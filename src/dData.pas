@@ -1158,13 +1158,14 @@ begin
       (Components[i] as TSQLTransaction).DataBase := MainCon
   end;
 
-  //dSqlUserData, dSqlStat, dSqlImpExp, dSqlQsl and dSqlRef run on their own
-  //cursors and are not our components, so the loop above does not reach them
+  //the dSql* modules run on their own cursors and are not our components,
+  //so the loop above does not reach them
   dmSqlUserData.AttachTo(MainCon);
   dmSqlStat.AttachTo(MainCon);
   dmSqlImpExp.AttachTo(MainCon);
   dmSqlQsl.AttachTo(MainCon);
   dmSqlRef.AttachTo(MainCon);
+  dmSqlQso.AttachTo(MainCon);
 
   //special connection for band map thread
   BandMapCon.Transaction    := trBandMapFil;
@@ -1310,9 +1311,6 @@ var
   sWAZ, sITU : String;
   rx_freq : String;
 begin
-  Q.Close;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
   band := dmUtils.GetBandFromFreq(CurrToStr(freq));
   if qso_dxcc then
     changed := 1
@@ -1333,19 +1331,14 @@ begin
   dok     := UpperCase(copy(dok,1,12));
   cont    := UpperCase(copy(cont,1,2));
   qth     := copy(qth,1,60);
-  trQ.StartTransaction;
   qsodate := (FormatDateTime('YYYY-MM-DD',date));
   //locators go in normalised, the free-text fields trimmed
-  Q.SQL.Text := dmSqlQso.SqlInsertQso(qsodate, time_on, time_off, call, freq, mode, rst_s, rst_r,
+  dmSqlQso.InsertQso(qsodate, time_on, time_off, call, freq, mode, rst_s, rst_r,
                   trim(stn_name), trim(qth), qsl_s, qsl_r, qsl_via, iota, pwr, sITU, sWAZ,
                   dmUtils.StdFormatLocator(loc), dmUtils.StdFormatLocator(my_loc),
                   trim(county), trim(award), trim(remarks), adif, idcall, state, changed, band,
                   profile, cont, nclub1, nclub2, nclub3, nclub4, nclub5, PropMode, Satellite, rx_freq,
-                  srx, stx, srx_string, stx_string, contestname, dok, Op);
-  if fDebugLevel >=1 then
-    Writeln(Q.SQL.Text);
-  Q.ExecSQL;
-  trQ.Commit
+                  srx, stx, srx_string, stx_string, contestname, dok, Op)
 end;
 
 procedure TdmData.EditQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
@@ -1361,8 +1354,6 @@ var
   sWAZ, sITU : String;
   rx_freq : String;
 begin
-  Q.Close;
-  if trQ.Active then trQ.Rollback;
   band  := dmUtils.GetBandFromFreq(CurrToStr(freq));
   state := copy(state,1,4);
   if qso_dxcc then
@@ -1383,16 +1374,10 @@ begin
   cont := UpperCase(copy(cont,1,2));
   qth  := copy(qth,1,60);
   qsodate := (FormatDateTime('YYYY-MM-DD',date));
-  Q.SQL.Text := dmSqlQso.SqlUpdateQso(qsodate, time_on, time_off, call, freq, mode, rst_s, rst_r,
+  dmSqlQso.UpdateQso(qsodate, time_on, time_off, call, freq, mode, rst_s, rst_r,
                   qsl_s, qsl_r, qsl_via, iota, pwr, sWAZ, sITU, loc, my_loc, county, Trim(remarks),
                   adif, changed, Trim(stn_name), Trim(qth), award, band, profile, idcall, state, cont,
-                  PropMode, Satellite, rx_freq, stx, stx_string, srx, srx_string, contestname, dok, Op, idx);
-  if fDebugLevel >=1 then
-    Writeln(Q.SQL.Text);
-  trQ.StartTransaction;
-  Q.ExecSQL;
-  trQ.Commit;
-  Q.Close;
+                  PropMode, Satellite, rx_freq, stx, stx_string, srx, srx_string, contestname, dok, Op, idx)
 end;
 
 const
@@ -1653,30 +1638,14 @@ begin
   if not ((iwaz > 0) and (iwaz < 41)) then
     exit;
   band := dmUtils.GetBandFromFreq(freq);
-  Q.Close();
-  Q.SQL.Text := dmSqlQso.SqlWazCfmOnBand(waz, band);
-  trQ.StartTransaction;
-  Q.Open();
-  if Q.Fields[0].AsInteger > 0 then
+  if dmSqlQso.WazConfirmedOnBand(waz, band) then
     Result := 4 //waz already confirmed
-  else begin
-    Q.Close();
-    Q.SQL.Text := dmSqlQso.SqlWazOnBand(waz, band);
-    Q.Open();
-    if Q.Fields[0].AsInteger > 0 then
-      Result := 3 //qsl needed
-    else begin
-      Q.Close();
-      Q.SQL.Text := dmSqlQso.SqlWazWorked(waz);
-      Q.Open();
-      if Q.Fields[0].AsInteger > 0 then
-        Result := 2 //new band waz zone
-      else
-        Result := 1 //new zone
-    end
-  end;
-  trQ.RollBack;
-  Q.Close()
+  else if dmSqlQso.WazWorkedOnBand(waz, band) then
+    Result := 3 //qsl needed
+  else if dmSqlQso.WazWorked(waz) then
+    Result := 2 //new band waz zone
+  else
+    Result := 1 //new zone
 end;
 
 function TdmData.GetWAZInfoString(Index : Integer) : String;
@@ -1703,30 +1672,14 @@ begin
   if not ((iitu > 0) and (iitu < 76)) then
     exit;
   band := dmUtils.GetBandFromFreq(freq);
-  Q.Close();
-  Q.SQL.Text := dmSqlQso.SqlItuCfmOnBand(itu, band);
-  trQ.StartTransaction;
-  Q.Open();
-  if Q.Fields[0].AsInteger > 0 then
+  if dmSqlQso.ItuConfirmedOnBand(itu, band) then
     Result := 4 //itu already confirmed
-  else begin
-    Q.Close();
-    Q.SQL.Text := dmSqlQso.SqlItuOnBand(itu, band);
-    Q.Open();
-    if Q.Fields[0].AsInteger > 0 then
-      Result := 3 //qsl needed
-    else begin
-      Q.Close();
-      Q.SQL.Text := dmSqlQso.SqlItuWorked(itu);
-      Q.Open();
-      if Q.Fields[0].AsInteger > 0 then
-        Result := 2 //new band itu zone
-      else
-        Result := 1 //new zone
-    end
-  end;
-  trQ.RollBack;
-  Q.Close()
+  else if dmSqlQso.ItuWorkedOnBand(itu, band) then
+    Result := 3 //qsl needed
+  else if dmSqlQso.ItuWorked(itu) then
+    Result := 2 //new band itu zone
+  else
+    Result := 1 //new zone
 end;
 
 function TdmData.GetITUInfoString(Index : Integer) : String;
@@ -1745,25 +1698,12 @@ begin
   Result := 0;
   if not dmUtils.IsIOTAOK(iota) then
     exit;
-  Q.Close();
-  Q.SQL.Text := dmSqlQso.SqlIotaCfm(iota);
-  if fDebugLevel >= 1 then Writeln(Q.SQL.Text);
-  trQ.StartTransaction;
-  Q.Open();
-  if Q.Fields[0].AsInteger > 0 then
+  if dmSqlQso.IotaConfirmed(iota) then
     Result := 3 //iota already confirmed
-  else begin
-    Q.Close();
-    Q.SQL.Text := dmSqlQso.SqlIotaWorked(iota);
-    if fDebugLevel >= 1 then Writeln(Q.SQL.Text);
-    Q.Open();
-    if Q.Fields[0].AsInteger > 0 then
-      Result := 2 //qsl needed
-    else
-      Result := 1 //new iota
-  end;
-  trQ.RollBack;
-  Q.Close()
+  else if dmSqlQso.IotaWorked(iota) then
+    Result := 2 //qsl needed
+  else
+    Result := 1 //new iota
 end;
 
 function TdmData.GetIOTAInfoString(Index : Integer) : String;
@@ -1922,19 +1862,10 @@ begin
 
     if cqrini.ReadBool('NewQSO','AutoDQSLS',False) or cqrini.ReadBool('NewQSO','AutoQQSLS',False) then
     begin
-      Q.Close();
-      trQ.StartTransaction;
-      try
-        Q.SQL.Text := dmSqlQso.SqlQslAlreadySent(adif, mode, not cqrini.ReadBool('NewQSO','AutoDQSLS',False), call);
-        Q.Open();
-        if Q.Fields[0].AsInteger = 0 then
-          Result := cqrini.ReadString('NewQSO','QSL_S','')
-        else
-          Result := ''
-      finally
-        Q.Close();
-        trQ.Rollback
-      end
+      if not dmSqlQso.QslAlreadySent(adif, mode, not cqrini.ReadBool('NewQSO','AutoDQSLS',False), call) then
+        Result := cqrini.ReadString('NewQSO','QSL_S','')
+      else
+        Result := ''
     end
   end
 end;
@@ -2105,12 +2036,14 @@ var
    qrc,
    Myloc,
    loc :String;
+   FilterSql : String;
+   rows : TDataSet;
 
   procedure HandleRecord;
    Begin
-        Myloc := Q.Fields[0].AsString;
+        Myloc := rows.Fields[0].AsString;
         if length(Myloc) = 4 then Myloc := Myloc +'LL';
-        loc := Q.Fields[1].AsString;
+        loc := rows.Fields[1].AsString;
         if length(loc) = 4 then loc := loc +'LL';
         dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(Myloc),loc,qrb,qrc);
         if StrToIntDef(qrb,0) > LongestDist then  LongestDist := StrToIntDef(qrb,0);
@@ -2122,85 +2055,29 @@ begin
   LongestDist :=0;
   MainLocCount := 0;
 
-  Q.Close;
-  if trQ.Active then
-    trQ.RollBack;
-
   if IsFilter then
-  begin
-    Q.SQL.Text := StringReplace(dmData.qCQRLOG.SQL.Text,'*','my_loc,loc',[]);
-    trQ.StartTransaction;
-    try
-      Q.Open;
-      while not Q.Eof do
-       begin
-        HandleRecord;
-        Q.Next;
-       end
-    finally
-      Q.Close;
-      trQ.RollBack
-    end
-  end
-  else begin
-    Q.SQL.Text := dmSqlQso.SqlQsoLocators;
-    trQ.StartTransaction;
-    try
-      Q.Open;
-      while not Q.Eof do
-       begin
-        HandleRecord;
-        Q.Next;
-       end
-    finally
-      Q.Close;
-      trQ.RollBack
-    end
+    FilterSql := StringReplace(dmData.qCQRLOG.SQL.Text,'*','my_loc,loc',[])
+  else
+    FilterSql := '';
+
+  rows := dmSqlQso.OpenQsoLocatorsRows(FilterSql);
+  try
+    while not rows.Eof do
+     begin
+      HandleRecord;
+      rows.Next;
+     end
+  finally
+    dmSqlQso.CloseRows
   end;
-  if pos('WHERE', Q.SQL.Text) > 0 then
-       Q.SQL.Text := dmSqlQso.SqlSquareCountFiltered(copy(Q.SQL.Text, pos('WHERE', Q.SQL.Text)+5, length(Q.SQL.Text)))
-   else
-    Q.SQL.Text := dmSqlQso.SqlSquareCount;
-   trQ.StartTransaction;
-    try
-      Q.Open;
-      MainLocCount := Q.Fields[0].AsInteger
-    finally
-      Q.Close;
-      trQ.RollBack
-    end
+  MainLocCount := dmSqlQso.GetSquareCountFor(FilterSql)
 end;
 function TdmData.GetQSOCount : Integer;
 begin
-  Q.Close;
-  if trQ.Active then
-    trQ.RollBack;
-
   if IsFilter then
-  begin
-    Q.SQL.Text := dmData.qCQRLOG.SQL.Text;
-    trQ.StartTransaction;
-    try
-      Q.Open;
-      Q.Last;
-      Result := dmData.Q.RecordCount
-      //Q.First;
-    finally
-      Q.Close;
-      trQ.RollBack
-    end
-  end
-  else begin
-    Q.SQL.Text := dmSqlQso.SqlQsoCount;
-    trQ.StartTransaction;
-    try
-      Q.Open;
-      Result := Q.Fields[0].AsInteger
-    finally
-      Q.Close;
-      trQ.RollBack
-    end
-  end
+    Result := dmSqlQso.GetQsoCount(dmData.qCQRLOG.SQL.Text)
+  else
+    Result := dmSqlQso.GetQsoCount('')
 end;
 
 procedure TdmData.TruncateTables(nr : Word);

@@ -13,10 +13,17 @@
 // probes NewQSO and the spot windows run, and the contest window's
 // scoring queries.
 //
-// Builders only.  Every caller
-// still runs these on the cursor it always used -- qCQRLOG, Q, Q1, CQ,
-// qQSOBefore, qBandMapFil, qRbnMon -- and the critical sections around
-// qBandMapFil and the DX cluster cursors are untouched.
+// Two layers.  The Sql* builders return statement text and nothing else;
+// the grid and its paging (qCQRLOG), the contest window (CQ), the
+// previous-QSO grid (qQSOBefore), the band map and RBN threads and the
+// callbook update thread keep the cursors they had.  Above the builders
+// sit the operations for what used to run on dmData.Q and Q1: saving,
+// editing and deleting a QSO, the field updates of group edit and edit
+// details, the "worked before" probes as values, the paging counts and
+// edge ids as values, the spot line's last QSO lent as a one-row dataset.
+//
+// Two cursors: FRows is the one lent out (OpenXxxRows ... CloseRows), FQ
+// serves scalars and writes that commit on their own.  No batches here.
 
 unit dSqlQso;
 
@@ -25,11 +32,84 @@ unit dSqlQso;
 interface
 
 uses
-  Classes, SysUtils, LResources;
+  Classes, SysUtils, LResources, sqldb, db, uSqlCursor;
 
 type
   TdmSqlQso = class(TDataModule)
+    procedure DataModuleCreate(Sender : TObject);
+  private
+    FQ    : TSqlCursor;   // scalars and writes
+    FRows : TSqlCursor;   // lent out by the Open...Rows operations
+    function  OpenRows(const Sql : String) : TDataSet;
+    function  GetValue(const Sql : String) : Integer;
+    function  Exists(const Sql : String) : Boolean;
+    procedure ExecAlone(const Sql : String);
   public
+    // Wired from TdmData once MainCon exists -- this module is not one of
+    // dData's components, so its bulk DataBase assignment does not reach it.
+    procedure AttachTo(Connection : TSQLConnection);
+
+    // main grid (fMain): the edge ids and the counts the paging asks
+    // before it moves the grid's own dataset; ByDate picks the sort
+    function  GetFirstQsoId(const ByDate : Boolean) : Integer;
+    function  GetLastQsoId(const ByDate : Boolean) : Integer;
+    function  CountQsosAbove(const ByDate : Boolean; const QsoDate, Time, Call : String; const Limit : Integer) : Integer;
+    function  CountQsosBelow(const ByDate : Boolean; const QsoDate, Time, Call : String; const Limit : Integer) : Integer;
+    procedure DeleteQso(const Id : Integer);
+
+    // contest window (fContest)
+    function  GetLastSrxString : String;
+
+    // saving and editing a QSO (dData); the argument lists are the builders'
+    procedure InsertQso(const QsoDate, TimeOn, TimeOff, Call : String; const Freq : Currency;
+                        const Mode, RstS, RstR, StnName, Qth, QslS, QslR, QslVia, Iota, Pwr, Itu, Waz,
+                        Loc, MyLoc, County, Award, Remarks : String; const Adif : Integer;
+                        const IdCall, State : String; const QsoDxcc : Integer; const Band : String;
+                        const Profile : Integer; const Cont, Club1, Club2, Club3, Club4, Club5,
+                        PropMode, Satellite, RxFreq, Srx, Stx, SrxString, StxString, ContestName,
+                        Dok, Op : String);
+    procedure UpdateQso(const QsoDate, TimeOn, TimeOff, Call : String; const Freq : Currency;
+                        const Mode, RstS, RstR, QslS, QslR, QslVia, Iota, Pwr, Waz, Itu, Loc, MyLoc,
+                        County, Remarks : String; const Adif, QsoDxcc : Integer;
+                        const StnName, Qth, Award, Band : String; const Profile : Integer;
+                        const IdCall, State, Cont, PropMode, Satellite, RxFreq, Stx, StxString,
+                        Srx, SrxString, ContestName, Dok, Op : String; const Id : Integer);
+    function  QslAlreadySent(const Adif : Integer; const Mode : String; const WithCall : Boolean; const Call : String) : Boolean;
+    // FilterSql is the grid's statement narrowed to my_loc,loc, or empty
+    // for the whole log; GetSquareCountFor counts the squares of the same
+    // selection
+    function  OpenQsoLocatorsRows(const FilterSql : String) : TDataSet;
+    function  GetSquareCountFor(const FilterSql : String) : Integer;
+    // FilterSql is the grid's statement, or empty for the whole log
+    function  GetQsoCount(const FilterSql : String) : Integer;
+
+    // WAZ / ITU / IOTA "new one" probes (dData)
+    function  WazConfirmedOnBand(const Waz, Band : String) : Boolean;
+    function  WazWorkedOnBand(const Waz, Band : String) : Boolean;
+    function  WazWorked(const Waz : String) : Boolean;
+    function  ItuConfirmedOnBand(const Itu, Band : String) : Boolean;
+    function  ItuWorkedOnBand(const Itu, Band : String) : Boolean;
+    function  ItuWorked(const Itu : String) : Boolean;
+    function  IotaConfirmed(const Iota : String) : Boolean;
+    function  IotaWorked(const Iota : String) : Boolean;
+
+    // the spot line (fNewQSO): the last QSO, lent as a one-row dataset
+    function  OpenLastQsoForSpotRows : TDataSet;
+    function  OpenLastQsoDetailsForSpotRows : TDataSet;
+
+    // club QSL probes (fQSODetails)
+    function  ClubQsoConfirmed(const Num : Integer; const ClubNr, FromDate, ToDate, Band, Mode : String) : Boolean;
+    function  ClubQsoWorkedOnBandMode(const Num : Integer; const ClubNr, FromDate, ToDate, Band, Mode : String) : Boolean;
+    function  ClubQsoWorkedOnBand(const Num : Integer; const ClubNr, FromDate, ToDate, Band : String) : Boolean;
+    function  ClubQsoWorked(const Num : Integer; const ClubNr, FromDate, ToDate : String) : Boolean;
+
+    // group edit, edit details
+    procedure SetQsoFields(const SetList : String; const Id : Integer);
+
+    // Every Open...Rows above lends the same cursor; give it back before
+    // the next row pass.
+    procedure CloseRows;
+
     // main grid paging (fMain, fSort, fContestFilter)
     function SqlDeleteQso(const Id : Integer) : String;
     function SqlQsosByIds(const IdList : String) : String;
@@ -126,6 +206,265 @@ var
 implementation
 
 {$R *.lfm}
+
+procedure TdmSqlQso.DataModuleCreate(Sender : TObject);
+begin
+  FQ    := TSqlCursor.Create(Self);
+  FRows := TSqlCursor.Create(Self)
+end;
+
+procedure TdmSqlQso.AttachTo(Connection : TSQLConnection);
+begin
+  FQ.AttachTo(Connection);
+  FRows.AttachTo(Connection)
+end;
+
+function TdmSqlQso.OpenRows(const Sql : String) : TDataSet;
+begin
+  FRows.Prepare(Sql);
+  FRows.Open;
+  Result := FRows.Query
+end;
+
+procedure TdmSqlQso.CloseRows;
+begin
+  FRows.Release
+end;
+
+// The first column of the single row the statement returns; an empty
+// result reads as 0.
+function TdmSqlQso.GetValue(const Sql : String) : Integer;
+begin
+  FQ.Prepare(Sql);
+  try
+    FQ.Open;
+    Result := FQ.Query.Fields[0].AsInteger
+  finally
+    FQ.Release
+  end
+end;
+
+function TdmSqlQso.Exists(const Sql : String) : Boolean;
+begin
+  Result := GetValue(Sql) > 0
+end;
+
+procedure TdmSqlQso.ExecAlone(const Sql : String);
+begin
+  FQ.Prepare(Sql);
+  FQ.ExecAndCommit
+end;
+
+{ main grid }
+
+function TdmSqlQso.GetFirstQsoId(const ByDate : Boolean) : Integer;
+begin
+  if ByDate then
+    Result := GetValue(SqlFirstQsoIdByDate)
+  else
+    Result := GetValue(SqlFirstQsoIdByCall)
+end;
+
+function TdmSqlQso.GetLastQsoId(const ByDate : Boolean) : Integer;
+begin
+  if ByDate then
+    Result := GetValue(SqlOldestQsoId)
+  else
+    Result := GetValue(SqlLastQsoIdByCall)
+end;
+
+function TdmSqlQso.CountQsosAbove(const ByDate : Boolean; const QsoDate, Time, Call : String; const Limit : Integer) : Integer;
+begin
+  if ByDate then
+    Result := GetValue(SqlCountNewerByDate(QsoDate, Time, Limit))
+  else
+    Result := GetValue(SqlCountBeforeByCall(Call, Limit))
+end;
+
+function TdmSqlQso.CountQsosBelow(const ByDate : Boolean; const QsoDate, Time, Call : String; const Limit : Integer) : Integer;
+begin
+  if ByDate then
+    Result := GetValue(SqlCountOlderByDate(QsoDate, Time, Limit))
+  else
+    Result := GetValue(SqlCountAfterByCall(Call, Limit))
+end;
+
+procedure TdmSqlQso.DeleteQso(const Id : Integer);
+begin
+  ExecAlone(SqlDeleteQso(Id))
+end;
+
+{ contest window }
+
+function TdmSqlQso.GetLastSrxString : String;
+begin
+  FQ.Prepare(SqlLastSrxString);
+  try
+    FQ.Open;
+    Result := FQ.Query.Fields[0].AsString
+  finally
+    FQ.Release
+  end
+end;
+
+{ saving and editing a QSO }
+
+procedure TdmSqlQso.InsertQso(const QsoDate, TimeOn, TimeOff, Call : String; const Freq : Currency;
+                              const Mode, RstS, RstR, StnName, Qth, QslS, QslR, QslVia, Iota, Pwr, Itu, Waz,
+                              Loc, MyLoc, County, Award, Remarks : String; const Adif : Integer;
+                              const IdCall, State : String; const QsoDxcc : Integer; const Band : String;
+                              const Profile : Integer; const Cont, Club1, Club2, Club3, Club4, Club5,
+                              PropMode, Satellite, RxFreq, Srx, Stx, SrxString, StxString, ContestName,
+                              Dok, Op : String);
+begin
+  ExecAlone(SqlInsertQso(QsoDate, TimeOn, TimeOff, Call, Freq, Mode, RstS, RstR, StnName, Qth, QslS,
+                         QslR, QslVia, Iota, Pwr, Itu, Waz, Loc, MyLoc, County, Award, Remarks, Adif,
+                         IdCall, State, QsoDxcc, Band, Profile, Cont, Club1, Club2, Club3, Club4, Club5,
+                         PropMode, Satellite, RxFreq, Srx, Stx, SrxString, StxString, ContestName, Dok, Op))
+end;
+
+procedure TdmSqlQso.UpdateQso(const QsoDate, TimeOn, TimeOff, Call : String; const Freq : Currency;
+                              const Mode, RstS, RstR, QslS, QslR, QslVia, Iota, Pwr, Waz, Itu, Loc, MyLoc,
+                              County, Remarks : String; const Adif, QsoDxcc : Integer;
+                              const StnName, Qth, Award, Band : String; const Profile : Integer;
+                              const IdCall, State, Cont, PropMode, Satellite, RxFreq, Stx, StxString,
+                              Srx, SrxString, ContestName, Dok, Op : String; const Id : Integer);
+begin
+  ExecAlone(SqlUpdateQso(QsoDate, TimeOn, TimeOff, Call, Freq, Mode, RstS, RstR, QslS, QslR, QslVia,
+                         Iota, Pwr, Waz, Itu, Loc, MyLoc, County, Remarks, Adif, QsoDxcc, StnName, Qth,
+                         Award, Band, Profile, IdCall, State, Cont, PropMode, Satellite, RxFreq, Stx,
+                         StxString, Srx, SrxString, ContestName, Dok, Op, Id))
+end;
+
+function TdmSqlQso.QslAlreadySent(const Adif : Integer; const Mode : String; const WithCall : Boolean; const Call : String) : Boolean;
+begin
+  Result := GetValue(SqlQslAlreadySent(Adif, Mode, WithCall, Call)) <> 0
+end;
+
+function TdmSqlQso.OpenQsoLocatorsRows(const FilterSql : String) : TDataSet;
+begin
+  if FilterSql = '' then
+    Result := OpenRows(SqlQsoLocators)
+  else
+    Result := OpenRows(FilterSql)
+end;
+
+// The squares of the same selection: the WHERE clause of the statement the
+// locators came from, if it has one, narrows the count.
+function TdmSqlQso.GetSquareCountFor(const FilterSql : String) : Integer;
+var
+  Sql : String;
+begin
+  if FilterSql = '' then
+    Sql := SqlQsoLocators
+  else
+    Sql := FilterSql;
+  if pos('WHERE', Sql) > 0 then
+    Result := GetValue(SqlSquareCountFiltered(copy(Sql, pos('WHERE', Sql)+5, length(Sql))))
+  else
+    Result := GetValue(SqlSquareCount)
+end;
+
+// With a filter the count is the rows of the grid's own statement, fetched
+// to the end, as dData always did.
+function TdmSqlQso.GetQsoCount(const FilterSql : String) : Integer;
+begin
+  if FilterSql = '' then
+    Result := GetValue(SqlQsoCount)
+  else begin
+    FQ.Prepare(FilterSql);
+    try
+      FQ.Open;
+      FQ.Query.Last;
+      Result := FQ.Query.RecordCount
+    finally
+      FQ.Release
+    end
+  end
+end;
+
+{ WAZ / ITU / IOTA probes }
+
+function TdmSqlQso.WazConfirmedOnBand(const Waz, Band : String) : Boolean;
+begin
+  Result := Exists(SqlWazCfmOnBand(Waz, Band))
+end;
+
+function TdmSqlQso.WazWorkedOnBand(const Waz, Band : String) : Boolean;
+begin
+  Result := Exists(SqlWazOnBand(Waz, Band))
+end;
+
+function TdmSqlQso.WazWorked(const Waz : String) : Boolean;
+begin
+  Result := Exists(SqlWazWorked(Waz))
+end;
+
+function TdmSqlQso.ItuConfirmedOnBand(const Itu, Band : String) : Boolean;
+begin
+  Result := Exists(SqlItuCfmOnBand(Itu, Band))
+end;
+
+function TdmSqlQso.ItuWorkedOnBand(const Itu, Band : String) : Boolean;
+begin
+  Result := Exists(SqlItuOnBand(Itu, Band))
+end;
+
+function TdmSqlQso.ItuWorked(const Itu : String) : Boolean;
+begin
+  Result := Exists(SqlItuWorked(Itu))
+end;
+
+function TdmSqlQso.IotaConfirmed(const Iota : String) : Boolean;
+begin
+  Result := Exists(SqlIotaCfm(Iota))
+end;
+
+function TdmSqlQso.IotaWorked(const Iota : String) : Boolean;
+begin
+  Result := Exists(SqlIotaWorked(Iota))
+end;
+
+{ the spot line }
+
+function TdmSqlQso.OpenLastQsoForSpotRows : TDataSet;
+begin
+  Result := OpenRows(SqlLastQsoForSpot)
+end;
+
+function TdmSqlQso.OpenLastQsoDetailsForSpotRows : TDataSet;
+begin
+  Result := OpenRows(SqlLastQsoDetailsForSpot)
+end;
+
+{ club QSL probes }
+
+function TdmSqlQso.ClubQsoConfirmed(const Num : Integer; const ClubNr, FromDate, ToDate, Band, Mode : String) : Boolean;
+begin
+  Result := Exists(SqlClubQsoCfm(Num, ClubNr, FromDate, ToDate, Band, Mode))
+end;
+
+function TdmSqlQso.ClubQsoWorkedOnBandMode(const Num : Integer; const ClubNr, FromDate, ToDate, Band, Mode : String) : Boolean;
+begin
+  Result := Exists(SqlClubQsoOnBandMode(Num, ClubNr, FromDate, ToDate, Band, Mode))
+end;
+
+function TdmSqlQso.ClubQsoWorkedOnBand(const Num : Integer; const ClubNr, FromDate, ToDate, Band : String) : Boolean;
+begin
+  Result := Exists(SqlClubQsoOnBand(Num, ClubNr, FromDate, ToDate, Band))
+end;
+
+function TdmSqlQso.ClubQsoWorked(const Num : Integer; const ClubNr, FromDate, ToDate : String) : Boolean;
+begin
+  Result := Exists(SqlClubQso(Num, ClubNr, FromDate, ToDate))
+end;
+
+{ group edit, edit details }
+
+procedure TdmSqlQso.SetQsoFields(const SetList : String; const Id : Integer);
+begin
+  ExecAlone(SqlSetQsoFields(SetList, Id))
+end;
 
 { main grid paging }
 

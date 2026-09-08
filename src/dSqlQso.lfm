@@ -1,4 +1,5 @@
 object dmSqlQso: TdmSqlQso
+  OnCreate = DataModuleCreate
   OldCreateOrder = False
   Height = 150
   HorizontalOffset = 1227
