@@ -795,20 +795,21 @@ begin
   Result := 'SELECT COUNT(*) FROM cqrlog_main'
 end;
 
-// qsodate and time_on are text columns, hence the str_to_date dance
-// (see the note in dData.CallExistsInLog).
+// qsodate and time_on are text columns in the shape YYYY-MM-DD and HH:MM,
+// so "date time" compares as a string the way it compares as a moment;
+// this used to go through str_to_date on both sides (see the note in
+// dData.CallExistsInLog).
 function TdmSqlQso.SqlQsoAfter(const Call, Band, Mode, LastDate, LastTime : String) : String;
 begin
   Result := 'select id_cqrlog_main from cqrlog_main where (callsign= '+QuotedStr(Call)+') and (band = '+QuotedStr(Band)+') '+
-            'and (mode = '+QuotedStr(Mode)+') and (str_to_date(concat(qsodate,'+QuotedStr(' ')+',time_on), '+
-            QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date('+QuotedStr(LastDate+' '+LastTime)+', '+QuotedStr('%Y-%m-%d %H:%i')+')'
+            'and (mode = '+QuotedStr(Mode)+') and (concat(qsodate,'+QuotedStr(' ')+',time_on) > '+
+            QuotedStr(LastDate+' '+LastTime)+')'
 end;
 
 function TdmSqlQso.SqlQsoAfterParams : String;
 begin
   Result := 'select id_cqrlog_main from cqrlog_main where (callsign= :callsign) and (band = :band) '+
-            'and (mode = :mode) and (str_to_date(concat(qsodate, '+QuotedStr(' ')+',time_on), '+
-            QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date(:last_date_time, '+QuotedStr('%Y-%m-%d %H:%i')+')'
+            'and (mode = :mode) and (concat(qsodate, '+QuotedStr(' ')+',time_on) > :last_date_time)'
 end;
 
 { WAZ / ITU / IOTA probes }
