@@ -617,12 +617,12 @@ end;
 
 function TdmSqlStat.SqlSetCharacterSetUtf8 : String;
 begin
-  Result := 'SET CHARACTER SET "utf8"'
+  Result := 'SET CHARACTER SET '+QuotedStr('utf8')
 end;
 
 function TdmSqlStat.SqlWorkedContests : String;
 const
-  C_SEL = 'SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != "" ORDER BY `contestname` ASC';
+  C_SEL = 'SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != '''' ORDER BY `contestname` ASC';
 begin
   Result := C_SEL
 end;

@@ -512,7 +512,7 @@ end;
 
 function TdmSqlRef.SqlBandRange(const Band : String) : String;
 begin
-  Result := 'select band,b_begin,b_end from cqrlog_common.bands where band="'+Band+'"'
+  Result := 'select band,b_begin,b_end from cqrlog_common.bands where band='+QuotedStr(Band)
 end;
 
 function TdmSqlRef.SqlUpdateBand : String;

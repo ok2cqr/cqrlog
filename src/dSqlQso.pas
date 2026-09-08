@@ -590,11 +590,10 @@ begin
             ') LIMIT '+IntToStr(Limit)
 end;
 
-// The contest filter: the name goes in between double quotes as it always
-// did, unescaped.
+// The contest filter.
 function TdmSqlQso.SqlQsosOfContest(const ContestName : String) : String;
 begin
-  Result := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` = "' + ContestName + '"'
+  Result := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` = ' + QuotedStr(ContestName)
 end;
 
 { contest window }
@@ -673,7 +672,7 @@ function TdmSqlQso.SqlContestMsgCountOnBand(const ContestName, Band : String) : 
 begin
   Result := 'SELECT COUNT(DISTINCT(UPPER(srx_string))) AS Msgs FROM cqrlog_main WHERE contestname='+
             QuotedStr(ContestName)+ ' AND band='+QuotedStr(Band)+
-            ' AND srx_string<>""'
+            ' AND srx_string<>'+QuotedStr('')
 end;
 
 function TdmSqlQso.SqlContestMsgsOnBand(const ContestName, Band : String) : String;
@@ -685,12 +684,12 @@ end;
 
 function TdmSqlQso.SqlQsoRate10 : String;
 begin
-  Result := 'select count(callsign) as rate from cqrlog_main where timestampdiff(minute,concat(qsodate," ",time_off),utc_timestamp())<10'
+  Result := 'select count(callsign) as rate from cqrlog_main where timestampdiff(minute,concat(qsodate,'+QuotedStr(' ')+',time_off),utc_timestamp())<10'
 end;
 
 function TdmSqlQso.SqlQsoRate60 : String;
 begin
-  Result := 'select count(callsign) as rate from cqrlog_main where timestampdiff(minute,concat(qsodate," ",time_off),utc_timestamp())<60'
+  Result := 'select count(callsign) as rate from cqrlog_main where timestampdiff(minute,concat(qsodate,'+QuotedStr(' ')+',time_off),utc_timestamp())<60'
 end;
 
 { saving and editing a QSO }
@@ -781,13 +780,13 @@ end;
 // Where is what follows WHERE in the grid's current query.
 function TdmSqlQso.SqlSquareCountFiltered(const Where : String) : String;
 begin
-  Result := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM view_cqrlog_main_by_qsodate WHERE left(loc,4) <> "" AND '
+  Result := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM view_cqrlog_main_by_qsodate WHERE left(loc,4) <> '+QuotedStr('')+' AND '
             + Where
 end;
 
 function TdmSqlQso.SqlSquareCount : String;
 begin
-  Result := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM cqrlog_main WHERE left(loc,4) <> "" '
+  Result := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM cqrlog_main WHERE left(loc,4) <> '+QuotedStr('')+' '
 end;
 
 // GetQSOCount without a filter, and the DXCC rebuild after an import.

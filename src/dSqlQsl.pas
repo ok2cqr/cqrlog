@@ -427,7 +427,7 @@ end;
 
 function TdmSqlQsl.SqlMarkAllLotwSent(const Date : String) : String;
 const
-  C_UPD = 'update cqrlog_main set lotw_qsls = %s, lotw_qslsdate = %s where (lotw_qsls="" and lotw_qslsdate is NULL)';
+  C_UPD = 'update cqrlog_main set lotw_qsls = %s, lotw_qslsdate = %s where (lotw_qsls='''' and lotw_qslsdate is NULL)';
 begin
   Result := Format(C_UPD,[QuotedStr('Y'),QuotedStr(Date)])
 end;
@@ -461,7 +461,7 @@ end;
 
 function TdmSqlQsl.SqlMarkAllEqslSent(const Date : String) : String;
 const
-  C_UPD = 'update cqrlog_main set eqsl_qsl_sent = %s,eqsl_qslsdate=%s where (eqsl_qsl_sent="" and eqsl_qslsdate is NULL)';
+  C_UPD = 'update cqrlog_main set eqsl_qsl_sent = %s,eqsl_qslsdate=%s where (eqsl_qsl_sent='''' and eqsl_qslsdate is NULL)';
 begin
   Result := Format(C_UPD,[QuotedStr('Y'),QuotedStr(Date)])
 end;
