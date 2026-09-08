@@ -55,6 +55,7 @@ type
     FBatch : TSqlCursor;   // several writes in one transaction the caller ends
     function OpenRows(const Sql : String) : TDataSet;
     procedure ExecInBatch(const Sql : String);
+    function SqlCountyByZipTable(const Table : Integer; const Zip : String) : String;
   public
     // Wired from TdmData once MainCon exists -- this module is not one of
     // dData's components, so its bulk DataBase assignment does not reach it.
@@ -87,8 +88,11 @@ type
     function  GetIotaName(const Iota : String) : String;
     function  OpenIotaForDxccRows(const Pref : String) : TDataSet;
 
-    // zipcode1..3 (dData): Table is 1, 2 or 3
+    // zipcode1..3 (dData): Table is 1, 2 or 3.  The ...On form runs the
+    // same lookup on a query the caller owns -- the callbook update thread
+    // works on a connection of its own and must not touch this module's.
     function  GetCountyByZip(const Table : Integer; const Zip : String) : String;
+    function  GetCountyByZipOn(Q : TSQLQuery; const Table : Integer; const Zip : String) : String;
 
     // club1..5: the import (fLoadClub) clears and refills as one batch,
     // the lookup (fQSODetails) is a record
@@ -367,18 +371,35 @@ end;
 
 { zipcode1..3 }
 
-function TdmSqlRef.GetCountyByZip(const Table : Integer; const Zip : String) : String;
+function TdmSqlRef.SqlCountyByZipTable(const Table : Integer; const Zip : String) : String;
 begin
   case Table of
-    1 : FQ.Prepare(SqlCountyByZip1(Zip));
-    2 : FQ.Prepare(SqlCountyByZip2(Zip));
-    else FQ.Prepare(SqlCountyByZip3(Zip))
-  end;
+    1 : Result := SqlCountyByZip1(Zip);
+    2 : Result := SqlCountyByZip2(Zip);
+    else Result := SqlCountyByZip3(Zip)
+  end
+end;
+
+function TdmSqlRef.GetCountyByZip(const Table : Integer; const Zip : String) : String;
+begin
+  FQ.Prepare(SqlCountyByZipTable(Table, Zip));
   try
     FQ.Open;
     Result := Trim(FQ.Query.Fields[0].AsString)
   finally
     FQ.Release
+  end
+end;
+
+function TdmSqlRef.GetCountyByZipOn(Q : TSQLQuery; const Table : Integer; const Zip : String) : String;
+begin
+  Q.Close;
+  Q.SQL.Text := SqlCountyByZipTable(Table, Zip);
+  try
+    Q.Open;
+    Result := Trim(Q.Fields[0].AsString)
+  finally
+    Q.Close
   end
 end;
 

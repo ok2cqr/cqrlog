@@ -254,9 +254,11 @@ type
     function  GetIOTAInfoString(Index : Integer) : String;
     function  GetIOTAName(iota : String) : String;
     function  GetIOTAForDXCC(call,pref : String;cmbIOTA : TComboBox; date : TDateTime) : Boolean;
-    function  FindCounty1(qth,pfx : String; var StoreTo : String) : String;
-    function  FindCounty2(qth,pfx : String; var StoreTo : String) : String;
-    function  FindCounty3(qth,pfx : String; var StoreTo : String) : String;
+    //OwnQ, when given, is a query on the caller's own connection: the
+    //callbook update thread must not run the lookup on a main-thread cursor
+    function  FindCounty1(qth,pfx : String; var StoreTo : String; OwnQ : TSQLQuery = nil) : String;
+    function  FindCounty2(qth,pfx : String; var StoreTo : String; OwnQ : TSQLQuery = nil) : String;
+    function  FindCounty3(qth,pfx : String; var StoreTo : String; OwnQ : TSQLQuery = nil) : String;
     function  GetMyLocFromProfile(profile : String) : String;
     function  SendQSL(call,mode,freq : String; adif : Word) : String;
     function  GetSCPCalls(call : String) : String;
@@ -1805,7 +1807,7 @@ begin
   Zip3.DXCC       := cqrini.ReadString('ZipCode','ThirdDXCC','')+';';
 end;
 
-function TdmData.FindCounty1(qth,pfx : String; var StoreTo : String) : String;
+function TdmData.FindCounty1(qth,pfx : String; var StoreTo : String; OwnQ : TSQLQuery = nil) : String;
 var
   ZipCode : String;
 begin
@@ -1814,12 +1816,15 @@ begin
   begin
     ZipCode  := dmUtils.ExtractZipCode(qth,Zip1.ZipPos);
     if fDebugLevel>=1 then Writeln('ZipCode: ',ZipCode);
-    Result  := dmSqlRef.GetCountyByZip(1, ZipCode);
+    if OwnQ = nil then
+      Result := dmSqlRef.GetCountyByZip(1, ZipCode)
+    else
+      Result := dmSqlRef.GetCountyByZipOn(OwnQ, 1, ZipCode);
     StoreTo := Zip1.StoreField
   end
 end;
 
-function TdmData.FindCounty2(qth,pfx : String; var StoreTo : String) : String;
+function TdmData.FindCounty2(qth,pfx : String; var StoreTo : String; OwnQ : TSQLQuery = nil) : String;
 var
   ZipCode : String;
 begin
@@ -1827,12 +1832,15 @@ begin
   if (Zip2.StoreField <> '') and (Zip2.Name<>'') and (Pos(pfx+';',Zip2.DXCC) > 0) then
   begin
     ZipCode    := dmUtils.ExtractZipCode(qth,Zip2.ZipPos);
-    Result  := dmSqlRef.GetCountyByZip(2, ZipCode);
+    if OwnQ = nil then
+      Result := dmSqlRef.GetCountyByZip(2, ZipCode)
+    else
+      Result := dmSqlRef.GetCountyByZipOn(OwnQ, 2, ZipCode);
     StoreTo := Zip2.StoreField
   end
 end;
 
-function TdmData.FindCounty3(qth,pfx : String; var StoreTo : String) : String;
+function TdmData.FindCounty3(qth,pfx : String; var StoreTo : String; OwnQ : TSQLQuery = nil) : String;
 var
   ZipCode : String;
 begin
@@ -1840,7 +1848,10 @@ begin
   if (Zip3.StoreField <> '') and (Zip3.Name<>'') and (Pos(pfx+';',Zip3.DXCC) > 0) then
   begin
     ZipCode    := dmUtils.ExtractZipCode(qth,Zip3.ZipPos);
-    Result  := dmSqlRef.GetCountyByZip(3, ZipCode);
+    if OwnQ = nil then
+      Result := dmSqlRef.GetCountyByZip(3, ZipCode)
+    else
+      Result := dmSqlRef.GetCountyByZipOn(OwnQ, 3, ZipCode);
     StoreTo := Zip3.StoreField
   end
 end;

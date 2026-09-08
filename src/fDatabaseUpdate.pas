@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  ExtCtrls, StdCtrls, httpsend, inifiles, process, lcltype;
+  ExtCtrls, StdCtrls, httpsend, inifiles, process, lcltype, uInternalConnection;
 
 type
 
@@ -32,7 +32,14 @@ type
   end;
 
 type
+  // Runs on a connection of its own (like the LoTW and eQSL import
+  // threads): the main thread keeps its message loop going while this
+  // runs, so nothing here may touch dmData's cursors or the dSql* modules'
+  // ones.  The rows to update are read once into a list of ids, each QSO
+  // is then reread, looked up on the web and updated on that connection.
   TQRZThread = class(TThread)
+  private
+    FConn : TInternalConnection;
   protected
     procedure Execute; override;
   end;
@@ -45,7 +52,7 @@ implementation
 {$R *.lfm}
 
 { TfrmDatabaseUpdate }
-uses dUtils, dData, uMyIni, fMain, dSqlQso;
+uses dUtils, dData, uMyIni, fMain, dSqlQso, uDbUtils;
 
 var
   CanCancelAtStart  : boolean;
@@ -89,22 +96,66 @@ var
   IgnoreQRZ : boolean = False;
   MvToRem   : boolean = True;
   County    : String;
+  Ids       : array of LongInt;
+  Count     : Integer = 0;
+  i         : Integer;
 
-  procedure DoUpgrade;
+  //The QSOs the main window picked, by id, on this thread's connection; when
+  //a cancelled update is resumed, from the QSO it stopped at (QRZupdate has
+  //checked that id is in the selection).
+  procedure CollectIds;
+  var
+    StartId : LongInt;
+    Skip    : Boolean;
   begin
-    dbCall   := dmData.qCallBook.FieldByName('callsign').AsString;
-    dbName   := dmData.qCallBook.FieldByName('name').AsString;
-    dbQTH    := dmData.qCallBook.FieldByName('qth').AsString;
-    dbQSLVia := dmData.qCallBook.FieldByName('qsl_via').AsString;
-    dbCounty := dmData.qCallBook.FieldByName('county').AsString;
-    dbAward  := dmData.qCallBook.FieldByName('award').AsString;
-    dbId     := dmData.qCallBook.FieldByName('id_cqrlog_main').AsInteger;
-    dbState  := dmData.qCallBook.FieldByName('state').AsString;
-    dbRemQSO := dmData.qCallBook.FieldByName('remarks').AsString;
-    dbGrid   := dmData.qCallBook.FieldByName('loc').AsString;
-    dbIota   := dmData.qCallBook.FieldByName('iota').AsString;
-    dbWAZ    := dmData.qCallbook.FieldByName('waz').AsString;
-    dbITU    := dmdata.qCallbook.FieldByName('itu').AsString;
+    StartId := frmDatabaseUpdate.id_cqrlog_main;
+    Skip    := StartId > -1;
+    FConn.Q.Close;
+    FConn.Q.SQL.Text := dmData.qCallBook.SQL.Text;
+    FConn.Q.Open;
+    try
+      while not FConn.Q.Eof do
+      begin
+        if Skip and (FConn.Q.FieldByName('id_cqrlog_main').AsInteger = StartId) then
+          Skip := False;
+        if not Skip then
+        begin
+          if Count = Length(Ids) then
+            SetLength(Ids, Count + 1024);
+          Ids[Count] := FConn.Q.FieldByName('id_cqrlog_main').AsInteger;
+          inc(Count)
+        end;
+        FConn.Q.Next
+      end
+    finally
+      FConn.Q.Close
+    end
+  end;
+
+  procedure DoUpgrade(const Id : LongInt);
+  begin
+    FConn.Q.Close;
+    FConn.Q.SQL.Text := dmSqlQso.SqlQsosByIds(IntToStr(Id));
+    FConn.Q.Open;
+    if FConn.Q.Eof then //deleted meanwhile
+    begin
+      FConn.Q.Close;
+      exit
+    end;
+    dbCall   := FConn.Q.FieldByName('callsign').AsString;
+    dbName   := FConn.Q.FieldByName('name').AsString;
+    dbQTH    := FConn.Q.FieldByName('qth').AsString;
+    dbQSLVia := FConn.Q.FieldByName('qsl_via').AsString;
+    dbCounty := FConn.Q.FieldByName('county').AsString;
+    dbAward  := FConn.Q.FieldByName('award').AsString;
+    dbId     := FConn.Q.FieldByName('id_cqrlog_main').AsInteger;
+    dbState  := FConn.Q.FieldByName('state').AsString;
+    dbRemQSO := FConn.Q.FieldByName('remarks').AsString;
+    dbGrid   := FConn.Q.FieldByName('loc').AsString;
+    dbIota   := FConn.Q.FieldByName('iota').AsString;
+    dbWAZ    := FConn.Q.FieldByName('waz').AsString;
+    dbITU    := FConn.Q.FieldByName('itu').AsString;
+    FConn.Q.Close;
 
     c_nick    := '';
     c_qth     := '';
@@ -121,13 +172,11 @@ var
 
     if frmDatabaseUpdate.NameFromLog then
     begin
-      dmData.Q.Close;
-      dmData.Q.SQL.Text := dmSqlQso.SqlLastNameForCall(dbCall);
-      if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
-      dmData.trQ.StartTransaction;
-      dmData.Q.Open();
-      dbName := dmData.Q.Fields[2].AsString;
-      dmData.trQ.RollBack
+      FConn.Q.SQL.Text := dmSqlQso.SqlLastNameForCall(dbCall);
+      if dmData.DebugLevel>=1 then Writeln(FConn.Q.SQL.Text);
+      FConn.Q.Open;
+      dbName := FConn.Q.Fields[2].AsString;
+      FConn.Q.Close
     end;
 
     if dmData.DebugLevel >= 1 then
@@ -149,9 +198,9 @@ var
 
     if CancelUpdate then
     begin
+      //remember where to resume; this QSO is not touched
       cqrini.WriteInteger('CallBook', 'LastId', dbId);
-      CloseW := True;
-      Synchronize(@frmDatabaseUpdate.SynCallBook);
+      exit
     end;
 
     c_ErrMsg   := '';
@@ -186,7 +235,7 @@ var
 
     if c_zip <> '' then
     begin
-      County := dmData.FindCounty1(c_zip, dbDXCC, StoreTo);
+      County := dmData.FindCounty1(c_zip, dbDXCC, StoreTo, FConn.Q);
       if County <> '' then
       begin
         if (StoreTo = 'county') and (dbCounty = '') then
@@ -199,7 +248,7 @@ var
           dbState := County;
       end;
 
-      County := dmData.FindCounty2(c_zip, dbDXCC, StoreTo);
+      County := dmData.FindCounty2(c_zip, dbDXCC, StoreTo, FConn.Q);
       if County <> '' then
       begin
         if (StoreTo = 'county') and (dbCounty = '') then
@@ -212,7 +261,7 @@ var
           dbState := County;
       end;
 
-      County := dmData.FindCounty3(c_zip, dbDXCC, StoreTo);
+      County := dmData.FindCounty3(c_zip, dbDXCC, StoreTo, FConn.Q);
       if County <> '' then
       begin
         if (StoreTo = 'county') and (dbCounty = '') then
@@ -262,19 +311,20 @@ var
     if (c_itu<>'') then
       dbITU := c_itu;
 
-    dmData.Q1.SQL.Text := dmSqlQso.SqlUpdateQsoFromCallbook(dbName, dbQTH, dbQSLVia, dbCounty, dbAward, dbState,
-                                                            dbRemQSO, dbIota, dbWAZ, dbITU, dbId);
-    dmData.trQ1.StartTransaction;
+    FConn.Q.SQL.Text := dmSqlQso.SqlUpdateQsoFromCallbook(dbName, dbQTH, dbQSLVia, dbCounty, dbAward, dbState,
+                                                          dbRemQSO, dbIota, dbWAZ, dbITU, dbId);
     if dmData.DebugLevel >= 1 then
-      Writeln(dmData.Q1.SQL.Text);
-    dmData.Q1.ExecSQL;
-    dmData.trQ1.Commit
+      Writeln(FConn.Q.SQL.Text);
+    FConn.Q.ExecSQL;
+    FConn.T.CommitRetaining
   end;
 
 begin
   FreeOnTerminate:= True;
   c_running := True;
-  try
+  FConn := nil;
+  try try
+    FConn := GetNewInternalConnection();
     c_nick     := '';
     c_qth      := '';
     c_address  := '';
@@ -288,15 +338,25 @@ begin
     MvToRem    := cqrini.ReadBool('NewQSO', 'MvToRem', True);
     c_SyncText := 'Working ...';
     Synchronize(@frmDatabaseUpdate.SynCallBook);
-    while not dmData.qCallBook.EOF do
+    CollectIds;
+    i := 0;
+    while (i < Count) and not CancelUpdate do
     begin
-      DoUpgrade;
+      DoUpgrade(Ids[i]);
       Sleep(1000);
-      dmData.qCallBook.Next
+      inc(i)
     end;
-    CloseW := True;
-    Synchronize(@frmDatabaseUpdate.SynCallBook)
+    FConn.T.Commit
+  except
+    on E : Exception do
+      Writeln('Callbook update: ', E.Message)
+  end
   finally
+    if (FConn <> nil) and FConn.T.Active then
+      FConn.T.Rollback;
+    FreeAndNil(FConn);
+    CloseW := True;
+    Synchronize(@frmDatabaseUpdate.SynCallBook);
     c_running := False
   end
 end;
