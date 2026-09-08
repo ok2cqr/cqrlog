@@ -744,14 +744,7 @@ var
 
   procedure DeleteRec(idx: longint);
   begin
-    if dmData.trQ.Active then
-      dmData.trQ.RollBack;
-    dmData.Q.SQL.Text := dmSqlQso.SqlDeleteQso(idx);
-    if dmData.DebugLevel >= 1 then
-                                  WriteLn(dmData.Q.SQL.Text);
-    dmData.trQ.StartTransaction;
-    dmData.Q.ExecSQL;
-    dmData.trQ.Commit
+    dmSqlQso.DeleteQso(idx)
   end;
 
 begin
@@ -1825,29 +1818,13 @@ begin
     qsodate := dmData.qCQRLOG.Fields[1].AsDateTime;
     call    := dmData.qCQRLOG.Fields[4].AsString;
     ///////
-    if dmData.SortType =  stDate then
-      dmData.Q1.SQL.Text := dmSqlQso.SqlFirstQsoIdByDate
-    else
-      dmData.Q1.SQL.Text := dmSqlQso.SqlFirstQsoIdByCall;
-    dmData.trQ1.StartTransaction;
-    dmData.Q1.Open;
-    id1 := dmData.Q1.Fields[0].AsInteger;
-    dmData.Q1.Close;
-    dmData.trQ1.Rollback;
+    id1 := dmSqlQso.GetFirstQsoId(dmData.SortType = stDate);
     ///////
     if id1=id then //we are on the begining of dataset
       exit;
 
     // count
-    if dmData.SortType =  stDate then
-      dmData.Q1.SQL.Text := dmSqlQso.SqlCountNewerByDate(DateToStr(qsodate), time, cDB_LIMIT)
-    else
-      dmData.Q1.SQL.Text := dmSqlQso.SqlCountBeforeByCall(call, cDB_LIMIT);
-    dmData.trQ1.StartTransaction;
-    dmData.Q1.Open;
-    counted := dmData.Q1.Fields[0].AsInteger;
-    dmData.Q1.Close;
-    dmData.trQ1.Rollback;
+    counted := dmSqlQso.CountQsosAbove(dmData.SortType = stDate, DateToStr(qsodate), time, call, cDB_LIMIT);
 
     dmData.qCQRLOG.Close;
     dmData.trCQRLOG.Rollback;
@@ -1876,29 +1853,13 @@ begin
     qsodate := dmData.qCQRLOG.Fields[1].AsDateTime;
     call    := dmData.qCQRLOG.Fields[4].AsString;
     ///////
-    if dmData.SortType =  stDate then
-      dmData.Q1.SQL.Text := dmSqlQso.SqlOldestQsoId
-    else
-      dmData.Q1.SQL.Text := dmSqlQso.SqlLastQsoIdByCall;
-    dmData.trQ1.StartTransaction;
-    dmData.Q1.Open;
-    id1 := dmData.Q1.Fields[0].AsInteger;
-    dmData.Q1.Close;
-    dmData.trQ1.Rollback;
+    id1 := dmSqlQso.GetLastQsoId(dmData.SortType = stDate);
     ///////
     if id1=id then //we are on the end of dataset
       exit;
 
     //count
-    if dmData.SortType =  stDate then
-      dmData.Q1.SQL.Text := dmSqlQso.SqlCountOlderByDate(DateToStr(qsodate), time, cDB_LIMIT)
-    else
-      dmData.Q1.SQL.Text := dmSqlQso.SqlCountAfterByCall(call, cDB_LIMIT);
-    dmData.trQ1.StartTransaction;
-    dmData.Q1.Open;
-    counted := dmData.Q1.Fields[0].AsInteger;
-    dmData.Q1.Close;
-    dmData.trQ1.Rollback;
+    counted := dmSqlQso.CountQsosBelow(dmData.SortType = stDate, DateToStr(qsodate), time, call, cDB_LIMIT);
 
     dmData.qCQRLOG.Close;
     dmData.trCQRLOG.Rollback;

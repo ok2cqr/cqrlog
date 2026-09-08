@@ -1194,16 +1194,7 @@ end;
 procedure TfrmContest.QspMsg;
 Begin
    try
-    dmData.Q.Close;
-    if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.SQL.Text := dmSqlQso.SqlLastSrxString;
-    dmData.trQ.StartTransaction;
-    if dmData.DebugLevel >=1 then
-      Writeln(dmData.Q.SQL.Text);
-    dmData.Q.Open();
-    edtSTXStr.Text := dmData.Q.Fields[0].AsString;
-    dmData.Q.Close();
-    dmData.trQ.Rollback;
+    edtSTXStr.Text := dmSqlQso.GetLastSrxString;
    finally
      edtSTXStr.SetFocus;
      edtSTXStr.SelStart:=length(edtSTXStr.Text);
