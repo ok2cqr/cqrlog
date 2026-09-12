@@ -2756,6 +2756,8 @@ begin
   Writeln(ExtractFilePath(Paramstr(0))  + 'mysqld');
   if FileExistsUTF8(ExtractFilePath(Paramstr(0))  + 'mysqld') then
     Result := ExtractFilePath(Paramstr(0))  + 'mysqld';
+  if FileExistsUTF8('/usr/bin/mariadb') then
+    Result := '/usr/bin/mariadb';
   if FileExistsUTF8('/usr/bin/mysqld') then
     Result := '/usr/bin/mysqld';
   if FileExistsUTF8('/usr/bin/mysqld_safe') then //Fedora
