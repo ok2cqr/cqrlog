@@ -33,6 +33,7 @@ type
     tmrLoad: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure btnCloseClick(Sender: TObject);
     procedure tmrLoadTimer(Sender: TObject);
   private
@@ -69,6 +70,11 @@ begin
   tmrLoad.Enabled := True
 end;
 
+procedure TfrmLoadClub.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  CanClose := not Running  //the import pumps messages, a close would free the form under it
+end;
+
 procedure TfrmLoadClub.btnCloseClick(Sender: TObject);
 begin
   Close;
@@ -77,6 +83,7 @@ end;
 procedure TfrmLoadClub.tmrLoadTimer(Sender: TObject);
 begin
   tmrLoad.Enabled := False;
+  Running := True;
   try
     btnClose.Enabled := False;
     Cursor := crHourGlass;
@@ -87,6 +94,7 @@ begin
   finally
     Cursor := crDefault;
     btnClose.Enabled := True;
+    Running := False
   end
 end;
 
@@ -136,6 +144,7 @@ begin
   readln(sF,tmp);
   mLoad.Lines.Add('Working ....');
   mLoad.Repaint;
+  Application.ProcessMessages;
   try try
     dmSqlRef.ClearClub(DBnum);
     while not Eof(sF) do
@@ -217,7 +226,12 @@ begin
       if clubnr='' then
         clubnr := call;
       if dmData.DebugLevel >=1 then WriteLn(clubnr,';',call,';',fromdate,';',todate);
-      dmSqlRef.InsertClubMember(DBnum, clubnr, call, fromDate, toDate)
+      dmSqlRef.InsertClubMember(DBnum, clubnr, call, fromDate, toDate);
+      if (num mod 100) = 0 then
+      begin
+        mLoad.Lines[mLoad.Lines.Count-1] := IntToStr(num) + ' records ...';
+        Application.ProcessMessages
+      end
     end
   except
     on Ex : Exception do
