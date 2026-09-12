@@ -164,7 +164,8 @@ type
     fShareDir    : String;
     fFirstMemId  : Integer;
     fLastMemId   : Integer;
-    aSCP  : Array of String[20];
+    fSCPData  : AnsiString; //MASTER.SCP calls, each wrapped in #10, see LoadMasterSCP
+    fSCPCount : Integer;
     MySQLProcess : TProcess;
     csPreviousQSO : TRTLCriticalSection;
     fMySQLVersion : Currency;
@@ -1914,50 +1915,70 @@ begin
 end;
 
 procedure TdmData.LoadMasterSCP;
+//Loads MASTER.SCP into one flat string: #10 CALL1 #10 CALL2 #10 ... CALLn #10
+//GetSCPCalls then does one Pos() per hit over the whole buffer instead of one
+//Pos() per callsign. Assigning a new string is also a safe swap for the reload
+//after a country files update.
 var
-  i   : LongInt=1;
-  f   : TextFile;
+  Lines, Calls : TStringList;
+  i   : Integer;
   tmp : String;
 begin
-  if FileExists(fHomeDir+'MASTER.SCP') then
-  begin
-    SetLength(aSCP,80000);
-    AssignFile(f,fHomeDir+'MASTER.SCP');
-    Reset(f);
-    while not eof(f) do
+  if not FileExists(fHomeDir+'MASTER.SCP') then
+    exit;
+  Lines := TStringList.Create;
+  Calls := TStringList.Create;
+  try
+    Lines.LoadFromFile(fHomeDir+'MASTER.SCP');
+    Calls.Capacity := Lines.Count;
+    for i:=0 to Lines.Count-1 do
     begin
-      Readln(f,tmp);
-      tmp := trim(tmp);
+      tmp := trim(Lines[i]);
       if tmp = '' then
         Continue;
-      if tmp[1]='#' then //skip comments
+      if (tmp[1]='#') or (tmp[1]='!') then //skip comments and the !!Order header
         Continue;
-      aSCP[i-1] := tmp;
-      inc(i);
-      if i>80000 then
-        SetLength(aSCP,10000000)
+      Calls.Add(tmp)
     end;
-    CloseFile(f);
-    SetLength(aSCP,i);
-    if fDebugLevel>=1 then Writeln('Loaded ',i,' SCP calls')
+    Calls.LineBreak := #10;
+    fSCPData  := #10 + Calls.Text; //Text ends with LineBreak
+    fSCPCount := Calls.Count;
+    if fDebugLevel>=1 then Writeln('Loaded ',fSCPCount,' SCP calls')
+  finally
+    Calls.Free;
+    Lines.Free
   end
 end;
 
 function TdmData.GetSCPCalls(call : String) : String;
 var
-  s : String = '';
-  i : LongInt;
+  p, TokenStart, TokenEnd : SizeInt;
+  Hits : TStringList;
 begin
-  if call = '' then
+  Result := '';
+  if (call = '') or (fSCPData = '') or (Pos(#10,call) > 0) then
     exit;
-  for i:=0 to Length(aSCP)-1 do
-  begin
-   if Pos(call,aSCP[i]) > 0 then
-      s := s + ' ' + aSCP[i]
-    {else if Pos(aSCP[i],call) > 0 then
-      s := s + ' ' + aSCP[i]}
-  end;
-  Result := s
+  Hits := TStringList.Create;
+  try
+    Hits.Delimiter := ' ';
+    Hits.StrictDelimiter := True;
+    p := Pos(call,fSCPData);
+    while p > 0 do
+    begin
+      TokenStart := p;
+      while (TokenStart > 1) and (fSCPData[TokenStart-1] <> #10) do
+        Dec(TokenStart);
+      TokenEnd := p + Length(call);
+      while (TokenEnd <= Length(fSCPData)) and (fSCPData[TokenEnd] <> #10) do
+        Inc(TokenEnd);
+      Hits.Add(Copy(fSCPData,TokenStart,TokenEnd-TokenStart));
+      p := Pos(call,fSCPData,TokenEnd+1)
+    end;
+    if Hits.Count > 0 then
+      Result := ' ' + Hits.DelimitedText //same format as before: space separated with a leading space
+  finally
+    Hits.Free
+  end
 end;
 
 

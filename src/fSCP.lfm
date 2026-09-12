@@ -17,6 +17,7 @@ object frmSCP: TfrmSCP
     Top = 0
     Width = 462
     Align = alClient
+    ScrollBars = ssAutoVertical
     TabOrder = 0
   end
 end
