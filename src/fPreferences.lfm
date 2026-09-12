@@ -244,7 +244,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 6
         Height = 230
-        Top = 289
+        Top = 316
         Width = 666
         BorderSpacing.Top = 9
         Caption = ' Offsets and colors'
@@ -627,7 +627,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 6
         Height = 26
-        Top = 525
+        Top = 552
         Width = 207
         AutoSize = True
         BorderSpacing.Top = 6
@@ -641,7 +641,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrCenter
         Left = 6
         Height = 18
-        Top = 260
+        Top = 287
         Width = 113
         Caption = 'QSO older than'
         TabOrder = 10
@@ -653,7 +653,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 122
         Height = 21
-        Top = 259
+        Top = 286
         Width = 104
         BorderSpacing.Left = 3
         TabOrder = 11
@@ -666,7 +666,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrCenter
         Left = 229
         Height = 16
-        Top = 261
+        Top = 288
         Width = 150
         BorderSpacing.Left = 3
         Caption = 'show with different color'
@@ -675,12 +675,13 @@ object frmPreferences: TfrmPreferences
       object lblQsoColorDate: TLabel
         AnchorSideLeft.Control = edtQSOColorDate
         AnchorSideLeft.Side = asrCenter
-        AnchorSideTop.Control = chkShowMiles
+        AnchorSideTop.Control = chkNewVersionCheck
         AnchorSideTop.Side = asrBottom
         Left = 126
         Height = 16
-        Top = 243
+        Top = 270
         Width = 96
+        BorderSpacing.Top = 7
         Caption = '(YYYY-MM-DD)'
         ParentColor = False
       end
@@ -701,7 +702,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Control = edtQSOColorDate
         Left = 391
         Height = 34
-        Top = 259
+        Top = 286
         Width = 90
         BorderSpacing.Left = 12
         BorderWidth = 1
@@ -710,6 +711,14 @@ object frmPreferences: TfrmPreferences
         ButtonColor = clBlack
         Caption = 'Color'
         Color = clDefault
+      end
+      object chkNewVersionCheck: TCheckBox
+        Left = 6
+        Height = 18
+        Top = 245
+        Width = 287
+        Caption = 'Check for a new version after program startup'
+        TabOrder = 13
       end
     end
     object tabStation: TTabSheet
@@ -10079,7 +10088,7 @@ object frmPreferences: TfrmPreferences
         Left = 54
         Height = 16
         Top = 85
-        Width = 360
+        Width = 366
         Caption = 'Look at https://www.hamqsl.com/solar.html for more variants'
         ParentColor = False
       end

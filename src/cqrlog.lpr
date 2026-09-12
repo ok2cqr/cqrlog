@@ -27,7 +27,8 @@ uses
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
   dMembership, dSatellite, dSqlUserData, dSqlUpload, dSqlQsl, dSqlRef, dSqlImpExp, dSqlStat, dSqlQso, dSqlSchema, uRigControl, uRotControl, azidis3, aziloc, fDOKStat,
   fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech, gline2, uDebugLog,
-  fDbSqlSel, fProgress, fDbError, fCountyStat, uBandMapStore, fBandMapGfx;
+  fDbSqlSel, fProgress, fDbError, fCountyStat, uBandMapStore, fBandMapGfx,
+  uVersionCheck, fNewVersion;
 var
   Splash : TfrmSplash;
 

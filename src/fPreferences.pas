@@ -107,6 +107,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkNewVersionCheck: TCheckBox;
     chkUdUpEnabled: TCheckBox;
     chkUdUpOnline: TCheckBox;
     chkUdIncExch: TCheckBox;
@@ -1213,6 +1214,7 @@ begin
   cqrini.WriteBool('Program', 'QSODiffColor', chkQSOColor.Checked);
   cqrini.WriteInteger('Program', 'QSOColor', btnSelectQSOColor.ButtonColor);
   cqrini.WriteString('Program', 'QSOColorDate', edtQSOColorDate.Text);
+  cqrini.WriteBool('Program','VersionCheck', chkNewVersionCheck.Checked);
 
   cqrini.WriteBool('Columns', 'Date', chkDate.Checked);
   cqrini.WriteBool('Columns', 'time_on', chkTimeOn.Checked);
@@ -2868,7 +2870,7 @@ begin
   btnBPColor.ButtonColor:= StringToColor(cqrini.ReadString('Program', 'GraylineGCLineBEColor','clRed'));
   edtGCBeamWidth.Caption:= IntToStr(cqrini.ReadInteger('Program', 'GraylineGBeamLineWidth',2));
   edtGCBeamLength.Caption:= IntToStr(cqrini.ReadInteger('Program', 'GraylineGBeamLineLength',1500));
-
+  chkNewVersionCheck.Checked := cqrini.ReadBool('Program','VersionCheck', True);
 
   edtWebBrowser.Text := cqrini.ReadString('Program', dmUtils.PlatformKey('WebBrowser'), dmUtils.MyDefaultBrowser);
   chkNewDXCCTables.Checked := cqrini.ReadBool('Program', 'CheckDXCCTabs', True);

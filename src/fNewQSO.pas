@@ -330,6 +330,7 @@ type
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
+    mnuCheckNewVersion: TMenuItem;
     mnuHelp: TMenuItem;
     mnuClose: TMenuItem;
     mnuPreferences: TMenuItem;
@@ -473,6 +474,7 @@ type
     procedure mnuIK3QARClick(Sender: TObject);
     procedure mnuHamQthClick(Sender : TObject);
     procedure MenuItem9Click(Sender: TObject);
+    procedure mnuCheckNewVersionClick(Sender: TObject);
     procedure acRemoteModeExecute(Sender: TObject);
     procedure acWASCfmExecute(Sender: TObject);
     procedure acDOKCfmExecute(Sender: TObject);
@@ -685,6 +687,7 @@ type
     procedure CheckForDOKTablesUpdate;
     procedure CheckForQslManagersUpdate;
     procedure CheckForMembershipUpdate;
+    procedure CheckForNewVersion;
 
     procedure SelTextFix(Edit : TEdit; var Key : Char);
 
@@ -834,7 +837,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
      fRemind, fContest, fXfldigi, dMembership, dSatellite, dSqlUserData, fCountyStat,
-     fBandMapGfx, uBandMapStore;
+     fBandMapGfx, uBandMapStore, fNewVersion;
 
 
 
@@ -4380,6 +4383,11 @@ begin
   end
 end;
 
+procedure TfrmNewQSO.mnuCheckNewVersionClick(Sender: TObject);
+begin
+  StartVersionCheck(True)
+end;
+
 procedure TfrmNewQSO.acRemoteModeExecute(Sender: TObject);
 var
   run    : Boolean = False;
@@ -7731,7 +7739,8 @@ begin
   CheckForDXCCTablesUpdate;
   CheckForDOKTablesUpdate;
   CheckForQslManagersUpdate;
-  CheckForMembershipUpdate
+  CheckForMembershipUpdate;
+  CheckForNewVersion
 end;
 
 procedure TfrmNewQSO.CheckForDXCCTablesUpdate;
@@ -7774,6 +7783,12 @@ procedure TfrmNewQSO.CheckForMembershipUpdate;
 begin
   if cqrini.ReadBool('Clubs', 'CheckForUpdate', False) then
     dmMembership.CheckForMembershipUpdate
+end;
+
+procedure TfrmNewQSO.CheckForNewVersion;
+begin
+  if cqrini.ReadBool('Program', 'VersionCheck', True) then
+    StartVersionCheck(False)
 end;
 
 //at least in Ubuntu 18.04 when user wanted to rewrite the second auto-selected

@@ -5529,6 +5529,10 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem16: TMenuItem
         Caption = '-'
       end
+      object mnuCheckNewVersion: TMenuItem
+        Caption = 'Check for new version...'
+        OnClick = mnuCheckNewVersionClick
+      end
       object MenuItem9: TMenuItem
         Caption = 'About'
         OnClick = MenuItem9Click
