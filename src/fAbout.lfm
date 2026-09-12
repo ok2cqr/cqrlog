@@ -7,8 +7,8 @@ object frmAbout: TfrmAbout
   Caption = 'About CQRLOG'
   ClientHeight = 294
   ClientWidth = 453
+  LCLVersion = '4.6.0.0'
   OnShow = FormShow
-  LCLVersion = '2.0.8.0'
   object PageControl1: TPageControl
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -20,9 +20,9 @@ object frmAbout: TfrmAbout
     Height = 294
     Top = 0
     Width = 453
-    ActivePage = tabContributors
+    ActivePage = tabAbout
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object tabAbout: TTabSheet
       AnchorSideLeft.Control = PageControl1
@@ -32,7 +32,7 @@ object frmAbout: TfrmAbout
       AnchorSideBottom.Control = PageControl1
       AnchorSideBottom.Side = asrBottom
       Caption = 'About'
-      ClientHeight = 265
+      ClientHeight = 260
       ClientWidth = 443
       object Image1: TImage
         AnchorSideLeft.Control = tabAbout
@@ -845,9 +845,9 @@ object frmAbout: TfrmAbout
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = Image1
         Left = 184
-        Height = 64
+        Height = 63
         Top = 6
-        Width = 250
+        Width = 223
         BorderSpacing.Left = 48
         Caption = 'CQRLOG'
         Font.Height = -54
@@ -869,7 +869,7 @@ object frmAbout: TfrmAbout
       object Label2: TLabel
         AnchorSideLeft.Control = Image1
         Left = 8
-        Height = 15
+        Height = 16
         Top = 152
         Width = 51
         Caption = 'Authors:'
@@ -880,11 +880,11 @@ object frmAbout: TfrmAbout
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = Label2
         Left = 74
-        Height = 15
+        Height = 16
         Top = 152
-        Width = 277
+        Width = 291
         BorderSpacing.Left = 15
-        Caption = 'Petr Hlozek, OK7AN && Martin Kratoska, OK1RR'
+        Caption = 'Petr Hlozek, OK2CQR && Martin Kratoska, OK1RR'
         ParentColor = False
       end
       object Label5: TLabel
@@ -892,9 +892,9 @@ object frmAbout: TfrmAbout
         AnchorSideTop.Control = Label2
         AnchorSideTop.Side = asrBottom
         Left = 8
-        Height = 15
-        Top = 183
-        Width = 151
+        Height = 16
+        Top = 184
+        Width = 150
         BorderSpacing.Top = 16
         Caption = 'Home page and support:'
         ParentColor = False
@@ -903,10 +903,10 @@ object frmAbout: TfrmAbout
         AnchorSideLeft.Control = Label5
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = Label5
-        Left = 175
-        Height = 15
-        Top = 183
-        Width = 139
+        Left = 174
+        Height = 16
+        Top = 184
+        Width = 144
         BorderSpacing.Left = 16
         Caption = 'https://www.cqrlog.com'
         Font.Color = clBlue
@@ -919,22 +919,22 @@ object frmAbout: TfrmAbout
       object btnChangelog: TButton
         AnchorSideLeft.Control = Image1
         Left = 9
-        Height = 31
+        Height = 26
         Top = 224
         Width = 90
         AutoSize = True
         BorderSpacing.Around = 1
         Caption = 'Changelog'
         Constraints.MinWidth = 90
-        OnClick = btnChangelogClick
         TabOrder = 0
+        OnClick = btnChangelogClick
       end
       object btnClose: TButton
         AnchorSideTop.Control = btnChangelog
         AnchorSideRight.Control = Label1
         AnchorSideRight.Side = asrBottom
-        Left = 343
-        Height = 31
+        Left = 316
+        Height = 26
         Top = 225
         Width = 90
         Anchors = [akTop, akRight]
@@ -951,9 +951,9 @@ object frmAbout: TfrmAbout
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = Label1
         AnchorSideRight.Side = asrBottom
-        Left = 271
+        Left = 244
         Height = 18
-        Top = 86
+        Top = 85
         Width = 163
         Alignment = taRightJustify
         Anchors = [akTop, akRight]
@@ -965,11 +965,11 @@ object frmAbout: TfrmAbout
     end
     object tabContributors: TTabSheet
       Caption = 'Contributors'
-      ClientHeight = 265
+      ClientHeight = 260
       ClientWidth = 443
       object mContributors: TMemo
         Left = 0
-        Height = 265
+        Height = 260
         Top = 0
         Width = 443
         Align = alClient
