@@ -23,6 +23,7 @@ uses
 const
   C_EErrorFile ='errors_eQSL.adi';
   C_LErrorFile ='errors_LoTW.adi';
+  C_CTY_DOWNLOAD_URL = 'https://ok2cqr.github.io/cqrlog-cnty-files/cqrlog-cty.tar.gz';
 
 type
   TImportProgressType = (imptRegenerateDXCC, imptImportDXCCTables, imptDownloadDXCCData, imptImportLoTWAdif,
@@ -539,7 +540,7 @@ begin
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
 
-    if HTTP.HTTPMethod('GET', 'https://www.ok2cqr.com/linux/cqrlog/ctyfiles/cqrlog-cty.tar.gz') then
+    if HTTP.HTTPMethod('GET', C_CTY_DOWNLOAD_URL) then
     begin
       http.Document.Seek(0,soBeginning);
       m.CopyFrom(http.Document,HTTP.Document.Size);

@@ -29,7 +29,7 @@ const
   cOperator ='Operator (ALT+O): ';
   cQSLMgrVersionCheckUrl = 'https://www.ok2cqr.com/linux/cqrlog/qslmgr/ver.dat';
   cDOKVersionCheckUrl = 'https://www.df2et.de/cqrlog/ver.dat';
-  cCntyVersionCheckUrl = 'https://www.ok2cqr.com/linux/cqrlog/ctyfiles/ver.dat';
+  cCntyVersionCheckUrl = 'https://ok2cqr.github.io/cqrlog-cnty-files/ver.dat';
 
 type
   TRemoteModeType = (rmtFldigi, rmtWsjt, rmtADIF);
