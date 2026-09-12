@@ -67,6 +67,11 @@ type
     //bm_ prefix keeps it apart from the fil_ spot filter config above
     bm_ToBandMap              : Boolean;
     bm_RbnColor               : LongInt;
+    //LoTW/eQSL user background, the same [LoTW] settings the DX cluster window uses
+    bm_UseLotwBgColor         : Boolean;
+    bm_LotwBgColor            : LongInt;
+    bm_UseEqslBgColor         : Boolean;
+    bm_EqslBgColor            : LongInt;
 
     property OnShowSpot : TOnShowSpotEvent read FOnShowSpot write FOnShowSpot;
 end;
@@ -385,6 +390,7 @@ var
   fkHz    : Double;
   cLat    : Currency;
   cLng    : Currency;
+  bgColor : LongInt;
   fsRbn   : TFormatSettings;
   nSpots  : Int64 = 0;
   tBeat   : TDateTime;
@@ -439,6 +445,13 @@ begin
       else
         eQSL := '';
 
+      //same rule as TfrmDXCluster: when the station uses both, LoTW wins
+      bgColor := clWindow;
+      if bm_UseEqslBgColor and (eQSL='E') then
+        bgColor := bm_EqslBgColor;
+      if bm_UseLotwBgColor and (LoTW='L') then
+        bgColor := bm_LotwBgColor;
+
       if AllowedSpot(spotter,dxstn,freq,mode,LoTW,eQSL,dxinfo,band,lat,long) then
       begin
         fRbnSpot.spotter := spotter;
@@ -458,7 +471,7 @@ begin
           begin
             dmDXCluster.GetRealCoordinate(lat,long,cLat,cLng);
             frmBandMap.AddToBandMap(fkHz,dxstn,mode,band,'',cLat,cLng,
-                                    bm_RbnColor,clWindow,False,(LoTW='L'),(eQSL='E'))
+                                    bm_RbnColor,bgColor,False,(LoTW='L'),(eQSL='E'))
           end
         end;
 
@@ -467,7 +480,7 @@ begin
         if bm_ToBandMap and Assigned(BandMapStore) and BandMapStore.Enabled then
         begin
           if TryStrToFloat(freq,fkHz,fsRbn) then    //RBN freq is already in kHz
-            BandMapStore.Add(fkHz,dxstn,mode,band,'',bm_RbnColor,clWindow,
+            BandMapStore.Add(fkHz,dxstn,mode,band,'',bm_RbnColor,bgColor,
                              gssRbn,(LoTW='L'),(eQSL='E'))
         end;
 
@@ -871,7 +884,13 @@ begin
     //resolved to a plain RGB here, on the main thread. The band map ages item colors
     //from its worker thread, so a system color like clWindowText would otherwise be
     //asked of the widgetset off the main thread on every aging tick
-    RbnMonThread.bm_RbnColor  := ColorToRGB(cqrini.ReadInteger('BandMap','RbnColor',clWindowText))
+    RbnMonThread.bm_RbnColor  := ColorToRGB(cqrini.ReadInteger('BandMap','RbnColor',clWindowText));
+    //same keys and defaults as TfrmDXCluster.ReloadSettings, so a spot gets the
+    //same LoTW/eQSL background whichever window fed it to the band map
+    RbnMonThread.bm_UseLotwBgColor := cqrini.ReadBool('LoTW','UseBackColor',True);
+    RbnMonThread.bm_LotwBgColor    := ColorToRGB(cqrini.ReadInteger('LoTW','BckColor',clMoneyGreen));
+    RbnMonThread.bm_UseEqslBgColor := cqrini.ReadBool('LoTW','eUseBackColor',True);
+    RbnMonThread.bm_EqslBgColor    := ColorToRGB(cqrini.ReadInteger('LoTW','eBckColor',clSkyBlue))
   end;
 
 end;
