@@ -363,6 +363,7 @@ type
     sbtnLoTW: TSpeedButton;
     sbtnQRZ: TSpeedButton;
     sbtnQSL: TSpeedButton;
+    Separator1: TMenuItem;
     sgrdStatistic : TStringGrid;
     btnSunRise: TSpeedButton;
     sgrdCallStatistic: TStringGrid;

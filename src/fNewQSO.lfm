@@ -5533,6 +5533,9 @@ object frmNewQSO: TfrmNewQSO
         Caption = 'Check for new version...'
         OnClick = mnuCheckNewVersionClick
       end
+      object Separator1: TMenuItem
+        Caption = '-'
+      end
       object MenuItem9: TMenuItem
         Caption = 'About'
         OnClick = MenuItem9Click
