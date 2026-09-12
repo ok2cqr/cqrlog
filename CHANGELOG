@@ -35,7 +35,7 @@
   - windows no longer interfere through the shared database cursors: saving a note or a call alert, DXCC lookups and the profile list used to close or roll back what another window had open (QTH profiles grid, notes grid, locator and county statistics) (Petr, OK2CQR)
   - macOS: opening attachments, links and the mysql.err log in an external application did not work (Petr, OK2CQR)
   - HamQTH, HRDLog, cqrlog.com and the other web addresses use https (Petr, OK2CQR)
-  - Linux: /usr/bin/mariadb is used for the local database server when it exists (Petr, OK2CQR)
+  - Linux: the database server is also found under its MariaDB name, mariadbd in /usr/sbin, /usr/libexec or /usr/bin, on systems that no longer ship the mysqld symlinks (Petr, OK2CQR)
   * SQL statements moved out of the forms and dData into dSql* data modules (dSqlQso, dSqlQsl, dSqlRef, dSqlStat, dSqlImpExp, dSqlUpload, dSqlUserData, dSqlSchema), each running on cursors of its own; the SQL text was verified unchanged after every step (Petr, OK2CQR)
   * first step towards an SQLite backend: single-quoted string literals, substr() instead of LEFT(), date and time compared as text (Petr, OK2CQR)
   * DXCC and DX cluster resolution code merged into one unit, uDxccService - dDXCC and dDXCluster no longer carry a copy each (Petr, OK2CQR)

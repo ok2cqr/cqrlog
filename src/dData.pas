@@ -2770,33 +2770,45 @@ begin
 end;
 
 function TdmData.GetMysqldPath : String;
-var
-  l : TStringList;
-  info : String;
-begin
-  Writeln(ExtractFilePath(Paramstr(0))  + 'mysqld');
-  if FileExistsUTF8(ExtractFilePath(Paramstr(0))  + 'mysqld') then
-    Result := ExtractFilePath(Paramstr(0))  + 'mysqld';
-  if FileExistsUTF8('/usr/bin/mariadb') then
-    Result := '/usr/bin/mariadb';
-  if FileExistsUTF8('/usr/bin/mysqld') then
-    Result := '/usr/bin/mysqld';
-  if FileExistsUTF8('/usr/bin/mysqld_safe') then //Fedora
-    Result := '/usr/bin/mysqld_safe';
-  if FileExistsUTF8('/usr/sbin/mysqld') then //openSUSE
-    Result := '/usr/sbin/mysqld';
+//Path of the database server binary. mariadbd is its current name, mysqld
+//the old one that most distributions still provide as a symlink; mariadb
+//(without the d) is the client and cannot start the database. The first
+//path found wins, a copy bundled with the program is the fallback.
+const
   {$IFDEF DARWIN}
-  if FileExistsUTF8('/usr/local/bin/mysqld') then
-    Result := '/usr/local/bin/mysqld';
-  if FileExistsUTF8('/opt/homebrew/bin/mysqld') then
-    Result := '/opt/homebrew/bin/mysqld';
-  if FileExistsUTF8('/usr/local/opt/mariadb/bin/mysqld') then
-    Result := '/usr/local/opt/mariadb/bin/mysqld';
-  if FileExistsUTF8('/opt/homebrew/opt/mariadb/bin/mysqld') then
-    Result := '/opt/homebrew/opt/mariadb/bin/mysqld';
+  cServerPathsDarwin : array[0..7] of String = (
+    '/opt/homebrew/opt/mariadb/bin/mariadbd',
+    '/opt/homebrew/opt/mariadb/bin/mysqld',
+    '/usr/local/opt/mariadb/bin/mariadbd',
+    '/usr/local/opt/mariadb/bin/mysqld',
+    '/opt/homebrew/bin/mariadbd',
+    '/opt/homebrew/bin/mysqld',
+    '/usr/local/bin/mariadbd',
+    '/usr/local/bin/mysqld');
   {$ENDIF}
-  if Result = '' then  //don't know where mysqld is, so hopefully will be in  $PATH
-    Result := 'mysqld'
+  cServerPaths : array[0..6] of String = (
+    '/usr/sbin/mariadbd',      //Debian, Ubuntu
+    '/usr/sbin/mysqld',        //openSUSE, Debian symlink
+    '/usr/bin/mysqld_safe',    //Fedora
+    '/usr/bin/mariadbd-safe',  //Fedora without the mysql symlinks
+    '/usr/libexec/mariadbd',   //Fedora, RHEL
+    '/usr/bin/mariadbd',       //Arch
+    '/usr/bin/mysqld');
+var
+  i : Integer;
+begin
+  {$IFDEF DARWIN}
+  for i := Low(cServerPathsDarwin) to High(cServerPathsDarwin) do
+    if FileExistsUTF8(cServerPathsDarwin[i]) then
+      Exit(cServerPathsDarwin[i]);
+  {$ENDIF}
+  for i := Low(cServerPaths) to High(cServerPaths) do
+    if FileExistsUTF8(cServerPaths[i]) then
+      Exit(cServerPaths[i]);
+  if FileExistsUTF8(ExtractFilePath(Paramstr(0)) + 'mysqld') then //bundled (AppImage)
+    Exit(ExtractFilePath(Paramstr(0)) + 'mysqld');
+    
+  Result := 'mysqld' //don't know where the server is, so hopefully it is in $PATH
 end;
 
 procedure TdmData.PrepareMysqlConfigFile;

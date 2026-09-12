@@ -36,8 +36,9 @@ cqrlog (3.1.0-1) unstable; urgency=low
     application did not work (Petr, OK2CQR)
   * HamQTH, HRDLog, cqrlog.com and the other web addresses use https
     (Petr, OK2CQR)
-  * Linux: /usr/bin/mariadb is used for the local database server when it
-    exists (Petr, OK2CQR)
+  * Linux: the database server is also found under its MariaDB name,
+    mariadbd in /usr/sbin, /usr/libexec or /usr/bin, on systems that no
+    longer ship the mysqld symlinks (Petr, OK2CQR)
   * SQL statements moved out of the forms and dData into dSql* data modules,
     each running on cursors of its own; SQL text verified unchanged
     (Petr, OK2CQR)
