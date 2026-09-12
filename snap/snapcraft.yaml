@@ -16,7 +16,7 @@
 #  * tqsl (LoTW) is NOT bundled - that integration is a known v1 limitation.
 name: cqrlog
 title: CQRLOG
-version: '3.0.0'
+version: '3.1.0'
 summary: Advanced ham radio logger
 description: |
   CQRLOG is an advanced ham radio logger based on MariaDB/MySQL database.

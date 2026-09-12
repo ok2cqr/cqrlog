@@ -1,3 +1,62 @@
+cqrlog (3.1.0-1) unstable; urgency=low
+
+  * check for a new version: after start CQRLOG asks GitHub for the latest
+    release and shows a dialog when a newer one exists (release notes, open
+    release page, don't show this version again); switch in
+    Preferences/Program, manual check in Help -> Check for new version
+    (Petr, OK2CQR)
+  * new DXCC resolution engine: the prefix parser was rewritten with a test
+    suite and verified against the old one with zero differences; no more
+    silent stop once the tables outgrow a fixed capacity (Petr, OK2CQR)
+  * country files updated: DXCC tables and exceptions, LoTW and eQSL user
+    lists, MASTER.SCP (Petr, OK2CQR)
+  * country files (DXCC tables, LoTW and eQSL user lists, MASTER.SCP) are
+    downloaded from GitHub (ok2cqr.github.io/cqrlog-cnty-files) instead of
+    ok2cqr.com; the QSL manager database still comes from ok2cqr.com
+    (Petr, OK2CQR)
+  * Argentine callsigns with /F, /G, /I, /K, /M and /P suffixes now resolve
+    to the right province (Petr, OK2CQR)
+  * Rebuild DXCC statistics wrote every correction into the QSO selected in
+    the QSO list instead of the QSO being checked (Petr, OK2CQR)
+  * Database update from the callbook runs on a database connection of its
+    own; cancelling leaves the QSO it was about to update untouched so the
+    next run resumes there (Petr, OK2CQR)
+  * RBN monitor: spots sent to the band map had no LoTW/eQSL background
+    colour (Petr, OK2CQR)
+  * Load club data: the window looked frozen during the import, it now
+    shows progress (Petr, OK2CQR)
+  * New QSO: a stray column ('??' or an empty 'Title') could appear in the
+    previous QSO grid and came back on every start (Petr, OK2CQR)
+  * export: a QSO with a profile number one above the highest existing QTH
+    profile read past the profile list (Petr, OK2CQR)
+  * windows no longer interfere through the shared database cursors: saving
+    a note or a call alert, DXCC lookups and the profile list used to close
+    or roll back what another window had open (Petr, OK2CQR)
+  * macOS: opening attachments, links and the mysql.err log in an external
+    application did not work (Petr, OK2CQR)
+  * HamQTH, HRDLog, cqrlog.com and the other web addresses use https
+    (Petr, OK2CQR)
+  * Linux: /usr/bin/mariadb is used for the local database server when it
+    exists (Petr, OK2CQR)
+  * SQL statements moved out of the forms and dData into dSql* data modules,
+    each running on cursors of its own; SQL text verified unchanged
+    (Petr, OK2CQR)
+  * first step towards an SQLite backend: single-quoted string literals,
+    substr() instead of LEFT(), date and time compared as text
+    (Petr, OK2CQR)
+  * DXCC and DX cluster resolution code merged into one unit, uDxccService
+    (Petr, OK2CQR)
+  * commented-out SQL, dead queries and unused cursors removed (Petr, OK2CQR)
+  * Makefile: 'make test-dmg' builds the macOS DMG without notarization
+    (Petr, OK2CQR)
+  * OK7AN replaced by OK2CQR in the About window, exception dialog and man
+    page (Petr, OK2CQR)
+  * Super Check Partial: search rewritten for the 50 000-call MASTER.SCP -
+    one pass over a flat buffer instead of a Pos() per callsign, three
+    times faster; the result window has a vertical scrollbar (Petr, OK2CQR)
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sat, 12 Sep 2026 12:00:00 +0200
+
 cqrlog (3.0.0-1) unstable; urgency=low
 
   * macOS support - native Cocoa build (Petr, OK2CQR)

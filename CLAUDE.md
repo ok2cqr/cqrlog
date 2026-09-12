@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 CQRLOG is an advanced ham radio logger for Linux/macOS, written in Free Pascal using the Lazarus IDE (LCL framework). It uses MariaDB/MySQL as its database backend and integrates with hamlib for radio control (140+ radio models).
 
-Current version: 3.0.0 (defined in `src/uVersion.pas`; the Makefile derives the package version from it).
+Current version: 3.1.0 (defined in `src/uVersion.pas`; the Makefile derives the package version from it).
 
 ## Build Commands
 
@@ -79,7 +79,7 @@ All source is in `src/`. Files follow a naming convention by prefix:
 | `dSatellite.pas` | Satellite tracking data |
 | `uRigControl.pas` | Radio control via hamlib's `rigctld` (TCP connection using lNet) |
 | `uRotControl.pas` | Rotator control via hamlib's `rotctld` |
-| `uVersion.pas` | Version constants — update this when bumping version |
+| `uVersion.pas` | Version constants — when bumping, change both `cVersionBase` (About dialog, version check) and the numeric `cMAJOR`/`cMINOR`/`cRELEAS` (the Makefile reads only these), plus `cBUILD_DATE`; `snap/snapcraft.yaml` carries its own copy |
 | `uDbUtils.pas` | Database connection factory and connection info management |
 | `uCWKeying.pas` | CW (Morse code) keying support |
 

@@ -52,7 +52,7 @@ connection dialog (do *not* tick "save to local"). The `network` plug means
 On Linux with snapcraft + LXD:
 
 ```bash
-snapcraft            # produces cqrlog_3.0.0_<arch>.snap
+snapcraft            # produces cqrlog_3.1.0_<arch>.snap
 ```
 
 The installable bundle is also produced by CI
