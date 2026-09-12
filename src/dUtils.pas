@@ -3503,7 +3503,8 @@ end;
 procedure TdmUtils.OpenWithDesktop(const Target: string);
 begin
   {$IFDEF DARWIN}
-  RunOnBackground('open ' + Target);
+  // full path: RunOnBackground only starts executables it can FileExists()
+  RunOnBackground('/usr/bin/open ' + Target);
   {$ELSE}
   RunOnBackground('xdg-open ' + Target);
   {$ENDIF}
