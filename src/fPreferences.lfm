@@ -2375,7 +2375,7 @@ object frmPreferences: TfrmPreferences
         Left = 6
         Height = 88
         Top = 4
-        Width = 657
+        Width = 760
         BorderSpacing.Left = 6
         BorderSpacing.Top = 4
         Caption = ' rigctld '
@@ -2744,16 +2744,16 @@ object frmPreferences: TfrmPreferences
             Height = 19
             Top = 34
             Width = 76
-            BorderSpacing.Left = 12
+            BorderSpacing.Left = 24
             ItemHeight = 18
             ItemIndex = 0
             Items.Strings = (
-              'default'
-              'None'
-              'Odd'
-              'Even'
-              'Mark'
-              'Space'
+            'default'
+            'None'
+            'Odd'
+            'Even'
+            'Mark'
+            'Space'
             )
             Style = csDropDownList
             TabOrder = 3
@@ -2768,16 +2768,16 @@ object frmPreferences: TfrmPreferences
             Height = 19
             Top = 34
             Width = 76
-            BorderSpacing.Left = 12
+            BorderSpacing.Left = 24
             ItemHeight = 18
             ItemIndex = 0
             Items.Strings = (
-              'default'
-              '5'
-              '6'
-              '7'
-              '8'
-              '9'
+            'default'
+            '5'
+            '6'
+            '7'
+            '8'
+            '9'
             )
             Style = csDropDownList
             TabOrder = 1
@@ -2792,15 +2792,15 @@ object frmPreferences: TfrmPreferences
             Height = 19
             Top = 34
             Width = 76
-            BorderSpacing.Left = 12
+            BorderSpacing.Left = 24
             ItemHeight = 18
             ItemIndex = 0
             Items.Strings = (
-              'default'
-              '0'
-              '1'
-              '2'
-              '3'
+            'default'
+            '0'
+            '1'
+            '2'
+            '3'
             )
             Style = csDropDownList
             TabOrder = 2
@@ -2843,14 +2843,14 @@ object frmPreferences: TfrmPreferences
             Height = 19
             Top = 81
             Width = 76
-            BorderSpacing.Left = 12
+            BorderSpacing.Left = 24
             ItemHeight = 18
             ItemIndex = 0
             Items.Strings = (
-              'default'
-              'Unset'
-              'ON'
-              'OFF'
+            'default'
+            'Unset'
+            'ON'
+            'OFF'
             )
             Style = csDropDownList
             TabOrder = 5
@@ -2875,14 +2875,14 @@ object frmPreferences: TfrmPreferences
             Height = 19
             Top = 81
             Width = 76
-            BorderSpacing.Left = 12
+            BorderSpacing.Left = 24
             ItemHeight = 18
             ItemIndex = 0
             Items.Strings = (
-              'default'
-              'Unset'
-              'ON'
-              'OFF'
+            'default'
+            'Unset'
+            'ON'
+            'OFF'
             )
             Style = csDropDownList
             TabOrder = 6
@@ -3094,7 +3094,7 @@ object frmPreferences: TfrmPreferences
           Hint = 'Check if rigctld has started with --vfo parameter. '#10'if response is 1 the polling command format should be'#10'changed from "+f +m +v" to "+f currVFO +m currVFO +v"'#10'And also some other Hamlib commands need "currVFO" then.'
           Top = 83
           Width = 93
-          BorderSpacing.Left = 3
+          BorderSpacing.Left = 20
           Caption = 'Use \chkvfo'
           Checked = True
           ParentShowHint = False
@@ -4722,7 +4722,7 @@ object frmPreferences: TfrmPreferences
         Left = 6
         Height = 105
         Top = 1
-        Width = 600
+        Width = 660
         BorderSpacing.Left = 6
         BorderSpacing.Top = 1
         Caption = 'Colors'
@@ -4785,7 +4785,7 @@ object frmPreferences: TfrmPreferences
           Left = 114
           Height = 19
           Top = 11
-          Width = 187
+          Width = 150
           Selected = clRed
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
           BorderSpacing.Left = 30
@@ -4799,7 +4799,7 @@ object frmPreferences: TfrmPreferences
           Left = 114
           Height = 19
           Top = 51
-          Width = 187
+          Width = 150
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
           ItemHeight = 28
           TabOrder = 1
@@ -4812,7 +4812,7 @@ object frmPreferences: TfrmPreferences
           Left = 474
           Height = 19
           Top = 11
-          Width = 187
+          Width = 150
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
           BorderSpacing.Left = 24
           ItemHeight = 28
@@ -4825,7 +4825,7 @@ object frmPreferences: TfrmPreferences
           Left = 474
           Height = 19
           Top = 51
-          Width = 187
+          Width = 150
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
           ItemHeight = 28
           TabOrder = 3
@@ -4844,7 +4844,7 @@ object frmPreferences: TfrmPreferences
         Caption = ' Show only spots'
         ClientHeight = 229
         ClientWidth = 590
-        Constraints.MinWidth = 600
+        Constraints.MinWidth = 660
         TabOrder = 1
         object Label45: TLabel
           AnchorSideLeft.Control = gbDXCSpots
@@ -5253,7 +5253,7 @@ object frmPreferences: TfrmPreferences
         Left = 6
         Height = 144
         Top = 363
-        Width = 600
+        Width = 660
         BorderSpacing.Left = 6
         BorderSpacing.Top = 1
         Caption = ' Callsign alert '
@@ -5321,7 +5321,7 @@ object frmPreferences: TfrmPreferences
         Left = 6
         Height = 100
         Top = 508
-        Width = 600
+        Width = 660
         BorderSpacing.Left = 6
         BorderSpacing.Top = 1
         Caption = 'Connect'
@@ -5805,9 +5805,9 @@ object frmPreferences: TfrmPreferences
           Left = 12
           Height = 19
           Top = 27
-          Width = 293
+          Width = 343
           BorderSpacing.Left = 12
-          Constraints.MinWidth = 293
+          Constraints.MinWidth = 343
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -5888,9 +5888,9 @@ object frmPreferences: TfrmPreferences
           Left = 12
           Height = 19
           Top = 27
-          Width = 293
+          Width = 343
           BorderSpacing.Left = 12
-          Constraints.MinWidth = 293
+          Constraints.MinWidth = 343
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -5971,9 +5971,9 @@ object frmPreferences: TfrmPreferences
           Left = 12
           Height = 19
           Top = 27
-          Width = 293
+          Width = 343
           BorderSpacing.Left = 12
-          Constraints.MinWidth = 293
+          Constraints.MinWidth = 343
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -6054,9 +6054,9 @@ object frmPreferences: TfrmPreferences
           Left = 12
           Height = 19
           Top = 27
-          Width = 293
+          Width = 343
           BorderSpacing.Left = 12
-          Constraints.MinWidth = 293
+          Constraints.MinWidth = 343
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -6137,9 +6137,9 @@ object frmPreferences: TfrmPreferences
           Left = 12
           Height = 19
           Top = 27
-          Width = 293
+          Width = 343
           BorderSpacing.Left = 12
-          Constraints.MinWidth = 293
+          Constraints.MinWidth = 343
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -6376,7 +6376,7 @@ object frmPreferences: TfrmPreferences
           Height = 16
           Top = 14
           Width = 103
-          BorderSpacing.Left = 38
+          BorderSpacing.Left = 24
           Caption = 'the second after '
           ParentColor = False
         end
@@ -6389,7 +6389,7 @@ object frmPreferences: TfrmPreferences
           Height = 16
           Top = 14
           Width = 96
-          BorderSpacing.Left = 78
+          BorderSpacing.Left = 24
           Caption = 'disappear after '
           ParentColor = False
         end
@@ -6962,22 +6962,23 @@ object frmPreferences: TfrmPreferences
           TabOrder = 2
         end
         object cmbFirstSaveTo: TComboBox
-          AnchorSideLeft.Control = GroupBox25
+          AnchorSideLeft.Control = Label74
+          AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = btnFirstLoad
           AnchorSideTop.Side = asrBottom
           Left = 118
           Height = 19
           Top = 46
           Width = 75
-          BorderSpacing.Left = 118
+          BorderSpacing.Left = 14
           BorderSpacing.Top = 14
           ItemHeight = 18
           ItemIndex = 0
           Items.Strings = (
-            'county'
-            'QTH'
-            'award'
-            'state'
+          'county'
+          'QTH'
+          'award'
+          'state'
           )
           Style = csDropDownList
           TabOrder = 3
@@ -7073,22 +7074,23 @@ object frmPreferences: TfrmPreferences
           TabOrder = 2
         end
         object cmbSecondSaveTo: TComboBox
-          AnchorSideLeft.Control = GroupBox26
+          AnchorSideLeft.Control = Label76
+          AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = btnSecondLoad
           AnchorSideTop.Side = asrBottom
           Left = 118
           Height = 19
           Top = 46
           Width = 75
-          BorderSpacing.Left = 118
+          BorderSpacing.Left = 14
           BorderSpacing.Top = 14
           ItemHeight = 18
           ItemIndex = 0
           Items.Strings = (
-            'county'
-            'QTH'
-            'award'
-            'state'
+          'county'
+          'QTH'
+          'award'
+          'state'
           )
           Style = csDropDownList
           TabOrder = 3
@@ -7184,22 +7186,23 @@ object frmPreferences: TfrmPreferences
           TabOrder = 2
         end
         object cmbThirdSaveTo: TComboBox
-          AnchorSideLeft.Control = GroupBox27
+          AnchorSideLeft.Control = Label78
+          AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = btnThirdLoad
           AnchorSideTop.Side = asrBottom
           Left = 118
           Height = 19
           Top = 44
           Width = 75
-          BorderSpacing.Left = 118
+          BorderSpacing.Left = 14
           BorderSpacing.Top = 12
           ItemHeight = 18
           ItemIndex = 0
           Items.Strings = (
-            'county'
-            'QTH'
-            'award'
-            'state'
+          'county'
+          'QTH'
+          'award'
+          'state'
           )
           Style = csDropDownList
           TabOrder = 3
@@ -8102,7 +8105,7 @@ object frmPreferences: TfrmPreferences
         Left = 6
         Height = 328
         Top = 6
-        Width = 724
+        Width = 790
         BorderSpacing.Left = 6
         BorderSpacing.Top = 6
         Caption = ' Reading data from fldigi'
@@ -8445,7 +8448,7 @@ object frmPreferences: TfrmPreferences
         Left = 6
         Height = 300
         Top = 340
-        Width = 724
+        Width = 790
         BorderSpacing.Top = 6
         Caption = 'Reading data from wsjtx'
         ClientHeight = 273
@@ -8800,7 +8803,7 @@ object frmPreferences: TfrmPreferences
         Left = 8
         Height = 370
         Top = 8
-        Width = 608
+        Width = 660
         ClientHeight = 343
         ClientWidth = 598
         TabOrder = 0

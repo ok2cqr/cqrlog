@@ -15,6 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Lint Lazarus forms
+      run: make lint-lfm
+
     - name: Install Dependencies
       run: make dependencies
 

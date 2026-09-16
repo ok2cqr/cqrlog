@@ -32,7 +32,8 @@ CQR_BUILD := $(shell git rev-list --count HEAD 2>/dev/null || echo $(CQR_BUILD_F
 .PHONY : help dependencies hamlib clean install deb deb_src debug \
          appimage appimage-qt5 docker-image docker docker-build docker-install \
          docker-appimage docker-appimage-qt5 docker-deb docker-deb-src \
-         install_macos sign_macos dmg_create dmg test-dmg flatpak docker-flatpak
+         install_macos sign_macos dmg_create dmg test-dmg flatpak docker-flatpak \
+         lint-lfm
 
 cqrlog: src/cqrlog.lpi
 	$(LAZBUILD) --ws=$(WS) src/cqrlog.lpi
@@ -430,11 +431,15 @@ FLATPAK_RUNTIME  = 6.10
 # itself.
 FLATPAK_WORK     ?= $(tmpdir)/cqrlog-flatpak
 FLATPAK_BUNDLE   ?= cqrlog.flatpak
+# flatpak-builder runs NCPU jobs by default; each cc1plus on the libQt6Pas
+# bindings needs ~1.5 GiB, so a small Docker VM gets OOM-killed. Cap the job
+# count by RAM (min 1, max NCPU).
+FLATPAK_JOBS     ?= $(shell awk -v n=$$(nproc) '/^MemTotal/ {j=int($$2/1572864); if (j<1) j=1; if (j>n) j=n; print j}' /proc/meminfo)
 
 flatpak: ## Build a single-file flatpak bundle (needs flatpak + flatpak-builder + org.kde.Sdk//6.10)
 	flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 	flatpak --user install -y flathub org.kde.Platform//$(FLATPAK_RUNTIME) org.kde.Sdk//$(FLATPAK_RUNTIME)
-	flatpak-builder --user --force-clean --install-deps-from=flathub \
+	flatpak-builder --user --force-clean --install-deps-from=flathub --jobs=$(FLATPAK_JOBS) \
 		--state-dir=$(FLATPAK_WORK)/state --repo=$(FLATPAK_WORK)/repo \
 		$(FLATPAK_WORK)/build $(FLATPAK_MANIFEST)
 	flatpak build-bundle $(FLATPAK_WORK)/repo $(FLATPAK_BUNDLE) $(FLATPAK_ID)
@@ -445,6 +450,15 @@ docker-flatpak: ## Build the flatpak bundle inside a Fedora flatpak-builder cont
 	docker run --rm --privileged \
 		-v $(PWD):/build -w /build \
 		cqrlog-flatpak-build make flatpak
+
+# Forms saved from Lazarus on macOS carry Cocoa control sizes; tools/lfm_layout.py
+# simulates the Qt layout and fails on overlaps/clipping and on collapsed
+# comboboxes. Only forms already converted to anchors are gated here; lint
+# everything with: make lint-lfm LFM_LINT_FILES='src/*.lfm'
+LFM_LINT_FILES ?= src/fPreferences.lfm src/fNewQSO.lfm src/fBandMapGfx.lfm
+
+lint-lfm: ## Check Lazarus forms for layout that breaks on Qt/GTK (tools/lfm_layout.py)
+	python3 tools/lfm_layout.py lint $(LFM_LINT_FILES)
 
 help: ## List the make options available
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
