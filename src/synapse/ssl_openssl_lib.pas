@@ -1859,6 +1859,12 @@ begin
 end;
 
 function InitSSLInterface: Boolean;
+{$IFDEF LINUX}
+const
+  // Unversioned libssl.so/libcrypto.so symlinks come only with -dev packages;
+  // Flatpak/Snap runtimes and plain installs ship just the versioned sonames.
+  cLinuxSSLVersions: array[0..1] of string = ('3', '1.1');
+{$ENDIF}
 var
   s: string;
   x: integer;
@@ -1885,6 +1891,19 @@ begin
   {$IFDEF MSWINDOWS}
       if (SSLLibHandle = 0) then
         SSLLibHandle := LoadLib(DLLSSLName2);
+  {$ENDIF}
+  {$IFDEF LINUX}
+      x := 0;
+      while ((SSLLibHandle = 0) or (SSLUtilHandle = 0)) and (x <= High(cLinuxSSLVersions)) do
+      begin
+        if SSLLibHandle <> 0 then
+          FreeLibrary(SSLLibHandle);
+        if SSLUtilHandle <> 0 then
+          FreeLibrary(SSLUtilHandle);
+        SSLUtilHandle := LoadLib('libcrypto.so.' + cLinuxSSLVersions[x]);
+        SSLLibHandle := LoadLib('libssl.so.' + cLinuxSSLVersions[x]);
+        Inc(x);
+      end;
   {$ENDIF}
 {$ENDIF}
       if (SSLLibHandle <> 0) and (SSLUtilHandle <> 0) then
