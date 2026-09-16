@@ -43,7 +43,8 @@ object frmBandMapGfx: TfrmBandMapGfx
       Height = 19
       Hint = 'How much of the band is visible. Mouse wheel over the map zooms too'
       Top = 2
-      Width = 38
+      Width = 78
+      Constraints.MinWidth = 78
       ItemHeight = 15
       ParentShowHint = False
       ShowHint = True

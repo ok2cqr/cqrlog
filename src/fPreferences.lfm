@@ -1017,8 +1017,8 @@ object frmPreferences: TfrmPreferences
           Height = 20
           Top = 30
           Width = 100
-          AutoSize = False
           BorderSpacing.Left = 70
+          Constraints.MinWidth = 100
           ItemHeight = 18
           TabOrder = 3
         end
@@ -1043,8 +1043,8 @@ object frmPreferences: TfrmPreferences
           Height = 20
           Top = 30
           Width = 100
-          AutoSize = False
           BorderSpacing.Left = 40
+          Constraints.MinWidth = 100
           ItemHeight = 18
           TabOrder = 5
         end
@@ -1219,8 +1219,8 @@ object frmPreferences: TfrmPreferences
         Height = 20
         Top = 182
         Width = 74
-        AutoSize = False
         BorderSpacing.Left = 10
+        Constraints.MinWidth = 74
         ItemHeight = 18
         TabOrder = 10
       end
@@ -3111,9 +3111,9 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 20
           Width = 120
-          AutoSize = False
           BorderSpacing.Left = 6
           BorderSpacing.Top = 1
+          Constraints.MinWidth = 120
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -4471,9 +4471,9 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 1
           Width = 120
-          AutoSize = False
           BorderSpacing.Left = 12
           BorderSpacing.Top = 1
+          Constraints.MinWidth = 120
           ItemHeight = 18
           ReadOnly = True
           Style = csDropDownList
@@ -4637,7 +4637,7 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 12
           Width = 539
-          AutoSize = False
+          Constraints.MinWidth = 539
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -4839,21 +4839,23 @@ object frmPreferences: TfrmPreferences
         Height = 256
         Top = 106
         Width = 600
+        AutoSize = True
         BorderSpacing.Left = 6
         Caption = ' Show only spots'
         ClientHeight = 229
         ClientWidth = 590
+        Constraints.MinWidth = 600
         TabOrder = 1
         object Label45: TLabel
           AnchorSideLeft.Control = gbDXCSpots
-          AnchorSideBottom.Control = edtDoNotShow
+          AnchorSideTop.Control = chkCW
+          AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 16
           Top = 170
           Width = 367
-          Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 6
-          BorderSpacing.Bottom = 3
+          BorderSpacing.Top = 38
           Caption = 'Do not show spots for following countries (use ; as delimiter)'
           ParentColor = False
         end
@@ -5061,23 +5063,23 @@ object frmPreferences: TfrmPreferences
         end
         object chkShow6MM: TCheckBox
           AnchorSideLeft.Control = chkShow160M
-          AnchorSideTop.Control = chkShow3CM
+          AnchorSideTop.Control = chkShow1MM
+          AnchorSideTop.Side = asrCenter
           Left = 176
           Height = 18
           Top = 96
           Width = 69
-          Anchors = [akLeft]
           Caption = '47 GHz'
           TabOrder = 19
         end
         object chkShow4MM: TCheckBox
           AnchorSideLeft.Control = chkShow80M
-          AnchorSideTop.Control = chkShow3CM
+          AnchorSideTop.Control = chkShow1MM
+          AnchorSideTop.Side = asrCenter
           Left = 264
           Height = 18
           Top = 96
           Width = 69
-          Anchors = [akLeft]
           Caption = '76 GHz'
           TabOrder = 20
         end
@@ -5135,13 +5137,14 @@ object frmPreferences: TfrmPreferences
         end
         object edtDoNotShow: TEdit
           AnchorSideLeft.Control = gbDXCSpots
-          AnchorSideBottom.Control = chkShowDxcCountry
+          AnchorSideTop.Control = Label45
+          AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 21
           Top = 189
           Width = 471
-          Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 6
+          BorderSpacing.Top = 3
           TabOrder = 26
         end
         object chkShow4M: TCheckBox
@@ -5200,15 +5203,13 @@ object frmPreferences: TfrmPreferences
         end
         object chkShowDxcCountry: TCheckBox
           AnchorSideLeft.Control = gbDXCSpots
-          AnchorSideBottom.Control = gbDXCSpots
-          AnchorSideBottom.Side = asrBottom
+          AnchorSideTop.Control = edtDoNotShow
+          AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 18
           Top = 210
           Width = 264
-          Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 6
-          BorderSpacing.Bottom = 1
           Caption = 'Show country name in the DX cluster spot'
           TabOrder = 32
         end
@@ -5805,8 +5806,8 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 27
           Width = 293
-          AutoSize = False
           BorderSpacing.Left = 12
+          Constraints.MinWidth = 293
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -5888,8 +5889,8 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 27
           Width = 293
-          AutoSize = False
           BorderSpacing.Left = 12
+          Constraints.MinWidth = 293
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -5971,8 +5972,8 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 27
           Width = 293
-          AutoSize = False
           BorderSpacing.Left = 12
+          Constraints.MinWidth = 293
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -6054,8 +6055,8 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 27
           Width = 293
-          AutoSize = False
           BorderSpacing.Left = 12
+          Constraints.MinWidth = 293
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -6137,8 +6138,8 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 27
           Width = 293
-          AutoSize = False
           BorderSpacing.Left = 12
+          Constraints.MinWidth = 293
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -6355,50 +6356,79 @@ object frmPreferences: TfrmPreferences
         ClientWidth = 665
         TabOrder = 7
         object Label62: TLabel
+          AnchorSideLeft.Control = GroupBox18
+          AnchorSideTop.Control = edtFirst
+          AnchorSideTop.Side = asrCenter
           Left = 11
           Height = 16
           Top = 14
           Width = 86
+          BorderSpacing.Left = 11
           Caption = 'The first after '
           ParentColor = False
         end
         object Label63: TLabel
+          AnchorSideLeft.Control = edtFirst
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtFirst
+          AnchorSideTop.Side = asrCenter
           Left = 192
           Height = 16
           Top = 14
           Width = 103
+          BorderSpacing.Left = 38
           Caption = 'the second after '
           ParentColor = False
         end
         object Label64: TLabel
+          AnchorSideLeft.Control = edtSecond
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtFirst
+          AnchorSideTop.Side = asrCenter
           Left = 440
           Height = 16
           Top = 14
           Width = 96
+          BorderSpacing.Left = 78
           Caption = 'disappear after '
           ParentColor = False
         end
         object edtFirst: TEdit
+          AnchorSideLeft.Control = Label62
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = GroupBox18
           Left = 104
           Height = 21
           Top = 11
           Width = 50
+          BorderSpacing.Left = 7
+          BorderSpacing.Top = 11
           TabOrder = 0
           Text = '5'
         end
         object edtSecond: TEdit
+          AnchorSideLeft.Control = Label63
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtFirst
+          AnchorSideTop.Side = asrCenter
           Left = 312
           Height = 21
           Top = 11
           Width = 50
+          BorderSpacing.Left = 17
           TabOrder = 1
           Text = '8'
         end
         object edtDisep: TEdit
+          AnchorSideLeft.Control = Label64
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtFirst
+          AnchorSideTop.Side = asrCenter
           Left = 568
           Height = 21
           Top = 11
           Width = 50
+          BorderSpacing.Left = 32
           TabOrder = 2
           Text = '12'
         end
@@ -6885,9 +6915,9 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 7
           Width = 224
-          AutoSize = False
           BorderSpacing.Left = 14
           BorderSpacing.Top = 7
+          Constraints.MinWidth = 224
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -6996,9 +7026,9 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 7
           Width = 224
-          AutoSize = False
           BorderSpacing.Left = 14
           BorderSpacing.Top = 7
+          Constraints.MinWidth = 224
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -7107,9 +7137,9 @@ object frmPreferences: TfrmPreferences
           Height = 19
           Top = 7
           Width = 224
-          AutoSize = False
           BorderSpacing.Left = 14
           BorderSpacing.Top = 7
+          Constraints.MinWidth = 224
           ItemHeight = 18
           Style = csDropDownList
           TabOrder = 0
@@ -8017,8 +8047,8 @@ object frmPreferences: TfrmPreferences
         Height = 19
         Top = 25
         Width = 120
-        AutoSize = False
         BorderSpacing.Top = 3
+        Constraints.MinWidth = 120
         ItemHeight = 18
         Style = csDropDownList
         TabOrder = 0
@@ -8202,9 +8232,9 @@ object frmPreferences: TfrmPreferences
           Top = 218
           Width = 128
           Anchors = [akRight, akBottom]
-          AutoSize = False
           BorderSpacing.Right = 6
           BorderSpacing.Bottom = 6
+          Constraints.MinWidth = 128
           ItemHeight = 18
           TabOrder = 6
         end
@@ -8594,9 +8624,9 @@ object frmPreferences: TfrmPreferences
           Top = 214
           Width = 128
           Anchors = [akRight, akBottom]
-          AutoSize = False
           BorderSpacing.Right = 5
           BorderSpacing.Bottom = 5
+          Constraints.MinWidth = 128
           ItemHeight = 18
           TabOrder = 8
         end
@@ -9479,10 +9509,12 @@ object frmPreferences: TfrmPreferences
         Height = 155
         Top = 0
         Width = 650
+        AutoSize = True
         BorderSpacing.Left = 12
         Caption = ' HamQTH '
         ClientHeight = 128
         ClientWidth = 640
+        Constraints.MinWidth = 650
         TabOrder = 0
         object chkHaUpEnabled: TCheckBox
           AnchorSideLeft.Control = GroupBox44
@@ -9623,10 +9655,12 @@ object frmPreferences: TfrmPreferences
         Height = 194
         Top = 158
         Width = 650
+        AutoSize = True
         BorderSpacing.Top = 3
         Caption = ' ClubLog '
         ClientHeight = 167
         ClientWidth = 640
+        Constraints.MinWidth = 650
         TabOrder = 1
         object chkClUpEnabled: TCheckBox
           AnchorSideLeft.Control = GroupBox45
@@ -9800,10 +9834,12 @@ object frmPreferences: TfrmPreferences
         Height = 157
         Top = 355
         Width = 650
+        AutoSize = True
         BorderSpacing.Top = 3
         Caption = ' HRDLog.net '
         ClientHeight = 130
         ClientWidth = 640
+        Constraints.MinWidth = 650
         TabOrder = 2
         object chkHrUpEnabled: TCheckBox
           AnchorSideLeft.Control = GroupBox46
@@ -9989,10 +10025,12 @@ object frmPreferences: TfrmPreferences
         Height = 141
         Top = 515
         Width = 650
+        AutoSize = True
         BorderSpacing.Top = 3
         Caption = 'UDP Log Messages'
         ClientHeight = 114
         ClientWidth = 640
+        Constraints.MinWidth = 650
         TabOrder = 7
         object chkUdUpEnabled: TCheckBox
           AnchorSideLeft.Control = GroupBox47
