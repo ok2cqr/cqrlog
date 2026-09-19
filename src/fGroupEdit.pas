@@ -111,6 +111,7 @@ begin
          end;
    end;
    pnlGrpEdt.Color:=$005C5CFF;
+   lblInfo.Font.Color:=clBlack;
    lblInfo.Caption := 'Backup your log! Operations can not be undone!';
    btnCancel.Caption:='Cancel';
    pnlGrpEdt.Repaint;
@@ -120,6 +121,7 @@ end;
 procedure TfrmGroupEdit.cmbValueChange(Sender: TObject);
 begin
   pnlGrpEdt.Color:=$005C5CFF;
+  lblInfo.Font.Color:=clBlack;
   lblInfo.Caption := 'Backup your log! Operations can not be undone!';
   btnCancel.Caption:='Cancel';
   pnlGrpEdt.Repaint;
@@ -136,6 +138,7 @@ procedure TfrmGroupEdit.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(self);
   pnlGrpEdt.Color:=clDefault;
+  lblInfo.Font.Color:=clDefault;
   if Selected then
      WhereTo := 'to selected qsos'
     else
@@ -189,6 +192,7 @@ var
 
     inc(nr);
     pnlGrpEdt.Color:=clYellow;
+    lblInfo.Font.Color:=clBlack;
     lblInfo.Caption := 'Working .... QSO nr. ' + IntToStr(nr);
     pnlGrpEdt.Repaint;
     lblInfo.Repaint
@@ -615,6 +619,7 @@ begin
   btnCancel.Caption:= 'Close';
   btnApply.Enabled:=False;
   pnlGrpEdt.Color:= clLime;
+  lblInfo.Font.Color:=clBlack;
   pnlGrpEdt.Repaint;
   lblInfo.Repaint;
 end;

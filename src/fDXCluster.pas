@@ -1769,15 +1769,15 @@ begin
     gcfgOC  := cqrini.ReadBool('BandMap','wOC',True);
     gcfgiDXCC := cqrini.ReadString('BandMap','iDXCC','');
     gcfgwIOTA := cqrini.ReadBool('BandMap','wIOTA', True);
-    gcfgNewCountryColor := cqrini.ReadInteger('DXCluster','NewCountry',0);
-    gcfgNewBandColor := cqrini.ReadInteger('DXCluster','NewBand',0);
-    gcfgNewModeColor := cqrini.ReadInteger('DXCluster','NewMode',0);
-    gcfgNeedQSLColor := cqrini.ReadInteger('DXCluster','NeedQSL',0);
+    gcfgNewCountryColor := cqrini.ReadInteger('DXCluster','NewCountry',clWindowText);
+    gcfgNewBandColor := cqrini.ReadInteger('DXCluster','NewBand',clWindowText);
+    gcfgNewModeColor := cqrini.ReadInteger('DXCluster','NewMode',clWindowText);
+    gcfgNeedQSLColor := cqrini.ReadInteger('DXCluster','NeedQSL',clWindowText);
     gcfgShowFrom     := cqrini.ReadInteger('xplanet','ShowFrom',0);
     gcfgLastSpots    := cqrini.ReadString('xplanet','LastSpots','20');
     gcfgIgnoreBandFreq := cqrini.ReadBool('BandMap','IgnoreBandFreq',True);
     gcfgUseDXCColors := cqrini.ReadBool('BandMap','UseDXCColors',False);
-    gcfgClusterColor := cqrini.ReadInteger('BandMap','ClusterColor',clBlack);
+    gcfgClusterColor := cqrini.ReadInteger('BandMap','ClusterColor',clWindowText);
     gcfgNotShow := cqrini.ReadString('DXCluster','NotShow','')
   finally
     LeaveCriticalSection(csDXCPref)

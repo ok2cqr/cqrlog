@@ -1157,11 +1157,11 @@ begin
   if pos('UNKN',Uppercase(lblCountryInfo.Caption))>0 then lblCountryInfo.Font.Color:=clRed;
   if pos('CONF',Uppercase(lblCountryInfo.Caption))>0 then lblCountryInfo.Font.Color:=clGreen;
   if pos('NEW C',Uppercase(lblCountryInfo.Caption))>0 then
-  lblCountryInfo.Font.Color:=cqrini.ReadInteger('DXCluster','NewCountry',0);
+  lblCountryInfo.Font.Color:=cqrini.ReadInteger('DXCluster','NewCountry',clWindowText);
   if pos('NEW B',Uppercase(lblCountryInfo.Caption))>0 then
-  lblCountryInfo.Font.Color:=cqrini.ReadInteger('DXCluster','NewBand',0);
+  lblCountryInfo.Font.Color:=cqrini.ReadInteger('DXCluster','NewBand',clWindowText);
   if pos('NEW M',Uppercase(lblCountryInfo.Caption))>0 then
-  lblCountryInfo.Font.Color:=cqrini.ReadInteger('DXCluster','NewMode',0);
+  lblCountryInfo.Font.Color:=cqrini.ReadInteger('DXCluster','NewMode',clWindowText);
   lblCountryInfo.Refresh;
 end;
 

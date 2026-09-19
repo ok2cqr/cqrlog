@@ -275,10 +275,10 @@ begin
   index := dmData.GetWAZInfoIndex(fwaz,ffreq);
   Lwaz.Text := dmData.GetWAZInfoString(index);
   case index of
-    1 : Lwaz.Color := cqrini.ReadInteger('Zones','NewWAZ',0);
-    2 : Lwaz.Color := cqrini.ReadInteger('Zones','NewBandWAZ',0);
-    3 : Lwaz.Color := cqrini.ReadInteger('Zones','QSLWAZ',0);
-    4 : Lwaz.Color := clBlack
+    1 : Lwaz.Color := cqrini.ReadInteger('Zones','NewWAZ',clWindowText);
+    2 : Lwaz.Color := cqrini.ReadInteger('Zones','NewBandWAZ',clWindowText);
+    3 : Lwaz.Color := cqrini.ReadInteger('Zones','QSLWAZ',clWindowText);
+    4 : Lwaz.Color := clWindowText
   end;
   Details.AddLine(Lwaz.Text,Lwaz.Color,clWindow,0)
 end;
@@ -292,10 +292,10 @@ begin
   index := dmData.GetITUInfoIndex(fITU,ffreq);
   Litu.Text := dmData.GetITUInfoString(index);
   case index of
-    1 : Litu.Color := cqrini.ReadInteger('Zones','NewITU',0);
-    2 : Litu.Color := cqrini.ReadInteger('Zones','NewBandITU',0);
-    3 : Litu.Color := cqrini.ReadInteger('Zones','QSLITU',0);
-    4 : Litu.Color := clBlack
+    1 : Litu.Color := cqrini.ReadInteger('Zones','NewITU',clWindowText);
+    2 : Litu.Color := cqrini.ReadInteger('Zones','NewBandITU',clWindowText);
+    3 : Litu.Color := cqrini.ReadInteger('Zones','QSLITU',clWindowText);
+    4 : Litu.Color := clWindowText
   end;
   Details.AddLine(Litu.Text,Litu.Color,clWindow,0)
 end;
@@ -310,9 +310,9 @@ begin
   Liota.island := dmData.GetIOTAName(fiota);
   Liota.Text   := dmData.GetIOTAInfoString(index);
   case index of
-    1 : Liota.Color := cqrini.ReadInteger('IOTA','NewIOTA',0);
-    2 : Liota.Color := cqrini.ReadInteger('IOTA','QSLIOTA',0);
-    3 : Liota.Color := clBlack
+    1 : Liota.Color := cqrini.ReadInteger('IOTA','NewIOTA',clWindowText);
+    2 : Liota.Color := cqrini.ReadInteger('IOTA','QSLIOTA',clWindowText);
+    3 : Liota.Color := clWindowText
   end; //case
   Details.AddLine(Liota.Text,Liota.color,clWindow,0);
   Details.AddLine(Liota.island,Liota.color,clWindow,0)

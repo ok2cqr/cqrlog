@@ -3076,10 +3076,10 @@ begin
   chkSSB.Checked := cqrini.ReadBool('DXCluster', 'SSB', True);
   chkDATA.Checked := cqrini.ReadBool('DXCluster', 'DATA', True);
   edtDoNotShow.Text := cqrini.ReadString('DXCluster', 'NotShow', '');
-  cmbNewCountry.Selected := cqrini.ReadInteger('DXCluster', 'NewCountry', 0);
-  cmbNewBand.Selected := cqrini.ReadInteger('DXCluster', 'NewBand', 0);
-  cmbNewMode.Selected := cqrini.ReadInteger('DXCluster', 'NewMode', 0);
-  cmbQSLNeeded.Selected := cqrini.ReadInteger('DXCluster', 'NeedQSL', 0);
+  cmbNewCountry.Selected := cqrini.ReadInteger('DXCluster', 'NewCountry', clWindowText);
+  cmbNewBand.Selected := cqrini.ReadInteger('DXCluster', 'NewBand', clWindowText);
+  cmbNewMode.Selected := cqrini.ReadInteger('DXCluster', 'NewMode', clWindowText);
+  cmbQSLNeeded.Selected := cqrini.ReadInteger('DXCluster', 'NeedQSL', clWindowText);
   chkConToDXC.Checked := cqrini.ReadBool('DXCluster', 'ConAfterRun', False);
   chkShowDxcCountry.Checked := cqrini.ReadBool('DXCluster','ShowDxcCountry',False);
   edtAlertCmd.Text := cqrini.ReadString('DXCluster', dmUtils.PlatformKey('AlertCmd'), '');
@@ -3101,17 +3101,17 @@ begin
   chkgridsmallrows.Checked := cqrini.ReadBool('Fonts','GridSmallRows',False);
   chkgriddotsinsteadspaces.Checked := cqrini.ReadBool('Fonts','GridDotsInsteadSpaces',False);
 
-  clboxNewWaz.Selected := cqrini.ReadInteger('Zones', 'NewWAZ', 0);
-  clBoxBandWAZ.Selected := cqrini.ReadInteger('Zones', 'NewBandWAZ', 0);
-  clBoxQSLWAZ.Selected := cqrini.ReadInteger('Zones', 'QSLWAZ', 0);
-  clboxNewITU.Selected := cqrini.ReadInteger('Zones', 'NewITU', 0);
-  clBoxBandITU.Selected := cqrini.ReadInteger('Zones', 'NewBandITU', 0);
-  clBoxQSLITU.Selected := cqrini.ReadInteger('Zones', 'QSLITU', 0);
+  clboxNewWaz.Selected := cqrini.ReadInteger('Zones', 'NewWAZ', clWindowText);
+  clBoxBandWAZ.Selected := cqrini.ReadInteger('Zones', 'NewBandWAZ', clWindowText);
+  clBoxQSLWAZ.Selected := cqrini.ReadInteger('Zones', 'QSLWAZ', clWindowText);
+  clboxNewITU.Selected := cqrini.ReadInteger('Zones', 'NewITU', clWindowText);
+  clBoxBandITU.Selected := cqrini.ReadInteger('Zones', 'NewBandITU', clWindowText);
+  clBoxQSLITU.Selected := cqrini.ReadInteger('Zones', 'QSLITU', clWindowText);
   chkShowWAZInfo.Checked := cqrini.ReadBool('Zones', 'ShowWAZInfo', True);
   chkShowITUInfo.Checked := cqrini.ReadBool('Zones', 'ShowITUInfo', True);
 
-  clboxNewIOTA.Selected := cqrini.ReadInteger('IOTA', 'NewIOTA', 0);
-  clboxQSLIOTA.Selected := cqrini.ReadInteger('IOTA', 'QSLIOTA', 0);
+  clboxNewIOTA.Selected := cqrini.ReadInteger('IOTA', 'NewIOTA', clWindowText);
+  clboxQSLIOTA.Selected := cqrini.ReadInteger('IOTA', 'QSLIOTA', clWindowText);
   chkShowIOTAInfo.Checked := cqrini.ReadBool('IOTA', 'ShowIOTAInfo', True);
 
   cmbFirstClub.Text := cqrini.ReadString('Clubs', 'First', '');
@@ -3126,13 +3126,13 @@ begin
   fbandSize := cqrini.ReadInteger('BandMap', dmUtils.PlatformKey('FontSize'), 8);
   lblBandMapFont.Caption :=
     cqrini.ReadString('BandMap', dmUtils.PlatformKey('BandFont'), cDefaultMonoFont) + ' ' + IntToStr(fbandSize);
-  cmbQSOBandColor.Selected := cqrini.ReadInteger('BandMap', 'NewQSOColor', clBlack);
+  cmbQSOBandColor.Selected := cqrini.ReadInteger('BandMap', 'NewQSOColor', clWindowText);
   chkBandMapkHz.Checked := cqrini.ReadBool('BandMap', 'in_kHz', True);
   chkSaveBandMap.Checked := cqrini.ReadBool('BandMap', 'Save', False);
   edtFirst.Text := IntToStr(cqrini.ReadInteger('BandMap', 'FirstAging', 5));
   edtSecond.Text := IntToStr(cqrini.ReadInteger('BandMap', 'SecondAging', 8));
   edtDisep.Text := IntToStr(cqrini.ReadInteger('BandMap', 'Disep', 12));
-  cmbFrmDXCColor.Selected := cqrini.ReadInteger('BandMap', 'ClusterColor', clBlack);
+  cmbFrmDXCColor.Selected := cqrini.ReadInteger('BandMap', 'ClusterColor', clWindowText);
   cmbRbnBandColor.Selected := cqrini.ReadInteger('BandMap', 'RbnColor', clWindowText);
   chkShowActiveBand.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
   chkShowActiveMode.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);

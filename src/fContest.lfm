@@ -975,6 +975,7 @@ object frmContest: TfrmContest
       Width = 1
       BorderSpacing.Left = 12
       Color = clYellow
+      Font.Color = clBlack
       ParentColor = False
       ParentFont = False
       ParentShowHint = False
@@ -1004,6 +1005,7 @@ object frmContest: TfrmContest
       Width = 1
       BorderSpacing.Left = 6
       Color = clYellow
+      Font.Color = clBlack
       ParentColor = False
       ParentFont = False
       ParentShowHint = False

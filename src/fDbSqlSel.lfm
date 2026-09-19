@@ -6,7 +6,6 @@ object frmDbSqlSel: TfrmDbSqlSel
   Caption = 'Select SQL for logs'
   ClientHeight = 456
   ClientWidth = 501
-  Color = clWhite
   LCLVersion = '4.6.0.0'
   OnClose = FormClose
   OnCreate = FormCreate
@@ -247,9 +246,6 @@ object frmDbSqlSel: TfrmDbSqlSel
     BorderSpacing.Right = 30
     ClientHeight = 31
     ClientWidth = 441
-    Color = clWhite
-    ParentBackground = False
-    ParentColor = False
     TabOrder = 0
     object lblWelcome: TLabel
       AnchorSideLeft.Control = pnlWelcome
@@ -584,9 +580,6 @@ object frmDbSqlSel: TfrmDbSqlSel
     BorderSpacing.Right = 30
     ClientHeight = 89
     ClientWidth = 441
-    Color = clWhite
-    ParentBackground = False
-    ParentColor = False
     TabOrder = 4
     Visible = False
     object lblInfo: TLabel

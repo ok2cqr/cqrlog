@@ -1468,7 +1468,7 @@ begin
        and frmWorkedGrids.GridOK(msgList[1]) )                                         //locator like "F5MYK/MM OJ12"
      then
           begin
-            edtFollow.Font.Color := clBlack;
+            edtFollow.Font.Color := clWindowText;
             edtFollow.Text := IntToStr(Df)+' '+IntToStr(Sr)+' '+message;
             if (( msgList.Count > 1 ) and (pos(edtFollowCall.Text,msgList[1])>0)) then RepFlw := Reply;
                //only if Fcall is second, do reply
