@@ -260,6 +260,20 @@ var
   num      : Integer = 0;
   tmp      : String;
   er    : Boolean = False;
+  values   : String = '';
+
+  procedure InsertBatch;
+  begin
+    if values = '' then
+      exit;
+    dmData.Q.SQL.Text := 'INSERT INTO zipcode'+IntToStr(ZipNr)+ ' (zip,county) VALUES'+values;
+    if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
+    dmData.Q.ExecSQL;
+    values := ''
+  end;
+
+const
+  C_ZIP_BATCH = 500; //rows per one INSERT
 begin
   mLoad.Clear;
   if not FileExists(SourceFile) then
@@ -299,12 +313,17 @@ begin
       inc(num);
       Readln(sF,tmp);
       data   := dmUtils.Explode(';',tmp);
-      dmData.Q.SQL.Text := 'INSERT INTO zipcode'+IntToStr(ZipNr)+ ' (zip,county) '+
-                           'VALUES('+QuotedStr(data[0])+','+QuotedStr(data[1])+')';
-      if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-      dmData.Q.ExecSQL;
-      Sleep(1)
+      if values <> '' then
+        values := values + ',';
+      values := values + '('+QuotedStr(data[0])+','+QuotedStr(data[1])+')';
+      if (num mod C_ZIP_BATCH) = 0 then
+      begin
+        InsertBatch;
+        mLoad.Lines[mLoad.Lines.Count-1] := IntToStr(num) + ' records ...';
+        Application.ProcessMessages
+      end
     end;
+    InsertBatch;
     mLoad.Lines.Add(IntToStr(num) + ' records converted');
   except
     on E : Exception do
