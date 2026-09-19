@@ -44,6 +44,8 @@ type
     FQ     : TSqlCursor;   // scalars and writes that commit on their own
     FRows  : TSqlCursor;   // lent out by the Open...Rows operations
     FBatch : TSqlCursor;   // several writes in one transaction the caller ends
+    FClubValues      : String;   // club member rows waiting for FlushClubMembers
+    FClubValuesCount : Integer;
     function OpenRows(const Sql : String) : TDataSet;
   public
     // Wired from TdmData once MainCon exists -- this module is not one of
@@ -73,6 +75,7 @@ type
     // club membership: the clear and the inserts are one batch
     procedure ClearClubTable(const TableName : String);
     procedure InsertClubMember(const TableName, ClubNr, ClubCall, FromDate, ToDate : String);
+    procedure FlushClubMembers(const TableName : String);
 
     // The batch is the writes marked so above, in one transaction; the
     // caller ends it with one of these.
@@ -120,7 +123,8 @@ type
 
     // club membership
     function SqlClearClubTable(const TableName : String) : String;
-    function SqlInsertClubMemberParams(const TableName : String) : String;
+    function SqlInsertClubMembers(const TableName, Values : String) : String;
+    function SqlClubMemberValues(const ClubNr, ClubCall, FromDate, ToDate : String) : String;
 
     // ADIF import
     function SqlQsoExists(const QsoDate, TimeOn, Call, Band, Mode : String) : String;
@@ -174,6 +178,8 @@ end;
 
 procedure TdmSqlImpExp.RollbackBatch;
 begin
+  FClubValues      := '';
+  FClubValuesCount := 0;
   FBatch.Release
 end;
 
@@ -257,14 +263,31 @@ begin
   FBatch.Exec
 end;
 
+const
+  C_CLUB_BATCH = 500; //rows per one INSERT
+
+// Rows are collected and sent as one multi-row INSERT per C_CLUB_BATCH rows;
+// the caller has to FlushClubMembers before CommitBatch.
 procedure TdmSqlImpExp.InsertClubMember(const TableName, ClubNr, ClubCall, FromDate, ToDate : String);
 begin
-  FBatch.PrepareNext(SqlInsertClubMemberParams(TableName));
-  FBatch.Query.Prepare;
-  FBatch.Query.Params[0].AsString := ClubNr;
-  FBatch.Query.Params[1].AsString := ClubCall;
-  FBatch.Query.Params[2].AsString := FromDate;
-  FBatch.Query.Params[3].AsString := ToDate;
+  if FClubValues <> '' then
+    FClubValues := FClubValues + ',';
+  FClubValues := FClubValues + SqlClubMemberValues(ClubNr, ClubCall, FromDate, ToDate);
+  inc(FClubValuesCount);
+  if FClubValuesCount >= C_CLUB_BATCH then
+    FlushClubMembers(TableName)
+end;
+
+procedure TdmSqlImpExp.FlushClubMembers(const TableName : String);
+var
+  Values : String;
+begin
+  if FClubValues = '' then
+    exit;
+  Values           := FClubValues;
+  FClubValues      := '';
+  FClubValuesCount := 0;
+  FBatch.PrepareNext(SqlInsertClubMembers(TableName, Values));
   FBatch.Exec
 end;
 
@@ -433,11 +456,15 @@ begin
   Result := 'TRUNCATE TABLE ' + TableName
 end;
 
-function TdmSqlImpExp.SqlInsertClubMemberParams(const TableName : String) : String;
-const
-  C_INS = 'insert into %s (club_nr,clubcall,fromdate,todate) values (:club_nr, :clubcall, :fromdate, :todate)';
+function TdmSqlImpExp.SqlInsertClubMembers(const TableName, Values : String) : String;
 begin
-  Result := Format(C_INS, [TableName])
+  Result := 'insert into ' + TableName + ' (club_nr,clubcall,fromdate,todate) values ' + Values
+end;
+
+function TdmSqlImpExp.SqlClubMemberValues(const ClubNr, ClubCall, FromDate, ToDate : String) : String;
+begin
+  Result := '('+QuotedStr(ClubNr)+','+QuotedStr(ClubCall)+','+QuotedStr(FromDate)+','+
+            QuotedStr(ToDate)+')'
 end;
 
 { ADIF import }

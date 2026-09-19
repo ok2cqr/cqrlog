@@ -53,6 +53,8 @@ type
     FQ     : TSqlCursor;   // scalars and writes that commit on their own
     FRows  : TSqlCursor;   // lent out by the Open...Rows operations
     FBatch : TSqlCursor;   // several writes in one transaction the caller ends
+    FClubValues      : String;   // club member rows waiting for FlushClubMembers
+    FClubValuesCount : Integer;
     function OpenRows(const Sql : String) : TDataSet;
     procedure ExecInBatch(const Sql : String);
     function SqlCountyByZipTable(const Table : Integer; const Zip : String) : String;
@@ -98,6 +100,7 @@ type
     // the lookup (fQSODetails) is a record
     procedure ClearClub(const DbNum : String);
     procedure InsertClubMember(const DbNum, ClubNr, Call, FromDate, ToDate : String);
+    procedure FlushClubMembers(const DbNum : String);
     function  GetClubMember(const ClubTable, ClubField, Value, Date : String; out Member : TClubMember) : Boolean;
 
     // The batch is the writes marked so above, in one transaction; the
@@ -152,7 +155,8 @@ type
 
     // club1..5
     function SqlClearClub(const DbNum : String) : String;
-    function SqlInsertClubMember(const DbNum, ClubNr, Call, FromDate, ToDate : String) : String;
+    function SqlInsertClubMembers(const DbNum, Values : String) : String;
+    function SqlClubMemberValues(const ClubNr, Call, FromDate, ToDate : String) : String;
     function SqlClubMember(const ClubTable, ClubField, Value, Date : String) : String;
   end;
 
@@ -203,6 +207,8 @@ end;
 
 procedure TdmSqlRef.RollbackBatch;
 begin
+  FClubValues      := '';
+  FClubValuesCount := 0;
   FBatch.Release
 end;
 
@@ -410,9 +416,31 @@ begin
   ExecInBatch(SqlClearClub(DbNum))
 end;
 
+const
+  C_CLUB_BATCH = 500; //rows per one INSERT
+
+// Rows are collected and sent as one multi-row INSERT per C_CLUB_BATCH rows;
+// the caller has to FlushClubMembers before CommitBatch.
 procedure TdmSqlRef.InsertClubMember(const DbNum, ClubNr, Call, FromDate, ToDate : String);
 begin
-  ExecInBatch(SqlInsertClubMember(DbNum, ClubNr, Call, FromDate, ToDate))
+  if FClubValues <> '' then
+    FClubValues := FClubValues + ',';
+  FClubValues := FClubValues + SqlClubMemberValues(ClubNr, Call, FromDate, ToDate);
+  inc(FClubValuesCount);
+  if FClubValuesCount >= C_CLUB_BATCH then
+    FlushClubMembers(DbNum)
+end;
+
+procedure TdmSqlRef.FlushClubMembers(const DbNum : String);
+var
+  Values : String;
+begin
+  if FClubValues = '' then
+    exit;
+  Values           := FClubValues;
+  FClubValues      := '';
+  FClubValuesCount := 0;
+  ExecInBatch(SqlInsertClubMembers(DbNum, Values))
 end;
 
 // A row with an empty id and an empty number is "not a member"; the number
@@ -636,10 +664,15 @@ begin
   Result := 'TRUNCATE TABLE club'+DbNum
 end;
 
-function TdmSqlRef.SqlInsertClubMember(const DbNum, ClubNr, Call, FromDate, ToDate : String) : String;
+function TdmSqlRef.SqlInsertClubMembers(const DbNum, Values : String) : String;
 begin
   Result := 'INSERT INTO club'+DbNum+' (club_nr,clubcall,fromdate,todate) '+
-            'VALUES ('+QuotedStr(ClubNr)+','+QuotedStr(Call)+','+QuotedStr(FromDate)+','+
+            'VALUES '+Values
+end;
+
+function TdmSqlRef.SqlClubMemberValues(const ClubNr, Call, FromDate, ToDate : String) : String;
+begin
+  Result := '('+QuotedStr(ClubNr)+','+QuotedStr(Call)+','+QuotedStr(FromDate)+','+
             QuotedStr(ToDate)+')'
 end;
 

@@ -1696,7 +1696,7 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
     pBarProg.Position := 0;
     pBarProg.Max := l.Count-1;
 
-    try try
+    try
       dmSqlImpExp.ClearClubTable(ClubTableName);
       for i:=0 to l.Count-1 do
       begin
@@ -1708,18 +1708,22 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
 
         dmSqlImpExp.InsertClubMember(ClubTableName, ClubLine.club_nr, ClubLine.club_call,
                                      ClubLine.fromdate, ClubLine.todate);
-        pBarProg.StepIt;
-        Application.ProcessMessages
-      end
+        if (i mod 500) = 0 then
+        begin
+          pBarProg.Position := i;
+          Application.ProcessMessages
+        end
+      end;
+      dmSqlImpExp.FlushClubMembers(ClubTableName);
+      pBarProg.Position := pBarProg.Max;
+      Application.ProcessMessages;
+      dmSqlImpExp.CommitBatch
     except
       on E : Exception do
       begin
-        Application.MessageBox(PChar('ERROR:' + LineEnding + LineEnding + E.ToString), 'Error', mb_OK + mb_IconError);
-        dmSqlImpExp.RollbackBatch
+        dmSqlImpExp.RollbackBatch;
+        Application.MessageBox(PChar('ERROR:' + LineEnding + LineEnding + E.ToString), 'Error', mb_OK + mb_IconError)
       end
-    end
-    finally
-      dmSqlImpExp.CommitBatch
     end
   end;
 

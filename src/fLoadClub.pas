@@ -232,7 +232,8 @@ begin
         mLoad.Lines[mLoad.Lines.Count-1] := IntToStr(num) + ' records ...';
         Application.ProcessMessages
       end
-    end
+    end;
+    dmSqlRef.FlushClubMembers(DBnum)
   except
     on Ex : Exception do
     begin
