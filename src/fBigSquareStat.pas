@@ -76,22 +76,18 @@ var
   allwkd : longint = 0;
   thiswkd : longint =0;
   allwkdBig : longint = 0;
-  TotPos : longint = 0;
   wkd : integer = 0;
   cfm : integer = 0;
   ll  : String = '';
   sum_wkd : integer = 0;
   sum_cfm : integer = 0;
-  db : TBufDataset;
   TableName : String;
-  bigSquares : TStringList;
-  squares    : TStringList;
-  i, y       : Integer;
+  squares    : TSquareStatuses;
+  i          : Integer;
 begin
   tmrBlink.Enabled:=False;
   TableName:='cqrlog_main';
-  bigSquares := TStringList.Create;
-  squares    := TStringList.Create;
+  Screen.Cursor := crHourGlass;
   try
     if chkQSL.Checked then
     begin
@@ -132,92 +128,45 @@ begin
     allwkdBig := dmSqlStat.CountBigSquaresWorked(TableName);
     allwkd    := dmSqlStat.CountSquaresWorked(TableName);
 
-    dmSqlStat.ListBigSquaresOnBand(TableName, bnd, bigSquares);
+    squares := dmSqlStat.ListSquareStatuses(TableName, bnd, tmp);
     WriteHMTLHeader;
     writeln(f,'<table>');
-    pbTot.Max:=bigSquares.Count;
-    thiswkd:= bigSquares.Count;
-    for i := 0 to bigSquares.Count-1 do
+    i := 0;
+    while i <= High(squares) do
     begin
-      inc(TotPos);
-      pbTot.Position:=TotPos;
-      Application.ProcessMessages;
-      ll := bigSquares[i];
+      inc(thiswkd);
+      ll := copy(squares[i].Square,1,2);
       writeln(f,'<tr>'+LineEnding+'<td valign="middle">'+LineEnding+'<font color="black"><b>'+ll+'</b></font>'+LineEnding+'</td>');
       writeln(f,'<td align="left">');
       writeln(f,'<font color="black">');
-      squares.Clear;
-      dmSqlStat.ListSquaresInBigSquare(TableName, ll, bnd, squares);
-
-      db := TBufDataset.Create(nil); //I was not able to clear all records from TBufDataset without this workaround
-      try
-        db.FieldDefs.Clear;
-        db.FieldDefs.Add('loc', ftString, 4);
-        db.IndexDefs.Add('loc','loc',[ixPrimary]);
-        db.FieldDefs.Add('cfm',ftBoolean);
-        db.CreateDataset;
-
-        db.Open;
-        wkd := 0;
-        for y := 0 to squares.Count-1 do
+      wkd := 0;
+      cfm := 0;
+      while (i <= High(squares)) and (copy(squares[i].Square,1,2) = ll) do
+      begin
+        if wkd > 0 then
+          Write(f,', ');
+        if squares[i].Cfm then
         begin
-          db.Append;
-          db.Fields[0].AsString  := squares[y];
-          db.Fields[1].AsBoolean := False;
-          db.Post;
-          inc(wkd)
-        end;
-        sum_wkd := sum_wkd + wkd;
-        if tmp <> '' then
-        begin
-          squares.Clear;
-          dmSqlStat.ListSquaresInBigSquareCfm(TableName, ll, bnd, tmp, squares);
-          cfm := 0;
-          for y := 0 to squares.Count-1 do
-          begin
-            if db.Locate('LOC',squares[y],[]) then
-            begin
-              db.Edit;
-              db.Fields[1].AsBoolean := True;
-              db.Post
-            end;
-            inc(cfm)
-          end;
-          sum_cfm := sum_cfm + cfm
-        end;
-
-        db.IndexFieldNames := 'loc';
-        db.First;
-        while not db.Eof do
-        begin
-          if db.Bof then
-          begin
-            if db.Fields[1].AsBoolean then
-              Write(f,'<font color="black">',db.Fields[0].AsString,'</font>')
-            else
-              Write(f,'<font color="gray">',db.Fields[0].AsString,'</font>')
-          end
-          else begin
-            if db.Fields[1].AsBoolean then
-              Write(f,', <font color="black">',db.Fields[0].AsString,'</font>')
-            else
-              Write(f,', <font color="gray">',db.Fields[0].AsString,'</font>')
-          end;
-          db.Next;
-        end;
-        Writeln(f,'</font>');
-        Writeln(f,'</td>');
-        Writeln(f,'<td valign="middle" align="left">');
-        Writeln(f,'<font color="black">');
-        Writeln(f,'<b>WKD: ',wkd,'</b><br>');
-        if tmp<>'' then
-          Writeln(f,'<font color="black"><b>CFM: ',cfm,'</font></b>');
-        Writeln(f,'</font>');
-        Writeln(f,'</td>');
-        Writeln(f,'</tr>')
-      finally
-        FreeAndNil(db)
+          Write(f,'<font color="black">',squares[i].Square,'</font>');
+          inc(cfm)
+        end
+        else
+          Write(f,'<font color="gray">',squares[i].Square,'</font>');
+        inc(wkd);
+        inc(i)
       end;
+      sum_wkd := sum_wkd + wkd;
+      sum_cfm := sum_cfm + cfm;
+      Writeln(f,'</font>');
+      Writeln(f,'</td>');
+      Writeln(f,'<td valign="middle" align="left">');
+      Writeln(f,'<font color="black">');
+      Writeln(f,'<b>WKD: ',wkd,'</b><br>');
+      if tmp<>'' then
+        Writeln(f,'<font color="black"><b>CFM: ',cfm,'</font></b>');
+      Writeln(f,'</font>');
+      Writeln(f,'</td>');
+      Writeln(f,'</tr>')
     end;
     Writeln(f,'</table>');
     Writeln(f,'<hr>');
@@ -231,6 +180,7 @@ begin
     Writeln(f,'</body>');
     Writeln(f,'</html>');
     CloseFile(f);
+    pbTot.Position:=pbTot.Max;
 
     if dmData.IsFilter then
       dmSqlStat.DropStatView(TableName);
@@ -238,8 +188,7 @@ begin
     CopyFile(TmpFile,ExtractFileNameWithoutExt(TmpFile)+'.html');
     IpHtmlPanel1.OpenURL(expandLocalHtmlFileName(ExtractFileNameWithoutExt(TmpFile)+'.html'))
   finally
-    squares.Free;
-    bigSquares.Free
+    Screen.Cursor := crDefault
   end
 end;
 

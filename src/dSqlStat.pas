@@ -22,10 +22,9 @@
 // module's own cursors.  A scalar (a count, a "does this QSO exist") comes
 // back as a value.  A row pass lends the module's row cursor: OpenXxxRows
 // opens the statement and returns the dataset, the window walks it with
-// Fields[...] as before, CloseRows gives it back.  Where the window keeps
-// the message loop running while it walks (the locator and county pages),
-// the rows are copied into a list instead, so nothing that runs meanwhile
-// can close the dataset under it.
+// Fields[...] as before, CloseRows gives it back.  The locator and county pages
+// get their rows copied into an array instead, one grouped statement for
+// the whole page.
 //
 // The two cursors: FRows is the one lent out, FQ serves scalars, list
 // fills and writes.  A scalar called from inside a borrowed row pass must
@@ -55,6 +54,13 @@ type
   end;
   TCountyQsoCounts = array of TCountyQsoCount;
 
+  // A worked square of the locator window (fBigSquareStat).
+  TSquareStatus = record
+    Square : String;
+    Cfm    : Boolean;
+  end;
+  TSquareStatuses = array of TSquareStatus;
+
   TdmSqlStat = class(TDataModule)
     procedure DataModuleCreate(Sender : TObject);
   private
@@ -64,7 +70,6 @@ type
     function  GetValue(const Sql : String) : Integer;
     function  GetRowCount(const Sql : String) : Integer;
     function  QsoExists(const Sql : String) : Boolean;
-    procedure ListFirstColumn(const Sql : String; Items : TStrings);
   public
     // Wired from TdmData once MainCon exists -- this module is not one of
     // dData's components, so its bulk DataBase assignment does not reach it.
@@ -109,15 +114,13 @@ type
     function OpenDokStatRows(const Where : String) : TDataSet;
 
     // big square / locator window (fBigSquareStat) and county window
-    // (fCountyStat); both walk their rows with the message loop running,
-    // so the rows come back as lists
+    // (fCountyStat); one grouped statement per page, the rows come back
+    // as arrays
     procedure DropStatView(const TableName : String);
     procedure CreateStatView(const TableName, FilterSql : String);
     function  CountBigSquaresWorked(const TableName : String) : Integer;
     function  CountSquaresWorked(const TableName : String) : Integer;
-    procedure ListBigSquaresOnBand(const TableName, BandCond : String; Items : TStrings);
-    procedure ListSquaresInBigSquare(const TableName, BigSquare, BandCond : String; Items : TStrings);
-    procedure ListSquaresInBigSquareCfm(const TableName, BigSquare, BandCond, CfmCond : String; Items : TStrings);
+    function  ListSquareStatuses(const TableName, BandCond, CfmCond : String) : TSquareStatuses;
     function  CountCountiesWorked(const TableName : String) : Integer;
     function  ListCountyQsoCounts(const TableName, BandCond, CfmCond : String) : TCountyQsoCounts;
 
@@ -184,9 +187,7 @@ type
     function SqlCreateStatView(const TableName, FilterSql : String) : String;
     function SqlBigSquaresWorked(const TableName : String) : String;
     function SqlSquaresWorked(const TableName : String) : String;
-    function SqlBigSquaresOnBand(const TableName, BandCond : String) : String;
-    function SqlSquaresInBigSquare(const TableName, BigSquare, BandCond : String) : String;
-    function SqlSquaresInBigSquareCfm(const TableName, BigSquare, BandCond, CfmCond : String) : String;
+    function SqlSquareStatuses(const TableName, BandCond, CfmCond : String) : String;
 
     // county window (fCountyStat)
     function SqlCountiesWorked(const TableName : String) : String;
@@ -279,21 +280,6 @@ end;
 function TdmSqlStat.QsoExists(const Sql : String) : Boolean;
 begin
   Result := GetValue(Sql) > 0
-end;
-
-procedure TdmSqlStat.ListFirstColumn(const Sql : String; Items : TStrings);
-begin
-  FQ.Prepare(Sql);
-  try
-    FQ.Open;
-    while not FQ.Query.Eof do
-    begin
-      Items.Add(FQ.Query.Fields[0].AsString);
-      FQ.Query.Next
-    end
-  finally
-    FQ.Release
-  end
 end;
 
 { DXCC counts and probes (dDXCC) }
@@ -507,19 +493,29 @@ begin
   Result := GetRowCount(SqlSquaresWorked(TableName))
 end;
 
-procedure TdmSqlStat.ListBigSquaresOnBand(const TableName, BandCond : String; Items : TStrings);
+// One pass for the whole window, sorted, so the squares of a big square
+// follow each other; two queries per big square were what made it slow.
+function TdmSqlStat.ListSquareStatuses(const TableName, BandCond, CfmCond : String) : TSquareStatuses;
+var
+  Count : Integer = 0;
 begin
-  ListFirstColumn(SqlBigSquaresOnBand(TableName, BandCond), Items)
-end;
-
-procedure TdmSqlStat.ListSquaresInBigSquare(const TableName, BigSquare, BandCond : String; Items : TStrings);
-begin
-  ListFirstColumn(SqlSquaresInBigSquare(TableName, BigSquare, BandCond), Items)
-end;
-
-procedure TdmSqlStat.ListSquaresInBigSquareCfm(const TableName, BigSquare, BandCond, CfmCond : String; Items : TStrings);
-begin
-  ListFirstColumn(SqlSquaresInBigSquareCfm(TableName, BigSquare, BandCond, CfmCond), Items)
+  Result := nil;
+  FQ.Prepare(SqlSquareStatuses(TableName, BandCond, CfmCond));
+  try
+    FQ.Open;
+    while not FQ.Query.Eof do
+    begin
+      if Count = Length(Result) then
+        SetLength(Result, Count*2 + 64);
+      Result[Count].Square := FQ.Query.Fields[0].AsString;
+      Result[Count].Cfm    := FQ.Query.Fields[1].AsInteger > 0;
+      inc(Count);
+      FQ.Query.Next
+    end;
+    SetLength(Result, Count)
+  finally
+    FQ.Release
+  end
 end;
 
 function TdmSqlStat.CountCountiesWorked(const TableName : String) : Integer;
@@ -923,22 +919,17 @@ begin
   Result := 'select substr(loc,1,4) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+' group by ll'
 end;
 
-function TdmSqlStat.SqlBigSquaresOnBand(const TableName, BandCond : String) : String;
+// CfmCond may be empty (no confirmation type ticked); cfm is then 0.
+function TdmSqlStat.SqlSquareStatuses(const TableName, BandCond, CfmCond : String) : String;
+var
+  Cfm : String;
 begin
-  Result := 'select upper(substr(loc,1,2)) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+
-            BandCond+' group by ll'
-end;
-
-function TdmSqlStat.SqlSquaresInBigSquare(const TableName, BigSquare, BandCond : String) : String;
-begin
-  Result := 'select upper(substr(loc,1,4)) as lll FROM '+TableName+' where loc like '+
-            QuotedStr(BigSquare+'%')+BandCond+' group by lll order by loc'
-end;
-
-function TdmSqlStat.SqlSquaresInBigSquareCfm(const TableName, BigSquare, BandCond, CfmCond : String) : String;
-begin
-  Result := 'select upper(substr(loc,1,4)) as lll FROM '+TableName+' where loc like '+
-            QuotedStr(BigSquare+'%')+BandCond+'and ('+CfmCond+') group by lll order by loc'
+  if CfmCond = '' then
+    Cfm := '0'
+  else
+    Cfm := 'max(case when ('+CfmCond+') then 1 else 0 end)';
+  Result := 'select upper(substr(loc,1,4)) as lll, '+Cfm+' as cfm FROM '+TableName+
+            ' where loc <> '+QuotedStr('')+BandCond+' group by lll order by lll'
 end;
 
 { county window }

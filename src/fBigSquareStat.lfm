@@ -32,6 +32,7 @@ object frmBigSquareStat: TfrmBigSquareStat
       Width = 164
       BorderSpacing.Left = 6
       BorderSpacing.Top = 9
+      Constraints.MinWidth = 164
       ItemHeight = 0
       OnChange = cmbBandsChange
       Style = csDropDownList
