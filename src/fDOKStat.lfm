@@ -242,6 +242,7 @@ object frmDOKStat: TfrmDOKStat
       Height = 25
       Top = 5
       Width = 136
+      Constraints.MinWidth = 136
       ItemHeight = 25
       Style = csDropDownList
       TabOrder = 2

@@ -254,8 +254,15 @@ begin
   end;
   if cqrini.ReadBool('Fonts','GridSmallRows',false) = True then
   begin
-    grdSumStat.DefaultRowHeight:=grdSumStat.Canvas.Font.Size+8;
-    grdStat.DefaultRowHeight:=grdStat.Canvas.Font.Size+8;
+    // Font.Size is 0 when default fonts are used; same fallback as dmUtils.LoadFontSettings
+    if grdStat.Font.Size > 0 then
+    begin
+      grdSumStat.DefaultRowHeight:=grdSumStat.Font.Size+8;
+      grdStat.DefaultRowHeight:=grdStat.Font.Size+8
+    end else begin
+      grdSumStat.DefaultRowHeight:=20;
+      grdStat.DefaultRowHeight:=20
+    end
   end else begin
     grdSumStat.DefaultRowHeight:=25;
     grdStat.DefaultRowHeight:=25;

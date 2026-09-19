@@ -242,6 +242,7 @@ object frmWAZITUStat: TfrmWAZITUStat
       Height = 31
       Top = 5
       Width = 136
+      Constraints.MinWidth = 136
       ItemHeight = 0
       Style = csDropDownList
       TabOrder = 2
