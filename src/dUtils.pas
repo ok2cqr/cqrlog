@@ -20,7 +20,7 @@ uses
   DBGrids, aziloc, azidis3, process, DB, sqldb, Grids, Buttons, spin, colorbox,
   Menus, Graphics, Math, LazHelpHTML, lNet, DateUtils, fileutil, httpsend,
   sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8, RegExpr,
-  laz2_XMLRead, laz2_DOM, fpjson,jsonparser,StrUtils;
+  laz2_XMLRead, laz2_DOM, fpjson,jsonparser,StrUtils, Themes;
 
   //"XMLRead, DOM," replced. These have system encoding. "laz2_" ones have full UTF-8 Unicode support
   //they should be replaceable by Laz-XML-wiki.
@@ -45,6 +45,8 @@ type
   TColumnVisibleArray = array of TVisibleColumn;
 
 const
+  cGreenBarDark  = $00243A1E;
+  cGreenBarLight = $00E7FFEB;
   MyWhiteSpace = [#0..#31];
   AllowedCallChars = ['A'..'Z', '0'..'9', '/'];
   AllowedChars = ['A'..'Z', 'a'..'z', '0'..'9', '/', ',', '.', '?', '!', ' ',
@@ -129,6 +131,7 @@ type
     procedure LoadRigListCombo(CurrentRigId : String; RigList : TStringList; RigComboBox : TComboBox);
     procedure ModeConvListsCreate(SetUp:boolean);
     procedure MakeMissingModeFile(num:integer);
+    procedure ThemeChanged(Sender: TObject);
 
     function nr(ch: char): integer;
     function GetTagValue(Data, tg: string): string;
@@ -647,12 +650,14 @@ begin
   USstates[48] := 'WI, Wisconsin';
   USstates[49] := 'WV, West Virginia';
   USstates[50] := 'WY, Wyoming';
+  ThemeServices.OnThemeChange := @ThemeChanged;
 
   ModeConvListsCreate(True);
 end;
 
 procedure TdmUtils.DataModuleDestroy(Sender: TObject);
 begin
+  ThemeServices.OnThemeChange := nil;
   ModeConvListsCreate(False);
 end;
 
@@ -2370,9 +2375,33 @@ end;
 function TdmUtils.GreenBarColor: TColor;
 begin
   if DarkThemeActive then
-    Result := $00243A1E  //dark green, system font color is light
+    Result := cGreenBarDark  //dark green, system font color is light
   else
-    Result := $00E7FFEB  //pale green, system font color is dark
+    Result := cGreenBarLight //pale green, system font color is dark
+end;
+
+procedure TdmUtils.ThemeChanged(Sender: TObject);
+
+  function IsGreenBar(AColor: TColor): Boolean;
+  begin
+    Result := (AColor = cGreenBarDark) or (AColor = cGreenBarLight)
+  end;
+
+var
+  i, j: integer;
+  c: TComponent;
+begin
+  //GreenBarColor is a fixed RGB value, so grids would keep the bar of the
+  //previous theme when the system switches between light and dark
+  for i := 0 to Screen.CustomFormCount - 1 do
+    for j := 0 to Screen.CustomForms[i].ComponentCount - 1 do
+    begin
+      c := Screen.CustomForms[i].Components[j];
+      if (c is TDBGrid) and IsGreenBar(TDBGrid(c).AlternateColor) then
+        TDBGrid(c).AlternateColor := GreenBarColor;
+      if (c is TStringGrid) and IsGreenBar(TStringGrid(c).AlternateColor) then
+        TStringGrid(c).AlternateColor := GreenBarColor
+    end
 end;
 
 function TdmUtils.IsItIOTA(spot: string): boolean;
