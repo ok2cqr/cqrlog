@@ -75,19 +75,18 @@ var
   grb : String = '';
   allwkd : longint = 0;
   thiswkd : longint =0;
-  TotPos : longint = 0;
   wkd : integer = 0;
   cfm : integer = 0;
   ll  : String = '';
   sum_wkd : integer = 0;
   sum_cfm : integer = 0;
   TableName : String;
-  counties : TStringList;
+  counties : TCountyQsoCounts;
   i        : Integer;
 begin
   tmrBlink.Enabled:=False;
   TableName:='cqrlog_main';
-  counties := TStringList.Create;
+  Screen.Cursor := crHourGlass;
   try
     if chkQSL.Checked then
     begin
@@ -127,27 +126,21 @@ begin
     end;
     allwkd := dmSqlStat.CountCountiesWorked(TableName);
 
-    dmSqlStat.ListCountiesOnBand(TableName, bnd, counties);
-    pbTot.Max:=counties.Count;
-    thiswkd:= counties.Count;
+    counties := dmSqlStat.ListCountyQsoCounts(TableName, bnd, tmp);
+    pbTot.Max:=Length(counties);
+    thiswkd:= Length(counties);
     WriteHMTLHeader;
     writeln(f,'<table>');
-    for i := 0 to counties.Count-1 do
+    for i := 0 to High(counties) do
     begin
-      inc(TotPos);
-      pbTot.Position:=TotPos;
-      Application.ProcessMessages;
-      ll := counties[i];
+      ll := counties[i].County;
       writeln(f,'<tr>'+LineEnding+'<td valign="middle">'+LineEnding+'<font color="black"><b>'+ll+'</b></font>'+LineEnding+'</td>');
       writeln(f,'<td align="left">');
       writeln(f,'<font color="black">');
-      wkd := dmSqlStat.GetCountyQsoCount(TableName, ll, bnd);
+      wkd := counties[i].Wkd;
       sum_wkd := sum_wkd + wkd;
-      if tmp <> '' then
-      begin
-        cfm := dmSqlStat.GetCountyQsoCountCfm(TableName, ll, bnd, tmp);
-        sum_cfm := sum_cfm + cfm
-      end;
+      cfm := counties[i].Cfm;
+      sum_cfm := sum_cfm + cfm;
 
       Writeln(f,'</font>');
       Writeln(f,'</td>');
@@ -172,6 +165,7 @@ begin
     Writeln(f,'</body>');
     Writeln(f,'</html>');
     CloseFile(f);
+    pbTot.Position:=pbTot.Max;
 
     if dmData.IsFilter then
       dmSqlStat.DropStatView(TableName);
@@ -179,7 +173,7 @@ begin
     CopyFile(TmpFile,ExtractFileNameWithoutExt(TmpFile)+'.html');
     IpHtmlPanel1.OpenURL(expandLocalHtmlFileName(ExtractFileNameWithoutExt(TmpFile)+'.html'))
   finally
-    counties.Free
+    Screen.Cursor := crDefault
   end
 end;
 

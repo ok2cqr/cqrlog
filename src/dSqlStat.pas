@@ -47,6 +47,14 @@ type
   // band in another mode; worked on another band; never worked.
   TDxccStatus = (dsConfirmed, dsQslNeeded, dsNewMode, dsNewBand, dsNewCountry);
 
+  // A county row of the county window (fCountyStat).
+  TCountyQsoCount = record
+    County : String;
+    Wkd    : Integer;
+    Cfm    : Integer;
+  end;
+  TCountyQsoCounts = array of TCountyQsoCount;
+
   TdmSqlStat = class(TDataModule)
     procedure DataModuleCreate(Sender : TObject);
   private
@@ -111,9 +119,7 @@ type
     procedure ListSquaresInBigSquare(const TableName, BigSquare, BandCond : String; Items : TStrings);
     procedure ListSquaresInBigSquareCfm(const TableName, BigSquare, BandCond, CfmCond : String; Items : TStrings);
     function  CountCountiesWorked(const TableName : String) : Integer;
-    procedure ListCountiesOnBand(const TableName, BandCond : String; Items : TStrings);
-    function  GetCountyQsoCount(const TableName, County, BandCond : String) : Integer;
-    function  GetCountyQsoCountCfm(const TableName, County, BandCond, CfmCond : String) : Integer;
+    function  ListCountyQsoCounts(const TableName, BandCond, CfmCond : String) : TCountyQsoCounts;
 
     // Every Open...Rows above lends the same cursor; give it back before
     // the next row pass.
@@ -184,9 +190,7 @@ type
 
     // county window (fCountyStat)
     function SqlCountiesWorked(const TableName : String) : String;
-    function SqlCountiesOnBand(const TableName, BandCond : String) : String;
-    function SqlCountyQsoCount(const TableName, County, BandCond : String) : String;
-    function SqlCountyQsoCountCfm(const TableName, County, BandCond, CfmCond : String) : String;
+    function SqlCountyQsoCounts(const TableName, BandCond, CfmCond : String) : String;
 
     // worked grids map (fWorkedGrids)
     function SqlQsoCountIn(const LogTable : String) : String;
@@ -523,19 +527,30 @@ begin
   Result := GetRowCount(SqlCountiesWorked(TableName))
 end;
 
-procedure TdmSqlStat.ListCountiesOnBand(const TableName, BandCond : String; Items : TStrings);
+// One pass for the whole window: a count query per county scans the
+// log once per county (upper(county) can not use an index).
+function TdmSqlStat.ListCountyQsoCounts(const TableName, BandCond, CfmCond : String) : TCountyQsoCounts;
+var
+  Count : Integer = 0;
 begin
-  ListFirstColumn(SqlCountiesOnBand(TableName, BandCond), Items)
-end;
-
-function TdmSqlStat.GetCountyQsoCount(const TableName, County, BandCond : String) : Integer;
-begin
-  Result := GetValue(SqlCountyQsoCount(TableName, County, BandCond))
-end;
-
-function TdmSqlStat.GetCountyQsoCountCfm(const TableName, County, BandCond, CfmCond : String) : Integer;
-begin
-  Result := GetValue(SqlCountyQsoCountCfm(TableName, County, BandCond, CfmCond))
+  Result := nil;
+  FQ.Prepare(SqlCountyQsoCounts(TableName, BandCond, CfmCond));
+  try
+    FQ.Open;
+    while not FQ.Query.Eof do
+    begin
+      if Count = Length(Result) then
+        SetLength(Result, Count*2 + 64);
+      Result[Count].County := FQ.Query.Fields[0].AsString;
+      Result[Count].Wkd    := FQ.Query.Fields[1].AsInteger;
+      Result[Count].Cfm    := FQ.Query.Fields[2].AsInteger;
+      inc(Count);
+      FQ.Query.Next
+    end;
+    SetLength(Result, Count)
+  finally
+    FQ.Release
+  end
 end;
 
 { DXCC counts and probes }
@@ -935,23 +950,17 @@ begin
   Result := 'select upper(county) as ll FROM '+TableName+' where county <> '+QuotedStr('')+' group by ll'
 end;
 
-function TdmSqlStat.SqlCountiesOnBand(const TableName, BandCond : String) : String;
+// CfmCond may be empty (no confirmation type ticked); cfm is then 0.
+function TdmSqlStat.SqlCountyQsoCounts(const TableName, BandCond, CfmCond : String) : String;
+var
+  Cfm : String;
 begin
-  Result := 'select upper(county) as ll FROM '+TableName+' where county <> '+QuotedStr('')+
-            BandCond+' group by ll'
-end;
-
-function TdmSqlStat.SqlCountyQsoCount(const TableName, County, BandCond : String) : String;
-begin
-  Result := 'select count(id_cqrlog_main) FROM '+TableName+' where upper(county)='+
-            QuotedStr(County)+BandCond
-end;
-
-function TdmSqlStat.SqlCountyQsoCountCfm(const TableName, County, BandCond, CfmCond : String) : String;
-begin
-  Result := 'select count(id_cqrlog_main) FROM '+TableName+' where upper(county)='+
-            QuotedStr(County)+BandCond+
-            'and ('+CfmCond+')'
+  if CfmCond = '' then
+    Cfm := '0'
+  else
+    Cfm := 'sum(case when ('+CfmCond+') then 1 else 0 end)';
+  Result := 'select upper(county) as ll, count(id_cqrlog_main) as wkd, '+Cfm+' as cfm FROM '+
+            TableName+' where county <> '+QuotedStr('')+BandCond+' group by ll order by ll'
 end;
 
 { worked grids map }
