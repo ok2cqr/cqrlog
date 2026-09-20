@@ -1,11 +1,11 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 0
+  Left = 226
   Height = 709
-  Top = 30
+  Top = 40
   Width = 1032
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
-  HorzScrollBar.Page = 974
+  HorzScrollBar.Page = 970
   VertScrollBar.Page = 638
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
@@ -2181,13 +2181,14 @@ object frmNewQSO: TfrmNewQSO
         ParentShowHint = False
         TabOrder = 0
         object lblCommentToCallsign: TLabel
-          AnchorSideLeft.Control = lblCounty
+          AnchorSideLeft.Control = mComment
           AnchorSideTop.Control = lblDate
           AnchorSideBottom.Side = asrBottom
-          Left = 259
+          Left = 272
           Height = 16
           Top = 171
           Width = 124
+          BorderSpacing.Left = 1
           Caption = 'Comment to callsign'
           Layout = tlBottom
           ParentColor = False
@@ -2479,12 +2480,14 @@ object frmNewQSO: TfrmNewQSO
           Visible = False
         end
         object lblQSLMgr: TLabel
-          AnchorSideLeft.Control = edtQSL_VIA
+          AnchorSideLeft.Control = lblCommentToCallsign
+          AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = lblDate
           Left = 402
           Height = 16
           Top = 171
           Width = 124
+          BorderSpacing.Left = 6
           Caption = 'QSL manager found!'
           Font.Color = clGreen
           Layout = tlBottom
@@ -2524,15 +2527,17 @@ object frmNewQSO: TfrmNewQSO
           OnKeyDown = edtDXCCRefKeyDown
         end
         object mComment: TMemo
-          AnchorSideLeft.Control = lblCommentToCallsign
+          AnchorSideLeft.Control = sbtnRefreshTime
+          AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = lblCommentToCallsign
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Side = asrBottom
-          Left = 259
+          Left = 271
           Height = 92
           Hint = 'Comment/Remark to the callsign, max length 256'
           Top = 189
-          Width = 276
+          Width = 260
+          BorderSpacing.Left = 8
           BorderSpacing.Top = 2
           BorderSpacing.Right = 6
           Lines.Strings = (
@@ -2920,14 +2925,14 @@ object frmNewQSO: TfrmNewQSO
         object btnDXCCRef: TButton
           AnchorSideLeft.Control = edtDXCCRef
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = lblDXCCRef
-          AnchorSideTop.Side = asrBottom
+          AnchorSideTop.Control = edtDXCCRef
+          AnchorSideBottom.Control = edtDXCCRef
+          AnchorSideBottom.Side = asrBottom
           Left = 78
           Height = 27
           Top = 147
           Width = 24
           BorderSpacing.Left = 2
-          BorderSpacing.Top = 2
           BorderSpacing.InnerBorder = 4
           Caption = '...'
           TabOrder = 18
@@ -2936,14 +2941,12 @@ object frmNewQSO: TfrmNewQSO
         object btnQSLMgr: TButton
           AnchorSideLeft.Control = edtQSL_VIA
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = lblQSLVia
-          AnchorSideTop.Side = asrBottom
+          AnchorSideTop.Control = edtQSL_VIA
           Left = 500
           Height = 27
           Top = 147
           Width = 24
           BorderSpacing.Left = 2
-          BorderSpacing.Top = 2
           BorderSpacing.InnerBorder = 4
           Caption = '...'
           TabOrder = 21
@@ -3245,7 +3248,7 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Control = edtRXFreq
               AnchorSideTop.Control = lblStatellite
               AnchorSideTop.Side = asrCenter
-              Left = 56
+              Left = 290
               Height = 16
               Top = 6
               Width = 82
@@ -3257,7 +3260,7 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Control = cmbSatellite
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = cmbSatellite
-              Left = 56
+              Left = 290
               Height = 21
               Top = 25
               Width = 128
@@ -3271,7 +3274,7 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Control = edtRXFreq
               AnchorSideTop.Control = cbSpotRX
               AnchorSideTop.Side = asrBottom
-              Left = 56
+              Left = 290
               Height = 26
               Top = 67
               Width = 71
@@ -3286,7 +3289,7 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = edtRXFreq
               AnchorSideTop.Side = asrCenter
-              Left = 190
+              Left = 424
               Height = 16
               Top = 27
               Width = 28
@@ -3298,7 +3301,7 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Control = lblRXFreq
               AnchorSideTop.Control = lblPropagation
               AnchorSideTop.Side = asrCenter
-              Left = 56
+              Left = 290
               Height = 18
               Hint = 'Use RX frequency from the Satellite tab instead of Frequency for DX spots'
               Top = 49
@@ -3397,15 +3400,15 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = pnlQSOinput
           AnchorSideRight.Control = pnlQSOinput
           AnchorSideRight.Side = asrBottom
-          Left = 555
+          Left = 551
           Height = 219
           Top = 0
-          Width = 204
+          Width = 208
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 20
           Caption = 'Contest'
           ClientHeight = 192
-          ClientWidth = 194
+          ClientWidth = 198
           TabOrder = 28
           Visible = False
           object lblContestName: TLabel
@@ -3476,7 +3479,7 @@ object frmNewQSO: TfrmNewQSO
             Height = 21
             Hint = 'name of contest, max 40 characters allowed'
             Top = 22
-            Width = 188
+            Width = 192
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Top = 3
             BorderSpacing.Right = 3
@@ -3526,7 +3529,7 @@ object frmNewQSO: TfrmNewQSO
             Height = 21
             Hint = 'contest exchange message sent, max 50 characters'
             Top = 68
-            Width = 115
+            Width = 119
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Top = 6
             BorderSpacing.Right = 3
@@ -3546,7 +3549,7 @@ object frmNewQSO: TfrmNewQSO
             Height = 21
             Hint = 'contest exchange message received, max 50 characters'
             Top = 117
-            Width = 115
+            Width = 119
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Right = 3
             MaxLength = 50
@@ -3626,7 +3629,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn1
           AnchorSideRight.Control = pnlSbtn1
-          Left = 335
+          Left = 331
           Height = 25
           Top = 283
           Width = 25
@@ -3691,7 +3694,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn2
           AnchorSideRight.Control = pnlSbtn2
-          Left = 360
+          Left = 356
           Height = 25
           Top = 283
           Width = 25
@@ -3756,7 +3759,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn3
           AnchorSideRight.Control = pnlSbtn3
-          Left = 385
+          Left = 381
           Height = 25
           Top = 283
           Width = 25
@@ -3861,7 +3864,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn4
           AnchorSideRight.Control = pnlSbtn4
-          Left = 410
+          Left = 406
           Height = 25
           Top = 283
           Width = 25
@@ -3925,7 +3928,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn5
           AnchorSideRight.Control = pnlSbtn5
-          Left = 435
+          Left = 431
           Height = 25
           Top = 283
           Width = 25
@@ -3989,7 +3992,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn6
           AnchorSideRight.Control = pnlSbtn6
-          Left = 460
+          Left = 456
           Height = 25
           Top = 283
           Width = 25
@@ -4055,7 +4058,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = mComment
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = pnlSbtn7
-          Left = 485
+          Left = 481
           Height = 25
           Top = 283
           Width = 25
@@ -4122,7 +4125,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = pnlSbtn1
           AnchorSideRight.Control = mComment
           AnchorSideRight.Side = asrBottom
-          Left = 510
+          Left = 506
           Height = 25
           Top = 283
           Width = 25
