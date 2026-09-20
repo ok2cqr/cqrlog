@@ -609,6 +609,10 @@ def lint(text, filename=""):
         if (n.cls == "TComboBox" and n.geti("Width") <= 40 and p.get("Style") == "csDropDownList"
                 and "Items.Strings" not in p and n.geti("Constraints.MinWidth") <= 40):
             emit(n, "combo-collapsed", "dropdown without design-time items collapsed to the Cocoa minimum width; restore Width and add Constraints.MinWidth")
+        elif (n.cls == "TComboBox" and p.get("Style") == "csDropDownList" and p.get("AutoSize") != "False"
+                and ("Items.Strings" not in p or "OnGetItems" in p) and n.geti("Constraints.MinWidth") <= 40
+                and not {"akLeft", "akRight"} <= a and p.get("Align", "alNone") in ("alNone", "alLeft", "alRight")):
+            emit(n, "combo-runtime-items", "dropdown filled at run time has no Constraints.MinWidth; Cocoa shrinks it to the minimum width when the items change")
         if n.cls == "TComboBox" and p.get("AutoSize") == "False" and n.geti("Height") < 24:
             emit(n, "combo-frozen-height", "AutoSize = False freezes the Cocoa height, too small for Qt/GTK; use Constraints.MinWidth to protect the width instead")
         if n.cls == "TLabel" and "akRight" in a and "akLeft" not in a and "AnchorSideRight.Control" in p and p.get("AutoSize") != "False":

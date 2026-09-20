@@ -712,6 +712,7 @@ object frmTRXControl: TfrmTRXControl
         Top = 0
         Width = 130
         Anchors = [akTop, akLeft, akBottom]
+        Constraints.MinWidth = 130
         ItemHeight = 0
         ItemIndex = 1
         Items.Strings = (
