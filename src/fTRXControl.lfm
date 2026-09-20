@@ -328,7 +328,6 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Right = 3
         BorderSpacing.Bottom = 3
         Caption = '0.0000'
-        Font.Color = clBlue
         Font.Height = 30
         Font.Style = [fsBold]
         Layout = tlCenter
