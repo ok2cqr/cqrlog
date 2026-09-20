@@ -302,6 +302,7 @@ object frmCabrilloExport: TfrmCabrilloExport
       Width = 100
       BorderSpacing.Left = 21
       BorderSpacing.Top = 6
+      Constraints.MinWidth = 100
       ItemHeight = 0
       ParentShowHint = False
       ShowHint = True
@@ -337,6 +338,7 @@ object frmCabrilloExport: TfrmCabrilloExport
       Width = 100
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
+      Constraints.MinWidth = 100
       ItemHeight = 0
       Items.Strings = (
         ''
@@ -460,6 +462,7 @@ object frmCabrilloExport: TfrmCabrilloExport
       Width = 100
       BorderSpacing.Left = 21
       BorderSpacing.Top = 6
+      Constraints.MinWidth = 100
       ItemHeight = 0
       Items.Strings = (
         ''
@@ -482,6 +485,7 @@ object frmCabrilloExport: TfrmCabrilloExport
       Width = 100
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
+      Constraints.MinWidth = 100
       ItemHeight = 0
       Items.Strings = (
         ''

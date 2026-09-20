@@ -138,6 +138,7 @@ object frmWorkedGrids: TfrmWorkedGrids
     Top = 20
     Width = 86
     BorderSpacing.Top = 2
+    Constraints.MinWidth = 86
     ItemHeight = 0
     OnChange = WsModeChange
     Style = csDropDownList
