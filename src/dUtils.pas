@@ -297,6 +297,7 @@ type
     function  IncColor(AColor: TColor; AQuantity: Byte) : TColor;
     function  DarkThemeActive : Boolean;
     function  GreenBarColor : TColor;
+    function  MaskURLPassword(url : String) : String;
     function  IsItIOTA(spot : String) : Boolean;
     function  GetXplanetCommand : String;
     function  GetLastUpgradeDate : TDateTime;
@@ -2378,6 +2379,12 @@ begin
     Result := cGreenBarDark  //dark green, system font color is light
   else
     Result := cGreenBarLight //pale green, system font color is dark
+end;
+
+function TdmUtils.MaskURLPassword(url: String): String;
+begin
+  //for debug output, users paste it to forums and bug reports
+  Result := ReplaceRegExpr('(?i)(password=)[^&]*', url, '$1***', True)
 end;
 
 procedure TdmUtils.ThemeChanged(Sender: TObject);

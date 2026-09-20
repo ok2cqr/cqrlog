@@ -117,7 +117,7 @@ begin
   begin
     Writeln('DLLSSLName:',DLLSSLName);
     Writeln('DLLUtilName:',DLLUtilName);
-    Writeln(url)
+    Writeln(dmUtils.MaskURLPassword(url))
   end;
 
   QSOList := TStringList.Create;

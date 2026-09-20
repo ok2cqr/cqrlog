@@ -114,7 +114,7 @@ begin
          '&Password='+dmUtils.EncodeURLData(pass)+
          '&QTHNickname='+dmUtils.EncodeURLData(edtQTH.Text)+
          '&RcvdSince='+StringReplace(edtDateFrom.Text,'-','',[rfReplaceAll, rfIgnoreCase]);
-  if dmData.DebugLevel>=1 then Writeln(url);
+  if dmData.DebugLevel>=1 then Writeln(dmUtils.MaskURLPassword(url));
 
   QSOList := TStringList.Create;
   try

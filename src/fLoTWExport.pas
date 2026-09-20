@@ -141,7 +141,7 @@ begin
     http.MimeType := 'multipart/form-data; boundary=' + Bound;
 
     url := Format(UPLOAD_URL,[cqrini.ReadString('LoTW','LoTWName',''),dmUtils.EncodeURLData(cqrini.ReadString('LoTW','LoTWPass',''))]);
-    if dmData.DebugLevel >= 1 then Writeln(url);
+    if dmData.DebugLevel >= 1 then Writeln(dmUtils.MaskURLPassword(url));
 
     Res := HTTP.HTTPMethod('POST', url);
     if Res then
