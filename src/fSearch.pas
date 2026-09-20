@@ -125,7 +125,7 @@ begin
           end
           else begin
             if chkInclude.Checked then
-              sql := sql + ' where (callsign like ''%' + edtText.Text + '%'')'
+              sql := sql + ' where (callsign like ' + QuotedStr('%' + edtText.Text + '%') + ')'
             else
               sql := sql + ' where callsign = '+ QuotedStr(edtText.Text);
               if chkSortByDate.Checked then
@@ -145,7 +145,7 @@ begin
           end
           else begin
             if chkInclude.Checked then
-              sql := sql + ' where (name like ''%' + edtText.Text + '%'')'
+              sql := sql + ' where (name like ' + QuotedStr('%' + edtText.Text + '%') + ')'
             else
               sql := sql + ' where name = '+ QuotedStr(edtText.Text);
             if chkSortByDate.Checked then
@@ -165,7 +165,7 @@ begin
           end
           else begin
             if chkInclude.Checked then
-              sql := sql + ' where (qth like ''%' + edtText.Text + '%'')'
+              sql := sql + ' where (qth like ' + QuotedStr('%' + edtText.Text + '%') + ')'
             else
               sql := sql + ' where qth = '+ QuotedStr(edtText.Text);
             if chkSortByDate.Checked then
