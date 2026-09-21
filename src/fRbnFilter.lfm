@@ -7,9 +7,9 @@ object frmRbnFilter: TfrmRbnFilter
   Caption = 'RBN filter criteria'
   ClientHeight = 641
   ClientWidth = 684
-  OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '2.2.4.0'
+  LCLVersion = '4.6.0.0'
+  OnShow = FormShow
   object grpDXStation: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -27,8 +27,8 @@ object frmRbnFilter: TfrmRbnFilter
     BorderSpacing.Right = 3
     BorderSpacing.Bottom = 3
     Caption = 'DX station '
-    ClientHeight = 617
-    ClientWidth = 676
+    ClientHeight = 608
+    ClientWidth = 668
     TabOrder = 0
     object grpCallisgn: TGroupBox
       AnchorSideLeft.Control = grpSource
@@ -38,19 +38,19 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideRight.Side = asrBottom
       Left = 6
       Height = 137
-      Top = 191
-      Width = 667
+      Top = 165
+      Width = 659
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 6
       Caption = ' Callsign '
-      ClientHeight = 119
-      ClientWidth = 665
+      ClientHeight = 110
+      ClientWidth = 649
       TabOrder = 5
       object rbAllDx: TRadioButton
         Left = 16
-        Height = 23
+        Height = 18
         Top = 16
-        Width = 43
+        Width = 41
         Caption = 'All'
         Checked = True
         TabOrder = 0
@@ -58,23 +58,23 @@ object frmRbnFilter: TfrmRbnFilter
       end
       object rbOnlyCall: TRadioButton
         Left = 16
-        Height = 23
+        Height = 18
         Top = 48
-        Width = 161
+        Width = 143
         Caption = 'Only these callsigns:'
         TabOrder = 1
       end
       object rbOnlyCallReg: TRadioButton
         Left = 16
-        Height = 23
+        Height = 18
         Top = 80
-        Width = 199
+        Width = 175
         Caption = 'Only these by expression: '
         TabOrder = 3
       end
       object edtDXOnlyCall: TEdit
         Left = 240
-        Height = 34
+        Height = 21
         Top = 48
         Width = 272
         CharCase = ecUppercase
@@ -83,7 +83,7 @@ object frmRbnFilter: TfrmRbnFilter
       end
       object edtDXOnlyExpres: TEdit
         Left = 240
-        Height = 34
+        Height = 21
         Top = 80
         Width = 272
         CharCase = ecUppercase
@@ -92,17 +92,17 @@ object frmRbnFilter: TfrmRbnFilter
       end
       object Label9: TLabel
         Left = 528
-        Height = 17
+        Height = 16
         Top = 56
-        Width = 89
+        Width = 80
         Caption = 'K1B, K1N etc.'
         ParentColor = False
       end
       object Label10: TLabel
         Left = 528
-        Height = 17
+        Height = 16
         Top = 87
-        Width = 68
+        Width = 64
         Caption = 'K[0..9]A?Z'
         ParentColor = False
       end
@@ -112,9 +112,9 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideTop.Control = edtLastHours
       AnchorSideTop.Side = asrCenter
       Left = 6
-      Height = 23
-      Top = 117
-      Width = 166
+      Height = 18
+      Top = 112
+      Width = 147
       BorderSpacing.Top = 3
       Caption = 'Ignore worked in last '
       Checked = True
@@ -125,8 +125,8 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideLeft.Control = edtDate
       AnchorSideTop.Control = grpSource
       AnchorSideTop.Side = asrBottom
-      Left = 169
-      Height = 34
+      Left = 152
+      Height = 21
       Top = 111
       Width = 41
       BorderSpacing.Top = 3
@@ -135,12 +135,13 @@ object frmRbnFilter: TfrmRbnFilter
     end
     object lblIgnoreHours: TLabel
       AnchorSideLeft.Control = edtLastHours
+      AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = edtLastHours
       AnchorSideTop.Side = asrCenter
-      Left = 175
-      Height = 17
-      Top = 120
-      Width = 226
+      Left = 199
+      Height = 16
+      Top = 113
+      Width = 210
       BorderSpacing.Left = 6
       Caption = 'hours on the same band and mode'
       ParentColor = False
@@ -150,9 +151,9 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideTop.Control = edtDate
       AnchorSideTop.Side = asrCenter
       Left = 6
-      Height = 23
-      Top = 157
-      Width = 157
+      Height = 18
+      Top = 139
+      Width = 140
       BorderSpacing.Top = 3
       Caption = 'Ignore worked after '
       TabOrder = 2
@@ -162,9 +163,9 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = edtLastHours
       AnchorSideTop.Side = asrBottom
-      Left = 169
-      Height = 34
-      Top = 151
+      Left = 152
+      Height = 21
+      Top = 138
       Width = 119
       BorderSpacing.Left = 6
       BorderSpacing.Top = 6
@@ -175,9 +176,9 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideLeft.Control = edtDate
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = edtDate
-      Left = 294
-      Height = 34
-      Top = 151
+      Left = 277
+      Height = 21
+      Top = 138
       Width = 66
       BorderSpacing.Left = 6
       TabOrder = 4
@@ -188,10 +189,10 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = edtTime
       AnchorSideTop.Side = asrCenter
-      Left = 369
-      Height = 17
-      Top = 160
-      Width = 150
+      Left = 352
+      Height = 16
+      Top = 140
+      Width = 148
       BorderSpacing.Left = 9
       Caption = '(YYYY-MM-DD, HH:MM)'
       ParentColor = False
@@ -201,9 +202,9 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideTop.Control = chkOnlyLoTW
       AnchorSideTop.Side = asrBottom
       Left = 6
-      Height = 23
-      Top = 545
-      Width = 169
+      Height = 18
+      Top = 514
+      Width = 153
       Caption = 'Show only eQSL users'
       TabOrder = 7
     end
@@ -212,9 +213,9 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideTop.Control = grpCallsignFrom
       AnchorSideTop.Side = asrBottom
       Left = 6
-      Height = 23
-      Top = 522
-      Width = 172
+      Height = 18
+      Top = 496
+      Width = 154
       BorderSpacing.Top = 6
       Caption = 'Show only LoTW users'
       TabOrder = 6
@@ -224,9 +225,9 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideTop.Control = Bevel1
       AnchorSideTop.Side = asrBottom
       Left = 6
-      Height = 23
-      Top = 585
-      Width = 431
+      Height = 18
+      Top = 549
+      Width = 381
       BorderSpacing.Top = 6
       Caption = 'Show only spots that are "New one"/"New band"/"New mode" '
       TabOrder = 8
@@ -241,17 +242,17 @@ object frmRbnFilter: TfrmRbnFilter
       BorderSpacing.Left = 6
       BorderSpacing.Top = 3
       Caption = ' Source data from '
-      ClientHeight = 87
-      ClientWidth = 574
+      ClientHeight = 78
+      ClientWidth = 566
       TabOrder = 9
       object lblContent: TLabel
         AnchorSideLeft.Control = grpSource
         AnchorSideTop.Control = edtSrcCont
         AnchorSideTop.Side = asrCenter
         Left = 6
-        Height = 17
-        Top = 12
-        Width = 67
+        Height = 16
+        Top = 5
+        Width = 63
         BorderSpacing.Left = 6
         Caption = 'Continent:'
         ParentColor = False
@@ -260,8 +261,8 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Control = lblContent
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = grpSource
-        Left = 79
-        Height = 34
+        Left = 75
+        Height = 21
         Top = 3
         Width = 280
         BorderSpacing.Left = 6
@@ -275,10 +276,10 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = lblContent
         AnchorSideTop.Side = asrCenter
-        Left = 415
-        Height = 17
-        Top = 12
-        Width = 93
+        Left = 411
+        Height = 16
+        Top = 5
+        Width = 88
         BorderSpacing.Left = 6
         Caption = 'AF, AN, AS etc'
         ParentColor = False
@@ -288,23 +289,23 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = edtSrcCont
         AnchorSideTop.Side = asrCenter
-        Left = 365
+        Left = 361
         Height = 27
-        Top = 7
+        Top = 0
         Width = 44
         BorderSpacing.Left = 6
         Caption = 'All'
-        OnClick = btnSrcContAllClick
         TabOrder = 1
+        OnClick = btnSrcContAllClick
       end
       object lblSrcCall: TLabel
         AnchorSideLeft.Control = lblContent
         AnchorSideTop.Control = edtSrcCall
         AnchorSideTop.Side = asrCenter
         Left = 6
-        Height = 17
-        Top = 46
-        Width = 56
+        Height = 16
+        Top = 26
+        Width = 52
         Caption = 'Callsign:'
         ParentColor = False
       end
@@ -312,10 +313,10 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Control = edtSrcCont
         AnchorSideTop.Control = edtSrcCont
         AnchorSideTop.Side = asrBottom
-        Left = 79
-        Height = 34
+        Left = 75
+        Height = 21
         Hint = 'Start of callsign(s), or full callsign(s),c omma separated'
-        Top = 37
+        Top = 24
         Width = 280
         CharCase = ecUppercase
         ParentShowHint = False
@@ -328,24 +329,24 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = edtSrcCall
         AnchorSideTop.Side = asrCenter
-        Left = 365
+        Left = 361
         Height = 27
-        Top = 41
+        Top = 21
         Width = 44
         BorderSpacing.Left = 6
         Caption = 'All'
-        OnClick = btnSrcCallAllClick
         TabOrder = 3
+        OnClick = btnSrcCallAllClick
       end
       object lblCallExample: TLabel
         AnchorSideLeft.Control = btnSrcContAll
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = edtSrcCall
         AnchorSideTop.Side = asrCenter
-        Left = 415
-        Height = 17
-        Top = 46
-        Width = 136
+        Left = 411
+        Height = 16
+        Top = 26
+        Width = 126
         BorderSpacing.Left = 6
         Caption = 'OK, OH1, AB1CD, etc'
         ParentColor = False
@@ -359,23 +360,23 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideRight.Side = asrBottom
       Left = 6
       Height = 185
-      Top = 331
-      Width = 667
+      Top = 305
+      Width = 659
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 3
       BorderSpacing.Right = 3
       Caption = 'Callsign From'
-      ClientHeight = 167
-      ClientWidth = 665
+      ClientHeight = 158
+      ClientWidth = 649
       TabOrder = 10
       object lblContinentFrom: TLabel
         AnchorSideLeft.Control = grpCallsignFrom
         AnchorSideTop.Control = edtDXCont
         AnchorSideTop.Side = asrCenter
         Left = 3
-        Height = 17
-        Top = 12
-        Width = 67
+        Height = 16
+        Top = 5
+        Width = 63
         BorderSpacing.Left = 3
         BorderSpacing.Top = 3
         Caption = 'Continent:'
@@ -385,8 +386,8 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Control = lblContinentFrom
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = grpCallsignFrom
-        Left = 94
-        Height = 34
+        Left = 90
+        Height = 21
         Top = 3
         Width = 280
         BorderSpacing.Left = 24
@@ -399,10 +400,10 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Control = lblBandExFrom
         AnchorSideTop.Control = edtDXCont
         AnchorSideTop.Side = asrCenter
-        Left = 518
-        Height = 17
-        Top = 12
-        Width = 93
+        Left = 514
+        Height = 16
+        Top = 5
+        Width = 88
         Caption = 'AF, AN, AS etc'
         ParentColor = False
       end
@@ -411,9 +412,9 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideTop.Control = edtDXBand
         AnchorSideTop.Side = asrCenter
         Left = 3
-        Height = 17
-        Top = 46
-        Width = 44
+        Height = 16
+        Top = 26
+        Width = 41
         Caption = 'Bands:'
         ParentColor = False
       end
@@ -421,9 +422,9 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Control = edtDXCont
         AnchorSideTop.Control = edtDXCont
         AnchorSideTop.Side = asrBottom
-        Left = 94
-        Height = 34
-        Top = 37
+        Left = 90
+        Height = 21
+        Top = 24
         Width = 368
         CharCase = ecUppercase
         TabOrder = 1
@@ -434,10 +435,10 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = edtDXBand
         AnchorSideTop.Side = asrCenter
-        Left = 518
-        Height = 17
-        Top = 46
-        Width = 100
+        Left = 514
+        Height = 16
+        Top = 26
+        Width = 95
         BorderSpacing.Left = 12
         Caption = '160M, 80M etc.'
         ParentColor = False
@@ -446,9 +447,9 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Control = edtDXBand
         AnchorSideTop.Control = edtDXBand
         AnchorSideTop.Side = asrBottom
-        Left = 94
-        Height = 34
-        Top = 71
+        Left = 90
+        Height = 21
+        Top = 45
         Width = 344
         CharCase = ecUppercase
         TabOrder = 2
@@ -459,9 +460,9 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideTop.Control = edtDXMode
         AnchorSideTop.Side = asrCenter
         Left = 3
-        Height = 17
-        Top = 80
-        Width = 47
+        Height = 16
+        Top = 47
+        Width = 45
         Caption = 'Modes:'
         ParentColor = False
       end
@@ -469,10 +470,10 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Control = lblBandExFrom
         AnchorSideTop.Control = edtDXMode
         AnchorSideTop.Side = asrCenter
-        Left = 518
-        Height = 17
-        Top = 80
-        Width = 95
+        Left = 514
+        Height = 16
+        Top = 47
+        Width = 91
         Caption = 'CW,  RTTY etc.'
         ParentColor = False
       end
@@ -480,9 +481,9 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Control = edtDXMode
         AnchorSideTop.Control = edtDXMode
         AnchorSideTop.Side = asrBottom
-        Left = 94
-        Height = 34
-        Top = 105
+        Left = 90
+        Height = 21
+        Top = 66
         Width = 184
         CharCase = ecUppercase
         TabOrder = 3
@@ -493,9 +494,9 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideTop.Control = edtDXCnty
         AnchorSideTop.Side = asrCenter
         Left = 3
-        Height = 17
-        Top = 114
-        Width = 66
+        Height = 16
+        Top = 68
+        Width = 62
         Caption = 'Countries:'
         ParentColor = False
       end
@@ -504,62 +505,62 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = edtDXCont
         AnchorSideTop.Side = asrCenter
-        Left = 374
+        Left = 370
         Height = 27
-        Top = 7
+        Top = 0
         Width = 44
         Caption = 'All'
-        OnClick = btnDxContAllClick
         TabOrder = 4
+        OnClick = btnDxContAllClick
       end
       object btnDxBandsAll: TButton
         AnchorSideLeft.Control = edtDXBand
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = edtDXBand
         AnchorSideTop.Side = asrCenter
-        Left = 462
+        Left = 458
         Height = 28
-        Top = 40
+        Top = 20
         Width = 44
         Caption = 'All'
-        OnClick = btnDxBandsAllClick
         TabOrder = 5
+        OnClick = btnDxBandsAllClick
       end
       object btnDxModeAll: TButton
         AnchorSideLeft.Control = edtDXMode
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = edtDXMode
         AnchorSideTop.Side = asrCenter
-        Left = 438
+        Left = 434
         Height = 27
-        Top = 75
+        Top = 42
         Width = 44
         Caption = 'All'
-        OnClick = btnDxModeAllClick
         TabOrder = 6
+        OnClick = btnDxModeAllClick
       end
       object btnDXCCnty: TButton
         AnchorSideLeft.Control = edtDXCnty
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = edtDXCnty
         AnchorSideTop.Side = asrCenter
-        Left = 278
+        Left = 274
         Height = 25
-        Top = 110
+        Top = 64
         Width = 30
         Caption = '...'
-        OnClick = btnDXCCntyClick
         TabOrder = 7
+        OnClick = btnDXCCntyClick
       end
       object lblNotCountry: TLabel
         AnchorSideLeft.Control = btnDXCCnty
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = btnDXCCnty
         AnchorSideTop.Side = asrCenter
-        Left = 311
-        Height = 17
-        Top = 114
-        Width = 49
+        Left = 307
+        Height = 16
+        Top = 68
+        Width = 47
         BorderSpacing.Left = 3
         Caption = 'or NOT '
         ParentColor = False
@@ -569,9 +570,9 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = lblNotCountry
         AnchorSideTop.Side = asrCenter
-        Left = 363
-        Height = 34
-        Top = 105
+        Left = 357
+        Height = 21
+        Top = 66
         Width = 175
         BorderSpacing.Left = 3
         CharCase = ecUppercase
@@ -583,14 +584,14 @@ object frmRbnFilter: TfrmRbnFilter
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = edtDXCNotCnty
         AnchorSideTop.Side = asrCenter
-        Left = 541
+        Left = 535
         Height = 25
-        Top = 110
+        Top = 64
         Width = 30
         BorderSpacing.Left = 3
         Caption = '...'
-        OnClick = btnDXCNotCntyClick
         TabOrder = 9
+        OnClick = btnDXCNotCntyClick
       end
     end
     object Bevel1: TBevel
@@ -601,8 +602,8 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideRight.Side = asrBottom
       Left = 12
       Height = 5
-      Top = 574
-      Width = 655
+      Top = 538
+      Width = 647
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 6
       BorderSpacing.Top = 6
@@ -612,7 +613,7 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideTop.Control = grpSource
       AnchorSideRight.Control = grpDXStation
       AnchorSideRight.Side = asrBottom
-      Left = 592
+      Left = 584
       Height = 25
       Top = 15
       Width = 75
@@ -620,14 +621,14 @@ object frmRbnFilter: TfrmRbnFilter
       BorderSpacing.Top = 12
       BorderSpacing.Right = 9
       Caption = 'OK'
-      OnClick = btnOKClick
       TabOrder = 11
+      OnClick = btnOKClick
     end
     object btnCancel: TButton
       AnchorSideLeft.Control = btnOK
       AnchorSideTop.Control = btnOK
       AnchorSideTop.Side = asrBottom
-      Left = 592
+      Left = 584
       Height = 25
       Top = 46
       Width = 75
