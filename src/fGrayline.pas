@@ -7,7 +7,8 @@ interface
 uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,
   ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,lNetComponents,
-  lnet, lclType, LazFileUtils, StrUtils, DateUtils, Math;
+  lnet, lclType, LazFileUtils, StrUtils, DateUtils, Math,
+  uRbnLineFramer, uRbnSpotParser, uRbnLogin;
 
 type
   TRBNList = record
@@ -77,6 +78,8 @@ type
     watchFor : String;
     LocalDbg : boolean;
     GC_lock  : boolean;
+    FFramer  : TRbnLineFramer;
+    FLogin   : TRbnLogin;
 
     procedure lConnect(aSocket: TLSocket);
     procedure lDisconnect(aSocket: TLSocket);
@@ -115,6 +118,8 @@ uses dUtils, dData, uMyIni, dDXCluster, fNewQSO, fRotControl;
 
 procedure TfrmGrayline.lConnect(aSocket: TLSocket);
 begin
+  FFramer.Reset;
+  FLogin.Reset;
   rbn_status := 'Connected';
 end;
 
@@ -124,49 +129,40 @@ begin
 end;
 
 procedure TfrmGrayline.lReceive(aSocket: TLSocket);
-const
-  CR = #13;
-  LF = #10;
 var
-  sStart, sStop: Integer;
-  tmp : String;
-  itmp : Integer;
   buffer : String;
-  f : Double;
+  line   : String;
+  Spot   : TRbnSpotLine;
+
+  procedure AnswerLogin(const Text : String);
+  var
+    UserName : String;
+  begin
+    if not IsRbnLoginPrompt(Text) then
+      exit;
+    UserName := cqrini.ReadString('RBN','login','');
+    if (UserName <> '') and FLogin.ShouldAnswer(Text) then
+      lTelnet.SendMessage(UserName+#13+#10)
+  end;
+
 begin
   if lTelnet.GetMessage(buffer) = 0 then
     exit;
-  sStart := 1;
-  sStop := Pos(CR, Buffer);
-  if sStop = 0 then
-    sStop := Length(Buffer) + 1;
-  while sStart <= Length(Buffer) do
+  //same framing and the same definition of a spot as the RBN monitor
+  FFramer.Feed(buffer);
+  while FFramer.NextLine(line) do
   begin
-    tmp  := Copy(Buffer, sStart, sStop - sStart);
-    tmp  := trim(tmp);
-    if LocalDbg then Writeln('Rcvd:',tmp);
-    itmp := Pos('DX DE',UpperCase(tmp));
-    if (itmp > 0) or TryStrToFloat(copy(tmp,1,Pos(' ',tmp)-1),f)  then
+    if ParseRbnSpot(line, Spot) then
     begin
-     if LocalDbg then Writeln('  RBN:',tmp);
-      AddSpotToList(tmp);
+      if LocalDbg then Writeln('  RBN:',line);
+      AddSpotToList(line)
     end
     else begin
-      if (Pos('LOGIN',UpperCase(tmp)) > 0) and (cqrini.ReadString('RBN','login','') <> '') then
-        lTelnet.SendMessage(cqrini.ReadString('RBN','login','')+#13+#10);
-      if (Pos('please enter your call',LowerCase(tmp)) > 0) and (cqrini.ReadString('RBN','login','') <> '') then
-        lTelnet.SendMessage(cqrini.ReadString('RBN','login','')+#13+#10);
-      if LocalDbg then Writeln('RBN:',tmp)
-    end;
-    sStart := sStop + 1;
-    if sStart > Length(Buffer) then
-      Break;
-    if Buffer[sStart] = LF then
-      sStart := sStart + 1;
-    sStop := sStart;
-    while (Buffer[sStop] <> CR) and (sStop <= Length(Buffer)) do
-      sStop := sStop + 1
+      if LocalDbg then Writeln('RBN:',line);
+      AnswerLogin(line)
+    end
   end;
+  AnswerLogin(FFramer.Pending);
   lTelnet.CallAction
 end;
 
@@ -292,6 +288,7 @@ var
   i : Integer;
 begin
   InitCriticalSection(csRBN);
+  FFramer := TRbnLineFramer.Create;
   tmrSpotDots.Enabled:=false;
   for i:=1 to MAX_ITEMS do
    begin
@@ -356,6 +353,7 @@ procedure TfrmGrayline.FormDestroy(Sender: TObject);
 begin
   if LocalDbg then Writeln('Closing GrayLine window');
   dispose(ob,done);
+  FreeAndNil(FFramer);
   DoneCriticalsection(csRBN)
 end;
 
@@ -790,20 +788,6 @@ begin
 end;
 procedure TfrmGrayline.AddSpotToList(spot : String);
 
-  procedure ParseSpot(spot : String; var spotter, dxstn, freq, mode, stren : String);
-  var
-     i: integer;
-  begin
-    spotter := ExtractWord(3,spot,[' ']);
-     i := pos('-', spotter);
-    if i > 0 then
-      spotter := copy(spotter, 1, i-1);
-    dxstn := ExtractWord(5,spot,[' ']);
-    freq  := ExtractWord(4,spot,[' ']);
-    mode  := ExtractWord(6,spot,[' ']);
-    stren := ExtractWord(7,spot,[' ']);
-  end;
-
 var
   spotter : String;
   call    : String;
@@ -816,10 +800,15 @@ var
   wCall   : String;
   mode    : String;
   latitude, longitude: Currency;
+  Parsed  : TRbnSpotLine;
 begin
-  if pos('DX DE',UpperCase(spot) )<> 1 then exit;
+  if not ParseRbnSpot(spot, Parsed) then exit;
   watchFor   := cqrini.ReadString('RBN','watch','');
-  ParseSpot(spot, spotter, call, freq, mode, stren);
+  spotter := Parsed.Spotter;
+  call    := Parsed.Dx;
+  freq    := Parsed.FreqText;
+  mode    := Parsed.Mode;
+  stren   := IntToStr(Parsed.SignalDb);
 
   if watchFor<>'' then
   begin

@@ -21,6 +21,9 @@ jobs:
     - name: Install Dependencies
       run: make dependencies
 
+    - name: Unit tests
+      run: make test
+
     - name: Run Build GTK2
       run: make cqrlog_gtk2
 

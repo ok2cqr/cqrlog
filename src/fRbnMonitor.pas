@@ -7,10 +7,14 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, ActnList, StdCtrls, Grids, lNetComponents, lNet, lclType, ExtCtrls,
-  Menus, RegExpr;
+  Menus, RegExpr, uRbnLineFramer, uRbnSpotParser, uRbnLogin, uRbnSpotQueue,
+  uRbnReconnect;
 
 const
   C_MAX_ROWS = 1000; //max lines in the list of RBN spots
+  //spot lines waiting for the worker. At about 5 spots/s through the filter it is
+  //some 100 s of backlog; beyond that the oldest lines are dropped and counted
+  C_RBN_QUEUE_SIZE = 500;
 
 
 type
@@ -141,6 +145,10 @@ type
   private
     RbnMonThread : TRbnThread;
     lTelnet      : TLTelnetClientComponent;
+    FFramer      : TRbnLineFramer;
+    FLogin       : TRbnLogin;
+    FReconnect   : TRbnReconnect;
+    tmrReconnect : TTimer;
     aRbnArchive  : Array of TRbnSpot;
     SrcCalls : TStringlist;
 
@@ -149,14 +157,17 @@ type
 
     procedure ParkFocus;
     procedure StopRbnThread;
+    procedure ConnectSocket;
+    procedure ScheduleReconnect;
+    procedure tmrReconnectTimer(Sender : TObject);
+    procedure lError(const msg: string; aSocket: TLSocket);
     procedure lConnect(aSocket: TLSocket);
     procedure lDisconnect(aSocket: TLSocket);
     procedure lReceive(aSocket: TLSocket);
     procedure AddSpotToThread(spot : String);
 
   public
-    csRbnMonitor : TRTLCriticalSection;
-    slRbnSpots   : TStringList;
+    SpotQueue    : TRbnSpotQueue;  //main thread pushes, TRbnThread pops
     DeleteCount  : Integer;
     procedure SynRbnMonitor(RbnSpot : TRbnSpot);
     procedure LoadConfigToThread;
@@ -345,37 +356,6 @@ end;
 
 procedure TRBNThread.Execute;
 
-  procedure ParseSpot(spot : String; var spotter, dxstn, freq, mode, stren : String);
-  var
-    i : Integer;
-    y : Integer;
-    b : Array of String[50];
-    p : Integer=0;
-  begin
-    SetLength(b,1);
-    for i:=1 to Length(spot) do
-    begin
-      if spot[i]<>' ' then
-        b[p] := b[p]+spot[i]
-      else begin
-        if (b[p]<>'') then
-        begin
-          inc(p);
-          SetLength(b,p+1)
-        end
-      end
-    end;
-
-    spotter := b[2];
-    i := pos('-', spotter);
-    if i > 0 then
-      spotter := copy(spotter, 1, i-1);
-    dxstn := b[4];
-    freq  := b[3];
-    mode  := b[5];
-    stren := b[6]
-  end;
-
 var
   spot    : String;
   spotter : String;
@@ -398,6 +378,7 @@ var
   fsRbn   : TFormatSettings;
   nSpots  : Int64 = 0;
   tBeat   : TDateTime;
+  Parsed  : TRbnSpotLine;
 begin
   DbgLog('RBN','thread started');
   tBeat := Now;
@@ -410,24 +391,15 @@ begin
   try try
     while not Terminated do
     begin
-      EnterCriticalsection(frmRbnMonitor.csRbnMonitor);
-      try
-        if frmRbnMonitor.slRbnSpots.Count>0 then
-        begin
-          spot := frmRbnMonitor.slRbnSpots.Strings[0];
-          frmRbnMonitor.slRbnSpots.Delete(0)
-        end
-        else
-          spot := ''
-      finally
-        LeaveCriticalsection(frmRbnMonitor.csRbnMonitor)
-      end;
+      if not frmRbnMonitor.SpotQueue.Pop(spot) then
+        spot := '';
       //heartbeat, so the log distinguishes "thread died" from "no spots arrived"
       if (Now - tBeat) > (5/1440) then
       begin
         tBeat := Now;
         DbgLog('RBN','alive, spots processed=' + IntToStr(nSpots) +
-                     ' queue=' + IntToStr(frmRbnMonitor.slRbnSpots.Count))
+                     ' queue=' + IntToStr(frmRbnMonitor.SpotQueue.Count) +
+                     ' dropped=' + IntToStr(frmRbnMonitor.SpotQueue.Dropped))
       end;
 
       if (spot='') then
@@ -437,7 +409,14 @@ begin
       end;
       Inc(nSpots);
 
-      ParseSpot(spot, spotter, dxstn, freq, mode, stren);
+      //lReceive queues only what parses, but the queue is a list of strings
+      if not ParseRbnSpot(spot, Parsed) then
+        Continue;
+      spotter := Parsed.Spotter;
+      dxstn   := Parsed.Dx;
+      freq    := Parsed.FreqText;
+      mode    := Parsed.Mode;
+      stren   := IntToStr(Parsed.SignalDb);
 
       if dmData.UsesLotw(dxstn) then
         LoTW := 'L'
@@ -489,8 +468,10 @@ begin
         end;
 
         Synchronize(@ShowSpot)
-      end;
-      Sleep(100)
+      end
+      //no Sleep here any more: the 100 ms after every spot capped the worker at
+      //10 spots/s minus the SQL time, below an ordinary evening's 6/s with peaks
+      //of 24/s. The thread sleeps above, when the queue is empty
     end
   except
     on E: Exception do
@@ -514,13 +495,9 @@ end;
 
 procedure TfrmRbnMonitor.AddSpotToThread(spot : String);
 begin
-  EnterCriticalsection(csRbnMonitor);
-  try
-     slRbnSpots.Add(spot);
-     if  (frmGrayline.Showing and frmGrayline.acLinkToRbnMonitor.Checked) then frmGrayline.AddSpotToList(spot);
-  finally
-    LeaveCriticalsection(csRbnMonitor)
-  end
+  SpotQueue.Push(spot);
+  //used to run inside the queue lock, with a DXCC lookup in it
+  if  (frmGrayline.Showing and frmGrayline.acLinkToRbnMonitor.Checked) then frmGrayline.AddSpotToList(spot)
 end;
 
 procedure TfrmRbnMonitor.StopRbnThread;
@@ -534,16 +511,15 @@ begin
   FreeAndNil(RbnMonThread);  //Destroy waits for Execute to leave
 
   //whatever was still queued belongs to the connection that has just ended
-  EnterCriticalsection(csRbnMonitor);
-  try
-    slRbnSpots.Clear
-  finally
-    LeaveCriticalsection(csRbnMonitor)
-  end
+  SpotQueue.Clear
 end;
 
 procedure TfrmRbnMonitor.lConnect(aSocket: TLSocket);
 begin
+  FFramer.Reset;
+  FLogin.Reset;
+  FReconnect.Connected;
+  tmrReconnect.Enabled := False;
   DbgLog('RBN','socket connected');
   tbtnConnect.Action   := acDisconnect;
   sbRbn.Panels[0].Text := 'Connected to RBN'
@@ -553,70 +529,104 @@ procedure TfrmRbnMonitor.lDisconnect(aSocket: TLSocket);
 begin
   DbgLog('RBN','socket disconnected');
   tbtnConnect.Action := acConnect;
-  sbRbn.Panels[0].Text := 'Disconected'
+  sbRbn.Panels[0].Text := 'Disconnected';
+  ScheduleReconnect
+end;
+
+procedure TfrmRbnMonitor.lError(const msg: string; aSocket: TLSocket);
+begin
+  DbgLog('RBN','socket error: ' + msg);
+  sbRbn.Panels[0].Text := 'Error: ' + msg;
+  ScheduleReconnect
+end;
+
+//The connection was lost or could not be made. Tries again with a growing delay
+//for as long as the user wants to be connected; never after a manual Disconnect,
+//never to another server
+procedure TfrmRbnMonitor.ScheduleReconnect;
+var
+  Delay : Integer;
+begin
+  if tmrReconnect.Enabled or (not FReconnect.ShouldReconnect) then
+    exit;
+  Delay := FReconnect.NextDelaySec;
+  DbgLog('RBN','next connection attempt in ' + IntToStr(Delay) + ' s');
+  sbRbn.Panels[0].Text := sbRbn.Panels[0].Text + ', next try in ' + IntToStr(Delay) + ' s';
+  //while reconnecting the button offers Disconnect: that is how the user stops it
+  tbtnConnect.Action    := acDisconnect;
+  tmrReconnect.Interval := Delay * 1000;
+  tmrReconnect.Enabled  := True
+end;
+
+procedure TfrmRbnMonitor.tmrReconnectTimer(Sender : TObject);
+begin
+  tmrReconnect.Enabled := False;
+  if (not FReconnect.ShouldReconnect) or lTelnet.Connected then
+    exit;
+  //armed again before the attempt: a Connect that fails without any event must
+  //not end the retries. lConnect switches the timer off
+  ScheduleReconnect;
+  sbRbn.Panels[0].Text := 'Connecting to RBN ...';
+  ConnectSocket
 end;
 
 procedure TfrmRbnMonitor.lReceive(aSocket: TLSocket);
-const
-  CR = #13;
-  LF = #10;
 var
-  sStart, sStop: Integer;
-  tmp : String;
   buffer : String;
-  UserName : String;
+  line   : String;
+  Spot   : TRbnSpotLine;
+
+  procedure AnswerLogin(const Text : String);
+  var
+    UserName : String;
+  begin
+    if not IsRbnLoginPrompt(Text) then
+      exit;
+    UserName := cqrini.ReadString('RBNMonitor','UserName',cqrini.ReadString('Station', 'Call', ''));
+    if (UserName <> '') and FLogin.ShouldAnswer(Text) then
+      lTelnet.SendMessage(UserName+#13+#10)
+  end;
+
 begin
   if lTelnet.GetMessage(buffer) = 0 then
     exit;
-  sStart := 1;
-  sStop := Pos(CR, Buffer);
-  if sStop = 0 then
-    sStop := Length(Buffer) + 1;
-  while sStart <= Length(Buffer) do
+  //GetMessage returns what has arrived so far, not lines. The framer keeps the
+  //unfinished tail for the next read; it used to be parsed as it was and lost
+  FFramer.Feed(buffer);
+  while FFramer.NextLine(line) do
   begin
-    tmp  := Copy(Buffer, sStart, sStop - sStart);
-    tmp  := trim(tmp);
-    if dmData.DebugLevel >=1 then Writeln(tmp);
-
-    if (Pos('DX DE',UpperCase(tmp))>0)  then
-    begin
-      AddSpotToThread(tmp)
-    end
-    else begin
-      UserName := cqrini.ReadString('RBNMonitor','UserName',cqrini.ReadString('Station', 'Call', ''));
-      if (Pos('LOGIN',UpperCase(tmp)) > 0) and (UserName <> '') then
-        lTelnet.SendMessage(UserName+#13+#10);
-      if (Pos('please enter your call',LowerCase(tmp)) > 0) and (UserName <> '') then
-        lTelnet.SendMessage(UserName+#13+#10)
-    end;
-
-    sStart := sStop + 1;
-    if sStart > Length(Buffer) then
-      Break;
-    if Buffer[sStart] = LF then
-      sStart := sStart + 1;
-    sStop := sStart;
-    while (Buffer[sStop] <> CR) and (sStop <= Length(Buffer)) do
-      sStop := sStop + 1
+    if dmData.DebugLevel >=1 then Writeln(line);
+    if ParseRbnSpot(line, Spot) then
+      AddSpotToThread(line)
+    else
+      AnswerLogin(line)
   end;
+  //the prompt comes without a line end
+  AnswerLogin(FFramer.Pending);
   lTelnet.CallAction
 end;
 
 procedure TfrmRbnMonitor.acConnectExecute(Sender: TObject);
-var
-  port   : Integer;
-  server : String;
-  user   : String;
 begin
-  server := cqrini.ReadString('RBNMonitor','ServerName','telnet.reversebeacon.net:7000');
-  user   := cqrini.ReadString('RBNMonitor','UserName',cqrini.ReadString('Station', 'Call', ''));
-
-  if (user='') then
+  if cqrini.ReadString('RBNMonitor','UserName',cqrini.ReadString('Station', 'Call', '')) = '' then
   begin
     Application.MessageBox('User name is not defined!','Warning...',mb_ok+mb_IconWarning);
     acRbnServer.Execute;
     exit
   end;
+  FReconnect.UserConnect;
+  tmrReconnect.Enabled := False;
+  ConnectSocket;
+  ParkFocus
+end;
+
+//one connection attempt; called by the user's Connect and by tmrReconnect
+procedure TfrmRbnMonitor.ConnectSocket;
+var
+  port   : Integer;
+  server : String;
+begin
+  server := cqrini.ReadString('RBNMonitor','ServerName','telnet.reversebeacon.net:7000');
 
   //the worker survives a socket drop (it still drains the queue), so connecting
   //again must reuse it. Creating a new one here used to leak the old thread
@@ -636,8 +646,7 @@ begin
     port := 7000;
   lTelnet.Port := port;
   if dmData.DebugLevel>=2 then Writeln(server,'   ',port);
-  lTelnet.Connect;
-  ParkFocus
+  lTelnet.Connect
 end;
 
 procedure TfrmRbnMonitor.acClearExecute(Sender: TObject);
@@ -649,6 +658,9 @@ end;
 
 procedure TfrmRbnMonitor.acDisconnectExecute(Sender: TObject);
 begin
+  //first, so that the socket's own OnDisconnect does not schedule a reconnect
+  FReconnect.UserDisconnect;
+  tmrReconnect.Enabled := False;
   lTelnet.Disconnect;
   StopRbnThread;
   tbtnConnect.Action := acConnect;
@@ -740,30 +752,35 @@ end;
 
 procedure TfrmRbnMonitor.FormCreate(Sender: TObject);
 begin
-  InitCriticalSection(csRbnMonitor);
-
   DeleteCount := 0;
 
   sgRbn.RowCount := 1;
 
-  slRbnSpots := TStringList.Create;
+  SpotQueue := TRbnSpotQueue.Create(C_RBN_QUEUE_SIZE);
+  FReconnect.Init;
+  tmrReconnect := TTimer.Create(self);
+  tmrReconnect.Enabled := False;
+  tmrReconnect.OnTimer := @tmrReconnectTimer;
   SrcCalls:= TStringList.Create;
+  FFramer := TRbnLineFramer.Create;
 
   lTelnet := TLTelnetClientComponent.Create(nil);
   lTelnet.OnConnect    := @lConnect;
   lTelnet.OnDisconnect := @lDisconnect;
-  lTelnet.OnReceive    := @lReceive
+  lTelnet.OnReceive    := @lReceive;
+  lTelnet.OnError      := @lError
 end;
 
 
 procedure TfrmRbnMonitor.FormDestroy(Sender: TObject);
 begin
-  //the worker uses csRbnMonitor and slRbnSpots, it has to be gone before they are
+  //the worker uses SpotQueue, it has to be gone before the queue is
+  tmrReconnect.Enabled := False;
   StopRbnThread;
   FreeAndNil(lTelnet);
-  DoneCriticalsection(csRbnMonitor);
+  FreeAndNil(FFramer);
   FreeAndNil(SrcCalls);
-  FreeAndNil(slRbnSpots)
+  FreeAndNil(SpotQueue)
 end;
 
 procedure TfrmRbnMonitor.FormKeyUp(Sender : TObject; var Key : Word;

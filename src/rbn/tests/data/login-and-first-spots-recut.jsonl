@@ -1,0 +1,128 @@
+{"t": 0.02, "data": "Please enter your "}
+{"t": 0.063, "data": "call: Hello, OK2PMG! Connected.\r\nLocal users: 759\r\nSpot rate: 6/s (21,857"}
+{"t": 0.24, "data": "/h)\r\nOK2PMG de RELAY 21-Sep-2026 18:45Z >\r\n\r\nDX de DK9VM-#:   7016.00  IZ4AHC         CW    10 dB  28 WPM  CQ"}
+{"t": 0.503, "data": "      1845Z\r\nDX de LZ4UT-#:   7016.00  IZ4AHC         CW    21 dB  28 WPM  CQ      1845Z\r\nDX de LZ4UT-#"}
+{"t": 0.752, "data": ":   7016.00  IZ4AHC         CW    21 dB  28 WPM  CQ      1845Z\r\nDX de HA8VPL-#:  7016.00  IZ4AHC  "}
+{"t": 0.988, "data": "       CW"}
+{"t": 1.01, "data": "    24 dB  27 WPM  CQ      1845Z\r"}
+{"t": 1.09, "data": "\nDX de DM6DS-#: "}
+{"t": 1.128, "data": "  7016.00  IZ4AHC         CW    18 dB  28 WPM  CQ      1845Z\r\nDX"}
+{"t": 1.283, "data": " de F5HSX-#:   7016.00  IZ4AHC         CW     4 dB  28 WPM  CQ      1845Z\r\nDX de S50Y-#:    7016.0"}
+{"t": 1.52, "data": "0  IZ4AHC         CW     5 dB  28 WPM  CQ      1845Z\r\nDX d"}
+{"t": 1.66, "data": "e DK0KZ-#:   7016.00  IZ4AHC         CW    19 dB  28 WPM  CQ "}
+{"t": 1.807, "data": "     1845Z\r\nDX de ON6IP-#:   7016.00  IZ4AHC         CW    18 dB  27 WPM  CQ      18"}
+{"t": 2.01, "data": "45Z\r\nDX de OK1ZDP-#:  7016.00  IZ4AHC         CW "}
+{"t": 2.128, "data": "   31 dB  28 WPM  CQ      1845Z\r\nDX de DO4IXF-#:  7016.00  IZ4AHC         CW    29 dB  28 WPM  CQ    "}
+{"t": 2.372, "data": "  1845Z\r\nDX de EY8LE-#:   7"}
+{"t": 2.437, "data": "024.00  UA9VD"}
+{"t": 2.469, "data": "V/M       CW    13 dB  34 WPM  CQ      1845Z\r\nDX de WT9N-#:   1"}
+{"t": 2.621, "data": "4059"}
+{"t": 2.631, "data": ".00  KB1MEN         CW    14 dB  20 WPM  CQ      1845Z\r\nDX de HA5U-#:    7016.00  IZ4AHC         CW    27 dB  28 WP"}
+{"t": 2.908, "data": "M  CQ      1845Z\r\nDX de DK3QX-#:   7016.00  IZ4AHC         CW    22 dB  27 WPM  CQ      1845Z\r\nDX de LZ4RA-"}
+{"t": 3.167, "data": "#:   7016.00  IZ4AHC         CW    21 dB  27 WPM  "}
+{"t": 3.287, "data": "CQ      1845Z\r\nDX de TI7Y-#:   14025.00  EH5IWM         "}
+{"t": 3.423, "data": "CW    20 dB  30 WPM  CQ      1845Z\r\nDX de DL8AEW-1-#:  7016.00  IZ4AHC        "}
+{"t": 3.611, "data": " CW    22 dB  27 WPM  CQ      1845Z\r\nDX de DL8AEW-#:  7016.00  IZ4AHC         CW    22 dB  27 WPM "}
+{"t": 3.848, "data": " CQ      1845Z\r\nDX de SE5D-#:    7016.00  IZ4AHC         CW    18 dB  29 WPM  CQ      1845Z\r\nDX de "}
+{"t": 4.087, "data": "H"}
+{"t": 4.089, "data": "B9GFK-#:  7016.00  IZ4AHC         CW    22 dB  28 WPM  CQ      1845Z\r\nDX de DL8FZ-#:   701"}
+{"t": 4.307, "data": "6.00  IZ4AHC         CW    17 dB  28 WPM  CQ      1845Z\r\nD"}
+{"t": 4.447, "data": "X de G0ADE-#:   7016.00  IZ4AHC    "}
+{"t": 4.531, "data": "     CW    15 dB  28 WPM  CQ      1845Z\r\nDX de PD2DWT-#:  7016.00  IZ4AHC         CW    13 dB"}
+{"t": 4.756, "data": "  28 WPM  CQ      1845Z\r\nDX de IK4VSB-#:  7016.00  IZ4AHC         CW    18 dB  28 WPM  CQ      1846Z\r\nD"}
+{"t": 5.004, "data": "X de G4SAQ-#:   3521.00  3Z75T"}
+{"t": 5.077, "data": "FW        CW    15 dB  22 WPM  CQ      1846Z\r\nDX de HA1XKY-#: 10125.20  SF7G"}
+{"t": 5.26, "data": "U          CW "}
+{"t": 5.294, "data": "   20 dB  21 WPM  CQ      1846Z\r\nDX de DE1ZVY-#:  3521.00  3Z75TFW        CW    14 dB  22 WPM  CQ      1846Z\r\nDX de "}
+{"t": 5.574, "data": "MM9OHB-#:  3521.00  3Z75TFW        CW    "}
+{"t": 5.673, "data": "21 d"}
+{"t": 5.683, "data": "B  "}
+{"t": 5.69, "data": "22 W"}
+{"t": 5.7, "data": "PM  CQ      1846Z\r\nDX de K9OCU-#:  10113.00  K0LVQ          CW    24 dB  20 WPM  CQ "}
+{"t": 5.903, "data": "     1846Z\r\nDX de LZ7YH-#:   7016.00  IZ4AHC         CW    23 dB  28 W"}
+{"t": 6.072, "data": "PM"}
+{"t": 6.077, "data": "  CQ      1846Z\r\nDX de DC8CG-#:   7016.00  IZ4AHC         CW    20 dB  28 WPM  CQ      1846Z\r\nDX de GI4VAN-#:  70"}
+{"t": 6.35, "data": "16.00  IZ4AHC         CW    12 dB  28 WPM  CQ    "}
+{"t": 6.468, "data": "  1846Z\r\nDX de OK2PY-#:   3521.00  3Z75TFW        CW     8 dB  22 WPM  CQ      1846Z\r\nDX"}
+{"t": 6.68, "data": " de HA5UM-#:  14058.00  EA7T"}
+{"t": 6.748, "data": "R          CW    11 dB  16 WPM  CQ      1846Z\r\nDX de SZ"}
+{"t": 6.881, "data": "1N-#:    7015.90  IZ4AHC         CW    13 dB  28 WPM  CQ      1846Z\r\nDX de SZ1N-#:    3536.90"}
+{"t": 7.105, "data": "  SM"}
+{"t": 7.115, "data": "6M           CW     5 dB  26 WPM  CQ      1846Z\r\nDX de K3OLJ-#:  101"}
+{"t": 7.279, "data": "13.00  K0LVQ          CW    1"}
+{"t": 7.349, "data": "1 dB  20 WPM  CQ      1846Z\r\nDX de HG8B-#:    7016.00  IZ4AHC         CW    26 dB  27 WPM  CQ     "}
+{"t": 7.586, "data": " 1846Z\r\nDX de PA5FL-4-#:  7036.40  SP3HSX         CW    1"}
+{"t": 7.724, "data": "6 dB  14 WPM  CQ      1846Z\r\nDX de PA5FL-4-#: 14058.00  EA7TR   "}
+{"t": 7.878, "data": "       CW    13 dB  16 WPM  CQ      1846Z\r\nDX de RU9DQR-#:  3521.00  3Z"}
+{"t": 8.05, "data": "75TFW        CW    12 dB  22 W"}
+{"t": 8.122, "data": "PM  CQ      1846Z\r\nDX de RU9DQR-#: 10125.10  "}
+{"t": 8.231, "data": "SF7GU          CW    11 dB  21"}
+{"t": 8.303, "data": " WPM  CQ      1846Z\r\nDX de DL0YE-#:   7016.00  IZ4AHC         CW    14 dB  28 WPM  CQ  "}
+{"t": 8.513, "data": "    1846Z\r\nDX de YO2OS-#:   7"}
+{"t": 8.583, "data": "016.00  IZ4AHC         CW    18 dB  25 WPM  CQ      1846Z\r\nDX de YO2OS-#:   3537.00  SM6WEU       "}
+{"t": 8.82, "data": "  CW     5 dB  24 WPM  CQ      1846Z\r\nDX de YO2OS-#:   3521"}
+{"t": 8.963, "data": ".00  3Z75TFW        CW     8 dB  23 WP"}
+{"t": 9.054, "data": "M  CQ      1846Z\r\nDX de UT5W-#:    3521.00  3Z75TFW        CW    14 dB  22 WPM  CQ      1846Z\r\nDX de YO2JHF-#: 10125.10"}
+{"t": 9.342, "data": "  S"}
+{"t": 9.349, "data": "F7GU          CW    18 dB  21 WPM  CQ      1846Z\r\nDX d"}
+{"t": 9.479, "data": "e G3LZO-#:   3521.00  3Z75TFW        CW    15 dB  22 WPM  CQ      1846Z\r\nDX de G4XTZ-#:   7024.00  UA9VDV/M "}
+{"t": 9.74, "data": "      CW     8 dB  33 WPM  CQ      1846Z\r\nDX de G4XTZ-#:  10125.20  SF7GU          CW    18 dB  21 WPM  CQ      1846Z\r"}
+{"t": 10.025, "data": "\nDX de KW7TN-#:  10110.00  N4SPC          CW     4 dB  20 WPM  CQ      1"}
+{"t": 10.199, "data": "846Z\r\nDX de DK9VM-#:  10125.20  SF7GU          CW    13 dB  21 WPM  CQ      1846Z\r\nDX de DL1NWO-#:  3537.00  SM6WEU    "}
+{"t": 10.486, "data": "     CW     4 dB  24 WPM  CQ      1846Z\r\nDX de DL1NWO-#:  7016.00  IZ4AHC         C"}
+{"t": 10.687, "data": "W    11 dB  2"}
+{"t": 10.718, "data": "7 WPM  CQ      1846Z\r\nDX"}
+{"t": 10.776, "data": " de OZ1BML-#:  7016.00  IZ4AHC         CW    10 dB  27 WPM  CQ      1846Z\r\nDX de "}
+{"t": 10.972, "data": "KM3G-5-#: 28197.50  PY1DXS/B       CW     6 dB  15 WPM  BEACON  1846Z\r\nDX de HA8VPL-#: 14058."}
+{"t": 11.196, "data": "00  EA7TR          CW     7 dB  17 WPM  CQ      1846Z\r\nDX de N2GOD-#:  10113.00  K0LVQ          CW    12 dB  20"}
+{"t": 11.464, "data": " WPM  CQ      1846Z\r\nDX de WZ7C-#:   1"}
+{"t": 11.556, "data": "0113.00  K0LVQ  "}
+{"t": 11.595, "data": "        CW    12 dB  20 WPM  CQ      1846Z\r\nDX de LZ2KH-#:   7024.00  UA9VDV/M       CW    13 dB"}
+{"t": 11.827, "data": "  33 WPM  CQ      1846Z\r\nDX de ON6IP-#:  10"}
+{"t": 11.931, "data": "125.20  SF7GU          CW    24 dB  21 WPM  CQ      1846Z\r\nDX de PI4LH-#:  18085.30  K4MAL          CW     5 dB  18"}
+{"t": 12.208, "data": " WPM  CQ      1846Z\r\nDX de HA5U-#:   10125.20  SF7GU          CW    27 dB  21 WPM  CQ      18"}
+{"t": 12.433, "data": "46Z\r\nDX de G7KCC-#:  21003.40  EC5F           CW     9 dB  34 WPM  CQ      1846Z\r\nDX de S53U"}
+{"t": 12.655, "data": "-#:   10125.20  SF7GU          CW    10 dB  21 WPM  CQ      1846Z"}
+{"t": 12.812, "data": "\r\nDX de S53U-#:    3552.00  DL0PEQ         CW    27 dB  21 WPM  CQ      1846Z\r\nDX de S53U-#:   10119.20  IK5OPY         "}
+{"t": 13.102, "data": "CW     6 dB  26 WPM  CQ      1846Z\r\nDX de F4LFG-#:   35"}
+{"t": 13.235, "data": "52.00  DL0PEQ         CW    22 dB  21 WPM  CQ      1846Z\r\nDX de O"}
+{"t": 13.392, "data": "E6VSA-#: 14025.00  EH5IWM         CW    29 dB  31 WPM  CQ      1846Z\r\nDX de DL8AEW-1-#:  3537.00  SM6WEU   "}
+{"t": 13.65, "data": "      CW    22 dB  24 WPM  CQ      1846Z\r\nDX de DL8AEW-#:  3537.00  SM6WEU         CW    22 dB  24 WPM  CQ      1846Z"}
+{"t": 13.932, "data": "\r\nDX de DL8AEW-#: 18085.30  K4MAL          CW    19 dB  18 WPM  CQ      1846Z\r\nDX de S"}
+{"t": 14.14, "data": "E5D-#:   14027.00  KB3QVJ"}
+{"t": 14.201, "data": "         CW     8 dB  20 WPM  CQ      1"}
+{"t": 14.295, "data": "846Z\r\nDX de HB9GFK-#: 10125.20  SF7GU"}
+{"t": 14.384, "data": "          CW    21 dB  21 WPM  CQ      1846Z\r\nDX de TI7Y-#:   18085.30  K4MA"}
+{"t": 14.568, "data": "L          CW    12 dB  18 WPM  CQ      1846Z\r\nDX de TI7Y-#:   18080.10  VA3EML         CW    13 dB  14 WPM  CQ  "}
+{"t": 14.841, "data": "    1846Z\r\nDX de N6LN-#:   18085.30  K4MAL          CW     7 dB "}
+{"t": 14.995, "data": " 18 WPM  CQ      1846Z\r\nDX de DK9VM-1-#: 10125.20  SF7GU          CW    31 dB  21 WPM  CQ      1846Z\r\nDX de D"}
+{"t": 15.258, "data": "L8AEW-3-#: 18085.30  K4MAL          CW    19 dB  18 WPM  CQ      "}
+{"t": 15.415, "data": "1846Z\r\nDX de HA1XKY-#:  3552.00  DL0PEQ         CW "}
+{"t": 15.538, "data": "   11 dB  21 WPM  CQ      1846Z\r\nDX de OH6DO-#:  18085.30  K4MAL          CW"}
+{"t": 15.722, "data": "    14 dB  18 WPM  CQ      1846Z\r\nDX de VE6GT-#:  18079.90  VA3EML         CW    20 dB  14 WPM  CQ      1846Z\r"}
+{"t": 15.988, "data": "\nDX d"}
+{"t": 16.0, "data": "e ES5PU-#:   3552.00  DL0PEQ         CW    13 dB  21 WPM  CQ  "}
+{"t": 16.149, "data": "    1846Z\r\nDX de ES5PU-#:  14059"}
+{"t": 16.227, "data": ".00  KB1MEN         CW     8 dB  20 WPM  CQ      1846Z\r\nDX de RK3QM-#:   7016.00  IZ4AHC        "}
+{"t": 16.459, "data": " CW    12 dB  27 WPM  CQ      1846Z\r\nDX de G0BJD-#:   3552.00  DL0PEQ         CW    24 dB  21 WPM  CQ  "}
+{"t": 16.707, "data": "    1846Z\r\nDX de GI4VAN-#:  3552.00  DL0PEQ         "}
+{"t": 16.833, "data": "CW    19 dB  21 WPM  CQ      1846Z\r\nDX de K9AA-#:   18"}
+{"t": 16.963, "data": "083.00  HA2PR          CW     4 dB  22 WPM  CQ      1846Z\r\nDX de GX0DQV-#:  3552.00  D"}
+{"t": 17.171, "data": "L0PEQ         CW     6 "}
+{"t": 17.226, "data": "dB  21 WPM  CQ      1846Z\r\nDX de IK7ONY-#:  355"}
+{"t": 17.34, "data": "2.00  DL0PEQ         CW    11 dB  22 WPM  CQ      1846Z\r\nDX de WE9S-#: "}
+{"t": 17.511, "data": "  14059.00  KB1MEN         CW    21 dB  20 WPM  CQ      1846Z\r\nDX de DF7ON-#:  10125.10  SF7GU          CW    21 "}
+{"t": 17.784, "data": "dB  21 WPM  CQ      1846Z\r\nDX de LZ3HE-#:  10101.00  5E4CX          CW     8 dB  45 WPM  C"}
+{"t": 18.002, "data": "Q      1846Z\r\nDX de OK4VC-#:  14023.20  GD0PEX         CW    23 dB  20 WPM  CQ      1846Z\r\nDX de UT5"}
+{"t": 18.243, "data": "W-#:   10125.20  SF7GU          CW    14 dB  21 WPM  CQ      1846Z\r\nDX de ND7A-#:   140"}
+{"t": 18.453, "data": "26.90  KB3QVJ         CW     6 dB  20 WPM  CQ      1846Z\r\nDX de W6LE-#:   18085.30  K4MAL      "}
+{"t": 18.683, "data": "    CW    16 dB  18 WPM  CQ      1846Z\r\nDX de EI"}
+{"t": 18.799, "data": "4DD-#:   352"}
+{"t": 18.828, "data": "1.00  3Z75TFW        CW    19 dB  22 WPM  CQ      1846Z\r\n"}
+{"t": 18.965, "data": "DX de YO2JHF-#:  3552.00  DL0PEQ         CW    10 dB  21 WPM  CQ      1846Z\r\nDX de LB"}
+{"t": 19.171, "data": "9ZP-#:   7030.90  F5JRH          CW     5 dB  22 WPM  CQ      1846"}
+{"t": 19.33, "data": "Z\r\nDX de G3LZO"}
+{"t": 19.364, "data": "-#:  10125.20  SF7GU          CW    18 dB  21 WPM  CQ      1846Z\r\nDX de G3LZO-#:   3552.00  DL0PEQ  "}
+{"t": 19.605, "data": "       CW    13 dB  2"}
+{"t": 19.656, "data": "1 WPM  CQ      1846Z\r\nDX de G3LZO-#:  14059.00  KB1MEN         CW  "}
+{"t": 19.818, "data": "   6 dB  20 WPM  CQ      1846Z\r\n"}

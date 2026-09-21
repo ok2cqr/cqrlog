@@ -29,7 +29,7 @@ CQR_BUILD := $(shell git rev-list --count HEAD 2>/dev/null || echo $(CQR_BUILD_F
 
 .DEFAULT_GOAL := cqrlog
 
-.PHONY : help dependencies hamlib clean install deb deb_src debug \
+.PHONY : help test dependencies hamlib clean install deb deb_src debug \
          appimage appimage-qt5 docker-image docker docker-build docker-install \
          docker-appimage docker-appimage-qt5 docker-deb docker-deb-src \
          install_macos sign_macos dmg_create dmg test-dmg flatpak docker-flatpak \
@@ -459,6 +459,15 @@ LFM_LINT_FILES ?= src/fPreferences.lfm src/fNewQSO.lfm src/fBandMapGfx.lfm
 
 lint-lfm: ## Check Lazarus forms for layout that breaks on Qt/GTK (tools/lfm_layout.py)
 	python3 tools/lfm_layout.py lint $(LFM_LINT_FILES)
+
+# Unit tests. The Pascal suites are built with plain fpc (no LCL, no MySQL), so
+# they do not need lazbuild nor a widget set.
+FPC ?= $(or $(shell command -v fpc 2>/dev/null),$(firstword $(wildcard $(HOME)/fpcupdeluxe/fpc/bin/*/fpc)),fpc)
+
+test: ## Run the unit tests (RBN receive path, DXCC parser, lfm layout tool)
+	$(MAKE) -C src/rbn test FPC=$(FPC)
+	$(MAKE) -C src/dxcc-parser test FPC=$(FPC)
+	cd tools && python3 -m unittest -q test_lfm_layout
 
 help: ## List the make options available
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
