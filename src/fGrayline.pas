@@ -83,6 +83,7 @@ type
     procedure lReceive(aSocket: TLSocket);
 
     function  ConnectToRBN : Boolean;
+    procedure SetRbnLink(Linked : Boolean);
     procedure CalculateBearing(lat0, long0, lat1, long1: extended; var bearing: extended);
   public
     RBNSpotList : array[1..MAX_ITEMS] of TRBNList;
@@ -270,10 +271,16 @@ end;
 
 procedure TfrmGrayline.acLinkToRbnMonitorExecute(Sender: TObject);
 begin
-    acLinkToRbnMonitor.Checked := not acLinkToRbnMonitor.Checked;
-    cqrini.WriteBool('RBN','AutoLink',acLinkToRbnMonitor.Checked);
-    pumConnect.Enabled:=not acLinkToRbnMonitor.Checked;
-    if acLinkToRbnMonitor.Checked then
+    //only the user toggles and stores the link, see tmrAutoConnectTimer
+    SetRbnLink(not acLinkToRbnMonitor.Checked);
+    cqrini.WriteBool('RBN','AutoLink',acLinkToRbnMonitor.Checked)
+end;
+
+procedure TfrmGrayline.SetRbnLink(Linked : Boolean);
+begin
+    acLinkToRbnMonitor.Checked := Linked;
+    pumConnect.Enabled:=not Linked;
+    if Linked then
      rbn_status := 'Linked to RBNMonitor'
     else
      rbn_status := 'Disconnected';
@@ -446,16 +453,16 @@ end;
 
 procedure TfrmGrayline.tmrAutoConnectTimer(Sender : TObject);
 begin
+    tmrAutoConnect.Enabled:=False; //runs once, FormShow starts it again
     if (rbn_status='Connected') or (rbn_status='Linked to RBNMonitor' ) then exit;
-    if cqrini.ReadBool('RBN','AutoLink',false) then
-        Begin
-         acLinkToRbnMonitorExecute(nil);
-         exit;
-        end;
+    //set, not toggled. The action keeps its Checked state while the window is
+    //closed, so toggling here switched the link off on the second FormShow and
+    //stored AutoLink=False. Also follows a change made in Preferences
+    SetRbnLink(cqrini.ReadBool('RBN','AutoLink',false));
+    if acLinkToRbnMonitor.Checked then
+      exit;
     if cqrini.ReadBool('RBN','AutoConnect',False) and (cqrini.ReadString('RBN','login','') <> '')
-       and (lTelnet = nil) then  acConnect.Execute;
-
-    tmrAutoConnect.Enabled:=False; //job is done, nex initiate when FormShow run
+       and (lTelnet = nil) then  acConnect.Execute
 end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
