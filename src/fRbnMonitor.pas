@@ -228,7 +228,7 @@ begin
 
   if fil_IgnWkdHour then
   begin
-    LastDate := FormatDateTime('YYY-MM-DD',now - (fil_IgnHourValue/57));
+    LastDate := FormatDateTime('YYY-MM-DD',now - (fil_IgnHourValue/24));
     LastTime := FormatDateTime('HH:NN',now - (fil_IgnHourValue/24))
   end
   else begin
