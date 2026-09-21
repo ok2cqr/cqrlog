@@ -160,7 +160,7 @@ begin
   if cmbStoreMembership.ItemIndex>0 then
     Sections := Sections + 'Clubs,FirstClub,SecondClub,ThirdClub,FifthClub,FourthClub,';
   if cmbStoreBandMap.ItemIndex>0 then
-    Sections := Sections + Sections + 'BandMap,BandMapFilter,';
+    Sections := Sections + 'BandMap,BandMapFilter,';
   if cmbStoreXplanet.ItemIndex>0 then
     Sections := Sections + 'xplanet,';
   if cmbStoreZipCode.ItemIndex>0 then
@@ -168,9 +168,9 @@ begin
   if cmbStoreLoTW.ItemIndex>0 then
     Sections := Sections + 'LoTW,';
   if cmbStoreCWInterface.ItemIndex>0 then
-    Sections := Sections + 'CW,CW1,CW2,CW3,CW4,CW5,CW6';
+    Sections := Sections + 'CW,CW1,CW2,CW3,CW4,CW5,CW6,';
   if cmbStoreFldigiInterface.ItemIndex>0 then
-    Sections := Sections + 'fldigi,wsjt,n1mm';
+    Sections := Sections + 'fldigi,wsjt,n1mm,';
   if cmbStoreAutoBackup.ItemIndex>0 then
     Sections := Sections + 'Backup,';
   if cmbStoreExtViewers.ItemIndex>0 then
