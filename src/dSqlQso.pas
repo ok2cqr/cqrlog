@@ -803,13 +803,13 @@ function TdmSqlQso.SqlQsoAfter(const Call, Band, Mode, LastDate, LastTime : Stri
 begin
   Result := 'select id_cqrlog_main from cqrlog_main where (callsign= '+QuotedStr(Call)+') and (band = '+QuotedStr(Band)+') '+
             'and (mode = '+QuotedStr(Mode)+') and (concat(qsodate,'+QuotedStr(' ')+',time_on) > '+
-            QuotedStr(LastDate+' '+LastTime)+')'
+            QuotedStr(LastDate+' '+LastTime)+') LIMIT 1'
 end;
 
 function TdmSqlQso.SqlQsoAfterParams : String;
 begin
   Result := 'select id_cqrlog_main from cqrlog_main where (callsign= :callsign) and (band = :band) '+
-            'and (mode = :mode) and (concat(qsodate, '+QuotedStr(' ')+',time_on) > :last_date_time)'
+            'and (mode = :mode) and (concat(qsodate, '+QuotedStr(' ')+',time_on) > :last_date_time) LIMIT 1'
 end;
 
 { WAZ / ITU / IOTA probes }
