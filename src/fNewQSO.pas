@@ -4848,7 +4848,7 @@ begin
       LogId   := dmData.qLogList.Fields[0].AsInteger;
       LogName := dmData.qLogList.Fields[1].AsString;
 
-      frmDXCluster.StopAllConnections;
+      frmDXCluster.DisconnectAndClear;
       CloseAllWindows;         //fixes issue #163
       //the windows are only hidden, their content would come back in the new log.
       //Spots were filtered (worked before, new DXCC...) against the old log, so they

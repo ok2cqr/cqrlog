@@ -193,6 +193,7 @@ type
 
     procedure SendCommand(cmd : String);
     procedure StopAllConnections;
+    procedure DisconnectAndClear;
     procedure ReloadSettings;
   end;
 
@@ -1081,6 +1082,22 @@ begin
     ConTelnet := False;
     SentStartCmd := False;
   end;
+end;
+
+//used when the log is switched. StopAllConnections alone closes the socket and
+//clears ConTelnet but leaves the button saying Disconnect, so the window looked
+//connected in the new log while no spots were coming. The button handlers keep
+//flags, captions and the F-keys tab together
+procedure TfrmDXCluster.DisconnectAndClear;
+begin
+  if ConWeb then
+    btnWebConnect.Click;
+  if ConTelnet then
+    btnTelConnect.Click;
+  //spots were coloured and filtered against the log that is being closed
+  WebSpots.RemoveAllLines;
+  TelSpots.RemoveAllLines;
+  ChatSpots.RemoveAllLines
 end;
 
 function TfrmDXCluster.ShowSpot(spot : String; var sColor : Integer; var Country : String; FromTelnet : Boolean = True) : Boolean;
