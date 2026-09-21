@@ -148,6 +148,7 @@ type
     function  GetModeFromFreq(freq: string): string;
 
     procedure ParkFocus;
+    procedure StopRbnThread;
     procedure lConnect(aSocket: TLSocket);
     procedure lDisconnect(aSocket: TLSocket);
     procedure lReceive(aSocket: TLSocket);
@@ -522,6 +523,25 @@ begin
   end
 end;
 
+procedure TfrmRbnMonitor.StopRbnThread;
+begin
+  if not Assigned(RbnMonThread) then
+    exit;
+  //no more grid updates from now on. ShowSpot tests this on the main thread,
+  //and TThread.WaitFor below keeps serving Synchronize while it waits
+  RbnMonThread.OnShowSpot := nil;
+  RbnMonThread.Terminate;
+  FreeAndNil(RbnMonThread);  //Destroy waits for Execute to leave
+
+  //whatever was still queued belongs to the connection that has just ended
+  EnterCriticalsection(csRbnMonitor);
+  try
+    slRbnSpots.Clear
+  finally
+    LeaveCriticalsection(csRbnMonitor)
+  end
+end;
+
 procedure TfrmRbnMonitor.lConnect(aSocket: TLSocket);
 begin
   DbgLog('RBN','socket connected');
@@ -588,13 +608,6 @@ var
   server : String;
   user   : String;
 begin
-  RbnMonThread := TRBNThread.Create(True);
-  RbnMonThread.FreeOnTerminate :=  False;// True; I think this causes abrt in terminate (TfrmRbnMonitor.acDisconnectExecute) because procedure has freeAndNil (does free twice)
-  RbnMonThread.OnShowSpot := @SynRbnMonitor; //shows up when RBN traffic is high like IARU HF contest and connect is tried to close or filter adjusted
-  RbnMonThread.Start;
-
-  LoadConfigToThread;
-
   server := cqrini.ReadString('RBNMonitor','ServerName','telnet.reversebeacon.net:7000');
   user   := cqrini.ReadString('RBNMonitor','UserName',cqrini.ReadString('Station', 'Call', ''));
 
@@ -604,6 +617,19 @@ begin
     acRbnServer.Execute;
     exit
   end;
+
+  //the worker survives a socket drop (it still drains the queue), so connecting
+  //again must reuse it. Creating a new one here used to leak the old thread
+  if not Assigned(RbnMonThread) then
+  begin
+    RbnMonThread := TRBNThread.Create(True);
+    RbnMonThread.FreeOnTerminate :=  False;// True; I think this causes abrt in terminate (TfrmRbnMonitor.acDisconnectExecute) because procedure has freeAndNil (does free twice)
+    RbnMonThread.OnShowSpot := @SynRbnMonitor; //shows up when RBN traffic is high like IARU HF contest and connect is tried to close or filter adjusted
+    LoadConfigToThread;
+    RbnMonThread.Start
+  end
+  else
+    LoadConfigToThread;
 
   lTelnet.Host := Copy(server,1,Pos(':',server)-1);
   if not TryStrToInt(Copy(server,Pos(':',server)+1,6),port) then
@@ -624,8 +650,7 @@ end;
 procedure TfrmRbnMonitor.acDisconnectExecute(Sender: TObject);
 begin
   lTelnet.Disconnect;
-  RbnMonThread.Terminate;
-  freeAndNil(RbnMonThread);
+  StopRbnThread;
   tbtnConnect.Action := acConnect;
   sbRbn.Panels[0].Text := 'Disconnected'
 end;
@@ -707,7 +732,9 @@ var
 begin
   for i:=0 to sgRbn.ColCount-1 do
     cqrini.WriteInteger('WindowSize','RbnCol'+IntToStr(i),sgRbn.ColWidths[i]);
-  lTelnet.Disconnect();
+  //closing the window always meant the end of the RBN feed, but only the socket
+  //was closed and the worker kept running behind the hidden form
+  acDisconnectExecute(nil);
   dmUtils.SaveWindowPos(self);
 end;
 
@@ -731,6 +758,8 @@ end;
 
 procedure TfrmRbnMonitor.FormDestroy(Sender: TObject);
 begin
+  //the worker uses csRbnMonitor and slRbnSpots, it has to be gone before they are
+  StopRbnThread;
   FreeAndNil(lTelnet);
   DoneCriticalsection(csRbnMonitor);
   FreeAndNil(SrcCalls);
@@ -772,7 +801,7 @@ begin
   //must happen before acConnectExecute below, LoadConfigToThread reads this action
   acLinkToBandMap.Checked := cqrini.ReadBool('RBNMonitor','ToBandMap',False);
 
-  if ((not(TRbnThread = nil)) and ( cqrini.ReadBool('RBN','AutoConnectM',False) )) then
+  if ((not Assigned(RbnMonThread)) and ( cqrini.ReadBool('RBN','AutoConnectM',False) )) then
      acConnectExecute(nil);
 end;
 

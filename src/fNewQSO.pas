@@ -4850,6 +4850,13 @@ begin
 
       frmDXCluster.StopAllConnections;
       CloseAllWindows;         //fixes issue #163
+      //the windows are only hidden, their content would come back in the new log.
+      //Spots were filtered (worked before, new DXCC...) against the old log, so they
+      //have to go. The text band map is reloaded from bandmap.csv when its Save
+      //option is on, and that way the spots are filtered again for the new log
+      frmRbnMonitor.acClear.Execute;
+      frmBandMap.acClear.Execute;
+      BandMapStore.Clear;
       SaveSettings;
       dmData.CloseDatabases;
 
