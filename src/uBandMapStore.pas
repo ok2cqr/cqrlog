@@ -111,7 +111,8 @@ type
       procedure Remove(const ACall, AMode, ABand : String);
 
       { main thread only }
-      function  Poll(ANow : TDateTime) : Boolean; //True when the display must be redrawn
+      //ANow is local time (spot aging), AUtcNow is the clock QSOs are logged in
+      function  Poll(ANow, AUtcNow : TDateTime) : Boolean; //True when the display must be redrawn
       procedure Clear;
       function  Count : Integer;
       function  Item(AIndex : Integer) : TGfxSpot;
@@ -327,7 +328,7 @@ begin
   end
 end;
 
-function TBandMapStore.Poll(ANow : TDateTime) : Boolean;
+function TBandMapStore.Poll(ANow, AUtcNow : TDateTime) : Boolean;
 var
   AddArr   : array of TGfxSpot;
   DelArr   : array of TGfxSpotKey;
@@ -377,8 +378,8 @@ begin
 
   if FDateFilter = bmdLastHours then
   begin
-    LastDate := FormatDateTime('yyyy-mm-dd',ANow-(FLastHours/24));
-    LastTime := FormatDateTime('hh:nn',ANow-(FLastHours/24))
+    LastDate := FormatDateTime('yyyy-mm-dd',AUtcNow-(FLastHours/24));
+    LastTime := FormatDateTime('hh:nn',AUtcNow-(FLastHours/24))
   end
   else begin
     if FDateFilter = bmdSinceDateTime then

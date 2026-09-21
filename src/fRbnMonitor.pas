@@ -190,6 +190,7 @@ var
   pfx      : String;
   LastDate : String;
   LastTime : String;
+  Boundary : TDateTime;
   adif     : Word;
   index    : Integer;
   f        : Double;
@@ -228,8 +229,10 @@ begin
 
   if fil_IgnWkdHour then
   begin
-    LastDate := FormatDateTime('YYY-MM-DD',now - (fil_IgnHourValue/24));
-    LastTime := FormatDateTime('HH:NN',now - (fil_IgnHourValue/24))
+    //qsodate/time_on are stored in UTC, the boundary has to be in UTC as well
+    Boundary := dmUtils.GetDateTime(fil_IgnHourValue);
+    LastDate := FormatDateTime('YYYY-MM-DD',Boundary);
+    LastTime := FormatDateTime('HH:NN',Boundary)
   end
   else begin
     LastDate := fil_IgnDateValue;

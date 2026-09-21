@@ -440,6 +440,7 @@ var
   p : Integer;
   Changed : Boolean = False;
   When : TDateTime;
+  Boundary : TDateTime;
   iter : Word;
   skip : Boolean = False;
   LastDate : String;
@@ -465,8 +466,10 @@ begin
 
       if (frmBandMap.FDateFilterType = dftShowLastHours) then
       begin
-        LastDate := FormatDateTime('YYY-MM-DD',when - (frmBandMap.FLastHours/24));
-        LastTime := FormatDateTime('HH:NN',when - (frmBandMap.FLastHours/24))
+        //qsodate/time_on are stored in UTC, the boundary has to be in UTC as well
+        Boundary := dmUtils.GetDateTime(frmBandMap.FLastHours);
+        LastDate := FormatDateTime('YYYY-MM-DD',Boundary);
+        LastTime := FormatDateTime('HH:NN',Boundary)
       end
       else begin
         if (frmBandMap.FDateFilterType = dftShowLastDateTime) then

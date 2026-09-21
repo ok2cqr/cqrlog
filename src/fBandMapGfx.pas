@@ -354,7 +354,7 @@ begin
   if (FVfoKHz <= 0) or FVfoFromQso then
     UseNewQsoFreq;
 
-  if BandMapStore.Poll(Now) then
+  if BandMapStore.Poll(Now, dmUtils.GetDateTime(0)) then
     FDirty := True;
   if FDirty then
   begin
