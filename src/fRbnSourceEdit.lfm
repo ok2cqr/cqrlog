@@ -1,0 +1,109 @@
+object frmRbnSourceEdit: TfrmRbnSourceEdit
+  Left = 420
+  Height = 190
+  Top = 320
+  Width = 400
+  ActiveControl = edtDescription
+  BorderStyle = bsDialog
+  Caption = 'RBN source'
+  ClientHeight = 190
+  ClientWidth = 400
+  Position = poOwnerFormCenter
+  LCLVersion = '3.0.0.3'
+  object lblDescription: TLabel
+    Left = 8
+    Height = 17
+    Top = 12
+    Width = 90
+    Caption = 'Name:'
+    ParentColor = False
+  end
+  object edtDescription: TEdit
+    Left = 110
+    Height = 27
+    Top = 8
+    Width = 282
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 0
+  end
+  object lblAddress: TLabel
+    Left = 8
+    Height = 17
+    Top = 48
+    Width = 90
+    Caption = 'Server:'
+    ParentColor = False
+  end
+  object edtAddress: TEdit
+    Left = 110
+    Height = 27
+    Top = 44
+    Width = 200
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 1
+  end
+  object lblPort: TLabel
+    Left = 318
+    Height = 17
+    Top = 48
+    Width = 12
+    Anchors = [akTop, akRight]
+    Caption = ':'
+    ParentColor = False
+  end
+  object edtPort: TEdit
+    Left = 332
+    Height = 27
+    Top = 44
+    Width = 60
+    Anchors = [akTop, akRight]
+    TabOrder = 2
+    Text = '7000'
+  end
+  object lblUserName: TLabel
+    Left = 8
+    Height = 17
+    Top = 84
+    Width = 90
+    Caption = 'Login:'
+    ParentColor = False
+  end
+  object edtUserName: TEdit
+    Left = 110
+    Height = 27
+    Top = 80
+    Width = 160
+    TabOrder = 3
+  end
+  object lblHint: TLabel
+    Left = 110
+    Height = 17
+    Top = 112
+    Width = 282
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'usually your own callsign; no password is needed'
+    ParentColor = False
+  end
+  object btnOK: TButton
+    Left = 216
+    Height = 30
+    Top = 150
+    Width = 85
+    Anchors = [akRight, akBottom]
+    Caption = 'OK'
+    Default = True
+    OnClick = btnOKClick
+    TabOrder = 4
+  end
+  object btnCancel: TButton
+    Left = 307
+    Height = 30
+    Top = 150
+    Width = 85
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 5
+  end
+end

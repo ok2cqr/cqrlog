@@ -99,7 +99,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="139">
+    <Units Count="142">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -671,334 +671,352 @@
         <ResourceBaseClass Value="Form"/>
       </Unit84>
       <Unit85>
-        <Filename Value="fRbnServer.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmRbnServer"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit85>
-      <Unit86>
         <Filename Value="fRadioMemories.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmRadioMemories"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit86>
-      <Unit87>
+      </Unit85>
+      <Unit86>
         <Filename Value="fAddRadioMemory.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAddRadioMemory"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit87>
-      <Unit88>
+      </Unit86>
+      <Unit87>
         <Filename Value="fException.pas"/>
         <IsPartOfProject Value="True"/>
         <HasResources Value="True"/>
-      </Unit88>
-      <Unit89>
+      </Unit87>
+      <Unit88>
         <Filename Value="fCommentToCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCommentToCall"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit89>
-      <Unit90>
+      </Unit88>
+      <Unit89>
         <Filename Value="fNewCommentToCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewCommentToCall"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit90>
-      <Unit91>
+      </Unit89>
+      <Unit90>
         <Filename Value="fFindCommentToCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmFindCommentToCall"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit91>
-      <Unit92>
+      </Unit90>
+      <Unit91>
         <Filename Value="frExportPref.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="fraExportPref"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit92>
-      <Unit93>
+      </Unit91>
+      <Unit92>
         <Filename Value="fExportPref.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmExportPref"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit93>
-      <Unit94>
+      </Unit92>
+      <Unit93>
         <Filename Value="fWorkedGrids.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmWorkedGrids"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit94>
-      <Unit95>
+      </Unit93>
+      <Unit94>
         <Filename Value="fPropDK0WCY.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmPropDK0WCY"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit95>
-      <Unit96>
+      </Unit94>
+      <Unit95>
         <Filename Value="fContest.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmContest"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit96>
-      <Unit97>
+      </Unit95>
+      <Unit96>
         <Filename Value="fMonWsjtx.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmMonWsjtx"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit97>
-      <Unit98>
+      </Unit96>
+      <Unit97>
         <Filename Value="fXfldigi.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmxfldigi"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit98>
-      <Unit99>
+      </Unit97>
+      <Unit98>
         <Filename Value="uColorMemo.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit99>
-      <Unit100>
+      </Unit98>
+      <Unit99>
         <Filename Value="dMembership.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmMembership"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-      </Unit100>
-      <Unit101>
+      </Unit99>
+      <Unit100>
         <Filename Value="dSatellite.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmSatellite"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
+      </Unit100>
+      <Unit101>
+        <Filename Value="uRigControl.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit101>
       <Unit102>
-        <Filename Value="uRigControl.pas"/>
+        <Filename Value="uRotControl.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit102>
       <Unit103>
-        <Filename Value="uRotControl.pas"/>
+        <Filename Value="aziloc.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit103>
       <Unit104>
-        <Filename Value="aziloc.pas"/>
+        <Filename Value="azidis3.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit104>
       <Unit105>
-        <Filename Value="azidis3.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit105>
-      <Unit106>
         <Filename Value="fCWKeys.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCWKeys"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit106>
-      <Unit107>
+      </Unit105>
+      <Unit106>
         <Filename Value="fEDIExport.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmEDIExport"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit107>
-      <Unit108>
+      </Unit106>
+      <Unit107>
         <Filename Value="fDOKStat.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmDOKStat"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit108>
-      <Unit109>
+      </Unit107>
+      <Unit108>
         <Filename Value="fCabrilloExport.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCabrilloExport"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit109>
-      <Unit110>
+      </Unit108>
+      <Unit109>
         <Filename Value="fContestFilter.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmContestFilter"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit110>
-      <Unit111>
+      </Unit109>
+      <Unit110>
         <Filename Value="uDbUtils.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit111>
-      <Unit112>
+      </Unit110>
+      <Unit111>
         <Filename Value="dQTHProfile.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmQTHProfile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
+      </Unit111>
+      <Unit112>
+        <Filename Value="uInternalConnection.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit112>
       <Unit113>
-        <Filename Value="uInternalConnection.pas"/>
+        <Filename Value="uConnectionInfo.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit113>
       <Unit114>
-        <Filename Value="uConnectionInfo.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit114>
-      <Unit115>
         <Filename Value="fChangeOperator.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmChangeOperator"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit115>
-      <Unit116>
+      </Unit114>
+      <Unit115>
         <Filename Value="fRemind.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmReminder"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit115>
+      <Unit116>
+        <Filename Value="znacmech.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit116>
       <Unit117>
-        <Filename Value="znacmech.pas"/>
+        <Filename Value="gline2.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit117>
       <Unit118>
-        <Filename Value="gline2.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit118>
-      <Unit119>
         <Filename Value="fSearch.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSearch"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit119>
-      <Unit120>
+      </Unit118>
+      <Unit119>
         <Filename Value="fDbSqlSel.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmDbSqlSel"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit120>
-      <Unit121>
+      </Unit119>
+      <Unit120>
         <Filename Value="fProgress.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmProgress"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit121>
-      <Unit122>
+      </Unit120>
+      <Unit121>
         <Filename Value="fDbError.pas"/>
         <IsPartOfProject Value="True"/>
         <HasResources Value="True"/>
-      </Unit122>
-      <Unit123>
+      </Unit121>
+      <Unit122>
         <Filename Value="fCountyStat.lfm"/>
         <IsPartOfProject Value="True"/>
-      </Unit123>
-      <Unit124>
+      </Unit122>
+      <Unit123>
         <Filename Value="fCountyStat.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCountyStat"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit124>
-      <Unit125>
+      </Unit123>
+      <Unit124>
         <Filename Value="uBandMapStore.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit125>
-      <Unit126>
+      </Unit124>
+      <Unit125>
         <Filename Value="fBandMapGfx.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmBandMapGfx"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit126>
-      <Unit127>
+      </Unit125>
+      <Unit126>
         <Filename Value="uDxccService.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit127>
-      <Unit128>
+      </Unit126>
+      <Unit127>
         <Filename Value="dSqlUserData.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmSqlUserData"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-      </Unit128>
-      <Unit129>
+      </Unit127>
+      <Unit128>
         <Filename Value="dSqlUpload.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmSqlUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-      </Unit129>
-      <Unit130>
+      </Unit128>
+      <Unit129>
         <Filename Value="dSqlQsl.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmSqlQsl"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-      </Unit130>
-      <Unit131>
+      </Unit129>
+      <Unit130>
         <Filename Value="dSqlRef.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmSqlRef"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-      </Unit131>
-      <Unit132>
+      </Unit130>
+      <Unit131>
         <Filename Value="dSqlImpExp.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmSqlImpExp"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-      </Unit132>
-      <Unit133>
+      </Unit131>
+      <Unit132>
         <Filename Value="dSqlStat.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmSqlStat"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-      </Unit133>
-      <Unit134>
+      </Unit132>
+      <Unit133>
         <Filename Value="dSqlQso.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmSqlQso"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-      </Unit134>
-      <Unit135>
+      </Unit133>
+      <Unit134>
         <Filename Value="dSqlSchema.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmSqlSchema"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
+      </Unit134>
+      <Unit135>
+        <Filename Value="uSqlCursor.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit135>
       <Unit136>
-        <Filename Value="uSqlCursor.pas"/>
+        <Filename Value="uVersionCheck.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit136>
       <Unit137>
-        <Filename Value="uVersionCheck.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit137>
-      <Unit138>
         <Filename Value="fNewVersion.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewVersion"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit137>
+      <Unit138>
+        <Filename Value="fRbnSources.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmRbnSources"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit138>
+      <Unit139>
+        <Filename Value="fRbnSourceEdit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmRbnSourceEdit"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit139>
+      <Unit140>
+        <Filename Value="uRbnConnection.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit140>
+      <Unit141>
+        <Filename Value="fRbnControl.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmRbnControl"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit141>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

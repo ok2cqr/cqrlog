@@ -5168,6 +5168,9 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem91: TMenuItem
         Action = acRBNMonitor
       end
+      object mnuRbnControl: TMenuItem
+        Action = acRbnControl
+      end
       object mnuReminder: TMenuItem
         Action = acReminder
       end
@@ -5798,6 +5801,11 @@ object frmNewQSO: TfrmNewQSO
       Category = 'Window'
       Caption = 'RBN monitor'
       OnExecute = acRBNMonitorExecute
+    end
+    object acRbnControl: TAction
+      Category = 'Window'
+      Caption = 'RBN control'
+      OnExecute = acRbnControlExecute
     end
     object acRemoteWsjt: TAction
       Category = 'File'

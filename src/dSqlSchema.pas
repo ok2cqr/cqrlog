@@ -37,6 +37,8 @@ type
     function SqlInsertVersion(const Nr : Integer) : String;
     function SqlCommonVersion : String;
     function SqlSetCommonVersion(const Nr : Integer) : String;
+    // common db version 7
+    function SqlCreateRbnSources : String;
     function SqlLogList : String;
     function SqlLogNumbers : String;
     function SqlLogExists(const Nr : Integer) : String;
@@ -169,6 +171,19 @@ end;
 function TdmSqlSchema.SqlCommonVersion : String;
 begin
   Result := 'select * from cqrlog_common.db_version'
+end;
+
+function TdmSqlSchema.SqlCreateRbnSources : String;
+begin
+  // the same as in dData.lfm scCommon; no password column on purpose, RBN
+  // servers take only the callsign
+  // Q1 runs with the log database in USE, hence the prefix
+  Result := 'CREATE TABLE IF NOT EXISTS cqrlog_common.rbn_sources (' +
+            'id_rbn_sources INT AUTO_INCREMENT PRIMARY KEY,' +
+            'description VARCHAR(100) DEFAULT '''',' +
+            'address VARCHAR(100) DEFAULT '''',' +
+            'port INT DEFAULT 7000,' +
+            'username VARCHAR(20) DEFAULT '''')'
 end;
 
 function TdmSqlSchema.SqlSetCommonVersion(const Nr : Integer) : String;

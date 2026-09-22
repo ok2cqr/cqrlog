@@ -128,6 +128,7 @@ type
     chkRSendCWR: TCheckBox;
     chkRVfo: TCheckBox;
     chkRBNMAutoConn: TCheckBox;
+    chkRBNConnectOnStart: TCheckBox;
     chkRBNLink: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
     chkRot2AzMinMax: TCheckBox;
@@ -1569,6 +1570,7 @@ begin
   cqrini.WriteString('RBN','watch',edtWatchFor.Text);
   cqrini.WriteBool('RBN','AutoConnect',chkRBNAutoConn.Checked);
   cqrini.WriteBool('RBN','AutoConnectM',chkRBNMAutoConn.Checked);
+  cqrini.WriteBool('RBN','ConnectOnStart',chkRBNConnectOnStart.Checked);
   cqrini.WriteBool('RBN','AutoLink',chkRBNLink.Checked);
   if TryStrToInt(edtDelAfter.Text,int) then
     cqrini.WriteInteger('RBN','deleteAfter',int)
@@ -3257,6 +3259,7 @@ begin
   edtWatchFor.Text       := cqrini.ReadString('RBN','watch','');
   chkRBNAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnect',False);
   chkRBNMAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnectM',false);
+  chkRBNConnectOnStart.Checked := cqrini.ReadBool('RBN','ConnectOnStart',false);
   chkRBNLink.Checked     := cqrini.ReadBool('RBN','AutoLink',false);
   edtDelAfter.Text       := cqrini.ReadString('RBN','deleteAfter','60');
   edtRBNServer.Text      := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');

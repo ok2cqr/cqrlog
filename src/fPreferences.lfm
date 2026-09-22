@@ -9486,7 +9486,7 @@ object frmPreferences: TfrmPreferences
         Height = 18
         Top = 200
         Width = 173
-        Caption = 'Autoconnect RBN Monitor'
+        Caption = 'Opening the RBN monitor window connects RBN'
         TabOrder = 9
       end
       object chkRBNLink: TCheckBox
@@ -9499,6 +9499,18 @@ object frmPreferences: TfrmPreferences
         Caption = 'Link Grayline to RBN monitor'
         TabOrder = 10
         OnChange = chkRBNLinkChange
+      end
+      object chkRBNConnectOnStart: TCheckBox
+        AnchorSideLeft.Control = lblRbnWindowOpen
+        AnchorSideTop.Control = chkRBNLink
+        AnchorSideTop.Side = asrBottom
+        Left = 401
+        Height = 18
+        Top = 245
+        Width = 220
+        BorderSpacing.Top = 8
+        Caption = 'Connect to RBN after program starts'
+        TabOrder = 11
       end
     end
     object tabOnlineLog: TTabSheet

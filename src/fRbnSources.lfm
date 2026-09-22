@@ -1,0 +1,63 @@
+object frmRbnSources: TfrmRbnSources
+  Left = 400
+  Height = 300
+  Top = 300
+  Width = 520
+  Caption = 'RBN sources'
+  ClientHeight = 300
+  ClientWidth = 520
+  Position = poOwnerFormCenter
+  OnShow = FormShow
+  LCLVersion = '3.0.0.3'
+  object lbSources: TListBox
+    Left = 8
+    Height = 284
+    Top = 8
+    Width = 380
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ItemHeight = 0
+    OnDblClick = btnEditClick
+    TabOrder = 0
+  end
+  object btnAdd: TButton
+    Left = 400
+    Height = 30
+    Top = 8
+    Width = 110
+    Anchors = [akTop, akRight]
+    Caption = 'Add ...'
+    OnClick = btnAddClick
+    TabOrder = 1
+  end
+  object btnEdit: TButton
+    Left = 400
+    Height = 30
+    Top = 44
+    Width = 110
+    Anchors = [akTop, akRight]
+    Caption = 'Edit ...'
+    OnClick = btnEditClick
+    TabOrder = 2
+  end
+  object btnDelete: TButton
+    Left = 400
+    Height = 30
+    Top = 80
+    Width = 110
+    Anchors = [akTop, akRight]
+    Caption = 'Delete'
+    OnClick = btnDeleteClick
+    TabOrder = 3
+  end
+  object btnClose: TButton
+    Left = 400
+    Height = 30
+    Top = 262
+    Width = 110
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    Caption = 'Close'
+    ModalResult = 1
+    TabOrder = 4
+  end
+end

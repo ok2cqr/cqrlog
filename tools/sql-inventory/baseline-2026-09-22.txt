@@ -1,0 +1,436 @@
+1	) ORDER BY b_begin
+3	) as foo order by callsign
+3	) as foo order by qsodate DESC,time_on DESC
+1	) group by d.dxcc_ref,c.band,c.mode,
+1	) order by fromDate
+3	) order by id
+1	)) group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd
+1	.cqrlog_config (config_file) values(:cnf)
+1	.cqrlog_config set config_file = :cnf
+1	.cqrlog_config set config_file =:config_file
+6	.cqrlog_main WHERE adif=
+1	.dxcc_id (adif,dxcc_ref,country) values (0,
+1	.dxcc_id select id_dxcc_ref,adif,pref,name from cqrlog_common.dxcc_ref
+4	ADIF export from CQRLOG for Linux version
+1	ALTER TABLE call_alert ADD INDEX (callsign);
+1	ALTER TABLE call_alert ADD INDEX (id);
+2	ALTER TABLE log_changes
+1	ALTER TABLE log_changes DROP FOREIGN KEY log_changes_ibfk_1
+1	COUNT(DISTINCT(UPPER(srx_string))) AS Msgs FROM cqrlog_main WHERE contestname=
+1	CREATE DATABASE IF NOT EXISTS
+1	CREATE INDEX
+1	CREATE TABLE IF NOT EXISTS cqrlog_common.rbn_sources (
+1	CREATE TABLE call_alert (
+1	CREATE TABLE freqmem (
+1	CREATE TABLE log_changes (
+1	CREATE TABLE upload_status (
+1	CREATE VIEW
+1	DELETE FROM %s
+1	DELETE FROM cqrlog_common.dxcc_ref
+1	DELETE FROM cqrlog_common.iota_list
+1	DELETE FROM cqrlog_common.log_list WHERE log_nr =
+1	DELETE FROM cqrlog_main WHERE id_cqrlog_main =
+1	DROP DATABASE
+1	DROP INDEX
+1	DROP TABLE qslexport
+1	DROP TRIGGER IF EXISTS %s
+1	DROP VIEW IF EXISTS
+1	Do you really want to select all records
+1	FROM cqrlog_common.bands WHERE band =
+1	GROUP BY award
+1	GROUP BY callsign
+1	GROUP BY club_nr1
+1	GROUP BY club_nr2
+1	GROUP BY club_nr3
+1	GROUP BY club_nr4
+1	GROUP BY club_nr5
+1	GROUP BY county
+1	GROUP BY dok
+1	GROUP BY dxcc_ref
+1	GROUP BY idcall
+1	GROUP BY iota
+1	GROUP BY itu
+1	GROUP BY loc
+1	GROUP BY remarks
+1	GROUP BY state
+1	GROUP BY waz
+1	INSERT INTO club
+1	INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (
+2	INSERT INTO cqrlog_common.dxcc_ref (pref,name,cont,utc,lat,
+1	INSERT INTO cqrlog_common.dxclusters (description,address,port,dxcuser,dxcpass)
+1	INSERT INTO cqrlog_common.iota_list (iota_nr,island_name,dxcc_ref)
+1	INSERT INTO cqrlog_common.iota_list (iota_nr,island_name,dxcc_ref,pref)
+1	INSERT INTO cqrlog_common.qslmgr (callsign,qsl_via,fromdate) VALUES (:callsign,:qsl_via, :fromdate)
+1	INSERT INTO dxclusters (description,address,port)
+1	INSERT INTO profiles (nr, locator, qth, rig, remarks, visible) VALUES (:nr, :locator, :qth, :rig, :remarks, :visible)
+1	INSERT INTO zipcode
+1	LoTW import errors from CQRLOG for Linux version
+1	ORDER BY MainLoc ASC
+1	ORDER BY award
+1	ORDER BY callsign
+1	ORDER BY county
+2	ORDER BY cqrlog_common.dxcc_ref.pref ASC
+1	ORDER BY dok
+2	ORDER BY dxcc_ref
+1	ORDER BY dxcc_ref,callsign
+1	ORDER BY freq
+1	ORDER BY iota_nr
+1	ORDER BY itu
+1	ORDER BY loc
+1	ORDER BY mode
+1	ORDER BY name
+3	ORDER BY qsodate,time_on
+1	ORDER BY qth
+1	ORDER BY srx_msg ASC
+1	ORDER BY state
+1	ORDER BY waz
+1	ORDER By callsign,dxcc_ref
+1	ORDER By qsl_via,callsign,dxcc_ref
+1	Please select file to export!
+1	SELECT
+1	SELECT * FROM bands ORDER BY b_begin
+1	SELECT * FROM cqrlog_common.bands
+1	SELECT * FROM cqrlog_common.bands ORDER BY b_begin
+1	SELECT * FROM cqrlog_common.bands WHERE band =
+1	SELECT * FROM cqrlog_common.bands where (b_begin <=
+1	SELECT * FROM cqrlog_common.dxcc_ref ORDER BY ADIF
+1	SELECT * FROM cqrlog_common.dxcc_ref ORDER BY adif
+1	SELECT * FROM cqrlog_common.dxcc_ref WHERE adif =
+1	SELECT * FROM cqrlog_common.dxcc_ref WHERE deleted = 0 ORDER BY pref
+1	SELECT * FROM cqrlog_common.dxcc_ref WHERE deleted = 1 ORDER BY pref
+1	SELECT * FROM cqrlog_common.dxcc_ref WHERE pref=
+1	SELECT * FROM cqrlog_config
+1	SELECT * FROM import ORDER BY qsodate,time_on
+1	SELECT * FROM profiles ORDER BY nr
+1	SELECT * FROM profiles WHERE nr =
+1	SELECT * FROM profiles WHERE visible > 0 ORDER BY nr
+1	SELECT * FROM view_cqrlog_main_by_qsodate
+1	SELECT * FROM view_cqrlog_main_by_qsodate WHERE
+1	SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` =
+1	SELECT * FROM view_cqrlog_main_by_qsodate WHERE callsign =
+1	SELECT * FROM view_cqrlog_main_by_qsodate WHERE idcall =
+1	SELECT * FROM view_cqrlog_main_by_qsodate where id_cqrlog_main in (
+1	SELECT * FROM view_cqrlog_main_by_qsodate_asc
+1	SELECT ASCII(MID(callsign,LENGTH(callsign),1)) AS SuffixEnd FROM cqrlog_main WHERE contestname=
+1	SELECT COUNT(*) FROM cqrlog_main
+1	SELECT COUNT(*) FROM cqrlog_main WHERE qsodate =
+1	SELECT COUNT(DISTINCT(UPPER(srx_string))) AS Msgs FROM cqrlog_main WHERE contestname=
+1	SELECT COUNT(DISTINCT(adif)) AS DXCntrs FROM cqrlog_main WHERE contestname=
+1	SELECT COUNT(DISTINCT(adif)) AS MYCntrs FROM cqrlog_main WHERE contestname=
+1	SELECT COUNT(DISTINCT(substr(loc,1,4))) FROM cqrlog_main WHERE substr(loc,1,4) <>
+1	SELECT COUNT(DISTINCT(substr(loc,1,4))) FROM view_cqrlog_main_by_qsodate WHERE substr(loc,1,4) <>
+1	SELECT COUNT(callsign) AS DXs FROM cqrlog_main WHERE contestname=
+1	SELECT COUNT(callsign) AS QSOs, COUNT(DISTINCT(adif)) AS Countries,
+1	SELECT COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname=
+1	SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != '' ORDER BY `contestname` ASC
+1	SELECT DISTINCT(SUBSTRING(UPPER(loc),1,4)) AS MainLoc FROM cqrlog_main WHERE contestname=
+1	SELECT DISTINCT(UPPER(srx_string)) AS srx_msg FROM cqrlog_main WHERE contestname=
+2	SELECT DISTINCT(pref) FROM cqrlog_common.dxcc_ref RIGHT JOIN cqrlog_main ON
+2	SELECT MAX(id_cqrlog_main) FROM cqrlog_main WHERE iota =
+1	SELECT callsign, longremarks FROM notes
+1	SELECT callsign,freq,rxfreq FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1
+1	SELECT county from zipcode1 where zip =
+1	SELECT county from zipcode2 where zip =
+1	SELECT county from zipcode3 where zip =
+6	SELECT id_cqrlog_main FROM
+5	SELECT id_cqrlog_main FROM cqrlog_main WHERE adif=
+1	SELECT id_long_note, note FROM long_note
+1	SELECT iota_nr,pref FROM cqrlog_common.iota_list WHERE dxcc_ref =
+1	SELECT island_name FROM cqrlog_common.iota_list WHERE iota_nr =
+1	SELECT log_nr,log_name FROM cqrlog_common.log_list order by log_nr
+1	SELECT longremarks FROM notes WHERE callsign =
+1	SELECT mode,rst_s,loc,prop_mode,my_loc,stx,stx_string,srx,srx_string,name FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1
+1	SELECT my_loc,loc FROM cqrlog_main
+1	SELECT my_loc,loc,band FROM cqrlog_main WHERE contestname=
+1	SELECT nr FROM profiles WHERE locator=
+1	SELECT srx_string FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1
+1	SELECT utc FROM cqrlog_common.dxcc_ref WHERE pref =
+2	SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,
+2	Select directory for backuping ...
+1	TRUNCATE TABLE
+1	TRUNCATE TABLE club
+1	UPDATE cqrlog_common.dxclusters SET description=
+1	UPDATE cqrlog_common.log_list SET log_name =
+1	UPDATE cqrlog_main SET adif=
+1	UPDATE cqrlog_main SET adif=0,waz=null,itu=null,cont=null WHERE id_cqrlog_main=
+1	UPDATE cqrlog_main SET qsl_r =
+1	UPDATE cqrlog_main SET qsl_s =
+1	UPDATE cqrlog_main set qsodate =
+1	UPDATE long_note set note = :note where id_long_note = 1
+3	VALUES (
+1	Vybrat vse|Select all
+1	Zrusit vyber|Select none
+1	alter table call_alert change mode mode varchar(12) null
+1	alter table cqrlog_common.bands add rx_offset numeric(10,4) default 0
+1	alter table cqrlog_common.bands add tx_offset numeric(10,4) default 0
+1	alter table cqrlog_main add contestname varchar(40) null
+1	alter table cqrlog_main add dok varchar(12) null
+1	alter table cqrlog_main add eqsl_qsl_rcvd varchar(1) null
+1	alter table cqrlog_main add eqsl_qsl_sent varchar(1) null
+1	alter table cqrlog_main add eqsl_qslrdate date null
+1	alter table cqrlog_main add eqsl_qslsdate date null
+1	alter table cqrlog_main add operator varchar(20) null
+1	alter table cqrlog_main add prop_mode varchar(30) default
+1	alter table cqrlog_main add rxfreq numeric(10,4) null
+1	alter table cqrlog_main add satellite varchar(30) default
+1	alter table cqrlog_main add srx varchar(6) null
+1	alter table cqrlog_main add srx_string varchar(50) null
+1	alter table cqrlog_main add stx varchar(6) null
+1	alter table cqrlog_main add stx_string varchar(50) null
+1	alter table cqrlog_main change eqsl_qsl_rcvd eqsl_qsl_rcvd varchar(1) default
+1	alter table cqrlog_main change eqsl_qsl_sent eqsl_qsl_sent varchar(1) default
+1	alter table cqrlog_main change loc loc varchar(10) default
+1	alter table cqrlog_main change lotw_qslr lotw_qslr varchar(1) default
+1	alter table cqrlog_main change lotw_qsls lotw_qsls varchar(1) default
+1	alter table cqrlog_main change mode mode varchar(10) not null
+1	alter table cqrlog_main change mode mode varchar(12) not null
+1	alter table cqrlog_main change my_loc my_loc varchar(10) default
+1	alter table cqrlog_main change qsl_r qsl_r varchar(3) default
+1	alter table cqrlog_main change qsl_s qsl_s varchar(3) default
+1	alter table cqrlog_main change qsl_s qsl_s varchar(4) default
+1	alter table freqmem add info varchar(25) null
+1	alter table freqmem change mode mode varchar(12) null
+1	alter table log_changes add upddeleted int(1) default 0
+1	alter table log_changes change mode mode varchar(12) null
+1	alter table log_changes change old_mode old_mode varchar(12) null
+1	alter table log_changes modify cmd varchar(20)
+1	c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd order by d.dxcc_ref,c.band,c.mode,c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd
+1	contestname,stx,stx_string,srx,srx_string) values(
+2	cqrlog_common.dxcc_ref.adif = cqrlog_main.adif WHERE contestname=
+1	cqrlog_main where id_cqrlog_main =
+1	create index callsign_qsodate_band on cqrlog_main (callsign, qsodate, band)
+1	create table tempdupes like cqrlog_main
+1	delete from call_alert where id = %d
+1	delete from cqrlog_common.dxclusters where id_dxclusters =
+1	delete from cqrlog_common.qslmgr
+1	delete from cqrlog_common.rbn_sources where id_rbn_sources =
+1	delete from cqrlog_main
+1	delete from cqrlog_main;
+1	delete from freqmem
+1	delete from log_changes
+1	delete from log_changes where id <
+1	delete from notes where callsign = %s
+1	delete from notes where id_notes = %d
+1	delete from profiles where nr = :profile_number limit 1
+1	delete from upload_status
+1	drop table tempdupes
+1	drop view view_cqrlog_main_by_callsign
+1	drop view view_cqrlog_main_by_qsodate
+1	drop view view_cqrlog_main_by_qsodate_asc
+1	dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and
+1	dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif<>0 and
+1	eQSL import errors from CQRLOG for Linux version
+2	from cqrlog_main
+2	from cqrlog_main where (callsign,qsodate,band) in (
+1	from cqrlog_main where eqsl_qslsdate is null
+1	from view_cqrlog_main_by_qsodate order by qsodate,time_on
+8	group by band
+1	group by band,mode
+1	group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd
+1	group by callsign,name
+2	group by cont,band,qsl_r order by cont,band)
+1	group by cont,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd
+1	group by d.dxcc_ref,c.band,c.mode,c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd order by d.dxcc_ref,c.band,c.mode,c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd
+1	group by dok,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd
+2	group by itu,band,qsl_r order by itu,band)
+1	group by itu,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd
+3	group by ll
+1	group by ll order by ll
+1	group by lll order by lll
+1	group by state,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd
+2	group by waz,band,qsl_r order by waz,band)
+1	group by waz,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd
+4	insert into
+1	insert into call_alert(callsign,mode,band) values (:callsign,:mode,:band)
+1	insert into cqrlog_common.log_list (log_nr,log_name) values
+1	insert into cqrlog_common.rbn_sources (description, address, port, username) values (
+2	insert into cqrlog_main (qsodate,time_on,time_off,callsign,freq,mode,
+1	insert into cqrlog_main select * from tempdupes
+1	insert into db_version (nr) values(
+1	insert into freqmem (freq,mode,bandwidth,info) values (:freq,:mode,:bandwidth,:info)
+2	insert into log_changes (cmd) values(
+1	insert into log_changes (id,cmd) values(1,
+1	insert into long_note(id_long_note,note) values (1,:note)
+1	insert into notes (callsign, longremarks) values (%s, %s)
+1	insert into profiles (nr,locator,qth,rig,remarks,visible) values (
+1	insert into qslexport (idcall,id_cqrlog_main,dxcc,qsodate,time_on,time_off,callsign,freq,mode,rst_s,rst_r,
+1	insert into tempdupes
+2	insert into upload_status (logname, id_log_changes) values (
+1	left join dxcc_id d on c.adif = d.adif where (d.dxcc_ref<>
+1	left join dxcc_id d on c.adif = d.adif where d.dxcc_ref<>
+2	longit,itu,waz,adif,deleted) VALUES (
+3	order by
+2	order by callsign DESC LIMIT
+1	order by callsign LIMIT
+1	order by cont
+2	order by convert(freq,signed),dok
+2	order by convert(freq,signed),state
+2	order by dok
+1	order by id
+1	order by itu
+4	order by qsodate
+1	order by qsodate DESC, time_on DESC LIMIT
+2	order by qsodate, time_on LIMIT
+2	order by qsodate,time_on
+1	order by state
+1	order by waz
+1	select
+1	select * from
+1	select * from (select * from view_cqrlog_main_by_callsign order by callsign DESC LIMIT
+1	select * from (select * from view_cqrlog_main_by_callsign where callsign <=
+1	select * from (select * from view_cqrlog_main_by_qsodate order by qsodate, time_on LIMIT
+1	select * from (select * from view_cqrlog_main_by_qsodate where (qsodate =
+1	select * from call_alert order by callsign
+1	select * from call_alert where %s regexp callsign
+1	select * from call_alert where callsign = %s
+1	select * from cqrlog_common.db_version
+1	select * from cqrlog_common.dxclusters order by description
+1	select * from cqrlog_common.qslmgr where (callsign =
+1	select * from cqrlog_main
+1	select * from cqrlog_main group by qsodate,time_on,callsign,mode,band
+1	select * from cqrlog_main where id_cqrlog_main =
+1	select * from cqrlog_main where lotw_qslsdate is null
+1	select * from db_version
+1	select * from log_changes where id = %d
+1	select * from log_changes where id > %d order by id
+1	select * from notes order by callsign
+1	select * from profiles order by nr
+1	select * from qslexport order by dxcc,idcall
+1	select * from tables where table_schema =
+1	select * from upload_status where logname=%s
+1	select * from view_cqrlog_main_by_callsign
+1	select * from view_cqrlog_main_by_callsign LIMIT
+1	select * from view_cqrlog_main_by_callsign where (callsign >=
+1	select * from view_cqrlog_main_by_qsodate
+2	select * from view_cqrlog_main_by_qsodate LIMIT
+1	select * from view_cqrlog_main_by_qsodate where (qsodate =
+1	select * from view_cqrlog_main_by_qsodate where qsodate >=
+1	select * from view_cqrlog_main_by_qsodate_asc LIMIT
+1	select band,b_begin,b_end from cqrlog_common.bands where band=
+3	select band,count(distinct adif) from cqrlog_main
+1	select band,count(distinct adif) from cqrlog_main where adif <> 0
+2	select band,count(distinct adif) from cqrlog_main where adif <> 0 and
+1	select band,mode from cqrlog_main where adif=
+2	select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif=
+2	select callsign,freq,mode,dok from cqrlog_main
+2	select callsign,freq,mode,state from cqrlog_main
+1	select callsign,qsl_via,fromdate from cqrlog_common.qslmgr order by callsign,fromDate
+1	select callsign,qsodate,band,time_on,mode,eqsl_qsl_rcvd,id_cqrlog_main
+1	select callsign,qsodate,band,time_on,mode,lotw_qslr,loc,state,county,id_cqrlog_main
+1	select column_name from information_schema.columns where table_schema=%s and table_name=%s and column_name=%s
+1	select config_file from
+1	select constraint_name from information_schema.table_constraints where table_schema=%s and table_name=%s and constraint_name=%s
+1	select cont,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main
+2	select cont,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where
+1	select count(*) from
+1	select count(*) from (select * from cqrlog_main where (qsodate =
+1	select count(*) from (select * from cqrlog_main where callsign <=
+1	select count(*) from (select count(iota) from cqrlog_main %s group by iota) as aa
+1	select count(*) from (select distinct adif from cqrlog_main
+1	select count(*) from (select distinct adif from cqrlog_main where adif <> 0) as foo
+2	select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on
+1	select count(*) from cqrlog_main where (qsodate =
+1	select count(*) from cqrlog_main where callsign >=
+1	select count(*) from information_schema.statistics where table_schema = database()
+1	select count(callsign) as
+1	select count(callsign) as qso from cqrlog_main where callsign<>
+2	select count(callsign) as rate from cqrlog_main where timestampdiff(minute,concat(qsodate,
+3	select count(callsign) from
+1	select count(distinct upper(substr(loc,1,2))) as main,count(distinct upper(substr(loc,1,4))) as sub
+2	select count(loc) as
+7	select count(loc) from
+1	select count(mode) as cnt,mode from cqrlog_main group by mode order by cnt
+1	select count(state) as
+2	select count(state) from
+2	select d.dxcc_ref,d.country, c.band, c.mode, c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd from cqrlog_main c
+1	select distinct dok from cqrlog_main
+1	select distinct iota,callsign from cqrlog_main %s group by iota order by iota
+1	select dok,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main
+1	select freq,mode,bandwidth,info from freqmem order by freq
+1	select id,freq,mode,bandwidth,info from freqmem
+3	select id_cqrlog_main FROM cqrlog_main WHERE itu =
+3	select id_cqrlog_main FROM cqrlog_main WHERE waz =
+1	select id_cqrlog_main from cqrlog_main order by callsign DESC LIMIT 1
+1	select id_cqrlog_main from cqrlog_main order by qsodate,time_on LIMIT 1
+1	select id_cqrlog_main from cqrlog_main where (callsign=
+1	select id_cqrlog_main from cqrlog_main where (callsign= :callsign) and (band = :band)
+1	select id_cqrlog_main from cqrlog_main where (profile = :profile_number) limit 1
+1	select id_cqrlog_main from cqrlog_main where adif =
+4	select id_cqrlog_main from cqrlog_main where club_nr
+1	select id_cqrlog_main from view_cqrlog_main_by_callsign LIMIT 1
+1	select id_cqrlog_main from view_cqrlog_main_by_qsodate LIMIT 1
+1	select id_cqrlog_main,qsodate,callsign,adif,qso_dxcc from cqrlog_main
+2	select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks, satellite, prop_mode, rxfreq
+1	select id_notes from notes where callsign = %s limit 1
+1	select id_notes from notes where callsign=%s
+1	select id_rbn_sources, description, address, port, username from cqrlog_common.rbn_sources order by description
+1	select id_rbn_sources, description, address, port, username from cqrlog_common.rbn_sources where id_rbn_sources =
+1	select itu,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main
+2	select itu,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where
+1	select last_insert_id()
+1	select locator from profiles where nr =
+1	select log_nr from cqrlog_common.log_list order by log_nr
+1	select log_nr from cqrlog_common.log_list where log_nr =
+2	select main.callsign, main.freq,main.mode,main.cont from (
+1	select main.callsign, main.freq,main.mode,main.itu from (
+1	select main.callsign, main.freq,main.mode,main.waz from (
+1	select main.callsign,main.freq,main.mode,main.itu from (
+1	select main.callsign,main.freq,main.mode,main.waz from (
+1	select max(id) from call_alert where (callsign=%s) and (band=%s) and (mode=%s)
+1	select max(id) from log_changes
+1	select max(id_cqrlog_main) from cqrlog_main where (not (
+1	select max(id_cqrlog_main),callsign,name from cqrlog_main where name <>
+1	select max(nr) as nr from profiles
+1	select max(nr) from profiles
+1	select nr from profiles where nr =
+1	select nr from profiles where nr = :profile_number
+1	select qsodate,freq,mode,qsl_r,lotw_qslr,dxcc_ref from
+1	select qsodate,time_on,callsign,freq,mode,award,qth,remarks
+1	select rx_offset, tx_offset from cqrlog_common.bands where b_begin <= :b_begin
+1	select state,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main
+1	select substr(loc,1,2) as ll FROM
+1	select substr(loc,1,4) as ll FROM
+1	select table_name from information_schema.tables where table_schema=
+1	select table_name from information_schema.tables where table_schema=%s and table_name=%s
+1	select upper(county) as ll FROM
+1	select upper(county) as ll, count(id_cqrlog_main) as wkd,
+1	select upper(substr(loc,1,4)) as lll,
+2	select upper(substr(loc,1,4)) as lo from
+1	select waz,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main
+2	select waz,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where
+1	srx_string, contestname, dok, operator) values(
+1	srx_string, stx_string, contestname, dok, operator) values(
+2	subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main order by convert(freq,signed),cont
+2	subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main order by convert(freq,signed),itu
+2	subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main order by convert(freq,signed),waz
+1	truncate table dxcc_id
+1	union all select count(callsign) from cqrlog_main where callsign<>
+1	update call_alert set callsign=:callsing,band =:band,mode =:mode where id=:id
+1	update cqrlog_common.bands set b_begin = :b_begin, b_end = :b_end, cw = :cw, rtty = :rtty,
+1	update cqrlog_common.db_version set nr=
+1	update cqrlog_common.rbn_sources set description=
+2	update cqrlog_main q inner join club
+3	update cqrlog_main set
+1	update cqrlog_main set club_nr
+2	update cqrlog_main set eqsl_qsl_rcvd =
+2	update cqrlog_main set eqsl_qsl_sent =
+1	update cqrlog_main set eqsl_qsl_sent = %s,eqsl_qslsdate=%s where (eqsl_qsl_sent='' and eqsl_qslsdate is NULL)
+1	update cqrlog_main set eqsl_qsl_sent=%s,eqsl_qslsdate=NULL where id_cqrlog_main=%d
+2	update cqrlog_main set lotw_qslr =
+2	update cqrlog_main set lotw_qsls =
+1	update cqrlog_main set lotw_qsls = %s, lotw_qslsdate = %s where (lotw_qsls='' and lotw_qslsdate is NULL)
+1	update cqrlog_main set lotw_qsls=%s,lotw_qslsdate=NULL where id_cqrlog_main=%d
+1	update cqrlog_main set name=
+1	update cqrlog_main set profile = :new_profile where profile = :old_profile
+1	update cqrlog_main set qsl_r =
+2	update cqrlog_main set qsl_s =
+1	update cqrlog_main set qsl_s=
+1	update cqrlog_main set qsl_via =
+1	update db_version set nr=
+1	update log_changes set upddeleted=0 where id = %d
+1	update notes set longremarks = %s where callsign = %s
+1	update profiles set locator = :locator, qth = :qth, rig = :rig, remarks = :remarks, visible = :visible, nr = :nr where nr = :old_nr
+1	update profiles set visible = :visible where nr = :profile_number limit 1
+1	update upload_status set id_log_changes = %d where logname = %s
+1	update upload_status set id_log_changes=
+1	values (
