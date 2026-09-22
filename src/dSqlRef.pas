@@ -47,6 +47,17 @@ type
     Nr, Call, FromDate, ToDate : String
   end;
 
+  // One RBN server preset (cqrlog_common.rbn_sources). No password: RBN
+  // servers take only the callsign.
+  TRbnSource = record
+    Id          : Integer;
+    Description : String;
+    Address     : String;
+    Port        : Integer;
+    UserName    : String
+  end;
+  TRbnSourceList = array of TRbnSource;
+
   TdmSqlRef = class(TDataModule)
     procedure DataModuleCreate(Sender : TObject);
   private
@@ -103,6 +114,13 @@ type
     procedure FlushClubMembers(const DbNum : String);
     function  GetClubMember(const ClubTable, ClubField, Value, Date : String; out Member : TClubMember) : Boolean;
 
+    // rbn_sources: presets of RBN telnet servers, see uRbnConnection
+    function  LoadRbnSources : TRbnSourceList;
+    function  GetRbnSource(const Id : Integer; out Source : TRbnSource) : Boolean;
+    function  InsertRbnSource(const Source : TRbnSource) : Integer;  // the new id
+    procedure UpdateRbnSource(const Source : TRbnSource);
+    procedure DeleteRbnSource(const Id : Integer);
+
     // The batch is the writes marked so above, in one transaction; the
     // caller ends it with one of these.
     procedure CommitBatch;
@@ -143,6 +161,13 @@ type
     function SqlUpdateDxCluster(const Description, Address, Port, User, Password : String; const Id : Integer) : String;
     function SqlInsertDxCluster(const Description, Address, Port, User, Password : String) : String;
     function SqlInsertDefaultDxCluster(const Description, Address, Port : String) : String;
+
+    // rbn_sources
+    function SqlRbnSources : String;
+    function SqlRbnSource(const Id : Integer) : String;
+    function SqlInsertRbnSource(const Description, Address : String; const Port : Integer; const UserName : String) : String;
+    function SqlUpdateRbnSource(const Description, Address : String; const Port : Integer; const UserName : String; const Id : Integer) : String;
+    function SqlDeleteRbnSource(const Id : Integer) : String;
 
     // iota_list
     function SqlIotaName(const Iota : String) : String;
@@ -445,6 +470,74 @@ end;
 
 // A row with an empty id and an empty number is "not a member"; the number
 // and the callsign come back trimmed, as fQSODetails read them.
+function TdmSqlRef.LoadRbnSources : TRbnSourceList;
+var
+  Src : TRbnSource;
+begin
+  Result := nil;
+  FQ.Prepare(SqlRbnSources);
+  try
+    FQ.Open;
+    with FQ.Query do
+      while not EOF do
+      begin
+        Src.Id          := Fields[0].AsInteger;
+        Src.Description := Fields[1].AsString;
+        Src.Address     := Fields[2].AsString;
+        Src.Port        := Fields[3].AsInteger;
+        Src.UserName    := Fields[4].AsString;
+        SetLength(Result, Length(Result)+1);
+        Result[High(Result)] := Src;
+        Next
+      end
+  finally
+    FQ.Release
+  end
+end;
+
+function TdmSqlRef.GetRbnSource(const Id : Integer; out Source : TRbnSource) : Boolean;
+begin
+  Source := Default(TRbnSource);
+  FQ.Prepare(SqlRbnSource(Id));
+  try
+    FQ.Open;
+    Result := not FQ.Query.EOF;
+    if Result then
+      with FQ.Query do
+      begin
+        Source.Id          := Fields[0].AsInteger;
+        Source.Description := Fields[1].AsString;
+        Source.Address     := Fields[2].AsString;
+        Source.Port        := Fields[3].AsInteger;
+        Source.UserName    := Fields[4].AsString
+      end
+  finally
+    FQ.Release
+  end
+end;
+
+function TdmSqlRef.InsertRbnSource(const Source : TRbnSource) : Integer;
+begin
+  FQ.PrepareNext(SqlInsertRbnSource(Source.Description, Source.Address, Source.Port, Source.UserName));
+  FQ.Exec;
+  FQ.PrepareNext('select last_insert_id()');
+  FQ.Open;
+  Result := FQ.Query.Fields[0].AsInteger;
+  FQ.Commit
+end;
+
+procedure TdmSqlRef.UpdateRbnSource(const Source : TRbnSource);
+begin
+  FQ.Prepare(SqlUpdateRbnSource(Source.Description, Source.Address, Source.Port, Source.UserName, Source.Id));
+  FQ.ExecAndCommit
+end;
+
+procedure TdmSqlRef.DeleteRbnSource(const Id : Integer);
+begin
+  FQ.Prepare(SqlDeleteRbnSource(Id));
+  FQ.ExecAndCommit
+end;
+
 function TdmSqlRef.GetClubMember(const ClubTable, ClubField, Value, Date : String; out Member : TClubMember) : Boolean;
 begin
   FQ.Prepare(SqlClubMember(ClubTable, ClubField, Value, Date));
@@ -624,6 +717,34 @@ begin
   Result := 'INSERT INTO dxclusters (description,address,port) ' +
             'VALUES ('+QuotedStr(Description) + ',' + QuotedStr(Address) +
             ','+QuotedStr(Port)+')'
+end;
+
+function TdmSqlRef.SqlRbnSources : String;
+begin
+  Result := 'select id_rbn_sources, description, address, port, username from cqrlog_common.rbn_sources order by description'
+end;
+
+function TdmSqlRef.SqlRbnSource(const Id : Integer) : String;
+begin
+  Result := 'select id_rbn_sources, description, address, port, username from cqrlog_common.rbn_sources where id_rbn_sources = ' + IntToStr(Id)
+end;
+
+function TdmSqlRef.SqlInsertRbnSource(const Description, Address : String; const Port : Integer; const UserName : String) : String;
+begin
+  Result := 'insert into cqrlog_common.rbn_sources (description, address, port, username) values (' +
+            QuotedStr(Description) + ',' + QuotedStr(Address) + ',' + IntToStr(Port) + ',' + QuotedStr(UserName) + ')'
+end;
+
+function TdmSqlRef.SqlUpdateRbnSource(const Description, Address : String; const Port : Integer; const UserName : String; const Id : Integer) : String;
+begin
+  Result := 'update cqrlog_common.rbn_sources set description=' + QuotedStr(Description) +
+            ', address=' + QuotedStr(Address) + ', port=' + IntToStr(Port) +
+            ', username=' + QuotedStr(UserName) + ' where id_rbn_sources = ' + IntToStr(Id)
+end;
+
+function TdmSqlRef.SqlDeleteRbnSource(const Id : Integer) : String;
+begin
+  Result := 'delete from cqrlog_common.rbn_sources where id_rbn_sources = ' + IntToStr(Id)
 end;
 
 { iota_list }

@@ -25,7 +25,7 @@ uses
 const
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 20;
-  cDB_COMN_VER = 6;
+  cDB_COMN_VER = 7;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
   //Connection params controlling TLS. mariadb-connector-c >= 3.4 refuses to
@@ -299,6 +299,7 @@ type
     procedure InsertProfiles(cmbProfile : TComboBox; ShowAll,loc,qth,rig : Boolean); overload;
     procedure RefreshMainDatabase(id : Integer = 0);
     procedure LoadClubsSettings;
+    procedure SeedRbnSources;
     procedure LoadZipSettings;
     procedure CheckForDatabases;
     procedure CreateDatabase(nr : Word; log_name : String);
@@ -746,6 +747,17 @@ begin
     Q.Close();
     trQ.Rollback
   end;
+  //version 7 was once stamped with the table created in the wrong database
+  //(a development build); the statement is IF NOT EXISTS, so it is cheap to
+  //make sure here
+  trQ.StartTransaction;
+  try
+    Q.SQL.Text := dmSqlSchema.SqlCreateRbnSources;
+    Q.ExecSQL;
+    trQ.Commit
+  except
+    trQ.Rollback
+  end;
 
   dmUtils.TimeOffset     := cqrini.ReadFloat('Program','offset',0);
   dmUtils.GrayLineOffset := cqrini.ReadFloat('Program','GraylineOffset',0);
@@ -773,6 +785,7 @@ begin
   OpenFreqMemories('');
 
   LoadClubsSettings;
+  SeedRbnSources;
   LoadZipSettings;
 
   LoadQSODateColorSettings
@@ -1566,6 +1579,60 @@ begin
   Result := GetProfileText(p)
 end;
 
+//RBN server presets: fills cqrlog_common.rbn_sources when it is empty, from the
+//keys the RBN monitor and the Grayline used before there were presets (they
+//could differ, so both are kept), or with the public RBN telnet server on a
+//fresh install. Runs once per log opening, after cqrini exists
+procedure TdmData.SeedRbnSources;
+
+  function Preset(const Description, ServerPort, DefaultUser : String) : TRbnSource;
+  var
+    p : Integer;
+  begin
+    Result := Default(TRbnSource);
+    Result.Description := Description;
+    p := Pos(':', ServerPort);
+    if p > 0 then
+    begin
+      Result.Address := Trim(Copy(ServerPort, 1, p-1));
+      if not TryStrToInt(Trim(Copy(ServerPort, p+1, 6)), Result.Port) then
+        Result.Port := 7000
+    end
+    else begin
+      Result.Address := Trim(ServerPort);
+      Result.Port    := 7000
+    end;
+    Result.UserName := Trim(UpperCase(DefaultUser))
+  end;
+
+var
+  Monitor, Grayline : TRbnSource;
+  Id : Integer;
+begin
+  //once: "connect the monitor when its window opens" used to be the only way to
+  //have RBN up after start, so it becomes "connect after program starts" too
+  if not cqrini.ReadBool('RBN', 'ConnectOnStartMigrated', False) then
+  begin
+    if cqrini.ReadBool('RBN', 'AutoConnectM', False) then
+      cqrini.WriteBool('RBN', 'ConnectOnStart', True);
+    cqrini.WriteBool('RBN', 'ConnectOnStartMigrated', True)
+  end;
+  if Length(dmSqlRef.LoadRbnSources) > 0 then
+    exit;
+  Monitor  := Preset('RBN', cqrini.ReadString('RBNMonitor', 'ServerName', 'telnet.reversebeacon.net:7000'),
+                     cqrini.ReadString('RBNMonitor', 'UserName', cqrini.ReadString('Station', 'Call', '')));
+  Grayline := Preset('RBN (Grayline)', cqrini.ReadString('RBN', 'Server', ''),
+                     cqrini.ReadString('RBN', 'login', ''));
+  if Monitor.Address = '' then
+    Monitor := Preset('RBN', 'telnet.reversebeacon.net:7000', cqrini.ReadString('Station', 'Call', ''));
+  Id := dmSqlRef.InsertRbnSource(Monitor);
+  if cqrini.ReadInteger('RBN', 'MainSourceId', 0) = 0 then
+    cqrini.WriteInteger('RBN', 'MainSourceId', Id);
+  if (Grayline.Address <> '') and
+     ((Grayline.Address <> Monitor.Address) or (Grayline.Port <> Monitor.Port)) then
+    dmSqlRef.InsertRbnSource(Grayline)
+end;
+
 procedure TdmData.PrepareDXClusterDatabase;
 const
   //description, address, port
@@ -2219,6 +2286,15 @@ begin
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         Q1.SQL.Text := dmSqlRef.SqlInsertBand('5M', '54.0000', '69.9000', '59.5000', '59.6000', '59.6000');
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+      end;
+
+      if old_version < 7 then
+      begin
+        //RBN server presets. The old [RBN] Server and [RBNMonitor] ServerName
+        //keys become presets when the log is opened, see fRbnSources
+        Q1.SQL.Text := dmSqlSchema.SqlCreateRbnSources;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
       end;

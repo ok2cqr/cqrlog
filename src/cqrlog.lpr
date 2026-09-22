@@ -21,7 +21,7 @@ uses
   fRebuildMembStat, uVersion, fAbout, fChangelog, fBigSquareStat, feQSLDownload,
   feQSLUpload, fSOTAExport, fEDIExport, fNewQSODefValues, fQSLExpPref,
   fRotControl, dLogUpload, fLogUploadStatus, frCWKeys, fCallAlert,
-  fNewCallAlert, fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer,
+  fNewCallAlert, fConfigStorage, fRbnFilter, fRbnMonitor, fRbnSources, fRbnSourceEdit, fRbnControl,
   fRadioMemories, fAddRadioMemory, fException, fCommentToCall,
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
@@ -101,6 +101,7 @@ begin
   Application.CreateForm(TfrmRotControl, frmRotControl);
   Application.CreateForm(TfrmLogUploadStatus, frmLogUploadStatus);
   Application.CreateForm(TfrmCWType, frmCWType);
+  Application.CreateForm(TfrmRbnControl, frmRbnControl);
   Application.CreateForm(TfrmRbnMonitor, frmRbnMonitor);
   Application.CreateForm(TfrmWorkedGrids, frmWorkedGrids);
   Application.CreateForm(TfrmPropDK0WCY, frmPropDK0WCY);

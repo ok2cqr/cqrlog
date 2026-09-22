@@ -37,7 +37,21 @@ make flatpak                           # single-file flatpak bundle, Qt6
 make dmg / test-dmg                    # macOS DMG (test-dmg skips notarization)
 ```
 
-The compiled binary is output to `src/cqrlog`. There is no test suite.
+The compiled binary is output to `src/cqrlog`.
+
+### Tests and lint
+
+There is no application-wide test suite; `make test` runs the unit tests of the parts that have them:
+
+```bash
+make test                              # everything below except lint; CI runs this and lint-lfm
+make -C src/rbn test                   # FPCUnit suite for the RBN line framer + spot parser (fixtures = recorded traffic)
+make -C src/dxcc-parser test           # FPCUnit suite for the DXCC parser; also test-full, diff, bench
+cd tools && python3 -m unittest test_lfm_layout   # tests for the .lfm layout linter
+make lint-lfm                          # lint selected forms (tools/lfm_layout.py)
+```
+
+The Pascal suites are built with plain `fpc` (no LCL, no MySQL). New non-GUI logic should follow the `src/dxcc-parser/` and `src/rbn/` pattern (LCL-free units + an `fpc`-built test runner) so it can be tested without a database or a widget set.
 
 macOS DMGs are built locally on Petr's machine (`make dmg` signs and notarizes via keychain profile `cqrlog`), not in CI.
 
@@ -98,7 +112,7 @@ All source is in `src/`. Files follow a naming convention by prefix:
 
 ### Database
 
-Uses MariaDB/MySQL with multiple connectors supported (mysql51, mysql55, mysql56, mysql57). Database schema is versioned — `dData.pas` constants `cDB_MAIN_VER` (20) and `cDB_COMN_VER` (6) track the schema version, and `fUpgrade.pas` handles migrations.
+Uses MariaDB/MySQL with multiple connectors supported (mysql51, mysql55, mysql56, mysql57). Database schema is versioned — `dData.pas` constants `cDB_MAIN_VER` (20) and `cDB_COMN_VER` (6) track the schema version. Migrations live in `dData.pas`: `UpgradeMainDatabase` and `UpgradeCommonDatabase` (one `if old_version < N` block per step), called from `OpenDatabase`. DDL for fresh installs is in `dData.lfm` (`scCommon`, `scLog`, `scViews`), so a schema change needs both. `fUpgrade.pas` is an unused progress form, not the migration code.
 
 Each log is a separate database. A common database stores shared data (DXCC tables, QSL manager data, membership stats).
 

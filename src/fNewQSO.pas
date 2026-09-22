@@ -74,6 +74,8 @@ type
     acHotkeys: TAction;
     acRefreshTime: TAction;
     acRBNMonitor: TAction;
+    acRbnControl: TAction;
+    mnuRbnControl: TMenuItem;
     acRemoteWsjt: TAction;
     acCommentToCallsign : TAction;
     acMonitorWsjtx: TAction;
@@ -398,6 +400,7 @@ type
     procedure acpDK0WCYExecute(Sender: TObject);
     procedure acQSOListExecute(Sender: TObject);
     procedure acRBNMonitorExecute(Sender: TObject);
+    procedure acRbnControlExecute(Sender: TObject);
     procedure acRefreshTimeExecute(Sender: TObject);
     procedure acRefreshTRXExecute(Sender: TObject);
     procedure acReloadCWExecute(Sender: TObject);
@@ -836,7 +839,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl,
      fQSODetails, fWAZITUStat, fDOKStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fRbnControl, fException, fCommentToCall,
      fRemind, fContest, fXfldigi, dMembership, dSatellite, dSqlUserData, fCountyStat,
      fBandMapGfx, uBandMapStore, fNewVersion;
 
@@ -1571,6 +1574,11 @@ begin
 
   CheckForExternalTablesUpdate;
 
+  //the connection first, so that a restored monitor window finds it up
+  if cqrini.ReadBool('RBN','ConnectOnStart',False) then
+    frmRbnControl.ConnectMain;
+  if cqrini.ReadBool('Window','RbnControl',False) then
+    acRbnControl.Execute;
   if cqrini.ReadBool('Window','RBNMonitor',False) then
     acRBNMonitor.Execute;
 
@@ -1769,7 +1777,13 @@ begin
       frmRBNMonitor.Close
     end
     else
-      cqrini.WriteBool('Window','RBNMonitor',False)
+      cqrini.WriteBool('Window','RBNMonitor',False);
+
+    cqrini.WriteBool('Window','RbnControl',frmRbnControl.Showing);
+    if frmRbnControl.Showing then
+      frmRbnControl.Close;
+    //log switch or shutdown: the spots of this log are done with
+    frmRbnControl.DisconnectMain
   end
 end;
 
@@ -4627,6 +4641,13 @@ end;
 procedure TfrmNewQSO.acRBNMonitorExecute(Sender: TObject);
 begin
   frmRBNMonitor.Show
+end;
+
+procedure TfrmNewQSO.acRbnControlExecute(Sender: TObject);
+begin
+  //shows the one control window with its real state; never a second connection
+  frmRbnControl.Show;
+  frmRbnControl.BringToFront
 end;
 
 procedure TfrmNewQSO.acRefreshTimeExecute(Sender: TObject);
