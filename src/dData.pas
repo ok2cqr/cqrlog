@@ -20,7 +20,7 @@ uses
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
   mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils,
-  mysql57dyn, mysql57conn, uMyFindFile, Graphics, contnrs;
+  mysql57dyn, mysql57conn, uMyFindFile, Graphics, contnrs, uRbnLogCache;
 
 const
   cDB_LIMIT = 500;
@@ -198,6 +198,9 @@ type
     MainCon      : TSQLConnection;
     BandMapCon   : TSQLConnection;
     RbnMonCon    : TSQLConnection;
+    //what the log says about spotted calls and entities, shared by the RBN
+    //monitor and the band maps. Fetches go through qRbnMon
+    RbnLogCache  : TRbnLogCache;
     LogUploadCon : TSQLConnection;
     dbDXC        : TSQLConnection;
 
@@ -275,7 +278,7 @@ type
     function  TriggersExistsOnCqrlog_main : Boolean;
     function  CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
-    function  RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+    function  RbnCallExistsInLog(const callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  GetNewLogNumber : Integer;
     function  getNewMySQLConnectionObject : TMySQL57Connection;
 
@@ -300,6 +303,7 @@ type
     procedure RefreshMainDatabase(id : Integer = 0);
     procedure LoadClubsSettings;
     procedure SeedRbnSources;
+    function  CachedDxccStatus(Adif : Word; const Band, Mode : String) : Integer;
     procedure LoadZipSettings;
     procedure CheckForDatabases;
     procedure CreateDatabase(nr : Word; log_name : String);
@@ -786,6 +790,7 @@ begin
 
   LoadClubsSettings;
   SeedRbnSources;
+  RbnLogCache.InvalidateAll;
   LoadZipSettings;
 
   LoadQSODateColorSettings
@@ -1245,6 +1250,7 @@ begin
   BandMapCon.Connected := False;
   MainCon.Connected := False;
   DoneCriticalsection(csPreviousQSO);
+  FreeAndNil(RbnLogCache);
   KillMySQL(False)
 end;
 
@@ -1327,6 +1333,9 @@ var
   sWAZ, sITU : String;
   rx_freq : String;
 begin
+  //a QSO with this call changes what the log says about it and its entity
+  RbnLogCache.InvalidateCall(call);
+  RbnLogCache.InvalidateAll;
   band := dmUtils.GetBandFromFreq(CurrToStr(freq));
   if qso_dxcc then
     changed := 1
@@ -3281,6 +3290,11 @@ begin
   end
 end;
 
+function TdmData.CachedDxccStatus(Adif : Word; const Band, Mode : String) : Integer;
+begin
+  RbnMonDXCCInfo(Adif, Band, Mode, False, Result)
+end;
+
 function TdmData.RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean; var index : integer) : String;
 var
   sAdif : String = '';
@@ -3358,7 +3372,7 @@ begin
   end
 end;
 
-function TdmData.RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+function TdmData.RbnCallExistsInLog(const callsign,band,mode,LastDate,LastTime : String) : Boolean;
 var
   sql : String;
 begin
@@ -3576,6 +3590,9 @@ begin
   MainCon      := getNewMySQLConnectionObject();
   BandMapCon   := getNewMySQLConnectionObject();
   RbnMonCon    := getNewMySQLConnectionObject();
+  RbnLogCache  := TRbnLogCache.Create(5000);
+  RbnLogCache.OnWorkedAfter := @RbnCallExistsInLog;
+  RbnLogCache.OnDxccStatus  := @CachedDxccStatus;
   LogUploadCon := getNewMySQLConnectionObject();
   dbDXC        := getNewMySQLConnectionObject();
 end;
