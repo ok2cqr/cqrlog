@@ -744,7 +744,9 @@ var
 
   procedure DeleteRec(idx: longint);
   begin
-    dmSqlQso.DeleteQso(idx)
+    dmSqlQso.DeleteQso(idx);
+    //the call is not at hand here; the whole cache is cheap to refill
+    dmData.RbnLogCache.InvalidateAll
   end;
 
 begin

@@ -6,9 +6,9 @@ interface
 
 uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,
-  ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,lNetComponents,
-  lnet, lclType, LazFileUtils, StrUtils, DateUtils, Math,
-  uRbnLineFramer, uRbnSpotParser, uRbnLogin;
+  ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,
+  lclType, LazFileUtils, StrUtils, DateUtils, Math,
+  uRbnSpotParser, uRbnConnection;
 
 type
   TRBNList = record
@@ -21,7 +21,9 @@ type
   end;
 
 const
-  MAX_ITEMS = 300;
+  //slots for spotters. It grows when needed; 300 was a fixed limit that a
+  //contest evening can pass, and a full list threw the spot away
+  INITIAL_ITEMS = 300;
 
 
 type
@@ -71,25 +73,25 @@ type
     procedure tmrGrayLineTimer(Sender: TObject);
     procedure tmrSpotDotsTimer(Sender: TObject);
   private
-    lTelnet    : TLTelnetClientComponent;
+    //shared mode listens to the main connection (the RBN control window's);
+    //"Connect to RBN" makes a connection of its own from [RBN] Server/login
+    FOwnConn   : TRbnConnection;
+    FListening : TRbnConnection;  //the one AddSpotToList is subscribed to, or nil
     csRBN : TRTLCriticalSection;
     login      : String;
     delAfter : integer;
     watchFor : String;
     LocalDbg : boolean;
     GC_lock  : boolean;
-    FFramer  : TRbnLineFramer;
-    FLogin   : TRbnLogin;
 
-    procedure lConnect(aSocket: TLSocket);
-    procedure lDisconnect(aSocket: TLSocket);
-    procedure lReceive(aSocket: TLSocket);
+    procedure Listen(Conn : TRbnConnection);
+    procedure OnRbnSpot(const Line : String; const Spot : TRbnSpotLine);
+    procedure OnRbnState(Sender : TObject);
 
-    function  ConnectToRBN : Boolean;
     procedure SetRbnLink(Linked : Boolean);
     procedure CalculateBearing(lat0, long0, lat1, long1: extended; var bearing: extended);
   public
-    RBNSpotList : array[1..MAX_ITEMS] of TRBNList;
+    RBNSpotList : array of TRBNList;  //1-based, index 0 unused
     band   : String;
     ob  : Pgrayline;
     s,d : String;
@@ -116,54 +118,40 @@ implementation
 
 uses dUtils, dData, uMyIni, dDXCluster, fNewQSO, fRotControl;
 
-procedure TfrmGrayline.lConnect(aSocket: TLSocket);
+//Subscribes to one connection at a time: the main one in shared mode, the own
+//one otherwise. Every spot of it, before any filter of the monitor
+procedure TfrmGrayline.Listen(Conn : TRbnConnection);
 begin
-  FFramer.Reset;
-  FLogin.Reset;
-  rbn_status := 'Connected';
-end;
-
-procedure TfrmGrayline.lDisconnect(aSocket: TLSocket);
-begin
-  rbn_status := 'Disconnected';
-end;
-
-procedure TfrmGrayline.lReceive(aSocket: TLSocket);
-var
-  buffer : String;
-  line   : String;
-  Spot   : TRbnSpotLine;
-
-  procedure AnswerLogin(const Text : String);
-  var
-    UserName : String;
-  begin
-    if not IsRbnLoginPrompt(Text) then
-      exit;
-    UserName := cqrini.ReadString('RBN','login','');
-    if (UserName <> '') and FLogin.ShouldAnswer(Text) then
-      lTelnet.SendMessage(UserName+#13+#10)
-  end;
-
-begin
-  if lTelnet.GetMessage(buffer) = 0 then
+  if FListening = Conn then
     exit;
-  //same framing and the same definition of a spot as the RBN monitor
-  FFramer.Feed(buffer);
-  while FFramer.NextLine(line) do
+  if Assigned(FListening) then
   begin
-    if ParseRbnSpot(line, Spot) then
-    begin
-      if LocalDbg then Writeln('  RBN:',line);
-      AddSpotToList(line)
-    end
-    else begin
-      if LocalDbg then Writeln('RBN:',line);
-      AnswerLogin(line)
-    end
+    FListening.UnsubscribeSpots(@OnRbnSpot);
+    FListening.UnsubscribeState(@OnRbnState)
   end;
-  AnswerLogin(FFramer.Pending);
-  lTelnet.CallAction
+  FListening := Conn;
+  if Assigned(FListening) then
+  begin
+    FListening.SubscribeSpots(@OnRbnSpot);
+    FListening.SubscribeState(@OnRbnState)
+  end;
+  OnRbnState(nil)
+end;
+
+procedure TfrmGrayline.OnRbnSpot(const Line : String; const Spot : TRbnSpotLine);
+begin
+  if LocalDbg then Writeln('  RBN:',Line);
+  AddSpotToList(Line)
+end;
+
+procedure TfrmGrayline.OnRbnState(Sender : TObject);
+begin
+  if FListening = nil then
+    rbn_status := 'Disconnected'
+  else if FListening = FOwnConn then
+    rbn_status := FOwnConn.Status
+  else
+    rbn_status := 'Linked to RBN monitor: ' + FListening.Status
 end;
 
 function TfrmGrayline.GetEmptyPos : Word;
@@ -171,13 +159,19 @@ var
   i : Integer;
 begin
   Result := 0;
-  for i:= 1 to MAX_ITEMS do
+  for i:= 1 to High(RBNSpotList) do
   begin
     if RBNSpotList[i].band='' then
     begin
       Result := i;
       break
     end
+  end;
+  if Result = 0 then
+  begin
+    //full: grow by half. Old slots are freed by RemoveOldSpots anyway
+    Result := Length(RBNSpotList);
+    SetLength(RBNSpotList, Length(RBNSpotList) + Length(RBNSpotList) div 2)
   end
 end;
 
@@ -186,45 +180,12 @@ var
   i : Integer;
 begin
   Result := 0;
-  for i:= 1 to MAX_ITEMS do
+  for i:= 1 to High(RBNSpotList) do
   begin
     if RBNSpotList[i].spotter=spotter then
     begin
       Result := i;
       break
-    end
-  end
-end;
-
-function TfrmGrayline.ConnectToRBN : Boolean;
-var
-  server : String;
-  port   : Integer;
-  tmp    : String;
-begin
-  Result := True;
-  lTelnet := TLTelnetClientComponent.Create(nil);
-  try
-    tmp    := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');
-    server := copy(tmp,1,Pos(':',tmp)-1);
-    tmp    := copy(tmp,Pos(':',tmp)+1,5);
-    if not TryStrToInt(tmp,port) then
-      port := 7000; //default value
-
-    if LocalDbg then Writeln('Server:',server,' Port:',port);
-
-    lTelnet.OnConnect    := @lConnect;
-    lTelnet.OnDisconnect := @lDisconnect;
-    lTelnet.OnReceive    := @lReceive;
-    lTelnet.Host := server;
-    lTelnet.Port := port;
-    lTelnet.Connect;
-    lTelnet.CallAction
-  except
-    on E : Exception do
-    begin
-      Result := False;
-      if LocalDbg then Writeln('Can not connect to RBN! ',E.Message)
     end
   end
 end;
@@ -244,25 +205,31 @@ end;
 
 
 procedure TfrmGrayline.acConnectExecute(Sender : TObject);
+var
+  tmp    : String;
+  server : String;
+  port   : Integer;
 begin
   if (cqrini.ReadString('RBN','login','')='') then
-    Application.MessageBox('Login to RBN server is not set. Go to Preferences -> RBN support and do the basic settings','Information ...',mb_OK+mb_IconInformation)
-  else begin
-    if acConnect.Caption = 'Disconnect' then
-    begin
-      if ltelnet <> nil then
-       Begin
-         lTelnet.Disconnect;
-         sleep(100);
-         FreeAndNil(lTelnet);
-         rbn_status := 'Disconnected';
-       end;
-    end
-    else begin
-      acLinkToRbnMonitor.Checked :=false;
-      ConnectToRBN;
-    end
-  end
+  begin
+    Application.MessageBox('Login to RBN server is not set. Go to Preferences -> RBN support and do the basic settings','Information ...',mb_OK+mb_IconInformation);
+    exit
+  end;
+  if (FListening = FOwnConn) and (FOwnConn.State <> rcsDisconnected) then
+  begin
+    FOwnConn.Disconnect;
+    exit
+  end;
+  //a connection of its own, to whatever [RBN] Server says; it may differ from
+  //the main source and it does not touch it
+  SetRbnLink(False);
+  tmp    := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');
+  server := copy(tmp,1,Pos(':',tmp)-1);
+  if not TryStrToInt(copy(tmp,Pos(':',tmp)+1,5),port) then
+    port := 7000;
+  if LocalDbg then Writeln('Server:',server,' Port:',port);
+  Listen(FOwnConn);
+  FOwnConn.Connect(server, port, cqrini.ReadString('RBN','login',''))
 end;
 
 procedure TfrmGrayline.acLinkToRbnMonitorExecute(Sender: TObject);
@@ -277,9 +244,15 @@ begin
     acLinkToRbnMonitor.Checked := Linked;
     pumConnect.Enabled:=not Linked;
     if Linked then
-     rbn_status := 'Linked to RBNMonitor'
+    begin
+      //shared mode: the main connection, every spot before the monitor's filter,
+      //whether or not the monitor window is open. The own connection is dropped
+      if FOwnConn.State <> rcsDisconnected then
+        FOwnConn.Disconnect;
+      Listen(RbnMainConnection)
+    end
     else
-     rbn_status := 'Disconnected';
+      Listen(nil)
 end;
 
 procedure TfrmGrayline.FormCreate(Sender: TObject);
@@ -288,9 +261,10 @@ var
   i : Integer;
 begin
   InitCriticalSection(csRBN);
-  FFramer := TRbnLineFramer.Create;
+  FOwnConn := TRbnConnection.Create(self);
+  SetLength(RBNSpotList, INITIAL_ITEMS + 1);
   tmrSpotDots.Enabled:=false;
-  for i:=1 to MAX_ITEMS do
+  for i:=1 to High(RBNSpotList) do
    begin
     RBNSpotList[i].band    := '';
     RBNSpotList[i].spotter := '';
@@ -334,12 +308,11 @@ begin
   tmrGrayLine.Enabled := False;
   tmrAutoConnect.Enabled:=False;
   tmrSpotDots.Enabled:=False;
-  if ltelnet <> nil then
-       Begin
-         lTelnet.Disconnect;
-         sleep(100);
-         FreeAndNil(lTelnet);
-       end;
+  //closing the window ends its own connection, as it always did; the shared
+  //one is not the window's
+  if FOwnConn.State <> rcsDisconnected then
+    FOwnConn.Disconnect;
+  Listen(nil);
   RemoveOldSpots(0);
 end;
 
@@ -352,8 +325,8 @@ end;
 procedure TfrmGrayline.FormDestroy(Sender: TObject);
 begin
   if LocalDbg then Writeln('Closing GrayLine window');
+  Listen(nil);
   dispose(ob,done);
-  FreeAndNil(FFramer);
   DoneCriticalsection(csRBN)
 end;
 
@@ -452,15 +425,15 @@ end;
 procedure TfrmGrayline.tmrAutoConnectTimer(Sender : TObject);
 begin
     tmrAutoConnect.Enabled:=False; //runs once, FormShow starts it again
-    if (rbn_status='Connected') or (rbn_status='Linked to RBNMonitor' ) then exit;
+    if Assigned(FListening) then exit;
     //set, not toggled. The action keeps its Checked state while the window is
     //closed, so toggling here switched the link off on the second FormShow and
     //stored AutoLink=False. Also follows a change made in Preferences
     SetRbnLink(cqrini.ReadBool('RBN','AutoLink',false));
     if acLinkToRbnMonitor.Checked then
       exit;
-    if cqrini.ReadBool('RBN','AutoConnect',False) and (cqrini.ReadString('RBN','login','') <> '')
-       and (lTelnet = nil) then  acConnect.Execute
+    if cqrini.ReadBool('RBN','AutoConnect',False) and (cqrini.ReadString('RBN','login','') <> '') then
+      acConnect.Execute
 end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
@@ -480,7 +453,7 @@ begin
      end;
     
   sbGrayLine.SimpleText := rbn_status;
-  if rbn_status='Connected' then
+  if (FListening = FOwnConn) and (FOwnConn.State <> rcsDisconnected) then
    Begin
     acConnect.Caption := 'Disconnect';
     pumLinkToRBNMonitor.Enabled:=false;
@@ -738,7 +711,7 @@ begin
   ob^.body_smaz;
   CqrBand := dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text);
 
-  for i:=1 to MAX_ITEMS do
+  for i:=1 to High(RBNSpotList) do
   begin
 
    if (RBNSpotList[i].band='') then  //skip empty
@@ -777,7 +750,7 @@ var
 begin
   time := DateTimeToUnix(now);
   EnterCriticalsection(csRBN);
-  for i:=1 to MAX_ITEMS do
+  for i:=1 to High(RBNSpotList) do
    begin
      if ((time - RBNSpotList[i].time) > RemoveAfter) then
          RBNSpotList[i].band :='';
@@ -836,11 +809,6 @@ begin
   if index = 0 then //spotter doesn't exist, we need new position
     index := GetEmptyPos;
 
-  if index = 0 then
-  begin
-    Writeln('CRITICAL ERROR! THIS SHOULD NOT HAPPEN, RBN LIST IS FULL');
-    exit
-  end;
   band := dmDXCluster.GetBandFromFreq(freq,True);
 
   frmGrayline.RBNSpotList[index].band    := band;

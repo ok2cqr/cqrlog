@@ -169,7 +169,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, uMyIni, dData, dSqlRef, fRbnControl, dDXCluster, fRbnFilter, fNewQSO, fGrayline,
+uses dUtils, uMyIni, dData, dSqlRef, fRbnControl, dDXCluster, fRbnFilter, fNewQSO,
      fBandMap, uBandMapStore, uDebugLog;
 
 { TfrmRbnMonitor }
@@ -248,7 +248,7 @@ begin
     exit
   end;
 
-  if dmData.RbnCallExistsInLog(dxstn,Band,mode,LastDate,LastTime) then
+  if dmData.RbnLogCache.WorkedAfter(dxstn,Band,mode,LastDate,LastTime) then
   begin
     if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station already exist in the log - ',dxstn);
     exit
@@ -325,7 +325,8 @@ begin
     exit
   end;
 
-  dmData.RbnMonDXCCInfo(adif,band,mode,DxccWithLoTW,index);
+  //DxccWithLoTW was never set anywhere, the LoTW variant of the query was dead
+  index := dmData.RbnLogCache.DxccStatus(adif,band,mode);
   case index of
     1 : dxinfo := 'N';
     2 : dxinfo := 'B';
@@ -484,13 +485,12 @@ end;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //subscriber of the shared connection, main thread. The worker filters and
-//needs a queue; the Grayline reads every spot straight away, before any filter
+//needs a queue
 procedure TfrmRbnMonitor.OnRbnSpot(const Line : String; const Spot : TRbnSpotLine);
 begin
+  //the Grayline is a subscriber of the same connection itself now
   if Assigned(RbnMonThread) then
-    SpotQueue.Push(Line);
-  if (frmGrayline.Showing and frmGrayline.acLinkToRbnMonitor.Checked) then
-    frmGrayline.AddSpotToList(Line)
+    SpotQueue.Push(Line)
 end;
 
 procedure TfrmRbnMonitor.OnRbnState(Sender : TObject);
