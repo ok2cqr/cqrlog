@@ -19,7 +19,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, ExtCtrls, StdCtrls, Buttons,
-  ComCtrls, Menus, Types, uBandMapStore, uBandMapLayout;
+  ComCtrls, Menus, Types, uBandMapStore, uBandMapLayout, uLogCheckQueue;
 
 type
   { What was drawn where, rebuilt at the end of every paint. Call/Mode/Freq are
@@ -76,7 +76,6 @@ type
     FInst      : TBandMapInstance;  //choice, viewport and filter, as saved
     FTitleBand : String;            //band named in the caption right now
     FStandInFor: String;            //saved key this Auto window replaces ('' = none)
-    FQueryBudget : Integer;         //log round trips this Poll may still make
 
     FSpanIndex : Integer;
     FSpanKHz   : Integer;   //total visible span in kHz
@@ -170,6 +169,8 @@ type
       FList         : TList;
       FShuttingDown : Boolean;
       FOnChanged    : TNotifyEvent;
+      FChecks       : TLogCheckQueue;
+      FChecker      : TThread;      //answers FChecks into the log cache
       function  EnabledBands : TStringArray;
       procedure Changed;
     public
@@ -196,6 +197,9 @@ type
         otherwise ACurrent^ is checked and other open ones say so (M > Band). }
       procedure FillChoiceMenu(AParent : TMenuItem; AOnClick : TNotifyEvent;
                                ACurrent : PBandMapChoice);
+      //a window met a station the log cache does not know: the thread looks
+      //it up, the window shows the spot until then
+      procedure RequestLogCheck(const ACall, ABand, AMode, ALastDate, ALastTime : String);
       //a window opened or closed: menus showing the open choices redraw
       property OnChanged : TNotifyEvent read FOnChanged write FOnChanged;
   end;
@@ -210,6 +214,20 @@ uses Math, LCLType, uColorMemo, dUtils, uMyIni, dData, fNewQSO, fTRXControl,
      fBandMapGfxFilter, uDebugLog;
 
 type
+  { One thread for all windows. Each question is one query through
+    dmData.RbnLogCache, which serialises the database access itself (the RBN
+    monitor thread uses the same path). A failed query (log being switched,
+    connection dropped) is logged and skipped; the window asks again on a
+    later tick if the station is still there. }
+  TLogCheckThread = class(TThread)
+    private
+      FQueue : TLogCheckQueue;
+    protected
+      procedure Execute; override;
+    public
+      constructor Create(AQueue : TLogCheckQueue);
+  end;
+
   { cqrini seen through the model's store interface }
   TCqrIniStore = class(TBandMapSettingsStore)
     function  ReadString(const Section, Key, Default : String; ALocal : Boolean = False) : String; override;
@@ -261,8 +279,6 @@ const
   //how far an aged spot is blended towards the background, per AgeStep
   cAgeBlend : array[0..2] of Byte = (0,40,70);
 
-  //log round trips one Poll (every 500 ms) may make for the QSO rule
-  cMaxLogChecksPerPoll = 25;
 
 { blends AFrom towards ATo by APct percent. Used instead of the text band map's
   IncColor, which lightens towards white and so makes old spots MORE prominent
@@ -377,6 +393,12 @@ begin
   //"only the active band" is the text band map's option and only means
   //something while following the radio; a fixed window is its band
   FOnlyCurrBand := FInst.Choice.IsAuto and cqrini.ReadBool('BandMap','OnlyActiveBand',False);
+  //a fixed window wants its band only; the Auto window keeps every band so
+  //that following the radio across bands throws nothing away
+  if FInst.Choice.IsAuto then
+    FView.Band := ''
+  else
+    FView.Band := FInst.Choice.Band;
   FOnlyCurrMode := FInst.OnlyCurrMode;
 
   //one QSO rule, never two stacked: the shared [BandMapFilter] keys of the
@@ -455,10 +477,8 @@ end;
 
 procedure TfrmBandMapGfx.FormShow(Sender: TObject);
 begin
-  DbgLog('BMAP', Name + ': FormShow begin');
   dmUtils.LoadWindowPosAs(Self, InstanceSection(FInst.Choice), True);
   LoadSettings;
-  DbgLog('BMAP', Name + ': settings loaded');
   FManualPan := False; //reopening always starts following the radio again
   if FVfoKHz <= 0 then
     UseNewQsoFreq; //open on the band the operator is actually on
@@ -500,18 +520,12 @@ begin
   if (FVfoKHz <= 0) or FVfoFromQso then
     UseNewQsoFreq;
 
-  //the QSO rule runs on the GUI thread: with a cold cache (start-up, log
-  //switch, a snapshot of thousands of candidates) unbounded round trips to a
-  //LAN database froze the window for seconds and starved the RBN socket's
-  //timer. The rest waits for the next tick; until then the spot is shown.
-  FQueryBudget := cMaxLogChecksPerPoll;
   t0 := Now;
   if FView.Poll(Now, dmUtils.GetDateTime(0)) then
     FDirty := True;
   ms := Round((Now - t0) * 86400000);
   if ms > 200 then
-    DbgLog('BMAP', Name + ': Poll took ' + IntToStr(ms) + ' ms, log lookups ' +
-           IntToStr(cMaxLogChecksPerPoll - FQueryBudget) + ', spots ' + IntToStr(FView.Count));
+    DbgLog('BMAP', Name + ': Poll took ' + IntToStr(ms) + ' ms, spots ' + IntToStr(FView.Count));
   if FDirty then
   begin
     FDirty := False;
@@ -835,30 +849,16 @@ begin
   ParkFocus
 end;
 
-{ runs on the GUI thread from TBandMapStore.Poll, which is why Poll rations the
-  number of calls per tick. dmData serialises access to the query object, so it
-  is safe to call while the classic band map's thread is doing the same. }
+{ runs on the GUI thread from TBandMapStore.Poll, so it never queries the
+  database: the shared cache answers or the log check thread is asked and the
+  spot stays visible until the answer is in }
 function TfrmBandMapGfx.IsWorked(const ACall, ABand, AMode,
                                  ALastDate, ALastTime : String) : Boolean;
 begin
-  //a failing query (log being switched, connection dropped) must not turn into
-  //an exception dialog every 500 ms - show the spot rather than nag
-  try
-    //shared with the RBN monitor; repeated calls cost no query
-    if dmData.RbnLogCache.TryWorkedAfter(ACall,ABand,AMode,ALastDate,ALastTime,Result) then
-      exit;
-    if FQueryBudget <= 0 then
-      exit(False); //not yet known: shown now, decided on a later tick
-    Dec(FQueryBudget);
-    Result := dmData.RbnLogCache.WorkedAfter(ACall,ABand,AMode,ALastDate,ALastTime)
-  except
-    on E : Exception do
-    begin
-      Result := False;
-      if dmData.DebugLevel >= 1 then
-        Writeln('BandMapGfx: log check failed - ',E.Message)
-    end
-  end
+  if dmData.RbnLogCache.TryWorkedAfter(ACall,ABand,AMode,ALastDate,ALastTime,Result) then
+    exit;
+  BandMapWindows.RequestLogCheck(ACall,ABand,AMode,ALastDate,ALastTime);
+  Result := False
 end;
 
 { the shared [BandMapFilter] rule of the text band map, in a few words }
@@ -1466,12 +1466,42 @@ begin
   c.TextOut(FRulerW-2-c.TextWidth(s),y-th div 2,s)
 end;
 
+{ TLogCheckThread }
+
+constructor TLogCheckThread.Create(AQueue : TLogCheckQueue);
+begin
+  FQueue := AQueue;
+  FreeOnTerminate := False;
+  inherited Create(False)
+end;
+
+procedure TLogCheckThread.Execute;
+var
+  R : TLogCheckRequest;
+begin
+  while not Terminated do
+  begin
+    if not FQueue.Pop(R) then
+    begin
+      Sleep(100);
+      Continue
+    end;
+    try
+      dmData.RbnLogCache.WorkedAfter(R.Call, R.Band, R.Mode, R.LastDate, R.LastTime)
+    except
+      on E : Exception do
+        DbgLogException('BMAP', 'log check ' + R.Call + ' ' + R.Band + ' ' + R.Mode, E)
+    end
+  end
+end;
+
 { TBandMapWindows }
 
 constructor TBandMapWindows.Create;
 begin
   inherited Create;
-  FList     := TList.Create
+  FList   := TList.Create;
+  FChecks := TLogCheckQueue.Create
 end;
 
 destructor TBandMapWindows.Destroy;
@@ -1479,10 +1509,25 @@ var
   i : Integer;
 begin
   FShuttingDown := True;
+  if Assigned(FChecker) then
+  begin
+    FChecker.Terminate;
+    FChecker.WaitFor;
+    FreeAndNil(FChecker)
+  end;
   for i := FList.Count-1 downto 0 do
     TfrmBandMapGfx(FList[i]).Free;
   FList.Free;
+  FChecks.Free;
   inherited Destroy
+end;
+
+procedure TBandMapWindows.RequestLogCheck(const ACall, ABand, AMode, ALastDate, ALastTime : String);
+begin
+  //started on the first question, so a session without a QSO rule has no thread
+  if FChecker = nil then
+    FChecker := TLogCheckThread.Create(FChecks);
+  FChecks.Push(ACall, ABand, AMode, ALastDate, ALastTime)
 end;
 
 procedure TBandMapWindows.Changed;
@@ -1677,6 +1722,8 @@ begin
   FShuttingDown := True;
   try
     SaveOpenList;
+    //answers for the old log are of no use to the new one
+    FChecks.Clear;
     for i := FList.Count-1 downto 0 do
       Item(i).Close //FormClose frees it and detaches it
   finally
