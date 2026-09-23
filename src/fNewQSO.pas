@@ -849,7 +849,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fRbnControl, fException, fCommentToCall,
      fRemind, fContest, fXfldigi, dMembership, dSatellite, dSqlUserData, fCountyStat,
-     fBandMapGfx, uBandMapStore, uBandMapLayout, fNewVersion;
+     fBandMapGfx, uBandMapStore, uBandMapLayout, fNewVersion, uDebugLog;
 
 
 
@@ -1578,7 +1578,11 @@ begin
 
   //the connection first, so that a restored monitor window finds it up
   if cqrini.ReadBool('RBN','ConnectOnStart',False) then
+  begin
+    DbgLog('START','ConnectMain begin');
     frmRbnControl.ConnectMain;
+    DbgLog('START','ConnectMain end')
+  end;
   if cqrini.ReadBool('Window','RbnControl',False) then
     acRbnControl.Execute;
   if cqrini.ReadBool('Window','RBNMonitor',False) then
@@ -1615,12 +1619,15 @@ begin
 
   if cqrini.ReadBool('BandMap', 'Save', False) then
     frmBandMap.LoadBandMapItemsFromFile(dmData.HomeDir+'bandmap.csv');
+  DbgLog('START','LoadSpotSnapshot begin');
   LoadSpotSnapshot;
+  DbgLog('START','LoadSpotSnapshot end, candidates: ' + IntToStr(SpotStore.Count));
   //the graphical band maps of this log, after the bands and the still valid
   //spots are known; the windows read their own settings as they open
   BandMapWindows.OnChanged := @BandMapWindowsChanged;
   BandMapWindows.Restore;
   RebuildBandMapGfxMenu;
+  DbgLog('START','band maps restored: ' + IntToStr(BandMapWindows.Count));
 
   ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);
@@ -1636,6 +1643,7 @@ begin
     RunST('start.sh');
     StartRun := true;
    end;
+  DbgLog('START','NewQSO.LoadSettings end')
 end;
 
 //The shared spot store, so that still valid spots (all bands, all sources) are

@@ -207,7 +207,7 @@ implementation
 {$R *.lfm}
 
 uses Math, LCLType, uColorMemo, dUtils, uMyIni, dData, fNewQSO, fTRXControl,
-     fBandMapGfxFilter;
+     fBandMapGfxFilter, uDebugLog;
 
 type
   { cqrini seen through the model's store interface }
@@ -455,8 +455,10 @@ end;
 
 procedure TfrmBandMapGfx.FormShow(Sender: TObject);
 begin
+  DbgLog('BMAP', Name + ': FormShow begin');
   dmUtils.LoadWindowPosAs(Self, InstanceSection(FInst.Choice), True);
   LoadSettings;
+  DbgLog('BMAP', Name + ': settings loaded');
   FManualPan := False; //reopening always starts following the radio again
   if FVfoKHz <= 0 then
     UseNewQsoFreq; //open on the band the operator is actually on
@@ -488,6 +490,9 @@ begin
 end;
 
 procedure TfrmBandMapGfx.tmrPollTimer(Sender: TObject);
+var
+  t0 : TDateTime;
+  ms : Integer;
 begin
   //With no rig model configured at all SynTRX never runs (its timer is only
   //enabled once a rig initialises), so nothing would ever call SetVfo. Keep
@@ -500,8 +505,13 @@ begin
   //LAN database froze the window for seconds and starved the RBN socket's
   //timer. The rest waits for the next tick; until then the spot is shown.
   FQueryBudget := cMaxLogChecksPerPoll;
+  t0 := Now;
   if FView.Poll(Now, dmUtils.GetDateTime(0)) then
     FDirty := True;
+  ms := Round((Now - t0) * 86400000);
+  if ms > 200 then
+    DbgLog('BMAP', Name + ': Poll took ' + IntToStr(ms) + ' ms, log lookups ' +
+           IntToStr(cMaxLogChecksPerPoll - FQueryBudget) + ', spots ' + IntToStr(FView.Count));
   if FDirty then
   begin
     FDirty := False;
