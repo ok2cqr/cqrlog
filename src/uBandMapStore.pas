@@ -64,6 +64,7 @@ type
       FDeleteSec : Integer;
       FLastCount : Integer;
 
+      FBand       : String;      //'' = every band (the window follows the radio)
       FDateFilter : TBmDateFilter;
       FLastHours  : Integer;
       FSinceDate  : String;
@@ -100,6 +101,7 @@ type
       property DeleteAfterSec : Integer read FDeleteSec write SetDeleteAfterSec;
 
       { the window's filters, applied by Poll }
+      property Band       : String read FBand write FBand;
       property DateFilter : TBmDateFilter read FDateFilter write FDateFilter;
       property LastHours  : Integer read FLastHours write FLastHours;
       property SinceDate  : String  read FSinceDate write FSinceDate;
@@ -210,7 +212,7 @@ begin
       end
   end;
 
-  V := SpotStore.Select('', ANow, F, Rule);
+  V := SpotStore.Select(FBand, ANow, F, Rule);
   if (Length(V) <> Length(FItems)) or (Length(V) <> FLastCount) then
     Result := True;
   SetLength(FItems, Length(V));
