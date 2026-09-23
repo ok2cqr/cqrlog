@@ -210,7 +210,9 @@ begin
   SetState(rcsConnecting, 'Connecting to ' + FHost + ':' + IntToStr(FPort) + ' ...');
   FTelnet.Host := FHost;
   FTelnet.Port := FPort;
-  FTelnet.Connect
+  //lNet resolves the host name here, synchronously
+  FTelnet.Connect;
+  DbgLog('RBN', 'connection: socket opened (name resolved)')
 end;
 
 //Lost or could not be made. Tries again with a growing delay for as long as the
