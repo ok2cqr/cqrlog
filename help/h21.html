@@ -197,6 +197,39 @@ So any time you like you can make it larger and chat lines are there to check.</
 		    <li> Indicator <b>"BM PAUSED!"</b> appears to form name as a note that adding new sports is disabled</li>
 		</ul>
 		<br><b>NOTE:</b> When band map window is active no new calls are added to prevent list scrolling. Select another window to be active to let new calls flow to list.               <br><br>See also <a href="h1.html#bh1">Quick start - Bandmap<a>
+		<br><br>
+		<a name="bh19g"><h3><strong>Graphical band map</strong></h3></a>
+		A graphical band map shows one band as a vertical frequency scale with the spots at their frequency, the
+		radio's frequency as a cursor and, optionally, your CQ frequency. It opens from
+		<b>NewQSO/Window/Band map (graphical, beta)</b>, where the submenu offers <b>Auto (follow VFO)</b> and every
+		band enabled in Preferences/Bands. Choosing an entry that is already open brings that window to the front;
+		otherwise a new window opens. So you can have one map following the radio and others fixed to bands you
+		keep an eye on. The open entries are marked in the menu.
+		<ul>
+		    <li><b>Span</b> combo (or the mouse wheel over the map) sets how much of the band is visible;
+		    drag the map up and down to look elsewhere on the band, the view follows the radio again once the
+		    radio leaves the visible slice.</li>
+		    <li><b>Click</b> a spot to QSY and load the call into New QSO, as with the text band map.
+		    Hover for the frequency and mode in the status bar.</li>
+		    <li><b>M</b> menu: mark, return to and forget <b>my CQ frequency</b>; <b>Band</b> - switch this window
+		    to Auto or to another enabled band (the window keeps its own settings per band); <b>Open another band map</b>;
+		    <b>Filter settings...</b>; <b>Remove all spots</b>; Help.</li>
+		    <li><b>Filter settings</b> of a window: exactly one rule for worked stations - the global band map
+		    filter shared with the text band map, a rule of its own ("hide stations worked in the last N hours" or
+		    "worked after a moment"), or no hiding - plus LoTW/eQSL users only and the mode the radio is on. The
+		    rule in force is always readable in the status bar. It applies the same way to RBN, DX cluster and
+		    manual spots. The answers come from your log through a shared cache, so several windows do not
+		    multiply the queries.</li>
+		</ul>
+		All graphical band maps read the same spots, kept for the "Delete after" time of the Preferences/Bandmap page
+		whether or not any band map window is open. Opening a fixed band map, switching a window to another band or
+		changing its filter shows the spots still valid at once, without waiting for new ones. On exit the spots are
+		saved (~/.config/cqrlog/spots.snapshot) and every window open at that moment is reopened at the next start,
+		with its band, filter, size and position, and with the spots that are still valid - their age and colour
+		continue from the real time of arrival. A window you closed by hand is not reopened. The text band map keeps
+		its own bandmap.csv and is not affected.
+		<br><br>With <b>Show club membership after the callsign</b> in Preferences/Bandmap the clubs the heard station
+		belongs to are shown after its call, see <a href="h1.html#bh1">Bandmap</a>.
     </td>
         <td valign="top">
             <div align="justify"><br><br><br><br>

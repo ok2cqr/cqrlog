@@ -34,9 +34,20 @@
 <p>
  Grayline map has speed button at top right corner that opens a popup menu containing:
    <ul>
-   <li> <b>Connect to RBN</b> If autoconnect is not seleceted, see: <a href="h1.html#ch6">RBN support</a>, the connect and disconnect to RBN can be done here.</li>
-   <li> <b>Link to RBNMonitor</b> This is alternative to RBN connection and will use same connection as RBN monitor window has (if connected).</li>
-   <li> <b>Show statusbar</b> Shows connection or linking state</li>
+   <li> <b>Connect to RBN</b> Makes a connection of the Grayline map's own to the source chosen below
+   (or to the Server/Login from <a href="h1.html#ch6">RBN support</a> when no preset is chosen). Choose it when the
+   map should watch another server than the band maps do. Selecting it again disconnects. "Autoconnect RBN Grayline"
+   in Preferences does this when the window opens.</li>
+   <li> <b>Link to RBNMonitor</b> The shared mode and the usual choice: the map listens to the main RBN connection
+   of the RBN control window, before the global filter, whether or not the RBN monitor window is open.
+   No second connection is made. Linking and an own connection are alternatives, choosing one ends the other.</li>
+   <li> <b>RBN source for "Connect to RBN"</b> The preset the own connection uses, one of the RBN sources edited in the
+   RBN control window, or "Preferences > RBN support" for the Server/Login pair set there. The choice is stored and
+   used on the next Connect to RBN; <b>Edit RBN sources...</b> opens the presets dialog.</li>
+   <li> <b>Show statusbar</b> Shows the connection state: the name of the source and its state for the own connection,
+   or "Linked to RBN monitor" and the state of the main connection. The source is always named because a server
+   that filters its stream shows fewer dots, and nothing in CQRLOG can bring those back. Both connections retry
+   by themselves after a loss (5 s growing to 5 min) and reconnect a session that stays silent for 3 minutes.</li>
    <li> <b>Show ShortPath</b> By default Grayline map will show straight line from your station (from your locator defined) to station you enter to NewQSO/callsign. 
    With this selection you can switch the  straight line to plotted great circle short path. </li>
    <li> <b>Show LongPath</b> As another option you can select great circle longpath. This can be selected with, or without short path.
@@ -45,6 +56,9 @@
    <br><b> Note:</b> Dots also depend on the band, if you change band, dots will always be deleted. All data is band related.</li>
    <li> <b>Watch for</b> Opens an edit window where you can change callsign or prefix watched without opening preferences. see: <a href="h1.html#ch6">RBN support</a></li>
    </ul>
+   <p>The global RBN filter of the RBN control window does not apply to the Grayline map: every spot of the
+   connection is a dot, filtered only by "Watch for". Every arriving spot refreshes its spotter's dot; recalculations
+   in the band maps never do.</p>
 
     <img src="img/h1114d.png"><br><br>
     <img src="img/h11141.png"><br>

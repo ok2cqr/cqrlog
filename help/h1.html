@@ -621,6 +621,20 @@ spots, often hard to 'catch'. Finally, if the <strong>'Delete station from band 
 If such a station is spotted again, it will appear again in the Band Map.
 
 <br><br> You can also set width for frequency and call columns. After change clear is needed to get all lines to have even columns.
+<br><br><strong>Graphical band maps.</strong> Besides the text band map above there are graphical band maps
+(NewQSO/Window/Band map (graphical, beta)): a vertical frequency scale of one band with the spots at their
+frequency and the radio's position marked. You can open several of them at once, one following the radio
+("Auto") and others fixed to a band of your choice. They share the settings on this page (aging, colours,
+"Delete station from band map after QSO", "Show only active mode/band" for the Auto window) and every window
+has a filter of its own for worked stations, LoTW/eQSL users and the current mode. All band maps read the same
+spots, which are kept even while no band map window is open and restored after a restart as long as they are
+still valid.
+<br><br><strong>Show club membership after the callsign</strong> - when checked, the clubs from
+<a href="#ah15">Membership</a> the heard station is a member of are shown after its callsign in every band map,
+e.g. <em>OK1ABC (EPC, SOTA)</em>, using the short names of the clubs. Only clubs looked up by callsign can be
+shown, a club keyed by QTH, award, county or state cannot be told from a spot. The membership is looked up once
+per station and day for all windows together, and again after a club list is updated or imported. Off by
+default; switching it changes the look of all open band maps at once, it does not hide any spot.
 <br><br>See also <a href="h21.html#bh19">Bandmap operation<a>
 <br><br>
 <a name=bh2><h2><strong>xplanet support</strong></h2></a>
@@ -809,35 +823,67 @@ There are no known dependencies issues.<br><br>
     <img src="img/h1112.png"><br><br>
 
     <a name=ch6><h2><strong>RBN support</strong></h2></a>
-    CQRLOG can receive spots from RBN and show them on the Gray line map or RBN monitor (text list). It's very nice to
-    see where your signal has been decoded especially when you are calling CQ on an empty band.
-    <br>RBN support settings for Grayline map is done at Preferences.
-    <br>Setup for RBN monitor (text display) is done at RBN montor (NewQSO/WINDOW/RBN monitor) with toolbuttons.
-    <br>See: <a href="./h31.html">Operation/RBN monitor</a>
+    CQRLOG can receive spots from the Reverse Beacon Network and show them in the RBN monitor
+    (a text list), in the band maps and as dots on the Grayline map. It is very nice to see where
+    your signal has been decoded, especially when you are calling CQ on an empty band.
     <br><br>
-    <img src="img/h1114.png"><br><br>
+    <strong>One connection for everything.</strong> The RBN connection is owned by the small
+    <strong>RBN control</strong> window (NewQSO/Window/RBN control), not by any of the windows that
+    show the spots. The RBN monitor, every band map and (in the linked mode) the Grayline map are
+    only listeners of that one connection: opening or closing them neither connects nor disconnects
+    anything, and there is one socket to the RBN server however many windows are open.
+    See: <a href="./h31.html">Operation/RBN monitor and RBN control</a>
+    <br><br>
     <ul>
-      <li><strong>Login:</strong> - your user name to log in to RBN. It's usually your own callsign.</li>
-      <li><strong>Watch for:</strong> the callsign you are watching for, usually your own callsign but can be any. You can also type in prefix followed by asterisk I.E. OK* etc.
-       If you leave this field empty, every spot will be shown on the grayline map.</li>
-      <li><strong>Signal strength</strong> How strong you are will be clear very quickly when you look
-    at the map with the dots in different colours. Which colour will be used can be set here.</li>
-      <li><strong>After window opens</strong> - check these options if you want to autoconnect
-    to RBN when the Grayline and/or RBN Monitor window opens. If you have closed cqrlog with window(s) open they will open at next program start
-    and so also connection is made.</li>
-    <ul>
-      <li><strong>Autoconnect RBN Grayline</strong> connects Grayline map to RBN.
-      <br>Connection to RBN must be done either here with <strong>Autoconnect RBN Monitor</strong> or <strong>manually</strong> at Grayline window side.</li>
-      <li><strong>Autoconnect RBN Monitor</strong> connects RBN Monitor to RBN site. See: <a href="./h31.html">Operation/RBN monitor</a></li>
-      <li><strong>Link Grayline to RBN Monitor</strong> links Grayline to same connection as RBN Monitor uses. It saves one connection as the same RBN connection can be used for both Grayline dotting and RBN Monitor listing.
-      </li>
-      <strong>Note:</strong> Linking alone does not start Grayline dotting.When linked, Grayline dotting and RBN Monitor listing both uses their own filter settings what call(s) to follow.
-      <br><strong>Note:</strong> "Connect RBN Grayline" and "Link Grayline to RBN Monitor" are alternatives. You can not select both of them at same time.</li>
-    </ul>
-      <li><strong>Delete old information after XX seconds</strong> The dots won't stay on the map forever.
+      <li><strong>RBN sources</strong> are presets (name, server:port, login) kept in the common database,
+    edited from the RBN control window. The public RBN server is <em>telnet.reversebeacon.net:7000</em>;
+    the login is usually your own callsign and no password is needed. On the first start after the upgrade
+    the presets are created from the old server and login settings.</li>
+      <li><strong>Connect to RBN after program starts</strong> - connects the main source when the log opens,
+    whether or not the RBN control or RBN monitor window is restored. With the option off nothing connects
+    by itself; the old "opening the RBN monitor connects" behaviour is still available as
+    <strong>Opening the RBN monitor window connects RBN</strong>.</li>
+      <li><strong>Server, Login</strong> - the pair used by the Grayline map for a connection of its own when no
+    preset is chosen in its popup menu (see below). They are also the values the first RBN presets were made from.</li>
+      <li><strong>Watch for:</strong> the callsign the Grayline map is watching for, usually your own callsign but
+    it can be any. You can also type a prefix followed by an asterisk, e.g. OK*. If you leave this field empty,
+    every spot will be shown on the Grayline map.</li>
+      <li><strong>Signal strength</strong> - the colour of the dots on the Grayline map per signal strength.</li>
+      <li><strong>Delete old information after XX seconds</strong> - the dots do not stay on the map forever.
     180 seconds (3 minutes) is a good default value.
-    <br><strong>Note:</strong> Dots also depend on the band, if you change band, dots will always be deleted. All data is band related.</li>
+    <br><strong>Note:</strong> the dots also depend on the band: if you change band the dots are deleted. All data is band related.</li>
     </ul>
+    <br>
+    <strong>Two kinds of filter.</strong> The <strong>global filter</strong> (the filter button in the RBN control
+    window, the same dialog the RBN monitor used to have) is applied by CQRLOG after the spots arrive: bands,
+    modes, continent of the spotter, countries, callsigns, LoTW/eQSL users, "new one" only and the
+    "worked in the last N hours / after a moment" rule. It changes what the RBN monitor and the band maps show;
+    it never changes what the server sends, so a change is applied at once to the spots still valid, without
+    a reconnect. The Grayline map is <em>not</em> affected by it, it sees every spot as it arrives.
+    <br>Some RBN servers (a private skimmer, a filtered feed) send only part of the traffic. Such a
+    <strong>server side filter</strong> cannot be undone in CQRLOG: the Grayline map shows only what that
+    server sends, which is why its status bar always names the source it is connected to.
+    <br><br>
+    <strong>The Grayline map and RBN.</strong> Its popup menu offers two ways to get spots:
+    <ul>
+      <li><strong>Link to RBNMonitor</strong> - the shared mode: the map listens to the main connection of the
+    RBN control window, before the global filter, whether or not the RBN monitor window is open. No second socket.
+    (This is what the old "Link Grayline to RBN Monitor" option became.)</li>
+      <li><strong>Connect to RBN</strong> - a connection of its own, to the preset chosen under
+    <strong>RBN source for "Connect to RBN"</strong> in the same popup, or to the Server/Login pair above when
+    "Preferences > RBN support" is selected there. Use it when the Grayline map should watch another server than
+    the band maps do. Changing the main source in the RBN control window does not touch this connection and the
+    other way round. (The old "Autoconnect RBN Grayline" option connects this way when the map opens.)</li>
+    </ul>
+    Linking and an own connection are alternatives; choosing one ends the other.
+    <br><br>
+    <strong>Status dot and reconnection.</strong> The RBN control window shows the state of the main connection
+    as a coloured dot (blue = connected, red = connecting or lost and retrying, grey = disconnected by you);
+    the same state is in its title. Hover the dot for the last message of the
+    connection. A lost connection is retried by itself with a growing delay (5, 10, 20 ... up to 300 seconds)
+    to the same server; a session that stays silent for 3 minutes is treated as dead and reconnected, because
+    RBN never pauses. After a manual disconnect nothing reconnects until you connect again. The RBN monitor
+    grid and the band maps keep their spots over a reconnect.
     <br><br>
 
     <a name=ch7><h2><strong>Online log upload support</strong></h2></a>

@@ -156,7 +156,6 @@ type
     SrcCalls : TStringlist;
 
 
-    function  GetModeFromFreq(freq: string): string;
 
     procedure ParkFocus;
     procedure StopRbnThread;
@@ -899,47 +898,6 @@ begin
     end;
 
     sgRbn.Row := sgRbn.RowCount
-  end
-end;
-
-function TfrmRbnMonitor.GetModeFromFreq(freq: string): string;
-var
-  Band: string;
-  eFreq: Currency;
-begin
-  Result := '';
-  if TryStrToCurr(freq,eFreq) then
-    eFreq := eFreq/1000
-  else
-    exit;
-
-  band := dmDXCluster.GetBandFromFreq(freq, True);
-  dmData.qRbnMon.Close;
-  dmData.qRbnMon.SQL.Text := dmSqlRef.SqlBand(band);
-  if dmData.DebugLevel>=1 then Writeln(dmData.qRbnMon.SQL.Text);
-  if dmData.trRbnMon.Active then
-    dmData.trRbnMon.Rollback;
-  dmData.trRbnMon.StartTransaction;
-  try
-    dmData.qRbnMon.Open;
-    if dmData.qRbnMon.RecordCount > 0 then
-    begin
-      if ((eFreq >= dmData.qRbnMon.FieldByName('B_BEGIN').AsCurrency) and
-        (eFreq <= dmData.qRbnMon.FieldByName('CW').AsCurrency)) then
-        Result := 'CW'
-      else
-      begin
-        if ((eFreq > dmData.qRbnMon.FieldByName('RTTY').AsCurrency) and
-          (eFreq <= dmData.qRbnMon.FieldByName('SSB').AsCurrency)) then
-          Result := 'RTTY'
-        else begin
-          Result := 'SSB'
-        end
-      end
-    end
-  finally
-    dmData.qRbnMon.Close;
-    dmData.trRbnMon.Rollback
   end
 end;
 

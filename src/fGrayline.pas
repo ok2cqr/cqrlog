@@ -8,7 +8,7 @@ uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,
   ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,
   lclType, LazFileUtils, StrUtils, DateUtils, Math,
-  uRbnSpotParser, uRbnConnection;
+  uRbnSpotParser, uRbnConnection, dSqlRef;
 
 type
   TRBNList = record
@@ -41,6 +41,7 @@ type
     pumMnuLine2: TMenuItem;
     pumClearAllSpots: TMenuItem;
     pumWatchFor: TMenuItem;
+    pumRbnSource: TMenuItem;
     pumConnect : TMenuItem;
     pumMnuLine1 : TMenuItem;
     pumShowStatusbar : TMenuItem;
@@ -68,15 +69,19 @@ type
     procedure pumShowLongPathClick(Sender: TObject);
     procedure pumShowShortPathClick(Sender: TObject);
     procedure pumWatchForClick(Sender: TObject);
+    procedure pumRbnSourceItemClick(Sender: TObject);
+    procedure pumRbnManageSourcesClick(Sender: TObject);
     procedure sbtnGrayLineClick(Sender : TObject);
     procedure tmrAutoConnectTimer(Sender : TObject);
     procedure tmrGrayLineTimer(Sender: TObject);
     procedure tmrSpotDotsTimer(Sender: TObject);
   private
     //shared mode listens to the main connection (the RBN control window's);
-    //"Connect to RBN" makes a connection of its own from [RBN] Server/login
+    //"Connect to RBN" makes a connection of its own to the preset chosen in
+    //the popup ([RBN] GraylineSourceId), or to [RBN] Server/login when none is
     FOwnConn   : TRbnConnection;
     FListening : TRbnConnection;  //the one AddSpotToList is subscribed to, or nil
+    FOwnName   : String;          //the preset FOwnConn was last connected to
     csRBN : TRTLCriticalSection;
     login      : String;
     delAfter : integer;
@@ -85,6 +90,8 @@ type
     GC_lock  : boolean;
 
     procedure Listen(Conn : TRbnConnection);
+    function  OwnSource(out Source : TRbnSource) : Boolean;
+    procedure FillSourceMenu;
     procedure OnRbnSpot(const Line : String; const Spot : TRbnSpotLine);
     procedure OnRbnState(Sender : TObject);
 
@@ -116,7 +123,7 @@ implementation
 
 { TfrmGrayline }
 
-uses dUtils, dData, uMyIni, dDXCluster, fNewQSO, fRotControl;
+uses dUtils, dData, uMyIni, dDXCluster, fNewQSO, fRotControl, fRbnSources;
 
 //Subscribes to one connection at a time: the main one in shared mode, the own
 //one otherwise. Every spot of it, before any filter of the monitor
@@ -149,7 +156,8 @@ begin
   if FListening = nil then
     rbn_status := 'Disconnected'
   else if FListening = FOwnConn then
-    rbn_status := FOwnConn.Status
+    //the source is named: a server that filters its stream shows fewer dots
+    rbn_status := FOwnName + ': ' + FOwnConn.Status
   else
     rbn_status := 'Linked to RBN monitor: ' + FListening.Status
 end;
@@ -204,32 +212,113 @@ begin
 end;
 
 
+{ The preset "Connect to RBN" uses: the one chosen in the popup, else the
+  legacy [RBN] Server/login pair as a preset of its own. False when there is
+  nothing to connect to (no login). }
+function TfrmGrayline.OwnSource(out Source : TRbnSource) : Boolean;
+var
+  List : TRbnSourceList;
+  i, Id : Integer;
+  tmp  : String;
+begin
+  Source := Default(TRbnSource);
+  Id := cqrini.ReadInteger('RBN','GraylineSourceId',0);
+  if Id > 0 then
+  begin
+    List := dmSqlRef.LoadRbnSources;
+    for i := 0 to High(List) do
+      if List[i].Id = Id then
+      begin
+        Source := List[i];
+        exit(Source.UserName <> '')
+      end
+  end;
+  //no preset chosen (or a deleted one): what Preferences > RBN support says
+  tmp := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');
+  Source.Description := 'Preferences > RBN support';
+  Source.Address     := copy(tmp,1,Pos(':',tmp)-1);
+  if not TryStrToInt(copy(tmp,Pos(':',tmp)+1,5),Source.Port) then
+    Source.Port := 7000;
+  Source.UserName := cqrini.ReadString('RBN','login','');
+  Result := Source.UserName <> ''
+end;
+
 procedure TfrmGrayline.acConnectExecute(Sender : TObject);
 var
-  tmp    : String;
-  server : String;
-  port   : Integer;
+  Src : TRbnSource;
 begin
-  if (cqrini.ReadString('RBN','login','')='') then
-  begin
-    Application.MessageBox('Login to RBN server is not set. Go to Preferences -> RBN support and do the basic settings','Information ...',mb_OK+mb_IconInformation);
-    exit
-  end;
   if (FListening = FOwnConn) and (FOwnConn.State <> rcsDisconnected) then
   begin
     FOwnConn.Disconnect;
     exit
   end;
-  //a connection of its own, to whatever [RBN] Server says; it may differ from
-  //the main source and it does not touch it
+  if not OwnSource(Src) then
+  begin
+    Application.MessageBox('Login to RBN server is not set. Choose an RBN source in this menu or set Preferences -> RBN support','Information ...',mb_OK+mb_IconInformation);
+    exit
+  end;
+  //a connection of its own; it may differ from the main source and it does
+  //not touch it
   SetRbnLink(False);
-  tmp    := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');
-  server := copy(tmp,1,Pos(':',tmp)-1);
-  if not TryStrToInt(copy(tmp,Pos(':',tmp)+1,5),port) then
-    port := 7000;
-  if LocalDbg then Writeln('Server:',server,' Port:',port);
+  if LocalDbg then Writeln('Server:',Src.Address,' Port:',Src.Port);
+  FOwnName := Src.Description;
   Listen(FOwnConn);
-  FOwnConn.Connect(server, port, cqrini.ReadString('RBN','login',''))
+  FOwnConn.Connect(Src.Address, Src.Port, Src.UserName)
+end;
+
+{ the popup's "RBN source" submenu: every preset, the chosen one checked,
+  and a way to the presets dialog. Rebuilt on every popup, the list is short }
+procedure TfrmGrayline.FillSourceMenu;
+var
+  List : TRbnSourceList;
+  i, Id : Integer;
+  m : TMenuItem;
+begin
+  pumRbnSource.Clear;
+  Id := cqrini.ReadInteger('RBN','GraylineSourceId',0);
+  List := dmSqlRef.LoadRbnSources;
+  for i := 0 to High(List) do
+  begin
+    m := TMenuItem.Create(pumRbnSource);
+    m.Caption   := RbnSourceCaption(List[i]);
+    m.Tag       := List[i].Id;
+    m.RadioItem := True;
+    m.Checked   := List[i].Id = Id;
+    m.OnClick   := @pumRbnSourceItemClick;
+    pumRbnSource.Add(m)
+  end;
+  m := TMenuItem.Create(pumRbnSource);
+  m.Caption   := 'Preferences > RBN support (server and login there)';
+  m.Tag       := 0;
+  m.RadioItem := True;
+  m.Checked   := Id = 0;
+  m.OnClick   := @pumRbnSourceItemClick;
+  pumRbnSource.Add(m);
+  m := TMenuItem.Create(pumRbnSource);
+  m.Caption := '-';
+  pumRbnSource.Add(m);
+  m := TMenuItem.Create(pumRbnSource);
+  m.Caption := 'Edit RBN sources...';
+  m.OnClick := @pumRbnManageSourcesClick;
+  pumRbnSource.Add(m)
+end;
+
+procedure TfrmGrayline.pumRbnSourceItemClick(Sender: TObject);
+begin
+  //stored only; a running own connection keeps its server until the user
+  //reconnects, the same as the RBN control window does with the main source
+  cqrini.WriteInteger('RBN','GraylineSourceId',TMenuItem(Sender).Tag)
+end;
+
+procedure TfrmGrayline.pumRbnManageSourcesClick(Sender: TObject);
+begin
+  with TfrmRbnSources.Create(self) do
+  try
+    SelectedId := cqrini.ReadInteger('RBN','GraylineSourceId',0);
+    ShowModal
+  finally
+    Free
+  end
 end;
 
 procedure TfrmGrayline.acLinkToRbnMonitorExecute(Sender: TObject);
@@ -365,6 +454,7 @@ procedure TfrmGrayline.popGrayLinePopup(Sender: TObject);
 begin
    watchFor := cqrini.ReadString('RBN','watch','');
    pumWatchFor.Caption:='Watch for: '+watchFor;
+   FillSourceMenu
 end;
 
 procedure TfrmGrayline.pumClearAllSpotsClick(Sender: TObject);

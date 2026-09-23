@@ -190,6 +190,9 @@ object frmGrayline: TfrmGrayline
     object pumLinkToRBNMonitor: TMenuItem
       Action = acLinkToRbnMonitor
     end
+    object pumRbnSource: TMenuItem
+      Caption = 'RBN source for "Connect to RBN"'
+    end
     object pumMnuLine1: TMenuItem
       Caption = '-'
     end

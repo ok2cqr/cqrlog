@@ -29,30 +29,53 @@
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align="center"><img src=img/line.png></p>
-<h3>RBN monitor</h3>
-<p> RBN monitor window opens from NewQSO/Window/RBN monitor.</p>
+<h3>RBN monitor and RBN control</h3>
+<p>The RBN control window opens from NewQSO/Window/RBN control, the RBN monitor from NewQSO/Window/RBN monitor.</p>
+
+<h4>RBN control</h4>
+<p>The small window that owns the connection to the Reverse Beacon Network. Everything that shows RBN
+spots - the RBN monitor, the band maps and the linked Grayline map - listens to this one connection,
+so there is one socket to the server no matter how many windows are open, and closing any of them
+changes nothing about the connection. From left to right:</p>
+<ul>
+<li><strong>Source</strong> - the main RBN source, chosen from the presets (name, server:port, login).
+Changing it while connected takes effect on the next connect; the spots of the old source are dropped
+from the band maps.</li>
+<li><strong>Edit RBN sources</strong> - add, edit and delete the presets. The public server is
+<em>telnet.reversebeacon.net:7000</em>, the login is usually your callsign, there is no password.</li>
+<li><strong>Connect / Disconnect</strong> - the main connection. A lost connection is retried by itself
+with a growing delay up to 5 minutes, a connection that stays silent for 3 minutes is reconnected; a manual
+disconnect stops all of that until you connect again.</li>
+<li><strong>Status dot</strong> - blue connected, red connecting or retrying after a loss, grey disconnected.
+Its tooltip is the last message of the connection; the window title says the same.</li>
+<li><strong>Global filter</strong> - the RBN filter criteria (see below).</li>
+<li><strong>Show spot counts</strong> - a status bar with the number of spots received and passed.</li>
+</ul>
+<p>Closing the RBN control window does not disconnect. "Connect to RBN after program starts" in
+Preferences/RBN support connects the main source when the log opens.</p>
+
+<h4>RBN monitor</h4>
 <table border="0" cellpadding="5" cellspacing="2" width="100%">
 <tbody>
-
 <tr>
   <td>
       Grid cells for DX heard:
-    <ul> 
+    <ul>
     <li>Source callsign for info</li>
     <li>Frequency</li>
     <li>Callsign</li>
     <li>Mode</li>
-    <li>Singnal streght</li>
-    <li>Is DX Lotw or/and Eqsl user</li>
-    <li>DX status against your log: New county, new Band, new Mode</li>
+    <li>Signal strength</li>
+    <li>Is DX LoTW or/and eQSL user</li>
+    <li>DX status against your log: New country, new Band, new Mode</li>
     </ul>
   </td>
   <td>
       Tool buttons from left to right are:
    <ul>
-   <li> Connect to RBN</li>
-   <li> Set RBN connect address and username</li>
-   <li> Set Filter criteria</li>
+   <li> Connect to RBN (connects the main source, the same as in the RBN control window)</li>
+   <li> Change RBN server address (opens the RBN control window)</li>
+   <li> Set Filter criteria (the global filter, shared with the band maps)</li>
    <li> Set Font for RBN grid</li>
    <li> Go to last line</li>
    <li> Clear RBN grid</li>
@@ -66,26 +89,32 @@
 </tr>
 </tbody>
 </table>
-</p>
 <p>If any column in any RBN spot row is clicked scrolling is paused to enable better study of spot.
  If tool button "Go to last line" is pressed, or if focus is moved to another form than RBN monitor,
-  display scrolling is again released. Double click on any column of RBN spot row will take the DX callsign of that row to New QSO and move rig frequency to DX frequency (if rig CAT is used). That also releases display scrolling  again.
-</p><p> With other tool buttons you can:
-<br>Set RBN address to connect and username to use.
-<br><br><img src="img/h31-2.png"><br></p>
-<p> Set filter criteria for RBN
-<br><br><img src="img/h31-3.png"><br></p>
-<p> Set font for RBN grid
-<br><br><img src="img/h31-4.png"><br></p>
+  display scrolling is again released. Double click on any column of RBN spot row will take the DX callsign of that row to New QSO and move rig frequency to DX frequency (if rig CAT is used). That also releases display scrolling again.
+</p>
+<p>The monitor is only a listener: closing it stops its list, not the connection, and it never filters
+anything for the other windows.</p>
+
+<h4>The global RBN filter</h4>
+<p><img src="img/h31-3.png"><br></p>
+<p>The filter is applied by CQRLOG to the spots after they arrive and it is shared by the RBN monitor and
+all band maps. It has the DX station side (callsigns, "ignore worked in the last N hours on the same band
+and mode" or "ignore worked after a moment", LoTW/eQSL users only, new one/band/mode only), the spotter side
+(continent, callsign) and bands, modes and countries. The "worked" rule is answered from your log through a
+shared cache, so many windows do not multiply the database queries. A change is applied at once to the
+spots still valid, without a reconnect. The Grayline map is not affected by this filter.</p>
+<p>What the server itself does not send (a private skimmer, a filtered feed) cannot be brought back by
+this filter; that is a property of the source, not of CQRLOG.</p>
 
 <h4>Sending RBN spots to the band map</h4>
 <p>Right click anywhere in the RBN monitor window (on the grid or on the toolbar) to open a menu
-with <strong>Send spots to band map</strong>. When it is checked, every spot that passes your RBN
-filter is also placed into the band map, next to the spots coming from the DX cluster.
+with <strong>Send spots to band map</strong>. When it is checked, every spot that passes the global RBN
+filter is also placed into the band maps, next to the spots coming from the DX cluster.
 The setting is remembered between sessions and takes effect immediately, there is no need to
 reconnect to the RBN server.</p>
-<p><strong>The band map window has to be open.</strong> While it is closed no RBN spots are sent to
-it, they only appear in the RBN grid.</p>
+<p>The graphical band maps collect the spots whether or not a band map window is open, so a band map
+opened later shows the spots that are still valid. The text band map only receives spots while it is open.</p>
 <p>RBN entries are drawn in a single colour, which you can change in
 <strong>Preferences/Bandmap/Color</strong> - "Select color of entry added from RBN monitor".
 They are deliberately not coloured by DXCC status the way DX cluster spots can be: RBN traffic
@@ -93,11 +122,6 @@ volume is much higher, and the flat colour also makes it easy to tell machine de
 spots (which can carry busted callsigns) apart from spots sent by humans. If the same station is
 already in the band map from the DX cluster, the RBN spot updates that entry instead of adding a
 duplicate.</p>
-
-
-
-
-
 
 <p align="center"><img src=img/line.png></p>
 <br>
