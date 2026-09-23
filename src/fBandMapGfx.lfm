@@ -5,7 +5,7 @@ object frmBandMapGfx: TfrmBandMapGfx
   Width = 300
   HelpType = htKeyword
   HelpKeyword = 'help/h21.html#bh19'
-  Caption = 'Band map (graphical)'
+  Caption = 'Band map'
   ClientHeight = 560
   ClientWidth = 300
   KeyPreview = True

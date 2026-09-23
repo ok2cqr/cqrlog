@@ -29,7 +29,6 @@ type
     destructor Destroy; override;
     function  ReadString(const Section, Key, Default : String; ALocal : Boolean = False) : String; override;
     procedure WriteString(const Section, Key, Value : String; ALocal : Boolean = False); override;
-    procedure DeleteSection(const Section : String); override;
   end;
 
   TBandMapLayoutTest = class(TTestCase)
@@ -88,16 +87,6 @@ begin
     Local.Values[Section+'|'+Key] := Value
   else
     Main.Values[Section+'|'+Key] := Value
-end;
-
-procedure TMemStore.DeleteSection(const Section : String);
-var
-  i : Integer;
-begin
-  for i := Main.Count-1 downto 0 do
-    if Pos(Section+'|', Main[i]) = 1 then Main.Delete(i);
-  for i := Local.Count-1 downto 0 do
-    if Pos(Section+'|', Local[i]) = 1 then Local.Delete(i)
 end;
 
 procedure TBandMapLayoutTest.SetUp;

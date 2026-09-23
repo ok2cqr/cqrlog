@@ -3,15 +3,15 @@ unit fBandMapGfx;
 { Graphical band map - a vertical frequency ruler with spots drawn at their
   true frequency, a live VFO cursor and click-to-QSY.
 
-  This is a second, additional band map window. It does not replace or touch
-  fBandMap in any way: it keeps its own spot store (uBandMapStore), its own
-  visibility gate and its own zoom setting, so the text band map can be used
-  side by side as the reference.
+  There can be several of these windows at once: one that follows the VFO
+  (Auto) and one per fixed band, all reading the same shared spot store
+  (uSpotStore via uBandMapStore) through their own view. Which band a window
+  shows, its zoom, viewport and filter are its own (uBandMapLayout), saved
+  under BandMapGfx.<key>; BandMapWindows below creates, finds and restores
+  the windows and is the only thing the rest of the application talks to.
 
-  Filtering shares the classic band map's dialog and its ini keys, so both
-  windows hide the same spots. Not implemented here on purpose (see the
-  CHANGELOG entry): xplanet export and bandmap.csv persistence. Those stay with
-  the text band map. }
+  The text band map (fBandMap) is untouched and stays a singleton. Not
+  implemented here on purpose: xplanet export and bandmap.csv persistence. }
 
 {$mode objfpc}{$H+}
 
@@ -19,7 +19,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, ExtCtrls, StdCtrls, Buttons,
-  ComCtrls, Menus, Types, uBandMapStore;
+  ComCtrls, Menus, Types, uBandMapStore, uBandMapLayout;
 
 type
   { What was drawn where, rebuilt at the end of every paint. Call/Mode/Freq are
@@ -68,6 +68,10 @@ type
     FPaintBox  : TPaintBox;
     FHits      : array of TSpotHit;
 
+    FView      : TBandMapStore;     //this window's view of the shared store
+    FInst      : TBandMapInstance;  //choice, viewport and filter, as saved
+    FTitleBand : String;            //band named in the caption right now
+
     FSpanIndex : Integer;
     FSpanKHz   : Integer;   //total visible span in kHz
     FCenterKHz : Double;    //sticky viewport centre
@@ -114,6 +118,9 @@ type
     function  SpotVisible(const ASpot : TGfxSpot) : Boolean;
     function  IsWorked(const ACall, ABand, AMode, ALastDate, ALastTime : String) : Boolean;
     procedure UpdateFilterIndicator;
+    function  ShownBand : String;
+    function  BandLimitsOf(const ABand : String; out ALoKHz, AHiKHz : Double) : Boolean;
+    procedure UpdateTitle;
 
     procedure DrawOutOfBand(c : TCanvas);
     procedure DrawRuler(c : TCanvas);
@@ -133,19 +140,73 @@ type
     procedure PaintBoxWheelDown(Sender: TObject; Shift: TShiftState;
                                 MousePos: TPoint; var Handled: Boolean);
   public
+    constructor CreateInstance(const AChoice : TBandMapChoice);
+    destructor  Destroy; override;
     procedure LoadSettings;
+    //viewport and filter to the ini; the window position goes with FormClose
+    procedure SaveInstanceSettings;
     //fed from TfrmTRXControl.SynTRX, main thread, freq in kHz (txlo corrected)
     procedure SetVfo(const ABand : String; AFreqKHz : Double; const AMode : String);
+    function  Choice : TBandMapChoice;
+  end;
+
+  { All open graphical band maps. Windows are created here and owned by
+    nobody (Owner = nil) so that their streamed name cannot collide in
+    Application; they free themselves on close and tell the manager. }
+  TBandMapWindows = class
+    private
+      FList         : TList;
+      FShuttingDown : Boolean;
+      FKeptKeys     : TStringList; //saved choices that could not be opened
+      function  EnabledBands : TStringArray;
+    public
+      constructor Create;
+      destructor  Destroy; override;
+      function  Count : Integer;
+      function  Item(AIndex : Integer) : TfrmBandMapGfx;
+      function  Find(const AChoice : TBandMapChoice) : TfrmBandMapGfx;
+      //an open window is brought to the front, otherwise one is created
+      function  Open(const AChoice : TBandMapChoice) : TfrmBandMapGfx;
+      procedure Detach(AWindow : TfrmBandMapGfx);
+      procedure SetVfo(const ABand : String; AFreqKHz : Double; const AMode : String);
+      procedure ReloadSettings;
+      procedure BringAllToFront;
+      //[BandMapGfx] Open from what is open right now
+      procedure SaveOpenList;
+      //after the log is open: migrate the single old window, reopen the list
+      procedure Restore;
+      //application exit or log switch: the list first, then every window
+      procedure CloseAll;
   end;
 
 var
-  frmBandMapGfx: TfrmBandMapGfx;
+  BandMapWindows : TBandMapWindows;
 
 implementation
 {$R *.lfm}
 
 uses Math, LCLType, uColorMemo, dUtils, uMyIni, dData, fNewQSO, fTRXControl,
      fBandMap, fBandMapFilter;
+
+type
+  { cqrini seen through the model's store interface }
+  TCqrIniStore = class(TBandMapSettingsStore)
+    function  ReadString(const Section, Key, Default : String; ALocal : Boolean = False) : String; override;
+    procedure WriteString(const Section, Key, Value : String; ALocal : Boolean = False); override;
+  end;
+
+var
+  IniStore : TCqrIniStore;
+
+function TCqrIniStore.ReadString(const Section, Key, Default : String; ALocal : Boolean) : String;
+begin
+  Result := cqrini.ReadString(Section, Key, Default, ALocal)
+end;
+
+procedure TCqrIniStore.WriteString(const Section, Key, Value : String; ALocal : Boolean);
+begin
+  cqrini.WriteString(Section, Key, Value, ALocal)
+end;
 
 const
   //the wide steps are for bands a 200 kHz view cannot cover - 20 m is 350 kHz,
@@ -211,10 +272,31 @@ end;
 
 { TfrmBandMapGfx }
 
+constructor TfrmBandMapGfx.CreateInstance(const AChoice : TBandMapChoice);
+begin
+  FInst := Default(TBandMapInstance);
+  FInst.Choice := AChoice;
+  inherited Create(nil);
+  //one name per choice, so a debug print or the LCL can tell them apart
+  Name := 'frmBandMapGfx_' + ChoiceKey(AChoice)
+end;
+
+destructor TfrmBandMapGfx.Destroy;
+begin
+  FreeAndNil(FView);
+  inherited Destroy
+end;
+
+function TfrmBandMapGfx.Choice : TBandMapChoice;
+begin
+  Result := FInst.Choice
+end;
+
 procedure TfrmBandMapGfx.FormCreate(Sender: TObject);
 var
   i : Integer;
 begin
+  FView := TBandMapStore.Create;
   //no cqrini/dmData access here - this runs from Application.CreateForm, before
   //the database (and therefore cqrini) exists. Settings live in LoadSettings.
   {$IFNDEF LCLCocoa}
@@ -261,32 +343,50 @@ begin
   dmUtils.LoadFontSettings(self);
 
   //aging is shared with the text band map on purpose - one place to tune it
-  BandMapStore.FirstAgingSec  := cqrini.ReadInteger('BandMap','FirstAging',5)*60;
-  BandMapStore.SecondAgingSec := cqrini.ReadInteger('BandMap','SecondAging',8)*60;
-  BandMapStore.DeleteAfterSec := cqrini.ReadInteger('BandMap','Disep',12)*60;
+  FView.FirstAgingSec  := cqrini.ReadInteger('BandMap','FirstAging',5)*60;
+  FView.SecondAgingSec := cqrini.ReadInteger('BandMap','SecondAging',8)*60;
+  FView.DeleteAfterSec := cqrini.ReadInteger('BandMap','Disep',12)*60;
   BandMapStoreDebug := dmData.DebugLevel >= 1;
 
-  //the filter dialog is the very same one the classic band map uses, and so
-  //are the ini keys - one filter, both windows behave alike
-  FOnlyCurrBand := cqrini.ReadBool('BandMap','OnlyActiveBand',False);
-  FOnlyCurrMode := cqrini.ReadBool('BandMap','OnlyActiveMode',False);
+  FInst := LoadInstance(IniStore, FInst.Choice, cSpans[cDefaultSpanIndex]);
 
-  BandMapStore.DateFilter := bmdShowAll;
-  if cqrini.ReadBool('BandMapFilter','NoWkdHour',False) then
-    BandMapStore.DateFilter := bmdLastHours;
-  if cqrini.ReadBool('BandMapFilter','NoWkdDate',False) then
-    BandMapStore.DateFilter := bmdSinceDateTime;
+  //"only the active band" is the text band map's option and only means
+  //something while following the radio; a fixed window is its band
+  FOnlyCurrBand := FInst.Choice.IsAuto and cqrini.ReadBool('BandMap','OnlyActiveBand',False);
+  FOnlyCurrMode := FInst.OnlyCurrMode;
 
-  BandMapStore.LastHours := cqrini.ReadInteger('BandMapFilter','LastHours',48);
-  BandMapStore.SinceDate := cqrini.ReadString('BandMapFilter','LastDate','');
-  BandMapStore.SinceTime := cqrini.ReadString('BandMapFilter','LastTime','');
-  BandMapStore.OnlyLoTW  := cqrini.ReadBool('BandMapFilter','OnlyLoTW',False);
-  BandMapStore.OnlyEQSL  := cqrini.ReadBool('BandMapFilter','OnlyeQSL',False);
-  BandMapStore.OnWorkedCheck := @IsWorked;
+  //one QSO rule, never two stacked: the shared [BandMapFilter] keys of the
+  //text band map, this window's own copy, or none
+  FView.DateFilter := bmdShowAll;
+  case FInst.QsoRule of
+    qrGlobal :
+      begin
+        if cqrini.ReadBool('BandMapFilter','NoWkdHour',False) then
+          FView.DateFilter := bmdLastHours;
+        if cqrini.ReadBool('BandMapFilter','NoWkdDate',False) then
+          FView.DateFilter := bmdSinceDateTime;
+        FView.LastHours := cqrini.ReadInteger('BandMapFilter','LastHours',48);
+        FView.SinceDate := cqrini.ReadString('BandMapFilter','LastDate','');
+        FView.SinceTime := cqrini.ReadString('BandMapFilter','LastTime','')
+      end;
+    qrCustom :
+      begin
+        if FInst.UseLastHours then
+          FView.DateFilter := bmdLastHours
+        else
+          FView.DateFilter := bmdSinceDateTime;
+        FView.LastHours := FInst.LastHours;
+        FView.SinceDate := FInst.SinceDate;
+        FView.SinceTime := FInst.SinceTime
+      end
+  end;
+  FView.OnlyLoTW := FInst.OnlyLoTW;
+  FView.OnlyEQSL := FInst.OnlyEQSL;
+  FView.OnWorkedCheck := @IsWorked;
 
   UpdateFilterIndicator;
 
-  sp := cqrini.ReadInteger('BandMapGfx','SpanKHz',cSpans[cDefaultSpanIndex]);
+  sp := FInst.SpanKHz;
   FSpanIndex := cDefaultSpanIndex;
   for i:=0 to High(cSpans) do
   begin
@@ -310,13 +410,28 @@ begin
     f.Free
   end;
 
+  //the saved viewport, once: later LoadSettings calls (filter changed) must
+  //not yank the map back
+  if (FCenterKHz <= 0) and (FInst.CenterKHz > 0) then
+    FCenterKHz := FInst.CenterKHz;
+
+  UpdateTitle;
   FDirty := True;
   FPaintBox.Invalidate
 end;
 
+procedure TfrmBandMapGfx.SaveInstanceSettings;
+begin
+  if dmData.DBName = '' then
+    exit; //no log open, cqrini would write into nothing
+  FInst.SpanKHz   := FSpanKHz;
+  FInst.CenterKHz := FCenterKHz;
+  SaveInstance(IniStore, FInst)
+end;
+
 procedure TfrmBandMapGfx.FormShow(Sender: TObject);
 begin
-  dmUtils.LoadWindowPos(frmBandMapGfx);
+  dmUtils.LoadWindowPosAs(Self, InstanceSection(FInst.Choice));
   LoadSettings;
   FManualPan := False; //reopening always starts following the radio again
   if FVfoKHz <= 0 then
@@ -329,11 +444,14 @@ end;
 
 procedure TfrmBandMapGfx.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  dmUtils.SaveWindowPos(frmBandMapGfx);
-  cqrini.WriteInteger('BandMapGfx','SpanKHz',FSpanKHz);
-  tmrPoll.Enabled      := False
-  //the shared store keeps collecting while the window is hidden, so opening it
+  tmrPoll.Enabled := False;
+  dmUtils.SaveWindowPosAs(Self, InstanceSection(FInst.Choice));
+  SaveInstanceSettings;
+  //the shared store keeps collecting while no window is open, so opening one
   //again shows what arrived meanwhile
+  CloseAction := caFree;
+  if Assigned(BandMapWindows) then
+    BandMapWindows.Detach(Self)
 end;
 
 procedure TfrmBandMapGfx.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -353,7 +471,7 @@ begin
   if (FVfoKHz <= 0) or FVfoFromQso then
     UseNewQsoFreq;
 
-  if BandMapStore.Poll(Now, dmUtils.GetDateTime(0)) then
+  if FView.Poll(Now, dmUtils.GetDateTime(0)) then
     FDirty := True;
   if FDirty then
   begin
@@ -372,7 +490,9 @@ begin
      and (AFromQso = FVfoFromQso) then
     exit; //parked radio must not cost a single repaint
 
-  if AFreqKHz > 0 then
+  //a fixed window shows its band whatever the radio does; the cursor still
+  //follows so it can be drawn when the radio comes to this band
+  if (AFreqKHz > 0) and (FInst.Choice.IsAuto or (ABand = FInst.Choice.Band)) then
   begin
     if FManualPan then
     begin
@@ -399,7 +519,45 @@ begin
   FVfoBand    := ABand;
   FVfoMode    := AMode;
   FVfoFromQso := AFromQso;
+  UpdateTitle;
   FDirty      := True //no Invalidate here, the poll timer coalesces
+end;
+
+{ the band this window is on: its own for a fixed window, the radio's for Auto }
+function TfrmBandMapGfx.ShownBand : String;
+begin
+  if FInst.Choice.IsAuto then
+    Result := FVfoBand
+  else
+    Result := FInst.Choice.Band
+end;
+
+procedure TfrmBandMapGfx.UpdateTitle;
+begin
+  if (Caption <> '') and (FTitleBand = ShownBand) then
+    exit;
+  FTitleBand := ShownBand;
+  Caption := ChoiceTitle(FInst.Choice, FTitleBand)
+end;
+
+{ Edges of the band named ABand (a code from the band table, '20M'), in kHz.
+  False when the table does not have it, or has not been read yet. }
+function TfrmBandMapGfx.BandLimitsOf(const ABand : String; out ALoKHz, AHiKHz : Double) : Boolean;
+var
+  i : Integer;
+begin
+  Result := False;
+  ALoKHz := 0;
+  AHiKHz := 0;
+  for i:=0 to cMaxBandsCount-1 do
+  begin
+    if (dmUtils.BandFreq[i].b_end > 0) and (dmUtils.BandFreq[i].band = ABand) then
+    begin
+      ALoKHz := dmUtils.BandFreq[i].b_begin*1000;
+      AHiKHz := dmUtils.BandFreq[i].b_end*1000;
+      exit(True)
+    end
+  end
 end;
 
 { Frequency typed into the New QSO window, used whenever the radio has none.
@@ -445,9 +603,24 @@ begin
 end;
 
 procedure TfrmBandMapGfx.EnsureCenter;
+var
+  lo,hi : Double;
 begin
   if FCenterKHz > 0 then
     exit;
+  if not FInst.Choice.IsAuto then
+  begin
+    //the fixed band, whatever the radio is doing: the saved centre if it is
+    //still inside, otherwise the middle of the band
+    if BandLimitsOf(FInst.Choice.Band,lo,hi) then
+    begin
+      if (FInst.CenterKHz >= lo) and (FInst.CenterKHz <= hi) then
+        FCenterKHz := FInst.CenterKHz
+      else
+        FCenterKHz := (lo+hi)/2;
+      exit
+    end
+  end;
   if FVfoKHz > 0 then
     FCenterKHz := FVfoKHz
   else
@@ -486,14 +659,20 @@ procedure TfrmBandMapGfx.ClampToBand;
 var
   lo,hi,ref : Double;
 begin
-  //anchor on the radio, not on the possibly dragged-away centre, so panning
-  //cannot wander off into the next band
-  ref := FVfoKHz;
-  if ref <= 0 then
-    ref := FCenterKHz;
-
-  if not BandLimits(ref,lo,hi) then
-    exit; //outside every band, or no band table yet - leave the view alone
+  if FInst.Choice.IsAuto then
+  begin
+    //anchor on the radio, not on the possibly dragged-away centre, so panning
+    //cannot wander off into the next band
+    ref := FVfoKHz;
+    if ref <= 0 then
+      ref := FCenterKHz;
+    if not BandLimits(ref,lo,hi) then
+      exit //outside every band, or no band table yet - leave the view alone
+  end
+  else begin
+    if not BandLimitsOf(FInst.Choice.Band,lo,hi) then
+      exit
+  end;
 
   lo := lo - cBandEdgeMarginKHz;
   hi := hi + cBandEdgeMarginKHz;
@@ -542,9 +721,10 @@ begin
   if cmbSpan.ItemIndex <> FSpanIndex then
     cmbSpan.ItemIndex := FSpanIndex;
   //zoom around wherever the operator is looking, not back at the radio
-  if (FVfoKHz > 0) and (not FManualPan) then
+  if (FVfoKHz > 0) and (not FManualPan) and (FInst.Choice.IsAuto or (FVfoBand = FInst.Choice.Band)) then
     FCenterKHz := FVfoKHz;
 
+  SaveInstanceSettings;
   FDirty := True;
   FPaintBox.Invalidate;
   ParkFocus
@@ -638,8 +818,8 @@ procedure TfrmBandMapGfx.UpdateFilterIndicator;
 var
   filtered : Boolean;
 begin
-  filtered := FOnlyCurrBand or FOnlyCurrMode or BandMapStore.OnlyLoTW
-              or BandMapStore.OnlyEQSL or (BandMapStore.DateFilter <> bmdShowAll);
+  filtered := FOnlyCurrBand or FOnlyCurrMode or FView.OnlyLoTW
+              or FView.OnlyEQSL or (FView.DateFilter <> bmdShowAll);
 
   //Spots disappearing for no visible reason is confusing, and the filter now
   //lives inside the menu where it cannot be seen. So the state has to show on
@@ -675,7 +855,8 @@ end;
 
 procedure TfrmBandMapGfx.pumClearMapClick(Sender: TObject);
 begin
-  BandMapStore.Clear;
+  //one store for every window, so this empties all of them
+  FView.Clear;
   FDirty := True;
   FPaintBox.Invalidate;
   ParkFocus
@@ -694,7 +875,12 @@ function TfrmBandMapGfx.SpotVisible(const ASpot : TGfxSpot) : Boolean;
 begin
   Result := True;
 
-  if FOnlyCurrBand and (FVfoBand <> '') then
+  if not FInst.Choice.IsAuto then
+  begin
+    if ASpot.Band <> FInst.Choice.Band then
+      exit(False)
+  end
+  else if FOnlyCurrBand and (FVfoBand <> '') then
   begin
     if ASpot.Band <> FVfoBand then
       exit(False)
@@ -979,9 +1165,9 @@ begin
   cLead      := BlendColor(clWindowText,clWindow,60);
 
   //the store is kept sorted by frequency, so this walks the plot top down
-  for i:=0 to BandMapStore.Count-1 do
+  for i:=0 to FView.Count-1 do
   begin
-    sp := BandMapStore.Item(i);
+    sp := FView.Item(i);
     if (sp.Freq < FTopKHz-1) or (sp.Freq > FTopKHz+FSpanKHz+1) then
       Continue;
     if not SpotVisible(sp) then
@@ -1096,6 +1282,11 @@ var
   cv   : TColor;
   s    : String;
 begin
+  //a fixed window draws the cursor only while the radio is on its band; the
+  //"no frequency" note belongs to the window that follows the radio
+  if (not FInst.Choice.IsAuto) and ((FVfoKHz <= 0) or (FVfoBand <> FInst.Choice.Band)) then
+    exit;
+
   if FVfoKHz <= 0 then
   begin
     s := 'No rig frequency';
@@ -1129,5 +1320,184 @@ begin
   c.Font.Color  := TcolorMemo.ReadableTextColor(clWindow,cv);
   c.TextOut(FRulerW-2-c.TextWidth(s),y-th div 2,s)
 end;
+
+{ TBandMapWindows }
+
+constructor TBandMapWindows.Create;
+begin
+  inherited Create;
+  FList     := TList.Create;
+  FKeptKeys := TStringList.Create
+end;
+
+destructor TBandMapWindows.Destroy;
+var
+  i : Integer;
+begin
+  FShuttingDown := True;
+  for i := FList.Count-1 downto 0 do
+    TfrmBandMapGfx(FList[i]).Free;
+  FList.Free;
+  FKeptKeys.Free;
+  inherited Destroy
+end;
+
+function TBandMapWindows.Count : Integer;
+begin
+  Result := FList.Count
+end;
+
+function TBandMapWindows.Item(AIndex : Integer) : TfrmBandMapGfx;
+begin
+  Result := TfrmBandMapGfx(FList[AIndex])
+end;
+
+function TBandMapWindows.Find(const AChoice : TBandMapChoice) : TfrmBandMapGfx;
+var
+  i : Integer;
+begin
+  for i := 0 to FList.Count-1 do
+    if SameChoice(Item(i).Choice, AChoice) then
+      exit(Item(i));
+  Result := nil
+end;
+
+function TBandMapWindows.Open(const AChoice : TBandMapChoice) : TfrmBandMapGfx;
+begin
+  Result := Find(AChoice);
+  if Result = nil then
+  begin
+    Result := TfrmBandMapGfx.CreateInstance(AChoice);
+    FList.Add(Result);
+    //settings are read in FormShow, once cqrini exists
+    Result.Show;
+    if not FShuttingDown then
+      SaveOpenList
+  end
+  else begin
+    Result.Show;
+    Result.BringToFront
+  end
+end;
+
+procedure TBandMapWindows.Detach(AWindow : TfrmBandMapGfx);
+begin
+  FList.Remove(AWindow);
+  //closed by the user: it stays closed after a restart. Closed because the
+  //program or the log is going down: the list was taken before that
+  if not FShuttingDown then
+    SaveOpenList
+end;
+
+procedure TBandMapWindows.SetVfo(const ABand : String; AFreqKHz : Double; const AMode : String);
+var
+  i : Integer;
+begin
+  for i := 0 to FList.Count-1 do
+    Item(i).SetVfo(ABand, AFreqKHz, AMode)
+end;
+
+procedure TBandMapWindows.ReloadSettings;
+var
+  i : Integer;
+begin
+  for i := 0 to FList.Count-1 do
+    Item(i).LoadSettings
+end;
+
+procedure TBandMapWindows.BringAllToFront;
+var
+  i : Integer;
+begin
+  for i := 0 to FList.Count-1 do
+    if Item(i).Showing then
+      Item(i).BringToFront
+end;
+
+procedure TBandMapWindows.SaveOpenList;
+var
+  keys : TStringArray;
+  i    : Integer;
+begin
+  if dmData.DBName = '' then
+    exit;
+  keys := nil;
+  for i := 0 to FList.Count-1 do
+  begin
+    SetLength(keys, Length(keys)+1);
+    keys[High(keys)] := ChoiceKey(Item(i).Choice)
+  end;
+  //choices that could not be opened (band disabled) are kept, not dropped
+  for i := 0 to FKeptKeys.Count-1 do
+  begin
+    SetLength(keys, Length(keys)+1);
+    keys[High(keys)] := FKeptKeys[i]
+  end;
+  WriteOpenList(IniStore, keys)
+end;
+
+function TBandMapWindows.EnabledBands : TStringArray;
+var
+  i : Integer;
+begin
+  Result := nil;
+  for i := 0 to cMaxBandsCount-1 do
+  begin
+    if dmUtils.MyBands[i][0] = '' then
+      break;
+    SetLength(Result, Length(Result)+1);
+    Result[High(Result)] := dmUtils.MyBands[i][0]
+  end
+end;
+
+procedure TBandMapWindows.Restore;
+var
+  keys : TStringArray;
+  k    : String;
+  c,e  : TBandMapChoice;
+  w    : TfrmBandMapGfx;
+begin
+  FKeptKeys.Clear;
+  MigrateLegacyLayout(IniStore, cqrini.LocalOnly('WindowSize'));
+  keys := ReadOpenList(IniStore);
+  for k in keys do
+  begin
+    if not ParseChoiceKey(k, c) then
+      Continue;
+    if ResolveChoice(c, EnabledBands, e) then
+      Open(c)
+    else begin
+      //the band was disabled in Preferences > Bands since: show Auto instead
+      //and say so, but keep the saved choice for when it is enabled again
+      FKeptKeys.Add(k);
+      w := Open(e);
+      w.sbStatus.Panels[0].Text := BandLabel(c.Band)+' is disabled in Preferences > Bands, following the VFO instead'
+    end
+  end;
+  //Open wrote the list from the windows alone, before the kept keys were known
+  SaveOpenList
+end;
+
+procedure TBandMapWindows.CloseAll;
+var
+  i : Integer;
+begin
+  FShuttingDown := True;
+  try
+    SaveOpenList;
+    for i := FList.Count-1 downto 0 do
+      Item(i).Close //FormClose frees it and detaches it
+  finally
+    FShuttingDown := False
+  end
+end;
+
+initialization
+  IniStore       := TCqrIniStore.Create;
+  BandMapWindows := TBandMapWindows.Create;
+
+finalization
+  FreeAndNil(BandMapWindows);
+  FreeAndNil(IniStore);
 
 end.

@@ -22,6 +22,7 @@ type
     destructor  Destroy; override;
 
     function  ReadString(const Section, Ident, Default: string): string;
+    function  ReadString(const Section, Ident, Default: string; ToLocal : Boolean): string;
     function  ReadInteger(const Section, Ident: string; Default: Longint;ToLocal : Boolean=FALSE): Longint;
     function  ReadBool(const Section, Ident: string; Default: Boolean;ToLocal : Boolean=FALSE): Boolean;
     function  ReadFloat(const Section, Ident: string; Default: Double): Double;
@@ -64,9 +65,14 @@ end;
 
 function TMyIni.ReadString(const Section, Ident, Default: string): string;
 begin
+  Result := ReadString(Section, Ident, Default, False)
+end;
+
+function TMyIni.ReadString(const Section, Ident, Default: string; ToLocal : Boolean): string;
+begin
   EnterCriticalsection(crit);
   try
-    if LocalOnly(Section) then
+    if (LocalOnly(Section) or ToLocal) then
       Result := lini.ReadString(Section, Ident, Default)
     else
       Result := ini.ReadString(Section, Ident, Default)

@@ -843,7 +843,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fRbnControl, fException, fCommentToCall,
      fRemind, fContest, fXfldigi, dMembership, dSatellite, dSqlUserData, fCountyStat,
-     fBandMapGfx, uBandMapStore, fNewVersion;
+     fBandMapGfx, uBandMapStore, uBandMapLayout, fNewVersion;
 
 
 
@@ -1537,12 +1537,6 @@ begin
     frmBandMap.BringToFront
   end;
 
-  if cqrini.ReadBool('Window','BandMapGfx',False) then
-  begin
-    frmBandMapGfx.Show;
-    frmBandMapGfx.BringToFront
-  end;
-
   if cqrini.ReadBool('Window','SCP',False) then
   begin
     frmSCP.Show;
@@ -1612,11 +1606,13 @@ begin
 
   frmBandMap.LoadSettings;
   frmBandMap.LoadFonts;
-  frmBandMapGfx.LoadSettings;
 
   if cqrini.ReadBool('BandMap', 'Save', False) then
     frmBandMap.LoadBandMapItemsFromFile(dmData.HomeDir+'bandmap.csv');
   LoadSpotSnapshot;
+  //the graphical band maps of this log, after the bands and the still valid
+  //spots are known; the windows read their own settings as they open
+  BandMapWindows.Restore;
 
   ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);
@@ -1751,13 +1747,8 @@ begin
     else
       cqrini.WriteBool('Window','BandMap',False);
 
-    if frmBandMapGfx.Showing then
-    begin
-      frmBandMapGfx.Close;
-      cqrini.WriteBool('Window','BandMapGfx',True)
-    end
-    else
-      cqrini.WriteBool('Window','BandMapGfx',False);
+    //writes [BandMapGfx] Open itself and frees the windows
+    BandMapWindows.CloseAll;
 
     if frmPropagation.Showing then
     begin
@@ -5365,10 +5356,7 @@ end;
 
 procedure TfrmNewQSO.acShowBandMapGfxExecute(Sender: TObject);
 begin
-  if frmBandMapGfx.Showing then
-    frmBandMapGfx.BringToFront
-  else
-    frmBandMapGfx.Show;
+  BandMapWindows.Open(AutoChoice)
 end;
 
 procedure TfrmNewQSO.acTRXControlExecute(Sender: TObject);
@@ -7157,8 +7145,7 @@ begin
     frmTRXControl.BringToFront;
   if frmBandMap.Showing then
     frmBandMap.BringToFront;
-  if frmBandMapGfx.Showing then
-    frmBandMapGfx.BringToFront;
+  BandMapWindows.BringAllToFront;
   if frmDXCluster.Showing then
     frmDXCluster.BringToFront;
   if frmQSODetails.Showing then

@@ -68,7 +68,6 @@ type
   TBandMapSettingsStore = class
     function  ReadString(const Section, Key, Default : String; ALocal : Boolean = False) : String; virtual; abstract;
     procedure WriteString(const Section, Key, Value : String; ALocal : Boolean = False); virtual; abstract;
-    procedure DeleteSection(const Section : String); virtual; abstract;
     function  ReadInteger(const Section, Key : String; Default : Integer; ALocal : Boolean = False) : Integer;
     function  ReadBool(const Section, Key : String; Default : Boolean; ALocal : Boolean = False) : Boolean;
     procedure WriteInteger(const Section, Key : String; Value : Integer; ALocal : Boolean = False);
