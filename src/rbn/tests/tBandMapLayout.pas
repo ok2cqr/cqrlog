@@ -41,6 +41,8 @@ type
     procedure AutoAndFixedKeysRoundTrip;
     procedure UnknownKeyIsRejected;
     procedure BandCodesWithADotAreKeys;
+    procedure ComponentNameIsAValidIdentifier;
+    procedure LegacyOnlyActiveModeIsKept;
     procedure BandLabelIsLowerCaseWithSpace;
     procedure TitleNamesTheBandAndTheMode;
     procedure OpenListRoundTripSkipsBlanks;
@@ -134,6 +136,27 @@ begin
   AssertEquals('2.5MM', C.Band);
   AssertFalse(ParseChoiceKey('.5M', C));
   AssertEquals('1.25 m', BandLabel('1.25M'))
+end;
+
+procedure TBandMapLayoutTest.ComponentNameIsAValidIdentifier;
+begin
+  AssertTrue(IsValidIdent(InstanceComponentName(AutoChoice)));
+  AssertTrue(IsValidIdent(InstanceComponentName(FixedChoice('20M'))));
+  AssertTrue(IsValidIdent(InstanceComponentName(FixedChoice('1.25M'))));
+  AssertTrue(IsValidIdent(InstanceComponentName(FixedChoice('2.5MM'))));
+  //still one name per choice
+  AssertTrue(InstanceComponentName(FixedChoice('1.25M')) <> InstanceComponentName(FixedChoice('125M')))
+end;
+
+procedure TBandMapLayoutTest.LegacyOnlyActiveModeIsKept;
+var
+  I : TBandMapInstance;
+begin
+  S.WriteString('Window', 'BandMapGfx', '1');
+  S.WriteString('BandMap', 'OnlyActiveMode', '1');
+  MigrateLegacyLayout(S, False);
+  I := LoadInstance(S, AutoChoice, 20);
+  AssertTrue(I.OnlyCurrMode)
 end;
 
 procedure TBandMapLayoutTest.BandLabelIsLowerCaseWithSpace;

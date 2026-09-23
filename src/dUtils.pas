@@ -3450,15 +3450,16 @@ begin
     end;
     a.Top := cqrini.ReadInteger(section, 'Top', 20, cqrini.LocalOnly('WindowSize'));
     a.Left := cqrini.ReadInteger(section, 'Left', 20, cqrini.LocalOnly('WindowSize'));
-    if AKeepOnScreen then
+    if AKeepOnScreen and (Screen.MonitorFromRect(a.BoundsRect, mdNull) = nil) then
     begin
-      //at least a grab-able strip of the window must be on the desktop
-      r := Screen.DesktopRect;
-      if a.Left > r.Right - 60 then
+      //saved on a monitor that is gone, or in a gap between monitors of
+      //different sizes: bring it onto the nearest one, title bar included
+      r := Screen.MonitorFromRect(a.BoundsRect, mdNearest).WorkareaRect;
+      if a.Left + a.Width > r.Right then
         a.Left := r.Right - a.Width;
-      if a.Left + a.Width < r.Left + 60 then
+      if a.Left < r.Left then
         a.Left := r.Left;
-      if a.Top > r.Bottom - 60 then
+      if a.Top + a.Height > r.Bottom then
         a.Top := r.Bottom - a.Height;
       if a.Top < r.Top then
         a.Top := r.Top
