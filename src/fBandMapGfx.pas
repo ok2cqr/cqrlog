@@ -122,6 +122,7 @@ type
     function  SpotVisible(const ASpot : TGfxSpot) : Boolean;
     function  IsWorked(const ACall, ABand, AMode, ALastDate, ALastTime : String) : Boolean;
     procedure UpdateFilterIndicator;
+    function  GlobalRuleText : String;
     function  ShownBand : String;
     function  BandLimitsOf(const ABand : String; out ALoKHz, AHiKHz : Double) : Boolean;
     procedure UpdateTitle;
@@ -205,7 +206,7 @@ implementation
 {$R *.lfm}
 
 uses Math, LCLType, uColorMemo, dUtils, uMyIni, dData, fNewQSO, fTRXControl,
-     fBandMap, fBandMapFilter;
+     fBandMapGfxFilter;
 
 type
   { cqrini seen through the model's store interface }
@@ -836,12 +837,42 @@ begin
   end
 end;
 
+{ the shared [BandMapFilter] rule of the text band map, in a few words }
+function TfrmBandMapGfx.GlobalRuleText : String;
+begin
+  if cqrini.ReadBool('BandMapFilter','NoWkdDate',False) then
+    Result := 'worked after '+cqrini.ReadString('BandMapFilter','LastDate','')+' '+
+              cqrini.ReadString('BandMapFilter','LastTime','')+' hidden'
+  else if cqrini.ReadBool('BandMapFilter','NoWkdHour',False) then
+    Result := 'worked in last '+IntToStr(cqrini.ReadInteger('BandMapFilter','LastHours',48))+' h hidden'
+  else
+    Result := 'worked stations shown'
+end;
+
 procedure TfrmBandMapGfx.UpdateFilterIndicator;
 var
   filtered : Boolean;
+  rule     : String;
 begin
   filtered := FOnlyCurrBand or FOnlyCurrMode or FView.OnlyLoTW
               or FView.OnlyEQSL or (FView.DateFilter <> bmdShowAll);
+
+  //the rule in force, in a few words, always visible; the details are in
+  //the Filter dialog
+  case FInst.QsoRule of
+    qrGlobal : rule := 'QSO: global';
+    qrNone   : rule := 'QSO: all';
+    else       rule := 'QSO: own'
+  end;
+  case FView.DateFilter of
+    bmdLastHours     : rule := rule+' '+IntToStr(FView.LastHours)+' h';
+    bmdSinceDateTime : rule := rule+' since '+FView.SinceDate
+  end;
+  if FView.OnlyLoTW then rule := rule+' | LoTW';
+  if FView.OnlyEQSL then rule := rule+' | eQSL';
+  if FOnlyCurrMode then rule := rule+' | mode';
+  if FOnlyCurrBand then rule := rule+' | band';
+  sbStatus.Panels[1].Text := rule;
 
   //Spots disappearing for no visible reason is confusing, and the filter now
   //lives inside the menu where it cannot be seen. So the state has to show on
@@ -859,15 +890,19 @@ end;
 
 procedure TfrmBandMapGfx.pumFilterClick(Sender: TObject);
 var
-  f : TfrmBandMapFilter;
+  f : TfrmBandMapGfxFilter;
 begin
-  f := TfrmBandMapFilter.Create(nil);
+  f := TfrmBandMapGfxFilter.Create(nil);
   try
+    f.Instance       := FInst;
+    f.GlobalRuleText := GlobalRuleText;
+    f.RbnContinents  := cqrini.ReadString('RBNFilter','SrcCont','');
     if f.ShowModal = mrOK then
     begin
-      LoadSettings;
-      //the classic band map reads the very same keys, keep the two in step
-      frmBandMap.LoadSettings
+      FInst := f.Instance;
+      SaveInstanceSettings;
+      //re-read: the still valid candidates are shown under the new rule at once
+      LoadSettings
     end
   finally
     FreeAndNil(f)

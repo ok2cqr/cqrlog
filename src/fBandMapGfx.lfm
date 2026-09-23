@@ -72,6 +72,9 @@ object frmBandMapGfx: TfrmBandMapGfx
     Width = 300
     Panels = <    
       item
+        Width = 150
+      end    
+      item
         Width = 400
       end>
     SimplePanel = False

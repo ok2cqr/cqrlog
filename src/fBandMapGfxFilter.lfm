@@ -1,0 +1,260 @@
+object frmBandMapGfxFilter: TfrmBandMapGfxFilter
+  Left = 300
+  Height = 372
+  Top = 150
+  Width = 620
+  AutoSize = True
+  BorderStyle = bsDialog
+  Caption = 'Band map filter'
+  ClientHeight = 372
+  ClientWidth = 620
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '4.6.0.0'
+  object gbQso: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 8
+    Height = 190
+    Top = 8
+    Width = 604
+    AutoSize = True
+    BorderSpacing.Left = 8
+    BorderSpacing.Top = 8
+    BorderSpacing.Right = 8
+    Caption = 'Worked stations'
+    ClientHeight = 170
+    ClientWidth = 600
+    TabOrder = 0
+    object rbGlobal: TRadioButton
+      AnchorSideLeft.Control = gbQso
+      AnchorSideTop.Control = gbQso
+      Left = 8
+      Height = 20
+      Top = 8
+      Width = 320
+      BorderSpacing.Left = 8
+      BorderSpacing.Top = 8
+      Caption = 'Use the global band map filter (shared with the text band map)'
+      Checked = True
+      TabOrder = 0
+      TabStop = True
+    end
+    object lblGlobal: TLabel
+      AnchorSideLeft.Control = rbGlobal
+      AnchorSideTop.Control = rbGlobal
+      AnchorSideTop.Side = asrBottom
+      Left = 28
+      Height = 16
+      Top = 30
+      Width = 60
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 2
+      Caption = 'Currently:'
+      ParentColor = False
+    end
+    object rbCustomHours: TRadioButton
+      AnchorSideLeft.Control = rbGlobal
+      AnchorSideTop.Control = lblGlobal
+      AnchorSideTop.Side = asrBottom
+      Left = 8
+      Height = 20
+      Top = 54
+      Width = 220
+      BorderSpacing.Top = 8
+      Caption = 'Hide stations worked in the last'
+      TabOrder = 1
+    end
+    object edtLastHours: TEdit
+      AnchorSideLeft.Control = rbCustomHours
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = rbCustomHours
+      AnchorSideTop.Side = asrCenter
+      Left = 234
+      Height = 22
+      Top = 53
+      Width = 48
+      BorderSpacing.Left = 6
+      TabOrder = 2
+      Text = '48'
+    end
+    object lblHours: TLabel
+      AnchorSideLeft.Control = edtLastHours
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = edtLastHours
+      AnchorSideTop.Side = asrCenter
+      Left = 288
+      Height = 16
+      Top = 56
+      Width = 200
+      BorderSpacing.Left = 6
+      Caption = 'hours on the same band and mode'
+      ParentColor = False
+    end
+    object rbCustomDate: TRadioButton
+      AnchorSideLeft.Control = rbGlobal
+      AnchorSideTop.Control = rbCustomHours
+      AnchorSideTop.Side = asrBottom
+      Left = 8
+      Height = 20
+      Top = 82
+      Width = 200
+      BorderSpacing.Top = 8
+      Caption = 'Hide stations worked after'
+      TabOrder = 3
+    end
+    object edtDate: TEdit
+      AnchorSideLeft.Control = rbCustomDate
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = rbCustomDate
+      AnchorSideTop.Side = asrCenter
+      Left = 214
+      Height = 22
+      Top = 81
+      Width = 96
+      BorderSpacing.Left = 6
+      TabOrder = 4
+      Text = '2000-10-10'
+    end
+    object edtTime: TEdit
+      AnchorSideLeft.Control = edtDate
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = rbCustomDate
+      AnchorSideTop.Side = asrCenter
+      Left = 316
+      Height = 22
+      Top = 81
+      Width = 56
+      BorderSpacing.Left = 6
+      TabOrder = 5
+      Text = '12:12'
+    end
+    object rbNone: TRadioButton
+      AnchorSideLeft.Control = rbGlobal
+      AnchorSideTop.Control = rbCustomDate
+      AnchorSideTop.Side = asrBottom
+      Left = 8
+      Height = 20
+      Top = 110
+      Width = 200
+      BorderSpacing.Top = 8
+      Caption = 'Do not hide worked stations'
+      TabOrder = 6
+    end
+    object lblScope: TLabel
+      AnchorSideLeft.Control = rbGlobal
+      AnchorSideTop.Control = rbNone
+      AnchorSideTop.Side = asrBottom
+      Left = 8
+      Height = 16
+      Top = 142
+      Width = 380
+      BorderSpacing.Top = 12
+      BorderSpacing.Bottom = 8
+      Caption = 'One rule for RBN, DX cluster and manual spots in this band map.'
+      ParentColor = False
+    end
+  end
+  object gbOther: TGroupBox
+    AnchorSideLeft.Control = gbQso
+    AnchorSideTop.Control = gbQso
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = gbQso
+    AnchorSideRight.Side = asrBottom
+    Left = 8
+    Height = 100
+    Top = 206
+    Width = 604
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BorderSpacing.Top = 8
+    Caption = 'Show only'
+    ClientHeight = 80
+    ClientWidth = 600
+    TabOrder = 1
+    object chkOnlyLoTW: TCheckBox
+      AnchorSideLeft.Control = gbOther
+      AnchorSideTop.Control = gbOther
+      Left = 8
+      Height = 20
+      Top = 8
+      Width = 120
+      BorderSpacing.Left = 8
+      BorderSpacing.Top = 8
+      Caption = 'LoTW users'
+      TabOrder = 0
+    end
+    object chkOnlyeQSL: TCheckBox
+      AnchorSideLeft.Control = chkOnlyLoTW
+      AnchorSideTop.Control = chkOnlyLoTW
+      AnchorSideTop.Side = asrBottom
+      Left = 8
+      Height = 20
+      Top = 34
+      Width = 120
+      BorderSpacing.Top = 6
+      Caption = 'eQSL users'
+      TabOrder = 1
+    end
+    object chkOnlyCurrMode: TCheckBox
+      AnchorSideLeft.Control = chkOnlyLoTW
+      AnchorSideTop.Control = chkOnlyeQSL
+      AnchorSideTop.Side = asrBottom
+      Left = 8
+      Height = 20
+      Top = 60
+      Width = 200
+      BorderSpacing.Top = 6
+      BorderSpacing.Bottom = 8
+      Caption = 'The mode the radio is on'
+      TabOrder = 2
+    end
+  end
+  object lblRbn: TLabel
+    AnchorSideLeft.Control = gbQso
+    AnchorSideTop.Control = gbOther
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = gbQso
+    AnchorSideRight.Side = asrBottom
+    Left = 8
+    Height = 16
+    Top = 314
+    Width = 604
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 8
+    Caption = ' '
+    ParentColor = False
+    WordWrap = True
+  end
+  object btnOK: TButton
+    AnchorSideTop.Control = lblRbn
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = btnCancel
+    Left = 450
+    Height = 25
+    Top = 338
+    Width = 75
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 8
+    BorderSpacing.Right = 6
+    BorderSpacing.Bottom = 8
+    Caption = 'OK'
+    Default = True
+    OnClick = btnOKClick
+    TabOrder = 2
+  end
+  object btnCancel: TButton
+    AnchorSideTop.Control = btnOK
+    AnchorSideRight.Control = gbQso
+    AnchorSideRight.Side = asrBottom
+    Left = 537
+    Height = 25
+    Top = 338
+    Width = 75
+    Anchors = [akTop, akRight]
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 3
+  end
+end
