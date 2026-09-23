@@ -227,7 +227,8 @@ type
     //same routing (log or local.cfg) under an explicit section, for windows
     //that exist more than once and so cannot use their form name
     procedure SaveWindowPosAs(a: TForm; const Section: string);
-    procedure LoadWindowPosAs(a: TForm; const Section: string);
+    //AKeepOnScreen moves a window saved on a monitor that is gone back into view
+    procedure LoadWindowPosAs(a: TForm; const Section: string; AKeepOnScreen: Boolean = False);
     procedure ShowQSLWithExtViewer(Call: string);
     procedure ShowQRZInBrowser(call: string);
     procedure ShowLocatorMapInBrowser(locator: string);
@@ -3433,7 +3434,9 @@ begin
   end;
 end;
 
-procedure TdmUtils.LoadWindowPosAs(a: TForm; const Section: string);
+procedure TdmUtils.LoadWindowPosAs(a: TForm; const Section: string; AKeepOnScreen: Boolean);
+var
+  r: TRect;
 begin
   LoadFontSettings(a);
   if cqrini.ReadBool(section, 'Max', False, cqrini.LocalOnly('WindowSize')) then
@@ -3447,6 +3450,19 @@ begin
     end;
     a.Top := cqrini.ReadInteger(section, 'Top', 20, cqrini.LocalOnly('WindowSize'));
     a.Left := cqrini.ReadInteger(section, 'Left', 20, cqrini.LocalOnly('WindowSize'));
+    if AKeepOnScreen then
+    begin
+      //at least a grab-able strip of the window must be on the desktop
+      r := Screen.DesktopRect;
+      if a.Left > r.Right - 60 then
+        a.Left := r.Right - a.Width;
+      if a.Left + a.Width < r.Left + 60 then
+        a.Left := r.Left;
+      if a.Top > r.Bottom - 60 then
+        a.Top := r.Bottom - a.Height;
+      if a.Top < r.Top then
+        a.Top := r.Top
+    end
   end;
   if dmData.DebugLevel >= 1 then
   begin

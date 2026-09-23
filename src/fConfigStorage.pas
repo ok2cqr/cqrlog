@@ -160,7 +160,7 @@ begin
   if cmbStoreMembership.ItemIndex>0 then
     Sections := Sections + 'Clubs,FirstClub,SecondClub,ThirdClub,FifthClub,FourthClub,';
   if cmbStoreBandMap.ItemIndex>0 then
-    Sections := Sections + 'BandMap,BandMapFilter,';
+    Sections := Sections + 'BandMap,BandMapFilter,BandMapGfx,'; //BandMapGfx.<band> follow BandMapGfx
   if cmbStoreXplanet.ItemIndex>0 then
     Sections := Sections + 'xplanet,';
   if cmbStoreZipCode.ItemIndex>0 then

@@ -176,11 +176,11 @@ begin
   C := AutoChoice;
   if LowerCase(s) = AUTO_KEY then
     exit(True);
-  //a band code: digits then M or CM, nothing else
+  //a band code: a number (1.25 allowed) then M, CM or MM, nothing else
   if (Length(s) < 2) or not (s[1] in ['0'..'9']) then
     exit(False);
   i := 1;
-  while (i <= Length(s)) and (s[i] in ['0'..'9']) do
+  while (i <= Length(s)) and (s[i] in ['0'..'9', '.']) do
     Inc(i);
   s := UpperCase(s);
   if not ((Copy(s, i, MaxInt) = 'M') or (Copy(s, i, MaxInt) = 'CM') or (Copy(s, i, MaxInt) = 'MM')) then
