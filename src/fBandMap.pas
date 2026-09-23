@@ -107,6 +107,7 @@ type
     FCurrentBand    : String;
     FBandMapClick   : TBandMapClick;
     FOnlyCurrMode   : Boolean;
+    FShowMembership : Boolean;   //[BandMap] ShowMembership, set by LoadSettings
     FOnlyCurrBand   : Boolean;
     FxplanetFile    : String;
     FxplanetExport  : Boolean;
@@ -172,7 +173,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, uMyIni, dData, fNewQSO, fBandMapFilter;
+uses dUtils, uMyIni, dData, fNewQSO, fBandMapFilter, fBandMapGfx;
 
 { TfrmBandMap }
 
@@ -239,10 +240,12 @@ end;
 
 procedure TfrmBandMap.SyncBandMap;
 var
-  i : Integer;
-  s : String;
+  i     : Integer;
+  s, m  : String;
+  today : String;
 begin
   if Active then exit; //do not refresh the window when it is activated (user is scrolling)
+  today := FormatDateTime('yyyy-mm-dd', dmUtils.GetDateTime(0));
   FBandFilter := UpperCase(FBandFilter);
   FModeFilter := UpperCase(FModeFilter);
   BandMap.DisableAutoRepaint(True);
@@ -283,6 +286,18 @@ begin
         s := CURRENT_STATION_CHAR + BandMapItems[i].TextValue
       else
         s := ' ' + BandMapItems[i].TextValue;
+      //club labels are not part of TextValue (it is what bandmap.csv keeps);
+      //the answer comes from the shared cache, asked once per call and day
+      if FShowMembership then
+      begin
+        if dmData.RbnLogCache.TryMembership(BandMapItems[i].Call, today, m) then
+        begin
+          if m <> '' then
+            s := s + ' (' + m + ')'
+        end
+        else
+          BandMapWindows.RequestMembership(BandMapItems[i].Call, today)
+      end;
       BandMap.AddLine(s,BandMapItems[i].Color,BandMapItems[i].BgColor,BandMapItems[i].Position)
     end;
 
@@ -935,6 +950,7 @@ begin
   frmBandMap.xplanetFile     := dmData.HomeDir+'xplanet/marker';
   frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
   frmBandMap.OnlyCurrMode    := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
+  frmBandMap.FShowMembership := cqrini.ReadBool('BandMap', 'ShowMembership', False);
   frmBandMap.DoXplanetExport := (cqrini.ReadInteger('xplanet','ShowFrom',0) = 1); //dxclust =0, wsjt=2
 
   if cqrini.ReadBool('BandMapFilter','ShowAll',True) then

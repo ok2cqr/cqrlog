@@ -288,6 +288,7 @@ type
     function  CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
     function  RbnLastQso(const callsign,band,mode : String) : String;
+    function  RbnMembership(const callsign, date : String) : String;
     function  ReopenConnection(con : TSQLConnection; const What : String) : Boolean;
     function  PingConnection(con : TSQLConnection; const What : String; out Reopened : Boolean) : Boolean;
     function  PingConnection(con : TSQLConnection; const What : String) : Boolean;
@@ -1886,24 +1887,34 @@ begin
   cmbIOTA.Text := tmp
 end;
 
+//The band map log check thread reads Club1..5 (RbnMembership) under
+//csRbnMon, so they are replaced under the same lock
 procedure TdmData.LoadClubsSettings;
 begin
-  dmMembership.LoadClubSettings(1, dmMembership.Club1);
-  dmMembership.LoadClubSettings(2, dmMembership.Club2);
-  dmMembership.LoadClubSettings(3, dmMembership.Club3);
-  dmMembership.LoadClubSettings(4, dmMembership.Club4);
-  dmMembership.LoadClubSettings(5, dmMembership.Club5);
+  EnterCriticalsection(csRbnMon);
+  try
+    dmMembership.LoadClubSettings(1, dmMembership.Club1);
+    dmMembership.LoadClubSettings(2, dmMembership.Club2);
+    dmMembership.LoadClubSettings(3, dmMembership.Club3);
+    dmMembership.LoadClubSettings(4, dmMembership.Club4);
+    dmMembership.LoadClubSettings(5, dmMembership.Club5);
 
-  if dmMembership.Club1.MainFieled = 'call' then
-    dmMembership.Club1.MainFieled := 'idcall';
-  if dmMembership.Club2.MainFieled = 'call' then
-    dmMembership.Club2.MainFieled := 'idcall';
-  if dmMembership.Club3.MainFieled = 'call' then
-    dmMembership.Club3.MainFieled := 'idcall';
-  if dmMembership.Club4.MainFieled = 'call' then
-    dmMembership.Club4.MainFieled := 'idcall';
-  if dmMembership.Club5.MainFieled = 'call' then
-    dmMembership.Club5.MainFieled := 'idcall'
+    if dmMembership.Club1.MainFieled = 'call' then
+      dmMembership.Club1.MainFieled := 'idcall';
+    if dmMembership.Club2.MainFieled = 'call' then
+      dmMembership.Club2.MainFieled := 'idcall';
+    if dmMembership.Club3.MainFieled = 'call' then
+      dmMembership.Club3.MainFieled := 'idcall';
+    if dmMembership.Club4.MainFieled = 'call' then
+      dmMembership.Club4.MainFieled := 'idcall';
+    if dmMembership.Club5.MainFieled = 'call' then
+      dmMembership.Club5.MainFieled := 'idcall'
+  finally
+    LeaveCriticalsection(csRbnMon)
+  end;
+  //the selected clubs may differ now; the band maps ask again
+  if Assigned(RbnLogCache) then
+    RbnLogCache.InvalidateMembership
 end;
 
 procedure TdmData.LoadZipSettings;
@@ -3451,6 +3462,60 @@ begin
   end
 end;
 
+//Called through RbnLogCache from the band map log check thread: the short
+//names of the clubs the heard station is a member of on the day, 'EPC, SOTA'.
+//Only clubs looked up by callsign (MainFields = call); a club keyed by QTH,
+//award, county or state cannot be told from a spot. One query per such club,
+//on qRbnMon under csRbnMon like RbnLastQso; the cache keeps the answer per
+//call and day, so this runs once per heard station
+function TdmData.RbnMembership(const callsign, date : String) : String;
+var
+  n      : Integer;
+  Club   : TClub;
+  idcall : String;
+  t0     : TDateTime;
+begin
+  Result := '';
+  t0 := Now;
+  idcall := dmUtils.GetIDCall(callsign);
+  EnterCriticalsection(csRbnMon);
+  try
+    for n := 1 to 5 do
+    begin
+      case n of
+        1 : Club := dmMembership.Club1;
+        2 : Club := dmMembership.Club2;
+        3 : Club := dmMembership.Club3;
+        4 : Club := dmMembership.Club4;
+        else Club := dmMembership.Club5
+      end;
+      if (Club.Name = '') or (Club.ClubField = '') or (Club.MainFieled <> 'idcall') then
+        Continue;
+      qRbnMon.Close;
+      qRbnMon.SQL.Text := dmSqlRef.SqlClubMember('club'+IntToStr(n), Club.ClubField, idcall, date);
+      if fDebugLevel>=1 then Writeln(qRbnMon.SQL.Text);
+      try
+        qRbnMon.Open;
+        if not qRbnMon.EOF then
+        begin
+          if Result <> '' then
+            Result := Result + ', ';
+          Result := Result + Club.Name
+        end
+      finally
+        qRbnMon.Close;
+        trRbnMon.RollBack
+      end
+    end
+  finally
+    LeaveCriticalsection(csRbnMon)
+  end;
+  //one line per heard station and day: grep them to count the club round
+  //trips against the spots
+  DbgLog('BMAP', 'membership ' + callsign + ' ' + date + ' -> "' + Result + '" ' +
+                 IntToStr(Round((Now - t0) * 86400000)) + ' ms')
+end;
+
 //Reopens a connection whose TCP session died under it, typically "Server has
 //gone away" (2006) after a network drop to a server in the LAN. Restores the
 //per-session state OpenConnections/OpenDatabase had set on it (sql_mode,
@@ -3749,6 +3814,7 @@ begin
   RbnLogCache  := TRbnLogCache.Create(20000);
   RbnLogCache.OnLastQso     := @RbnLastQso;
   RbnLogCache.OnDxccStatus  := @CachedDxccStatus;
+  RbnLogCache.OnMembership  := @RbnMembership;
   LogUploadCon := getNewMySQLConnectionObject();
   dbDXC        := getNewMySQLConnectionObject();
 end;

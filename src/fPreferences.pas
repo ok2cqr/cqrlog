@@ -161,6 +161,7 @@ type
     chkIgnoreLoTW: TCheckBox;
     chkExpCommet: TCheckBox;
     chkPlusToBandMap: TCheckBox;
+    chkShowMembership: TCheckBox;
     chkgridshowhint: TCheckBox;
     chkgriddotsinsteadspaces: TCheckBox;
     chkgridboldtitle: TCheckBox;
@@ -1450,6 +1451,7 @@ begin
   cqrini.WriteBool('BandMap','IgnoreBandFreq',chkIgnoreBandFreq.Checked);
   cqrini.WriteBool('BandMap','UseNewQSOFreqMode',chkUseNewQSOFreqMode.Checked);
   cqrini.WriteBool('BandMap','PlusToBandMap',chkPlusToBandMap.Checked);
+  cqrini.WriteBool('BandMap','ShowMembership',chkShowMembership.Checked);
   cqrini.WriteInteger('BandMapFilter','FreqWidth',seFreqWidth.Value);
   cqrini.WriteInteger('BandMapFilter','CallWidth',seCallWidth.Value);
 
@@ -3143,6 +3145,7 @@ begin
   chkIgnoreBandFreq.Checked := cqrini.ReadBool('BandMap','IgnoreBandFreq',True);
   chkUseNewQSOFreqMode.Checked := cqrini.ReadBool('BandMap','UseNewQSOFreqMode',False);
   chkPlusToBandMap.Checked := cqrini.ReadBool('BandMap','PlusToBandMap',False);
+  chkShowMembership.Checked := cqrini.ReadBool('BandMap','ShowMembership',False);
   seFreqWidth.Value := cqrini.ReadInteger('BandMapFilter','FreqWidth',12);
   seCallWidth.Value := cqrini.ReadInteger('BandMapFilter','CallWidth',12);
 

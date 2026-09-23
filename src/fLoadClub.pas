@@ -246,7 +246,8 @@ begin
     if not e then
     begin
       mLoad.Lines.Add(IntToStr(num) + ' records converted');
-      dmSqlRef.CommitBatch
+      dmSqlRef.CommitBatch;
+      dmData.RbnLogCache.InvalidateMembership   //the band maps ask again
     end
     else
         mLoad.Lines.Add('0 records converted');

@@ -1717,7 +1717,8 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
       dmSqlImpExp.FlushClubMembers(ClubTableName);
       pBarProg.Position := pBarProg.Max;
       Application.ProcessMessages;
-      dmSqlImpExp.CommitBatch
+      dmSqlImpExp.CommitBatch;
+      dmData.RbnLogCache.InvalidateMembership   //the band maps ask again
     except
       on E : Exception do
       begin
