@@ -498,6 +498,8 @@ type
     procedure acQSOperModeExecute(Sender: TObject);
     procedure acShowBandMapExecute(Sender: TObject);
     procedure acShowBandMapGfxExecute(Sender: TObject);
+    procedure mnuBandMapGfxChoiceClick(Sender: TObject);
+    procedure BandMapWindowsChanged(Sender: TObject);
     procedure acTRXControlExecute(Sender: TObject);
     procedure acViewQSOExecute(Sender: TObject);
     procedure acWACCfmExecute(Sender: TObject);
@@ -703,6 +705,9 @@ type
     procedure StartUpRemote;
     procedure NewLogSplash;
 
+  public
+    //Window > Band map (graphical): Auto and the enabled bands, open ones checked
+    procedure RebuildBandMapGfxMenu;
   public
     fEditQSO    : Boolean;
     fViewQSO    : Boolean;
@@ -1612,7 +1617,9 @@ begin
   LoadSpotSnapshot;
   //the graphical band maps of this log, after the bands and the still valid
   //spots are known; the windows read their own settings as they open
+  BandMapWindows.OnChanged := @BandMapWindowsChanged;
   BandMapWindows.Restore;
+  RebuildBandMapGfxMenu;
 
   ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);
@@ -5357,6 +5364,25 @@ end;
 procedure TfrmNewQSO.acShowBandMapGfxExecute(Sender: TObject);
 begin
   BandMapWindows.Open(AutoChoice)
+end;
+
+procedure TfrmNewQSO.RebuildBandMapGfxMenu;
+begin
+  BandMapWindows.FillChoiceMenu(mnuShowBandMapGfx, @mnuBandMapGfxChoiceClick, nil)
+end;
+
+procedure TfrmNewQSO.mnuBandMapGfxChoiceClick(Sender: TObject);
+var
+  c : TBandMapChoice;
+begin
+  //an open window of that choice only comes to the front
+  if ParseChoiceKey(TMenuItem(Sender).Hint, c) then
+    BandMapWindows.Open(c)
+end;
+
+procedure TfrmNewQSO.BandMapWindowsChanged(Sender: TObject);
+begin
+  RebuildBandMapGfxMenu
 end;
 
 procedure TfrmNewQSO.acTRXControlExecute(Sender: TObject);

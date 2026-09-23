@@ -46,6 +46,8 @@ type
     pumClearMap: TMenuItem;
     pumSep2: TMenuItem;
     pumHelp: TMenuItem;
+    pumBand: TMenuItem;
+    pumOpenMap: TMenuItem;
     cmbSpan: TComboBox;
     pnlPlot: TPanel;
     pnlTop: TPanel;
@@ -58,6 +60,8 @@ type
     procedure pumClearCqClick(Sender: TObject);
     procedure pumFilterClick(Sender: TObject);
     procedure pumHelpClick(Sender: TObject);
+    procedure pumBandChoiceClick(Sender: TObject);
+    procedure pumOpenMapChoiceClick(Sender: TObject);
     procedure cmbSpanChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -148,7 +152,12 @@ type
     //fed from TfrmTRXControl.SynTRX, main thread, freq in kHz (txlo corrected)
     procedure SetVfo(const ABand : String; AFreqKHz : Double; const AMode : String);
     function  Choice : TBandMapChoice;
+    //M > Band: this window shows another band from now on. Its ID follows
+    //the choice, so the old settings are saved and the new ones read.
+    procedure SetChoice(const AChoice : TBandMapChoice);
   end;
+
+  PBandMapChoice = ^TBandMapChoice;
 
   { All open graphical band maps. Windows are created here and owned by
     nobody (Owner = nil) so that their streamed name cannot collide in
@@ -158,7 +167,9 @@ type
       FList         : TList;
       FShuttingDown : Boolean;
       FKeptKeys     : TStringList; //saved choices that could not be opened
+      FOnChanged    : TNotifyEvent;
       function  EnabledBands : TStringArray;
+      procedure Changed;
     public
       constructor Create;
       destructor  Destroy; override;
@@ -177,6 +188,14 @@ type
       procedure Restore;
       //application exit or log switch: the list first, then every window
       procedure CloseAll;
+      { Fills AParent with "Auto (follow VFO)", a separator and every band
+        enabled in Preferences > Bands; each item carries its choice key in
+        Hint. With ACurrent = nil the open choices are checked (New QSO menu);
+        otherwise ACurrent^ is checked and other open ones say so (M > Band). }
+      procedure FillChoiceMenu(AParent : TMenuItem; AOnClick : TNotifyEvent;
+                               ACurrent : PBandMapChoice);
+      //a window opened or closed: menus showing the open choices redraw
+      property OnChanged : TNotifyEvent read FOnChanged write FOnChanged;
   end;
 
 var
@@ -753,6 +772,9 @@ begin
     pumClearCq.Caption := 'Forget my CQ frequency'
   end;
 
+  BandMapWindows.FillChoiceMenu(pumBand, @pumBandChoiceClick, @FInst.Choice);
+  BandMapWindows.FillChoiceMenu(pumOpenMap, @pumOpenMapChoiceClick, nil);
+
   //drop the menu just below the button
   p := btnMenu.ClientToScreen(Point(0,btnMenu.Height));
   popMenu.PopUp(p.X,p.Y);
@@ -866,6 +888,55 @@ procedure TfrmBandMapGfx.pumHelpClick(Sender: TObject);
 begin
   ShowHelp;
   ParkFocus
+end;
+
+procedure TfrmBandMapGfx.pumBandChoiceClick(Sender: TObject);
+var
+  c : TBandMapChoice;
+  w : TfrmBandMapGfx;
+begin
+  if not ParseChoiceKey(TMenuItem(Sender).Hint, c) then
+    exit;
+  if SameChoice(c, FInst.Choice) then
+    exit;
+  //one window per choice: an existing one comes to the front, this one stays
+  w := BandMapWindows.Find(c);
+  if w <> nil then
+  begin
+    w.BringToFront;
+    exit
+  end;
+  SetChoice(c);
+  ParkFocus
+end;
+
+procedure TfrmBandMapGfx.pumOpenMapChoiceClick(Sender: TObject);
+var
+  c : TBandMapChoice;
+begin
+  if ParseChoiceKey(TMenuItem(Sender).Hint, c) then
+    BandMapWindows.Open(c)
+end;
+
+procedure TfrmBandMapGfx.SetChoice(const AChoice : TBandMapChoice);
+begin
+  if SameChoice(AChoice, FInst.Choice) then
+    exit;
+  //the settings so far belong to the old choice
+  SaveInstanceSettings;
+  dmUtils.SaveWindowPosAs(Self, InstanceSection(FInst.Choice));
+  FInst.Choice := AChoice;
+  Name := 'frmBandMapGfx_' + ChoiceKey(AChoice);
+  //the new choice's own viewport and filter; the window stays where it is
+  FCenterKHz := 0;
+  FManualPan := False;
+  LoadSettings;
+  EnsureCenter;
+  SaveInstanceSettings;
+  BandMapWindows.SaveOpenList;
+  BandMapWindows.Changed;
+  FDirty := True;
+  FPaintBox.Invalidate
 end;
 
 { band and mode are display filters, applied here rather than on the way in, so
@@ -1342,6 +1413,47 @@ begin
   inherited Destroy
 end;
 
+procedure TBandMapWindows.Changed;
+begin
+  if Assigned(FOnChanged) then
+    FOnChanged(Self)
+end;
+
+procedure TBandMapWindows.FillChoiceMenu(AParent : TMenuItem; AOnClick : TNotifyEvent;
+                                         ACurrent : PBandMapChoice);
+var
+  bands : TStringArray;
+  b     : String;
+
+  procedure AddItem(const AChoice : TBandMapChoice; const ACaption : String);
+  var
+    m : TMenuItem;
+    isOpen : Boolean;
+  begin
+    m := TMenuItem.Create(AParent);
+    m.Hint    := ChoiceKey(AChoice);
+    m.Caption := ACaption;
+    m.OnClick := AOnClick;
+    isOpen := Find(AChoice) <> nil;
+    if ACurrent = nil then
+      m.Checked := isOpen
+    else begin
+      m.Checked := SameChoice(AChoice, ACurrent^);
+      if isOpen and not m.Checked then
+        m.Caption := ACaption + ' (open)'
+    end;
+    AParent.Add(m)
+  end;
+
+begin
+  AParent.Clear;
+  AddItem(AutoChoice, 'Auto (follow VFO)');
+  AParent.AddSeparator;
+  bands := EnabledBands;
+  for b in bands do
+    AddItem(FixedChoice(b), BandLabel(b))
+end;
+
 function TBandMapWindows.Count : Integer;
 begin
   Result := FList.Count
@@ -1372,7 +1484,10 @@ begin
     //settings are read in FormShow, once cqrini exists
     Result.Show;
     if not FShuttingDown then
-      SaveOpenList
+    begin
+      SaveOpenList;
+      Changed
+    end
   end
   else begin
     Result.Show;
@@ -1386,7 +1501,10 @@ begin
   //closed by the user: it stays closed after a restart. Closed because the
   //program or the log is going down: the list was taken before that
   if not FShuttingDown then
-    SaveOpenList
+  begin
+    SaveOpenList;
+    Changed
+  end
 end;
 
 procedure TBandMapWindows.SetVfo(const ABand : String; AFreqKHz : Double; const AMode : String);

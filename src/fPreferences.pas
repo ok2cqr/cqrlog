@@ -1640,6 +1640,7 @@ begin
   if frmBandMap.Showing then
     frmBandMap.LoadFonts;
   BandMapWindows.ReloadSettings;
+  frmNewQSO.RebuildBandMapGfxMenu; //the enabled bands may have changed
   cqrini.SaveToDisk;
   if TRXChanged then
     frmTRXControl.InitializeRig;
