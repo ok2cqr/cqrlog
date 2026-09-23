@@ -69,7 +69,16 @@ type
     //band map config, pushed from the main thread by LoadConfigToThread.
     //bm_ prefix keeps it apart from the fil_ spot filter config above
     bm_ToBandMap              : Boolean;
+    bm_SourceId               : Integer;  //rbn_sources id of the main connection
     bm_RbnColor               : LongInt;
+    //same rule as the DX cluster: with [BandMap] UseDXCColors the spot takes
+    //the colour of its DXCC status (new one / new band / new mode / QSL needed)
+    bm_UseDxcColors           : Boolean;
+    bm_NewCountryColor        : LongInt;
+    bm_NewBandColor           : LongInt;
+    bm_NewModeColor           : LongInt;
+    bm_NeedQslColor           : LongInt;
+    FDxccIndex                : Integer;  //of the spot AllowedSpot last accepted
     //LoTW/eQSL user background, the same [LoTW] settings the DX cluster window uses
     bm_UseLotwBgColor         : Boolean;
     bm_LotwBgColor            : LongInt;
@@ -143,7 +152,6 @@ type
     procedure ToolButton3Click(Sender: TObject);
   private
     RbnMonThread : TRbnThread;
-    FConn        : TRbnConnection;  //the main RBN source, shared, not owned
     aRbnArchive  : Array of TRbnSpot;
     SrcCalls : TStringlist;
 
@@ -158,6 +166,7 @@ type
 
   public
     SpotQueue    : TRbnSpotQueue;  //main thread pushes, TRbnThread pops
+    FConn        : TRbnConnection;  //the main RBN source, shared, not owned
     DeleteCount  : Integer;
     procedure SynRbnMonitor(RbnSpot : TRbnSpot);
     procedure LoadConfigToThread;
@@ -170,7 +179,7 @@ implementation
 {$R *.lfm}
 
 uses dUtils, uMyIni, dData, dSqlRef, fRbnControl, dDXCluster, fRbnFilter, fNewQSO,
-     fBandMap, uBandMapStore, uDebugLog;
+     fBandMap, uBandMapStore, uDebugLog, sqldb;
 
 { TfrmRbnMonitor }
 
@@ -327,6 +336,7 @@ begin
 
   //DxccWithLoTW was never set anywhere, the LoTW variant of the query was dead
   index := dmData.RbnLogCache.DxccStatus(adif,band,mode);
+  FDxccIndex := index;
   case index of
     1 : dxinfo := 'N';
     2 : dxinfo := 'B';
@@ -366,6 +376,7 @@ var
   cLat    : Currency;
   cLng    : Currency;
   bgColor : LongInt;
+  spotColor : LongInt;
   fsRbn   : TFormatSettings;
   nSpots  : Int64 = 0;
   tBeat   : TDateTime;
@@ -379,9 +390,9 @@ begin
   //settings would silently drop every spot on a comma decimal locale
   fsRbn := DefaultFormatSettings;
   fsRbn.DecimalSeparator := '.';
-  try try
+  try
     while not Terminated do
-    begin
+    try
       if not frmRbnMonitor.SpotQueue.Pop(spot) then
         spot := '';
       //heartbeat, so the log distinguishes "thread died" from "no spots arrived"
@@ -390,7 +401,8 @@ begin
         tBeat := Now;
         DbgLog('RBN','alive, spots processed=' + IntToStr(nSpots) +
                      ' queue=' + IntToStr(frmRbnMonitor.SpotQueue.Count) +
-                     ' dropped=' + IntToStr(frmRbnMonitor.SpotQueue.Dropped))
+                     ' dropped=' + IntToStr(frmRbnMonitor.SpotQueue.Dropped) +
+                     ' received10min=' + IntToStr(frmRbnMonitor.FConn.SpotsLastMinutes))
       end;
 
       if (spot='') then
@@ -428,6 +440,14 @@ begin
 
       if AllowedSpot(spotter,dxstn,freq,mode,LoTW,eQSL,dxinfo,band,lat,long) then
       begin
+        spotColor := bm_RbnColor;
+        if bm_UseDxcColors then
+          case FDxccIndex of
+            1 : spotColor := bm_NewCountryColor;
+            2 : spotColor := bm_NewBandColor;
+            3 : spotColor := bm_NewModeColor;
+            4 : spotColor := bm_NeedQslColor;
+          end;
         fRbnSpot.spotter := spotter;
         fRbnSpot.dxstn   := dxstn;
         fRbnSpot.freq    := freq;
@@ -445,17 +465,17 @@ begin
           begin
             dmDXCluster.GetRealCoordinate(lat,long,cLat,cLng);
             frmBandMap.AddToBandMap(fkHz,dxstn,mode,band,'',cLat,cLng,
-                                    bm_RbnColor,bgColor,False,(LoTW='L'),(eQSL='E'))
+                                    spotColor,bgColor,False,(LoTW='L'),(eQSL='E'))
           end
         end;
 
-        //graphical band map keeps a store of its own, with its own visibility
-        //gate, so the text band map above is not affected either way
-        if bm_ToBandMap and Assigned(BandMapStore) and BandMapStore.Enabled then
+        //the shared spot store collects whether or not a band map window is
+        //open; the text band map above keeps its own way
+        if bm_ToBandMap and Assigned(BandMapStore) then
         begin
           if TryStrToFloat(freq,fkHz,fsRbn) then    //RBN freq is already in kHz
-            BandMapStore.Add(fkHz,dxstn,mode,band,'',bm_RbnColor,bgColor,
-                             gssRbn,(LoTW='L'),(eQSL='E'))
+            BandMapStore.Add(fkHz,dxstn,mode,band,'',spotColor,bgColor,
+                             gssRbn,(LoTW='L'),(eQSL='E'),spotter,bm_SourceId)
         end;
 
         Synchronize(@ShowSpot)
@@ -463,19 +483,28 @@ begin
       //no Sleep here any more: the 100 ms after every spot capped the worker at
       //10 spots/s minus the SQL time, below an ordinary evening's 6/s with peaks
       //of 24/s. The thread sleeps above, when the queue is empty
+    except
+      //per spot, not around the whole loop: the loop version ended the thread
+      //on the first exception of any kind and RBN silently stopped updating
+      //until restart. Seen with "Server has gone away" after the machine slept
+      on E: ESQLDatabaseError do
+      begin
+        DbgLogException('RBN','spot=' + spot + ' dxstn=' + dxstn +
+                              ' spotter=' + spotter + ' freq=' + freq +
+                              ' mode=' + mode, E);
+        //the spot is dropped; the connection is reopened for the next one. On
+        //failure wait, so a server that is still down is not hammered per spot
+        if not dmData.ReconnectRbnMon then
+          Sleep(5000)
+      end;
+      on E: Exception do
+      begin
+        Writeln('*********',E.Message);
+        DbgLogException('RBN','spot=' + spot + ' dxstn=' + dxstn +
+                              ' spotter=' + spotter + ' freq=' + freq +
+                              ' mode=' + mode, E)
+      end
     end
-  except
-    on E: Exception do
-    begin
-      //this except used to be a bare Writeln, which is invisible when CQRLOG is
-      //started from a launcher rather than a terminal -- and reaching it kills
-      //the thread, so RBN silently stops updating
-      Writeln('*********',E.Message);
-      DbgLogException('RBN','spot=' + spot + ' dxstn=' + dxstn +
-                            ' spotter=' + spotter + ' freq=' + freq +
-                            ' mode=' + mode, E)
-    end
-  end
   finally
     DbgLog('RBN','thread leaving Execute, Terminated=' + BoolToStr(Terminated,True));
     FreeAndNil(reg)
@@ -495,6 +524,12 @@ end;
 
 procedure TfrmRbnMonitor.OnRbnState(Sender : TObject);
 begin
+  //the worker follows the connection, not the window: it is what feeds the
+  //band maps, and they must fill whether or not the monitor is open
+  if FConn.State = rcsDisconnected then
+    StopRbnThread
+  else
+    StartRbnThread;
   sbRbn.Panels[0].Text := FConn.Status;
   //while waiting for a retry the button offers Disconnect: that is how to stop it
   if FConn.State = rcsDisconnected then
@@ -533,6 +568,9 @@ begin
   //again must reuse it. Creating a new one here used to leak the old thread
   if not Assigned(RbnMonThread) then
   begin
+    //restored here, not in FormShow: the thread may start before the window
+    //is ever opened, and LoadConfigToThread reads this action
+    acLinkToBandMap.Checked := cqrini.ReadBool('RBNMonitor','ToBandMap',False);
     RbnMonThread := TRBNThread.Create(True);
     RbnMonThread.FreeOnTerminate :=  False;// True; I think this causes abrt in terminate (TfrmRbnMonitor.acDisconnectExecute) because procedure has freeAndNil (does free twice)
     RbnMonThread.OnShowSpot := @SynRbnMonitor; //shows up when RBN traffic is high like IARU HF contest and connect is tried to close or filter adjusted
@@ -622,9 +660,7 @@ var
 begin
   for i:=0 to sgRbn.ColCount-1 do
     cqrini.WriteInteger('WindowSize','RbnCol'+IntToStr(i),sgRbn.ColWidths[i]);
-  //the connection belongs to the RBN control window and stays; the worker that
-  //feeds this grid has nothing to do while the window is hidden
-  StopRbnThread;
+  //the connection and the worker are not the window's, both keep going
   dmUtils.SaveWindowPos(self);
 end;
 
@@ -800,10 +836,17 @@ begin
     RbnMonThread.fil_NewDXCOnly := cqrini.ReadBool('RBNFilter','NewDXCOnly',False);
 
     RbnMonThread.bm_ToBandMap := acLinkToBandMap.Checked;
+    RbnMonThread.bm_SourceId  := frmRbnControl.MainSourceId;
     //resolved to a plain RGB here, on the main thread. The band map ages item colors
     //from its worker thread, so a system color like clWindowText would otherwise be
     //asked of the widgetset off the main thread on every aging tick
     RbnMonThread.bm_RbnColor  := ColorToRGB(cqrini.ReadInteger('BandMap','RbnColor',clWindowText));
+    //the DX cluster's keys, so both feeds colour a new one the same way
+    RbnMonThread.bm_UseDxcColors    := cqrini.ReadBool('BandMap','UseDXCColors',False);
+    RbnMonThread.bm_NewCountryColor := ColorToRGB(cqrini.ReadInteger('DXCluster','NewCountry',clWindowText));
+    RbnMonThread.bm_NewBandColor    := ColorToRGB(cqrini.ReadInteger('DXCluster','NewBand',clWindowText));
+    RbnMonThread.bm_NewModeColor    := ColorToRGB(cqrini.ReadInteger('DXCluster','NewMode',clWindowText));
+    RbnMonThread.bm_NeedQslColor    := ColorToRGB(cqrini.ReadInteger('DXCluster','NeedQSL',clWindowText));
     //same keys and defaults as TfrmDXCluster.ReloadSettings, so a spot gets the
     //same LoTW/eQSL background whichever window fed it to the band map
     RbnMonThread.bm_UseLotwBgColor := cqrini.ReadBool('LoTW','UseBackColor',True);

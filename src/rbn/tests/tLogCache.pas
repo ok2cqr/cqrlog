@@ -27,9 +27,9 @@ type
   private
     C          : TRbnLogCache;
     FetchCount : Integer;
-    Worked     : Boolean;    //what the fake log answers
+    LastQso    : String;     //what the fake log answers: 'YYYY-MM-DD HH:NN' or ''
     Status     : Integer;
-    function FakeWorked(const Call, Band, Mode, LastDate, LastTime : String) : Boolean;
+    function FakeLastQso(const Call, Band, Mode : String) : String;
     function FakeStatus(Adif : Word; const Band, Mode : String) : Integer;
   protected
     procedure SetUp; override;
@@ -49,10 +49,10 @@ type
 
 implementation
 
-function TLogCacheTest.FakeWorked(const Call, Band, Mode, LastDate, LastTime : String) : Boolean;
+function TLogCacheTest.FakeLastQso(const Call, Band, Mode : String) : String;
 begin
   Inc(FetchCount);
-  Result := Worked
+  Result := LastQso
 end;
 
 function TLogCacheTest.FakeStatus(Adif : Word; const Band, Mode : String) : Integer;
@@ -64,10 +64,10 @@ end;
 procedure TLogCacheTest.SetUp;
 begin
   C := TRbnLogCache.Create(1000);
-  C.OnWorkedAfter := @FakeWorked;
-  C.OnDxccStatus  := @FakeStatus;
+  C.OnLastQso    := @FakeLastQso;
+  C.OnDxccStatus := @FakeStatus;
   FetchCount := 0;
-  Worked := True;
+  LastQso := '2026-09-21 12:00';
   Status := 4
 end;
 
@@ -92,15 +92,18 @@ end;
 
 procedure TLogCacheTest.DifferentBoundaryIsADifferentEntry;
 begin
-  //"worked in the last 48 h" moves with the clock, minute by minute
-  C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
-  C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:01');
-  AssertEquals(2, FetchCount)
+  //"worked in the last 48 h" moves with the clock, minute by minute; the
+  //cached last QSO serves every boundary without another fetch
+  AssertTrue(C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00'));
+  AssertTrue(C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-21', '11:59'));
+  AssertFalse(C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-21', '12:00'));
+  AssertFalse(C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-22', '00:00'));
+  AssertEquals(1, FetchCount)
 end;
 
 procedure TLogCacheTest.NegativeAnswerIsCachedToo;
 begin
-  Worked := False;
+  LastQso := '';
   AssertFalse(C.WorkedAfter('ZZ9ZZZ', '20M', 'CW', '2026-09-20', '10:00'));
   AssertFalse(C.WorkedAfter('ZZ9ZZZ', '20M', 'CW', '2026-09-20', '10:00'));
   AssertEquals(1, FetchCount)
@@ -155,7 +158,7 @@ var
 begin
   FreeAndNil(C);
   C := TRbnLogCache.Create(10);
-  C.OnWorkedAfter := @FakeWorked;
+  C.OnLastQso := @FakeLastQso;
   for i := 1 to 100 do
     C.WorkedAfter('C' + IntToStr(i), '20M', 'CW', '2026-09-20', '10:00');
   AssertTrue('entries=' + IntToStr(C.Count), C.Count <= 10)

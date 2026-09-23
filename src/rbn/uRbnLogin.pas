@@ -35,6 +35,7 @@ type
     procedure Reset;  //on every connect
     //True once per connection, for the first text that is a prompt
     function  ShouldAnswer(const Text : String) : Boolean;
+    property  Answered : Boolean read FAnswered;
   end;
 
 function IsRbnLoginPrompt(const Text : String) : Boolean;

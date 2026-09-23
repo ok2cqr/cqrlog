@@ -601,7 +601,10 @@ end;
 
 function TdmSqlRef.SqlClearDxccId : String;
 begin
-  Result := 'truncate table dxcc_id'
+  //DELETE, not TRUNCATE: TRUNCATE is DDL and needs an exclusive metadata lock,
+  //which a stale connection of a dead client (its read transaction still open
+  //on the server) blocks forever; the rows are few and DML waits for no reader
+  Result := 'delete from dxcc_id'
 end;
 
 function TdmSqlRef.SqlFillDxccId(const DbName : String) : String;

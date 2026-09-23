@@ -682,6 +682,8 @@ type
     procedure GoToRemoteMode(RemoteType : TRemoteModeType);
 
     procedure CloseAllWindows;
+    procedure SaveSpotSnapshot;
+    procedure LoadSpotSnapshot;
     procedure onExcept(Sender: TObject; E: Exception);
     procedure DisplayCoordinates(latitude, Longitude : Currency);
     procedure DrawGrayline;
@@ -1614,6 +1616,7 @@ begin
 
   if cqrini.ReadBool('BandMap', 'Save', False) then
     frmBandMap.LoadBandMapItemsFromFile(dmData.HomeDir+'bandmap.csv');
+  LoadSpotSnapshot;
 
   ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);
@@ -1631,8 +1634,62 @@ begin
    end;
 end;
 
+//The shared spot store, so that still valid spots (all bands, all sources) are
+//back after a restart with their original age. One file per log: a spot is not
+//the log's, but what the user sees of it is, and a switched log starts clean.
+//Written whole, through a temporary file, so a crash mid-write leaves the
+//previous snapshot intact
+procedure TfrmNewQSO.SaveSpotSnapshot;
+var
+  L    : TStringList;
+  f    : String;
+begin
+  f := dmData.HomeDir + 'spots-' + dmData.DBName + '.snapshot';
+  L := TStringList.Create;
+  try
+    try
+      SpotStore.SaveSnapshot(L);
+      L.SaveToFile(f + '.tmp');
+      if FileExists(f) then
+        DeleteFile(f);
+      RenameFile(f + '.tmp', f)
+    except
+      on E : Exception do
+        if dmData.DebugLevel >= 1 then Writeln('spot snapshot not saved: ', E.Message)
+    end
+  finally
+    L.Free
+  end
+end;
+
+procedure TfrmNewQSO.LoadSpotSnapshot;
+var
+  L : TStringList;
+  f : String;
+begin
+  f := dmData.HomeDir + 'spots-' + dmData.DBName + '.snapshot';
+  if not FileExists(f) then
+    exit;
+  L := TStringList.Create;
+  try
+    try
+      L.LoadFromFile(f);
+      //what the windows will show is decided by them; here only what is
+      //still valid gets in, with the time it really arrived
+      SpotStore.DeleteAfterSec := cqrini.ReadInteger('BandMap','Disep',12)*60;
+      SpotStore.LoadSnapshot(L, Now)
+    except
+      on E : Exception do
+        if dmData.DebugLevel >= 1 then Writeln('spot snapshot not loaded: ', E.Message)
+    end
+  finally
+    L.Free
+  end
+end;
+
 procedure TfrmNewQSO.CloseAllWindows;
 begin
+  SaveSpotSnapshot;
   //SaveGrid;
   tmrRadio.Enabled := False;
   tmrEnd.Enabled   := False;
@@ -4455,7 +4512,7 @@ begin
   frmBandMap.AddToBandMap(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',lat,
                           lng,clBlack,clWhite,True,sbtnLoTW.Visible,sbtneQSL.Visible);
   //graphical band map: system colours, it has to stay readable in dark mode
-  if Assigned(BandMapStore) and BandMapStore.Enabled then
+  if Assigned(BandMapStore) then
     BandMapStore.Add(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',
                      clWindowText,clWindow,gssManual,sbtnLoTW.Visible,sbtneQSL.Visible)
 end;
@@ -4877,7 +4934,9 @@ begin
       //option is on, and that way the spots are filtered again for the new log
       frmRbnMonitor.acClear.Execute;
       frmBandMap.acClear.Execute;
-      BandMapStore.Clear;
+      //saved for this log, then gone: the new log starts with an empty map
+      SaveSpotSnapshot;
+      SpotStore.Clear;
       SaveSettings;
       dmData.CloseDatabases;
 

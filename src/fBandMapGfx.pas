@@ -322,7 +322,6 @@ begin
   if FVfoKHz <= 0 then
     UseNewQsoFreq; //open on the band the operator is actually on
   EnsureCenter;
-  BandMapStore.Enabled := True;
   tmrPoll.Enabled      := True;
   FDirty := True;
   FPaintBox.Invalidate
@@ -332,9 +331,9 @@ procedure TfrmBandMapGfx.FormClose(Sender: TObject; var CloseAction: TCloseActio
 begin
   dmUtils.SaveWindowPos(frmBandMapGfx);
   cqrini.WriteInteger('BandMapGfx','SpanKHz',FSpanKHz);
-  tmrPoll.Enabled      := False;
-  //producers stop queueing immediately, so a hidden window costs nothing
-  BandMapStore.Enabled := False
+  tmrPoll.Enabled      := False
+  //the shared store keeps collecting while the window is hidden, so opening it
+  //again shows what arrived meanwhile
 end;
 
 procedure TfrmBandMapGfx.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -623,7 +622,8 @@ begin
   //a failing query (log being switched, connection dropped) must not turn into
   //an exception dialog every 500 ms - show the spot rather than nag
   try
-    Result := dmData.CallExistsInLog(ACall,ABand,AMode,ALastDate,ALastTime)
+    //shared with the RBN monitor; repeated calls cost no query
+    Result := dmData.RbnLogCache.WorkedAfter(ACall,ABand,AMode,ALastDate,ALastTime)
   except
     on E : Exception do
     begin

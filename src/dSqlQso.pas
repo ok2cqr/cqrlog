@@ -168,7 +168,7 @@ type
     function SqlSquareCount : String;
     function SqlQsoCount : String;
     function SqlQsoAfter(const Call, Band, Mode, LastDate, LastTime : String) : String;
-    function SqlQsoAfterParams : String;
+    function SqlLastQsoParams : String;
 
     // WAZ / ITU / IOTA "new one" probes (dData)
     function SqlWazCfmOnBand(const Waz, Band : String) : String;
@@ -806,10 +806,12 @@ begin
             QuotedStr(LastDate+' '+LastTime)+') LIMIT 1'
 end;
 
-function TdmSqlQso.SqlQsoAfterParams : String;
+// the moment of the last QSO with a call on a band and mode; the RBN log cache
+// keeps it and compares the "worked after" boundary in memory
+function TdmSqlQso.SqlLastQsoParams : String;
 begin
-  Result := 'select id_cqrlog_main from cqrlog_main where (callsign= :callsign) and (band = :band) '+
-            'and (mode = :mode) and (concat(qsodate, '+QuotedStr(' ')+',time_on) > :last_date_time) LIMIT 1'
+  Result := 'select qsodate, time_on from cqrlog_main where (callsign = :callsign) and (band = :band) '+
+            'and (mode = :mode) order by qsodate desc, time_on desc LIMIT 1'
 end;
 
 { WAZ / ITU / IOTA probes }
