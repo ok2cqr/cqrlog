@@ -224,6 +224,10 @@ type
     procedure RunOnBackground(path: string);
     procedure SaveWindowPos(a: TForm);
     procedure LoadWindowPos(a: TForm);
+    //same routing (log or local.cfg) under an explicit section, for windows
+    //that exist more than once and so cannot use their form name
+    procedure SaveWindowPosAs(a: TForm; const Section: string);
+    procedure LoadWindowPosAs(a: TForm; const Section: string);
     procedure ShowQSLWithExtViewer(Call: string);
     procedure ShowQRZInBrowser(call: string);
     procedure ShowLocatorMapInBrowser(locator: string);
@@ -3398,12 +3402,19 @@ begin
   end;
 end;
 procedure TdmUtils.SaveWindowPos(a: TForm);
-var
-  section: string = '';
+begin
+  SaveWindowPosAs(a, a.Name)
+end;
+
+procedure TdmUtils.LoadWindowPos(a: TForm);
+begin
+  LoadWindowPosAs(a, a.Name)
+end;
+
+procedure TdmUtils.SaveWindowPosAs(a: TForm; const Section: string);
 begin
   if dmData.DBName = '' then
     exit;
-  section := a.Name;
   if a.WindowState = wsMaximized then
     cqrini.WriteBool(section, 'Max', True, cqrini.LocalOnly('WindowSize'))
   else
@@ -3422,11 +3433,8 @@ begin
   end;
 end;
 
-procedure TdmUtils.LoadWindowPos(a: TForm);
-var
-  section: string = '';
+procedure TdmUtils.LoadWindowPosAs(a: TForm; const Section: string);
 begin
-  section := a.Name;
   LoadFontSettings(a);
   if cqrini.ReadBool(section, 'Max', False, cqrini.LocalOnly('WindowSize')) then
     a.WindowState := wsMaximized

@@ -1639,8 +1639,7 @@ begin
   frmNewQSO.UseSpaceBar := chkUseSpaceBar.Checked;
   if frmBandMap.Showing then
     frmBandMap.LoadFonts;
-  if frmBandMapGfx.Showing then
-    frmBandMapGfx.LoadSettings;
+  BandMapWindows.ReloadSettings;
   cqrini.SaveToDisk;
   if TRXChanged then
     frmTRXControl.InitializeRig;

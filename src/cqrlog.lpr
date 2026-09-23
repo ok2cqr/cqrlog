@@ -111,7 +111,6 @@ begin
   Application.CreateForm(TdmMembership, dmMembership);
   Application.CreateForm(TdmSatellite, dmSatellite);
   Application.CreateForm(TfrmProgress, frmProgress);
-  Application.CreateForm(TfrmBandMapGfx, frmBandMapGfx);
 
   Splash.Update;
   application.ProcessMessages;
