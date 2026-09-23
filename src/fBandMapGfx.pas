@@ -75,6 +75,7 @@ type
     FView      : TBandMapStore;     //this window's view of the shared store
     FInst      : TBandMapInstance;  //choice, viewport and filter, as saved
     FTitleBand : String;            //band named in the caption right now
+    FStandInFor: String;            //saved key this Auto window replaces ('' = none)
 
     FSpanIndex : Integer;
     FSpanKHz   : Integer;   //total visible span in kHz
@@ -167,7 +168,6 @@ type
     private
       FList         : TList;
       FShuttingDown : Boolean;
-      FKeptKeys     : TStringList; //saved choices that could not be opened
       FOnChanged    : TNotifyEvent;
       function  EnabledBands : TStringArray;
       procedure Changed;
@@ -298,7 +298,7 @@ begin
   FInst.Choice := AChoice;
   inherited Create(nil);
   //one name per choice, so a debug print or the LCL can tell them apart
-  Name := 'frmBandMapGfx_' + ChoiceKey(AChoice)
+  Name := InstanceComponentName(AChoice)
 end;
 
 destructor TfrmBandMapGfx.Destroy;
@@ -961,11 +961,18 @@ begin
   SaveInstanceSettings;
   dmUtils.SaveWindowPosAs(Self, InstanceSection(FInst.Choice));
   FInst.Choice := AChoice;
-  Name := 'frmBandMapGfx_' + ChoiceKey(AChoice);
+  Name := InstanceComponentName(AChoice);
+  //this window no longer stands in for a disabled band
+  FStandInFor := '';
   //the new choice's own viewport and filter; the window stays where it is
   FCenterKHz := 0;
   FManualPan := False;
+  FTitleBand := #0; //the caption changes even when the band does not
   LoadSettings;
+  //following the radio again means being where the radio is, not where the
+  //Auto window was left last time
+  if AChoice.IsAuto and (FVfoKHz > 0) then
+    FCenterKHz := FVfoKHz;
   EnsureCenter;
   SaveInstanceSettings;
   BandMapWindows.SaveOpenList;
@@ -1171,11 +1178,19 @@ var
   lo,hi,ref : Double;
   y         : Integer;
 begin
-  ref := FVfoKHz;
-  if ref <= 0 then
-    ref := FCenterKHz;
-  if not BandLimits(ref,lo,hi) then
-    exit;
+  if FInst.Choice.IsAuto then
+  begin
+    ref := FVfoKHz;
+    if ref <= 0 then
+      ref := FCenterKHz;
+    if not BandLimits(ref,lo,hi) then
+      exit
+  end
+  else begin
+    //the fixed band's edges, whatever band the radio is on
+    if not BandLimitsOf(FInst.Choice.Band,lo,hi) then
+      exit
+  end;
 
   c.Brush.Style := bsSolid;
   c.Brush.Color := BlendColor(clWindow,clWindowText,12);
@@ -1432,8 +1447,7 @@ end;
 constructor TBandMapWindows.Create;
 begin
   inherited Create;
-  FList     := TList.Create;
-  FKeptKeys := TStringList.Create
+  FList     := TList.Create
 end;
 
 destructor TBandMapWindows.Destroy;
@@ -1444,7 +1458,6 @@ begin
   for i := FList.Count-1 downto 0 do
     TfrmBandMapGfx(FList[i]).Free;
   FList.Free;
-  FKeptKeys.Free;
   inherited Destroy
 end;
 
@@ -1578,13 +1591,12 @@ begin
   for i := 0 to FList.Count-1 do
   begin
     SetLength(keys, Length(keys)+1);
-    keys[High(keys)] := ChoiceKey(Item(i).Choice)
-  end;
-  //choices that could not be opened (band disabled) are kept, not dropped
-  for i := 0 to FKeptKeys.Count-1 do
-  begin
-    SetLength(keys, Length(keys)+1);
-    keys[High(keys)] := FKeptKeys[i]
+    //a window standing in for a disabled band keeps that band's key, so the
+    //choice comes back once the band is enabled; closing the window drops it
+    if Item(i).FStandInFor <> '' then
+      keys[High(keys)] := Item(i).FStandInFor
+    else
+      keys[High(keys)] := ChoiceKey(Item(i).Choice)
   end;
   WriteOpenList(IniStore, keys)
 end;
@@ -1610,7 +1622,6 @@ var
   c,e  : TBandMapChoice;
   w    : TfrmBandMapGfx;
 begin
-  FKeptKeys.Clear;
   MigrateLegacyLayout(IniStore, cqrini.LocalOnly('WindowSize'));
   keys := ReadOpenList(IniStore);
   for k in keys do
@@ -1622,12 +1633,16 @@ begin
     else begin
       //the band was disabled in Preferences > Bands since: show Auto instead
       //and say so, but keep the saved choice for when it is enabled again
-      FKeptKeys.Add(k);
-      w := Open(e);
-      w.sbStatus.Panels[0].Text := BandLabel(c.Band)+' is disabled in Preferences > Bands, following the VFO instead'
+      w := Find(e);
+      if w = nil then
+      begin
+        w := Open(e);
+        w.FStandInFor := k
+      end;
+      w.sbStatus.Panels[1].Text := BandLabel(c.Band)+' is disabled in Preferences > Bands, following the VFO instead'
     end
   end;
-  //Open wrote the list from the windows alone, before the kept keys were known
+  //Open wrote the list before the stand-ins were known
   SaveOpenList
 end;
 

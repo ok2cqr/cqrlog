@@ -500,6 +500,7 @@ type
     procedure acShowBandMapGfxExecute(Sender: TObject);
     procedure mnuBandMapGfxChoiceClick(Sender: TObject);
     procedure BandMapWindowsChanged(Sender: TObject);
+    procedure RebuildBandMapGfxMenuAsync(Data: PtrInt);
     procedure acTRXControlExecute(Sender: TObject);
     procedure acViewQSOExecute(Sender: TObject);
     procedure acWACCfmExecute(Sender: TObject);
@@ -5381,6 +5382,14 @@ begin
 end;
 
 procedure TfrmNewQSO.BandMapWindowsChanged(Sender: TObject);
+begin
+  //a window opens from a click on one of these very items; rebuilding the
+  //submenu right now would free the item while its click is still running
+  //(Cocoa touches the item after OnClick), so it waits for the next idle
+  Application.QueueAsyncCall(@RebuildBandMapGfxMenuAsync, 0)
+end;
+
+procedure TfrmNewQSO.RebuildBandMapGfxMenuAsync(Data: PtrInt);
 begin
   RebuildBandMapGfxMenu
 end;

@@ -80,6 +80,8 @@ function SameChoice(const A, B : TBandMapChoice) : Boolean;
 function ChoiceKey(const C : TBandMapChoice) : String;
 function ParseChoiceKey(const AKey : String; out C : TBandMapChoice) : Boolean;
 function InstanceSection(const C : TBandMapChoice) : String;
+//a valid component name for the window of this choice ('.' is not allowed)
+function InstanceComponentName(const C : TBandMapChoice) : String;
 
 //'20M' -> '20 m', '70CM' -> '70 cm'
 function BandLabel(const ABand : String) : String;
@@ -192,6 +194,11 @@ end;
 function InstanceSection(const C : TBandMapChoice) : String;
 begin
   Result := SECTION_PREFIX + ChoiceKey(C)
+end;
+
+function InstanceComponentName(const C : TBandMapChoice) : String;
+begin
+  Result := 'frmBandMapGfx_' + StringReplace(ChoiceKey(C), '.', '_', [rfReplaceAll])
 end;
 
 function BandLabel(const ABand : String) : String;
@@ -330,6 +337,7 @@ begin
   I.LastHours := Store.ReadInteger('BandMapFilter', 'LastHours', 48);
   I.SinceDate := Store.ReadString('BandMapFilter', 'LastDate', '');
   I.SinceTime := Store.ReadString('BandMapFilter', 'LastTime', '');
+  I.OnlyCurrMode := Store.ReadBool('BandMap', 'OnlyActiveMode', False);
   if Store.ReadBool('BandMapFilter', 'NoWkdDate', False) then
   begin
     I.QsoRule := qrCustom;
