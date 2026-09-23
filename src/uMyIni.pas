@@ -263,6 +263,9 @@ end;
 
 function TMyIni.LocalOnly(Section : String) : Boolean;
 begin
+  //a dotted section (BandMapGfx.20M) is stored where its parent is
+  if Pos('.', Section) > 0 then
+    Section := Copy(Section, 1, Pos('.', Section)-1);
   Result := IsWordPresent(Section,LocalSections,[',']);
 end;
 

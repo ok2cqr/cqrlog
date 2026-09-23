@@ -40,6 +40,7 @@ type
   published
     procedure AutoAndFixedKeysRoundTrip;
     procedure UnknownKeyIsRejected;
+    procedure BandCodesWithADotAreKeys;
     procedure BandLabelIsLowerCaseWithSpace;
     procedure TitleNamesTheBandAndTheMode;
     procedure OpenListRoundTripSkipsBlanks;
@@ -121,6 +122,18 @@ begin
   AssertFalse(ParseChoiceKey('', C));
   AssertFalse(ParseChoiceKey('bogus', C));
   AssertFalse(ParseChoiceKey('20 m', C))
+end;
+
+procedure TBandMapLayoutTest.BandCodesWithADotAreKeys;
+var
+  C : TBandMapChoice;
+begin
+  AssertTrue(ParseChoiceKey('1.25M', C));
+  AssertEquals('1.25M', C.Band);
+  AssertTrue(ParseChoiceKey('2.5MM', C));
+  AssertEquals('2.5MM', C.Band);
+  AssertFalse(ParseChoiceKey('.5M', C));
+  AssertEquals('1.25 m', BandLabel('1.25M'))
 end;
 
 procedure TBandMapLayoutTest.BandLabelIsLowerCaseWithSpace;

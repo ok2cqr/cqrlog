@@ -1,12 +1,12 @@
 object frmBandMapGfxFilter: TfrmBandMapGfxFilter
   Left = 300
-  Height = 372
+  Height = 412
   Top = 150
   Width = 620
   AutoSize = True
   BorderStyle = bsDialog
   Caption = 'Band map filter'
-  ClientHeight = 372
+  ClientHeight = 412
   ClientWidth = 620
   OnShow = FormShow
   Position = poMainFormCenter

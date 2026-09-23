@@ -451,7 +451,7 @@ end;
 
 procedure TfrmBandMapGfx.FormShow(Sender: TObject);
 begin
-  dmUtils.LoadWindowPosAs(Self, InstanceSection(FInst.Choice));
+  dmUtils.LoadWindowPosAs(Self, InstanceSection(FInst.Choice), True);
   LoadSettings;
   FManualPan := False; //reopening always starts following the radio again
   if FVfoKHz <= 0 then
