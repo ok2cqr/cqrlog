@@ -36,6 +36,7 @@ type
     procedure TearDown; override;
   published
     procedure FirstAskFetchesSecondDoesNot;
+    procedure TryAnswersFromTheCacheOnly;
     procedure DifferentBandIsADifferentEntry;
     procedure DifferentBoundaryIsADifferentEntry;
     procedure NegativeAnswerIsCachedToo;
@@ -74,6 +75,24 @@ end;
 procedure TLogCacheTest.TearDown;
 begin
   FreeAndNil(C)
+end;
+
+procedure TLogCacheTest.TryAnswersFromTheCacheOnly;
+var
+  worked : Boolean;
+begin
+  LastQso := '2026-09-20 10:00';
+  //unknown station: no answer and, above all, no round trip to the log
+  AssertFalse(C.TryWorkedAfter('OK1ABC', '20M', 'CW', '2026-09-19', '00:00', worked));
+  AssertEquals(0, FetchCount);
+  //once fetched the answer comes from the cache
+  AssertTrue(C.WorkedAfter('OK1ABC', '20M', 'CW', '2026-09-19', '00:00'));
+  AssertEquals(1, FetchCount);
+  AssertTrue(C.TryWorkedAfter('OK1ABC', '20M', 'CW', '2026-09-19', '00:00', worked));
+  AssertTrue(worked);
+  AssertTrue(C.TryWorkedAfter('OK1ABC', '20M', 'CW', '2026-09-21', '00:00', worked));
+  AssertFalse(worked);
+  AssertEquals(1, FetchCount)
 end;
 
 procedure TLogCacheTest.FirstAskFetchesSecondDoesNot;
