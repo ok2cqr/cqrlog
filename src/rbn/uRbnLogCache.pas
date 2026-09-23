@@ -55,6 +55,10 @@ type
     //was there a QSO after LastDate LastTime? Answered from the cached last
     //QSO, so a boundary that moves with the clock costs no new fetch
     function  WorkedAfter(const Call, Band, Mode, LastDate, LastTime : String) : Boolean;
+    //the same answer from the cache alone: False when the station has not
+    //been looked up yet, so the caller can ration the round trips
+    function  TryWorkedAfter(const Call, Band, Mode, LastDate, LastTime : String;
+                             out Worked : Boolean) : Boolean;
     //the index of TdmData.RbnMonDXCCInfo: 0 confirmed/unknown, 1 new country,
     //2 new band, 3 new mode, 4 QSL needed
     function  DxccStatus(Adif : Word; const Band, Mode : String) : Integer;
@@ -176,6 +180,18 @@ begin
   end;
   //both are 'YYYY-MM-DD HH:NN', so text order is time order
   Result := (Last <> '') and (Last > LastDate + ' ' + LastTime)
+end;
+
+function TRbnLogCache.TryWorkedAfter(const Call, Band, Mode, LastDate, LastTime : String;
+                                     out Worked : Boolean) : Boolean;
+var
+  v    : Integer;
+  Last : String;
+begin
+  Worked := False;
+  Result := Get('W|' + UpperCase(Call) + '|' + Band + '|' + Mode, v, Last);
+  if Result then
+    Worked := (Last <> '') and (Last > LastDate + ' ' + LastTime)
 end;
 
 function TRbnLogCache.DxccStatus(Adif : Word; const Band, Mode : String) : Integer;

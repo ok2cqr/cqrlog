@@ -76,6 +76,7 @@ type
     FInst      : TBandMapInstance;  //choice, viewport and filter, as saved
     FTitleBand : String;            //band named in the caption right now
     FStandInFor: String;            //saved key this Auto window replaces ('' = none)
+    FQueryBudget : Integer;         //log round trips this Poll may still make
 
     FSpanIndex : Integer;
     FSpanKHz   : Integer;   //total visible span in kHz
@@ -259,6 +260,9 @@ const
 
   //how far an aged spot is blended towards the background, per AgeStep
   cAgeBlend : array[0..2] of Byte = (0,40,70);
+
+  //log round trips one Poll (every 500 ms) may make for the QSO rule
+  cMaxLogChecksPerPoll = 25;
 
 { blends AFrom towards ATo by APct percent. Used instead of the text band map's
   IncColor, which lightens towards white and so makes old spots MORE prominent
@@ -491,6 +495,11 @@ begin
   if (FVfoKHz <= 0) or FVfoFromQso then
     UseNewQsoFreq;
 
+  //the QSO rule runs on the GUI thread: with a cold cache (start-up, log
+  //switch, a snapshot of thousands of candidates) unbounded round trips to a
+  //LAN database froze the window for seconds and starved the RBN socket's
+  //timer. The rest waits for the next tick; until then the spot is shown.
+  FQueryBudget := cMaxLogChecksPerPoll;
   if FView.Poll(Now, dmUtils.GetDateTime(0)) then
     FDirty := True;
   if FDirty then
@@ -826,6 +835,11 @@ begin
   //an exception dialog every 500 ms - show the spot rather than nag
   try
     //shared with the RBN monitor; repeated calls cost no query
+    if dmData.RbnLogCache.TryWorkedAfter(ACall,ABand,AMode,ALastDate,ALastTime,Result) then
+      exit;
+    if FQueryBudget <= 0 then
+      exit(False); //not yet known: shown now, decided on a later tick
+    Dec(FQueryBudget);
     Result := dmData.RbnLogCache.WorkedAfter(ACall,ABand,AMode,ALastDate,ALastTime)
   except
     on E : Exception do
