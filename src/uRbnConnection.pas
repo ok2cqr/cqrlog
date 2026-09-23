@@ -31,6 +31,13 @@ uses
   Classes, SysUtils, ExtCtrls, lNet, lNetComponents,
   uRbnLineFramer, uRbnSpotParser, uRbnLogin, uRbnReconnect;
 
+const
+  RBN_RATE_MINUTES = 10;
+  //RBN sends spots without a pause; a session that is Connected and has been
+  //silent this long is dead (half-open TCP after a network drop, or a login
+  //the server never got) and is reconnected by the watchdog
+  RBN_SILENCE_SEC  = 180;
+
 type
   TRbnConnState = (rcsDisconnected,  //by the user, or never connected
                    rcsConnecting,
@@ -45,6 +52,8 @@ type
   private
     FTelnet    : TLTelnetClientComponent;
     FTimer     : TTimer;
+    FWatchdog  : TTimer;
+    FLastRx    : TDateTime;   //last byte from the server
     FFramer    : TRbnLineFramer;
     FLogin     : TRbnLogin;
     FReconnect : TRbnReconnect;
@@ -55,12 +64,20 @@ type
     FUserName  : String;
     FSpotSubs  : array of TRbnSpotEvent;
     FStateSubs : array of TRbnStateEvent;
+    //spots received per minute, a ring of the last RBN_RATE_MINUTES minutes
+    FRate      : array[0..RBN_RATE_MINUTES-1] of Integer;
+    FRateMin   : Int64;   //the minute the ring was last advanced to
+    FTotal     : Int64;
+
+    procedure CountSpot;
+    procedure AdvanceRate(ToMinute : Int64);
 
     procedure SetState(AState : TRbnConnState; const AStatus : String);
     procedure OpenSocket;
     procedure ScheduleReconnect(const Why : String);
     procedure AnswerLogin(const Text : String);
     procedure TimerTick(Sender : TObject);
+    procedure WatchdogTick(Sender : TObject);
     procedure SockConnect(aSocket : TLSocket);
     procedure SockDisconnect(aSocket : TLSocket);
     procedure SockError(const msg : string; aSocket : TLSocket);
@@ -81,6 +98,10 @@ type
 
     property State  : TRbnConnState read FState;
     property Status : String read FStatus;  //for a status bar
+    //spots received from the server in the last RBN_RATE_MINUTES minutes,
+    //before any filter; and since the connection object exists
+    function  SpotsLastMinutes : Integer;
+    property SpotsTotal : Int64 read FTotal;
     property Host   : String read FHost;
     property Port   : Integer read FPort;
   end;
@@ -122,6 +143,11 @@ begin
   FTimer.Enabled := False;
   FTimer.OnTimer := @TimerTick;
 
+  FWatchdog := TTimer.Create(self);
+  FWatchdog.Enabled  := False;
+  FWatchdog.Interval := 30000;
+  FWatchdog.OnTimer  := @WatchdogTick;
+
   FTelnet := TLTelnetClientComponent.Create(self);
   FTelnet.OnConnect    := @SockConnect;
   FTelnet.OnDisconnect := @SockDisconnect;
@@ -132,6 +158,7 @@ end;
 destructor TRbnConnection.Destroy;
 begin
   FTimer.Enabled := False;
+  FWatchdog.Enabled := False;
   SetLength(FSpotSubs, 0);
   SetLength(FStateSubs, 0);
   if FTelnet.Connected then
@@ -173,6 +200,7 @@ begin
   //first, so that the socket's own OnDisconnect does not schedule a reconnect
   FReconnect.UserDisconnect;
   FTimer.Enabled := False;
+  FWatchdog.Enabled := False;
   FTelnet.Disconnect;
   SetState(rcsDisconnected, 'Disconnected')
 end;
@@ -221,23 +249,49 @@ begin
   FLogin.Reset;
   FReconnect.Connected;
   FTimer.Enabled := False;
+  FLastRx := Now;
+  FWatchdog.Enabled := True;
   SetState(rcsConnected, 'Connected to RBN')
+end;
+
+//Seen 2026-09-22: after "Connection reset by peer" the socket reconnected in
+//250 ms, reported Connected, and then nothing arrived for the rest of the
+//evening -- no error, no disconnect, no spots. The socket cannot tell a dead
+//session from a quiet one; the spot rate can
+procedure TRbnConnection.WatchdogTick(Sender : TObject);
+begin
+  if FState <> rcsConnected then
+    exit;
+  if (Now - FLastRx) * SecsPerDay < RBN_SILENCE_SEC then
+    exit;
+  FWatchdog.Enabled := False;
+  DbgLog('RBN', 'connection: no data for ' + IntToStr(RBN_SILENCE_SEC) +
+                ' s while connected, login answered=' + BoolToStr(FLogin.Answered, True) +
+                ', reconnecting');
+  //our own Disconnect raises no OnDisconnect, so schedule the retry here
+  FTelnet.Disconnect;
+  ScheduleReconnect('Silent connection dropped')
 end;
 
 procedure TRbnConnection.SockDisconnect(aSocket : TLSocket);
 begin
+  FWatchdog.Enabled := False;
   ScheduleReconnect('Disconnected')
 end;
 
 procedure TRbnConnection.SockError(const msg : string; aSocket : TLSocket);
 begin
+  FWatchdog.Enabled := False;
   ScheduleReconnect('Error: ' + msg)
 end;
 
 procedure TRbnConnection.AnswerLogin(const Text : String);
 begin
   if (FUserName <> '') and IsRbnLoginPrompt(Text) and FLogin.ShouldAnswer(Text) then
+  begin
+    DbgLog('RBN', 'connection: login prompt "' + Trim(Text) + '", sending ' + FUserName);
     FTelnet.SendMessage(FUserName + #13#10)
+  end
 end;
 
 procedure TRbnConnection.SockReceive(aSocket : TLSocket);
@@ -250,22 +304,67 @@ var
 begin
   if FTelnet.GetMessage(Buffer) = 0 then
     exit;
+  FLastRx := Now;
   //GetMessage returns what has arrived so far, not lines
   FFramer.Feed(Buffer);
   while FFramer.NextLine(Line) do
   begin
     if ParseRbnSpot(Line, Spot) then
     begin
+      CountSpot;
       Subs := Copy(FSpotSubs);
       for i := 0 to High(Subs) do
         Subs[i](Line, Spot)
     end
-    else
+    else begin
+      //banner, prompt, server messages: a few lines per session, and the only
+      //trace of what the server said when no spots follow
+      if Trim(Line) <> '' then
+        DbgLog('RBN', 'connection: server: ' + Copy(Trim(Line), 1, 120));
       AnswerLogin(Line)
+    end
   end;
   //the prompt comes without a line end
   AnswerLogin(FFramer.Pending);
   FTelnet.CallAction
+end;
+
+//minutes that passed without a spot are zeroed as the ring moves on
+procedure TRbnConnection.AdvanceRate(ToMinute : Int64);
+var
+  i : Integer;
+begin
+  if (FRateMin = 0) or (ToMinute - FRateMin >= RBN_RATE_MINUTES) then
+  begin
+    for i := 0 to High(FRate) do
+      FRate[i] := 0;
+    FRateMin := ToMinute
+  end;
+  while FRateMin < ToMinute do
+  begin
+    Inc(FRateMin);
+    FRate[FRateMin mod RBN_RATE_MINUTES] := 0
+  end
+end;
+
+procedure TRbnConnection.CountSpot;
+var
+  m : Int64;
+begin
+  m := Trunc(Now * 1440);
+  AdvanceRate(m);
+  Inc(FRate[m mod RBN_RATE_MINUTES]);
+  Inc(FTotal)
+end;
+
+function TRbnConnection.SpotsLastMinutes : Integer;
+var
+  i : Integer;
+begin
+  AdvanceRate(Trunc(Now * 1440));
+  Result := 0;
+  for i := 0 to High(FRate) do
+    Result := Result + FRate[i]
 end;
 
 procedure TRbnConnection.SubscribeSpots(Handler : TRbnSpotEvent);

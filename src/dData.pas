@@ -42,6 +42,14 @@ const
   //server-side errno when require_secure_transport=ON rejects a plaintext conn.
   //FPC hides the server message ("Server connect failed."), so we match errno.
   cErrSecureTransportRequired = 3159;         //ER_SECURE_TRANSPORT_REQUIRED
+  //per-session setup, run on every connection right after it opens (and again
+  //when a connection is reopened, see ReconnectRbnMon).
+  //lock_wait_timeout: a metadata lock held by a stale connection (a client
+  //that died without closing its TCP session, its transaction still open on
+  //the server) would otherwise block any DDL for a year, the server default,
+  //and the program would just hang. An error after 30 s at least says why
+  cDBSessionSetupSql = 'SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,''ONLY_FULL_GROUP_BY'','''')),'+
+                       ' lock_wait_timeout=30;';
                        //so now after cDB_PING_INT will be run simple sql query
                        //which refresh connection
 
@@ -168,6 +176,7 @@ type
     fSCPCount : Integer;
     MySQLProcess : TProcess;
     csPreviousQSO : TRTLCriticalSection;
+    csRbnMon      : TRTLCriticalSection;  //qRbnMon: RBN worker and GUI thread
     fMySQLVersion : Currency;
     FreqMemCount  : integer;
 
@@ -278,7 +287,12 @@ type
     function  TriggersExistsOnCqrlog_main : Boolean;
     function  CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
-    function  RbnCallExistsInLog(const callsign,band,mode,LastDate,LastTime : String) : Boolean;
+    function  RbnLastQso(const callsign,band,mode : String) : String;
+    function  ReopenConnection(con : TSQLConnection; const What : String) : Boolean;
+    function  PingConnection(con : TSQLConnection; const What : String; out Reopened : Boolean) : Boolean;
+    function  PingConnection(con : TSQLConnection; const What : String) : Boolean;
+    function  ReconnectRbnMon : Boolean;
+    function  PingRbnMon : Boolean;
     function  GetNewLogNumber : Integer;
     function  getNewMySQLConnectionObject : TMySQL57Connection;
 
@@ -344,7 +358,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlUpload, dSqlQsl, dSqlRef, dSqlStat, dSqlImpExp, dSqlQso, dSqlSchema;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlUpload, dSqlQsl, dSqlRef, dSqlStat, dSqlImpExp, dSqlQso, dSqlSchema, uDebugLog;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -585,8 +599,7 @@ begin
 
   //connections are open now (plaintext or TLS) - apply the session sql_mode
   try
-    sql := 'SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'+QuotedStr('ONLY_FULL_GROUP_BY')+','+QuotedStr('')+'));';
-
+    sql := cDBSessionSetupSql;
     MainCon.ExecuteDirect(sql);
     dbDXC.ExecuteDirect(sql);
     LogUploadCon.ExecuteDirect(sql);
@@ -706,13 +719,19 @@ begin
   qBandMapFil.ExecSQL;
   trBandMapFil.Commit;
 
-  if trRbnMon.Active then trRbnMon.Rollback;
-  qRbnMon.Close;
-  qRbnMon.SQL.Text := dmSqlSchema.SqlUseDb(fDBName);
-  if (fDebugLevel>=1) then Writeln(qRbnMon.SQL.Text);
-  trRbnMon.StartTransaction;
-  qRbnMon.ExecSQL;
-  trRbnMon.Commit;
+  //the RBN worker may be inside a fetch on this query right now
+  EnterCriticalsection(csRbnMon);
+  try
+    if trRbnMon.Active then trRbnMon.Rollback;
+    qRbnMon.Close;
+    qRbnMon.SQL.Text := dmSqlSchema.SqlUseDb(fDBName);
+    if (fDebugLevel>=1) then Writeln(qRbnMon.SQL.Text);
+    trRbnMon.StartTransaction;
+    qRbnMon.ExecSQL;
+    trRbnMon.Commit
+  finally
+    LeaveCriticalsection(csRbnMon)
+  end;
 
   Q.SQL.Text := dmSqlSchema.SqlConfig;
   trQ.StartTransaction;
@@ -1104,6 +1123,7 @@ var
 
 begin
   InitCriticalSection(csPreviousQSO);
+  InitCriticalSection(csRbnMon);
   cqrini       := nil;
   IsSFilter    := False;
   fDLLSSLName  := '';
@@ -1250,6 +1270,7 @@ begin
   BandMapCon.Connected := False;
   MainCon.Connected := False;
   DoneCriticalsection(csPreviousQSO);
+  DoneCriticalsection(csRbnMon);
   FreeAndNil(RbnLogCache);
   KillMySQL(False)
 end;
@@ -1314,8 +1335,35 @@ begin
   }
 end;
 
+//Every cDB_PING_INT s. After a network drop to the server every connection is
+//dead and the user learns it from the next Save QSO. The ping finds them and
+//reopens them first. Connections shared with a worker thread are pinged under
+//that thread's lock, by the module owning it
 procedure TdmData.tmrDBPingTimer(Sender: TObject);
+var
+  reopened : Boolean;
 begin
+  if fDBName = '' then    //no log open yet
+    exit;
+  try
+    if not PingConnection(MainCon,'MainCon',reopened) then
+      exit;
+    if reopened then
+    begin
+      //ReopenConnection closed every dataset on MainCon, the log grid included;
+      //show the first page again, as Cancel filter does
+      if Assigned(frmMain) and frmMain.Visible then
+        frmMain.acCancelFilter.Execute
+    end;
+    PingConnection(BandMapCon,'BandMapCon');
+    PingRbnMon;
+    dmDXCluster.PingDatabase
+    //LogUploadCon on purpose not: TUploadThread uses dmLogUpload.Q without a
+    //lock, the upload dialog reports its own errors
+  except
+    on E : Exception do
+      DbgLog('DB','ping timer: ' + E.Message)
+  end
 end;
 
 
@@ -3292,7 +3340,12 @@ end;
 
 function TdmData.CachedDxccStatus(Adif : Word; const Band, Mode : String) : Integer;
 begin
-  RbnMonDXCCInfo(Adif, Band, Mode, False, Result)
+  EnterCriticalsection(csRbnMon);
+  try
+    RbnMonDXCCInfo(Adif, Band, Mode, False, Result)
+  finally
+    LeaveCriticalsection(csRbnMon)
+  end
 end;
 
 function TdmData.RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean; var index : integer) : String;
@@ -3372,30 +3425,131 @@ begin
   end
 end;
 
-function TdmData.RbnCallExistsInLog(const callsign,band,mode,LastDate,LastTime : String) : Boolean;
-var
-  sql : String;
+//Called through RbnLogCache from the RBN worker thread AND from the graphical
+//band map on the GUI thread (its QSO rule). qRbnMon is one query on one
+//connection, and two threads inside the MySQL client at once hang it, so the
+//two fetches below take csRbnMon for the whole round trip
+function TdmData.RbnLastQso(const callsign,band,mode : String) : String;
 begin
+  Result := '';
+  EnterCriticalsection(csRbnMon);
   try
-    Result := False;
     qRbnMon.Close;
-
-    //this ugly query is because I made a stupid mistake when stored qsodate and time_on as Varchar(), now it's probably
-    //too late to rewrite it (Petr, OK2CQR)
-    qRbnMon.SQL.Text := dmSqlQso.SqlQsoAfterParams;
-
+    qRbnMon.SQL.Text := dmSqlQso.SqlLastQsoParams;
     qRbnMon.Prepare;
     qRbnMon.ParamByName('callsign').AsString := callsign;
     qRbnMon.ParamByName('band').AsString := band;
     qRbnMon.ParamByName('mode').AsString := mode;
-    qRbnMon.ParamByName('last_date_time').AsString := LastDate + ' ' + LastTime;
     if fDebugLevel>=1 then Writeln(qRbnMon.SQL.Text);
     qRbnMon.Open;
-
-    Result := qRbnMon.RecordCount > 0
+    if not qRbnMon.EOF then
+      Result := qRbnMon.Fields[0].AsString + ' ' + qRbnMon.Fields[1].AsString
   finally
     qRbnMon.Close;
-    trRbnMon.RollBack
+    trRbnMon.RollBack;
+    LeaveCriticalsection(csRbnMon)
+  end
+end;
+
+//Reopens a connection whose TCP session died under it, typically "Server has
+//gone away" (2006) after a network drop to a server in the LAN. Restores the
+//per-session state OpenConnections/OpenDatabase had set on it (sql_mode,
+//USE <log>). Closing the connection closes every dataset on it, so the caller
+//refreshes what it shows. Returns False when the server is still unreachable.
+//Caller holds the lock of connections shared with a worker thread
+function TdmData.ReopenConnection(con : TSQLConnection; const What : String) : Boolean;
+begin
+  Result := False;
+  try
+    if Assigned(con.Transaction) and con.Transaction.Active then
+      con.Transaction.Rollback;
+    con.Connected := False;
+    con.Connected := True;
+    con.ExecuteDirect(cDBSessionSetupSql);
+    if fDBName <> '' then
+      con.ExecuteDirect(dmSqlSchema.SqlUseDb(fDBName));
+    //ExecuteDirect leaves the transaction it started active; callers use
+    //StartTransaction without checking
+    if Assigned(con.Transaction) and con.Transaction.Active then
+      con.Transaction.Rollback;
+    Result := True;
+    DbgLog('DB',What + ': reconnected')
+  except
+    on E : Exception do
+    begin
+      DbgLog('DB',What + ': reconnect failed: ' + E.Message);
+      try
+        if con.Connected then
+          con.Connected := False
+      except
+      end
+    end
+  end
+end;
+
+//Cheap round trip to find a dead connection before a user action hits it.
+//Returns False when the connection was found dead and could not be reopened;
+//Reopened tells the caller its datasets were closed on the way
+function TdmData.PingConnection(con : TSQLConnection; const What : String; out Reopened : Boolean) : Boolean;
+var
+  wasActive : Boolean;
+begin
+  Result   := True;
+  Reopened := False;
+  //left closed by a failed reopen. ExecuteDirect would open it by itself, but
+  //without the session setup
+  if not con.Connected then
+  begin
+    Result   := ReopenConnection(con, What);
+    Reopened := Result;
+    exit
+  end;
+  try
+    wasActive := Assigned(con.Transaction) and con.Transaction.Active;
+    con.ExecuteDirect('SELECT 1');
+    if (not wasActive) and Assigned(con.Transaction) and con.Transaction.Active then
+      con.Transaction.Rollback
+  except
+    on E : ESQLDatabaseError do
+    begin
+      DbgLog('DB',What + ': ping failed (' + E.Message + ')');
+      Result   := ReopenConnection(con, What);
+      Reopened := Result
+    end
+  end
+end;
+
+function TdmData.PingConnection(con : TSQLConnection; const What : String) : Boolean;
+var
+  dummy : Boolean;
+begin
+  Result := PingConnection(con, What, dummy)
+end;
+
+//Called by the RBN worker after a query on RbnMonCon raised ESQLDatabaseError.
+//Nothing else reopened this connection, so the worker had no way to recover.
+//Returns False when the server is still unreachable; the caller waits and
+//retries with the next spot
+function TdmData.ReconnectRbnMon : Boolean;
+begin
+  EnterCriticalsection(csRbnMon);
+  try
+    if trRbnMon.Active then trRbnMon.Rollback;
+    qRbnMon.Close;
+    Result := ReopenConnection(RbnMonCon,'RbnMonCon')
+  finally
+    LeaveCriticalsection(csRbnMon)
+  end
+end;
+
+//the same under the lock, for the ping timer
+function TdmData.PingRbnMon : Boolean;
+begin
+  EnterCriticalsection(csRbnMon);
+  try
+    Result := PingConnection(RbnMonCon,'RbnMonCon')
+  finally
+    LeaveCriticalsection(csRbnMon)
   end
 end;
 
@@ -3590,8 +3744,10 @@ begin
   MainCon      := getNewMySQLConnectionObject();
   BandMapCon   := getNewMySQLConnectionObject();
   RbnMonCon    := getNewMySQLConnectionObject();
-  RbnLogCache  := TRbnLogCache.Create(5000);
-  RbnLogCache.OnWorkedAfter := @RbnCallExistsInLog;
+  //20000: a contest evening can bring that many distinct call/band/mode in
+  //the ten minutes an entry lives
+  RbnLogCache  := TRbnLogCache.Create(20000);
+  RbnLogCache.OnLastQso     := @RbnLastQso;
   RbnLogCache.OnDxccStatus  := @CachedDxccStatus;
   LogUploadCon := getNewMySQLConnectionObject();
   dbDXC        := getNewMySQLConnectionObject();

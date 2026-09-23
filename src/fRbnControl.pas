@@ -23,9 +23,12 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, StdCtrls, ExtCtrls, Buttons, Graphics,
-  Dialogs, LCLType, dSqlRef, uRbnConnection;
+  Dialogs, LCLType, ComCtrls, dSqlRef, uRbnConnection;
 
 type
+
+  { TfrmRbnControl }
+
   TfrmRbnControl = class(TForm)
     btnConnect: TSpeedButton;
     btnFilter: TSpeedButton;
@@ -33,6 +36,10 @@ type
     cmbSource: TComboBox;
     imgRbnControl: TImageList;
     shpState: TShape;
+    sbStatus: TStatusBar;
+    tmrStatus: TTimer;
+    procedure btnStatusBarClick(Sender: TObject);
+    procedure tmrStatusTimer(Sender: TObject);
     procedure btnConnectClick(Sender: TObject);
     procedure btnFilterClick(Sender: TObject);
     procedure btnSourcesClick(Sender: TObject);
@@ -67,7 +74,7 @@ implementation
 {$R *.lfm}
 
 uses
-  dUtils, uMyIni, fRbnSources, fRbnFilter, fRbnMonitor, fNewQSO;
+  dUtils, uMyIni, fRbnSources, fRbnFilter, fRbnMonitor, fNewQSO, uBandMapStore;
 
 procedure TfrmRbnControl.FormCreate(Sender: TObject);
 begin
@@ -84,7 +91,27 @@ procedure TfrmRbnControl.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(self);
   LoadSources;
+  //the status bar is the only place to see that spots arrive at all when the
+  //monitor is closed and the band is quiet
+  tmrStatusTimer(nil);
   OnRbnState(FConn)
+end;
+
+procedure TfrmRbnControl.tmrStatusTimer(Sender: TObject);
+begin
+  if FConn.State = rcsConnected then
+    sbStatus.SimpleText := IntToStr(FConn.SpotsLastMinutes) + ' spots in the last ' +
+                           IntToStr(RBN_RATE_MINUTES) + ' min, ' + IntToStr(FConn.SpotsTotal) + ' total'
+  else
+    sbStatus.SimpleText := FConn.Status
+end;
+
+procedure TfrmRbnControl.btnStatusBarClick(Sender: TObject);
+begin
+  if sbStatus.Visible then
+    sbStatus.Visible := False
+  else
+    sbStatus.Visible := True
 end;
 
 procedure TfrmRbnControl.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -123,11 +150,19 @@ begin
       if FSources[i].Id = Id then
         cmbSource.ItemIndex := i
     end;
-    //a deleted preset must not leave the combo pointing at nothing
+    //a deleted preset must not leave the combo pointing at nothing; prefer
+    //the public RBN server over whatever sorts first (the Grayline's own
+    //cluster address, for one)
     if (cmbSource.ItemIndex < 0) and (cmbSource.Items.Count > 0) then
     begin
       cmbSource.ItemIndex := 0;
-      cqrini.WriteInteger('RBN', 'MainSourceId', FSources[0].Id)
+      for i := 0 to High(FSources) do
+        if Pos('reversebeacon', LowerCase(FSources[i].Address)) > 0 then
+        begin
+          cmbSource.ItemIndex := i;
+          Break
+        end;
+      cqrini.WriteInteger('RBN', 'MainSourceId', FSources[cmbSource.ItemIndex].Id)
     end
   finally
     cmbSource.Items.EndUpdate
@@ -149,7 +184,12 @@ var
 begin
   if not SelectedSource(Src) then
     exit;
+  //candidates of the old source must not pass for the new one's
+  if Src.Id <> MainSourceId then
+    SpotStore.DropRbnSource(MainSourceId);
   cqrini.WriteInteger('RBN', 'MainSourceId', Src.Id);
+  if Assigned(frmRbnMonitor) then
+    frmRbnMonitor.LoadConfigToThread;
   //a live connection follows the choice, a disconnected one just remembers it
   if FConn.State <> rcsDisconnected then
     ConnectMain
@@ -229,6 +269,7 @@ begin
     else            shpState.Brush.Color := clSilver
   end;
   shpState.Hint := FConn.Status;
+  tmrStatusTimer(nil);
   if FConn.State = rcsDisconnected then
   begin
     btnConnect.ImageIndex := 1;

@@ -704,7 +704,6 @@ type
     Label26: TLabel;
     Label80: TLabel;
     Label81: TLabel;
-    lblRbnWindowOpen: TLabel;
     lblHamlib: TLabel;
     lbCallW: TLabel;
     lbFreqW: TLabel;

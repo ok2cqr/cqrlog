@@ -127,6 +127,11 @@ type
     FirstShow  : Boolean;
     ConOnShow  : Boolean;
     lTelnet    : TLTelnetClientComponent;
+    //the user wants the telnet link up; set by Connect, cleared by Disconnect
+    //and StopAllConnections. The watchdog reconnects while it is set
+    FTelWanted : Boolean;
+    FTelLastRx : TDateTime;     //last byte from the cluster
+    tmrTelWatchdog : TTimer;
     csDXCPref  : TRTLCriticalSection;
     ReloadDXCPref : Boolean;
     FirstWebGet : Boolean;
@@ -178,6 +183,8 @@ type
     procedure lConnect(aSocket: TLSocket);
     procedure lDisconnect(aSocket: TLSocket);
     procedure lReceive(aSocket: TLSocket);
+    procedure lError(const msg : String; aSocket : TLSocket);
+    procedure tmrTelWatchdogTimer(Sender : TObject);
     procedure ChangeCallAlertCaption;
 
     function  ShowSpot(spot : String; var sColor : Integer; var Country : String; FromTelnet : Boolean = True) : Boolean;
@@ -232,7 +239,7 @@ implementation
 { TfrmDXCluster }
 
 uses dUtils, fDXClusterList, dData, dDXCluster, fMain, fTRXControl, fNewQSO, fBandMap,
-     uMyIni, fPreferences, uBandMapStore, uDebugLog;
+     uMyIni, fPreferences, uBandMapStore, uDebugLog, sqldb;
 
 procedure TfrmDXCluster.ConnectToWeb;
 var
@@ -266,6 +273,7 @@ begin
     ConTelnet := False;
     exit
   end;
+  FTelWanted := True;
   try
     lTelnet.Host    := telAddr;
     lTelnet.Port    := StrToInt(telPort);
@@ -487,6 +495,14 @@ begin
   lTelnet.OnConnect    := @lConnect;
   lTelnet.OnDisconnect := @lDisconnect;
   lTelnet.OnReceive    := @lReceive;
+  //without a handler lNet writes the error text into the receive buffer, where
+  //it shows up as one more line between the spots and nothing acts on it
+  lTelnet.OnError      := @lError;
+
+  tmrTelWatchdog := TTimer.Create(self);
+  tmrTelWatchdog.Interval := 30000;
+  tmrTelWatchdog.OnTimer  := @tmrTelWatchdogTimer;
+  tmrTelWatchdog.Enabled  := True;
 
   WebSpots             := TColorMemo.Create(pnlWeb);
   WebSpots.parent      := pnlWeb;
@@ -816,8 +832,48 @@ end;
 procedure TfrmDXCluster.lConnect(aSocket: TLSocket);
 begin
   DbgLog('DXC','telnet socket connected');
+  FTelLastRx := Now;
   btnTelConnect.Caption := 'Disconnect';
   ConTelnet := True;
+end;
+
+procedure TfrmDXCluster.lError(const msg : String; aSocket : TLSocket);
+begin
+  DbgLog('DXC','telnet socket error: ' + msg);
+  TelSpots.AddLine(msg,clWindowText,clWindow,0)
+end;
+
+//Seen 2026-09-22 on both telnet links (RBN and cluster): after "Connection
+//reset by peer" the socket comes back as Connected and then nothing arrives,
+//with no error and no disconnect. The socket cannot tell a dead session from a
+//quiet one; the traffic can -- a cluster is never silent for five minutes.
+//The same tick brings the link back after a disconnect the user did not ask for
+procedure TfrmDXCluster.tmrTelWatchdogTimer(Sender : TObject);
+const
+  SILENCE_SEC = 300;
+begin
+  if not FTelWanted then
+    exit;
+  if ConTelnet and lTelnet.Connected then
+  begin
+    if (Now - FTelLastRx) * SecsPerDay < SILENCE_SEC then
+      exit;
+    DbgLog('DXC','telnet: no data for ' + IntToStr(SILENCE_SEC) + ' s while connected, reconnecting');
+    lTelnet.Disconnect;
+    ConTelnet := False;
+    SentStartCmd := False
+  end;
+  //not connected while the user wants to be: lost, or dropped just above
+  DbgLog('DXC','telnet: reconnecting to ' + telAddr + ':' + telPort);
+  try
+    lTelnet.Host := telAddr;
+    lTelnet.Port := StrToInt(telPort);
+    lTelnet.Connect;
+    lTelnet.CallAction
+  except
+    on E : Exception do
+      DbgLog('DXC','telnet: reconnect failed: ' + E.Message)
+  end
 end;
 
 procedure TfrmDXCluster.lDisconnect(aSocket: TLSocket);
@@ -842,6 +898,7 @@ var
 begin
   if lTelnet.GetMessage(buffer) = 0 then
     exit;
+  FTelLastRx := Now;
   sStart := 1;
   sStop := Pos(CR, Buffer);
   if sStop = 0 then
@@ -1075,6 +1132,7 @@ procedure TfrmDXCluster.StopAllConnections;
 begin
   if ConWeb then
     tmrSpots.Enabled := False;
+  FTelWanted := False;
   if ConTelnet then
   begin
     if lTelnet.Connected then
@@ -1446,7 +1504,7 @@ begin
 
     //graphical band map keeps a store of its own, with its own visibility gate,
     //so the text band map above is not affected either way
-    if ToBandMap and Assigned(BandMapStore) and BandMapStore.Enabled then
+    if ToBandMap and Assigned(BandMapStore) then
     begin
       if cfgUseDXCColors then
         BandMapStore.Add(kmitocet,call,mode,band,splitstr,sColor,ThBckColor,
@@ -1484,9 +1542,8 @@ begin
   DbgLog('DXC','telnet thread started');
   dx := '';
   tBeat := Now;
+  while not Terminated do
   try
-  while true do
-  begin
     //heartbeat, so the log distinguishes "thread died" from "no spots arrived"
     if (Now - tBeat) > (5/1440) then
     begin
@@ -1545,8 +1602,17 @@ begin
     end;
 
     sleep(500)
-  end
   except
+    //per iteration, not around the whole loop: that ended the thread on the
+    //first exception and the cluster window silently stopped updating
+    on E: ESQLDatabaseError do
+    begin
+      DbgLogException('DXC','telnet spot=' + dx, E);
+      //"Server has gone away" after a network drop: reopen dbDXC for the next
+      //spot, or wait so a server that is still down is not hammered
+      if not dmDXCluster.ReopenDatabase then
+        Sleep(5000)
+    end;
     on E: Exception do
       DbgLogException('DXC','telnet spot=' + dx, E)
   end;

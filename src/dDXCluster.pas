@@ -47,6 +47,8 @@ type
     function  DXCCInfo(adif : Word;freq,mode : String; var index : integer) : String;
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
     function  UseseQSL(call : String) : Boolean;
+    function  PingDatabase : Boolean;
+    function  ReopenDatabase : Boolean;
     function  id_country(callsign: string;QsoDate : TDateTime; var pfx, cont, country, WAZ,
                                UtcOffset, ITU, lat, long: string) : Word; overload;
     function  id_country(callsign : String; QsoDate : TDateTime; var pfx,country,waz,itu,cont : String) : Word; overload;
@@ -458,6 +460,29 @@ begin
     finally
       l.Free
     end
+  finally
+    LeaveCriticalsection(csDX)
+  end
+end;
+
+//dbDXC is shared by three worker threads (see csDX above); both take the lock
+//for the whole round trip, like every other use of the connection
+function TdmDXCluster.PingDatabase : Boolean;
+begin
+  EnterCriticalsection(csDX);
+  try
+    Result := dmData.PingConnection(dmData.dbDXC,'dbDXC')
+  finally
+    LeaveCriticalsection(csDX)
+  end
+end;
+
+//for a worker that just got ESQLDatabaseError from a query on dbDXC
+function TdmDXCluster.ReopenDatabase : Boolean;
+begin
+  EnterCriticalsection(csDX);
+  try
+    Result := dmData.ReopenConnection(dmData.dbDXC,'dbDXC')
   finally
     LeaveCriticalsection(csDX)
   end

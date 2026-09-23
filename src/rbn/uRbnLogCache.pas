@@ -32,7 +32,9 @@ uses
   Classes, SysUtils, contnrs;
 
 type
-  TWorkedAfterFunc = function(const Call, Band, Mode, LastDate, LastTime : String) : Boolean of object;
+  //the moment of the last QSO with the call on the band and mode, as the log
+  //stores it: 'YYYY-MM-DD HH:NN' (UTC); '' when there is none
+  TLastQsoFunc     = function(const Call, Band, Mode : String) : String of object;
   TDxccStatusFunc  = function(Adif : Word; const Band, Mode : String) : Integer of object;
 
   TRbnLogCache = class
@@ -41,15 +43,17 @@ type
     FMap      : TFPHashList;    //key -> PEntry
     FCapacity : Integer;
     FClock    : Int64;          //insertion order, for eviction
-    function  Get(const Key : String; out Value : Integer) : Boolean;
-    procedure Put(const Key, Call : String; Value : Integer);
+    function  Get(const Key : String; out Value : Integer; out Text : String) : Boolean;
+    procedure Put(const Key, Call : String; Value : Integer; const Text : String = '');
     procedure ClearAll;
   public
-    OnWorkedAfter : TWorkedAfterFunc;
+    OnLastQso     : TLastQsoFunc;
     OnDxccStatus  : TDxccStatusFunc;
     TtlSeconds    : Integer;
     constructor Create(ACapacity : Integer);
     destructor Destroy; override;
+    //was there a QSO after LastDate LastTime? Answered from the cached last
+    //QSO, so a boundary that moves with the clock costs no new fetch
     function  WorkedAfter(const Call, Band, Mode, LastDate, LastTime : String) : Boolean;
     //the index of TdmData.RbnMonDXCCInfo: 0 confirmed/unknown, 1 new country,
     //2 new band, 3 new mode, 4 QSL needed
@@ -65,6 +69,7 @@ type
   PEntry = ^TEntry;
   TEntry = record
     Value : Integer;
+    Text  : String;   //the last QSO moment for W entries
     Stamp : TDateTime;
     Order : Int64;
     Call  : String;   //'' for DXCC entries
@@ -98,23 +103,27 @@ begin
   FMap.Clear
 end;
 
-function TRbnLogCache.Get(const Key : String; out Value : Integer) : Boolean;
+function TRbnLogCache.Get(const Key : String; out Value : Integer; out Text : String) : Boolean;
 var
   E : PEntry;
 begin
   Value := 0;
+  Text  := '';
   EnterCriticalsection(FCrit);
   try
     E := PEntry(FMap.Find(Key));
     Result := (E <> nil) and ((Now - E^.Stamp) * 86400 < TtlSeconds);
     if Result then
-      Value := E^.Value
+    begin
+      Value := E^.Value;
+      Text  := E^.Text
+    end
   finally
     LeaveCriticalsection(FCrit)
   end
 end;
 
-procedure TRbnLogCache.Put(const Key, Call : String; Value : Integer);
+procedure TRbnLogCache.Put(const Key, Call : String; Value : Integer; const Text : String);
 var
   E      : PEntry;
   i, old : Integer;
@@ -144,6 +153,7 @@ begin
       FMap.Add(Key, E)
     end;
     E^.Value := Value;
+    E^.Text  := Text;
     E^.Stamp := Now;
     Inc(FClock);
     E^.Order := FClock
@@ -154,25 +164,30 @@ end;
 
 function TRbnLogCache.WorkedAfter(const Call, Band, Mode, LastDate, LastTime : String) : Boolean;
 var
-  Key : String;
-  v   : Integer;
+  Key  : String;
+  v    : Integer;
+  Last : String;
 begin
-  Key := 'W|' + UpperCase(Call) + '|' + Band + '|' + Mode + '|' + LastDate + ' ' + LastTime;
-  if Get(Key, v) then
-    exit(v <> 0);
-  Result := OnWorkedAfter(Call, Band, Mode, LastDate, LastTime);
-  Put(Key, UpperCase(Call), Ord(Result))
+  Key := 'W|' + UpperCase(Call) + '|' + Band + '|' + Mode;
+  if not Get(Key, v, Last) then
+  begin
+    Last := OnLastQso(Call, Band, Mode);
+    Put(Key, UpperCase(Call), 0, Last)
+  end;
+  //both are 'YYYY-MM-DD HH:NN', so text order is time order
+  Result := (Last <> '') and (Last > LastDate + ' ' + LastTime)
 end;
 
 function TRbnLogCache.DxccStatus(Adif : Word; const Band, Mode : String) : Integer;
 var
   Key : String;
+  t   : String;
 begin
   Key := 'D|' + IntToStr(Adif) + '|' + Band + '|' + Mode;
-  if Get(Key, Result) then
+  if Get(Key, Result, t) then
     exit;
   Result := OnDxccStatus(Adif, Band, Mode);
-  Put(Key, '', Result)
+  Put(Key, '', Result, '')
 end;
 
 procedure TRbnLogCache.InvalidateAll;
