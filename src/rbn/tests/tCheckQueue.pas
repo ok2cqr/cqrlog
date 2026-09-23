@@ -33,6 +33,7 @@ type
     procedure DifferentBandIsAnotherQuestion;
     procedure CanBeAskedAgainOncePopped;
     procedure ClearEmptiesIt;
+    procedure MembershipIsAnotherKindOfQuestion;
   end;
 
 implementation
@@ -101,6 +102,23 @@ begin
   AssertFalse(Q.Pop(R));
   Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
   AssertEquals(1, Q.Count)
+end;
+
+procedure TLogCheckQueueTest.MembershipIsAnotherKindOfQuestion;
+var
+  R : TLogCheckRequest;
+begin
+  Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  Q.PushMembership('OK1AA', '2026-09-23');
+  Q.PushMembership('OK1AA', '2026-09-23');   //queued once
+  AssertEquals(2, Q.Count);
+  AssertTrue(Q.Pop(R));
+  AssertTrue(R.Kind = lckWorked);
+  AssertTrue(Q.Pop(R));
+  AssertTrue(R.Kind = lckMembership);
+  AssertEquals('OK1AA', R.Call);
+  AssertEquals('2026-09-23', R.LastDate);
+  AssertFalse(Q.Pop(R))
 end;
 
 initialization

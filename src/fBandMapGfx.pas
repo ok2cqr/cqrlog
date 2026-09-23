@@ -100,6 +100,10 @@ type
     //display filters, re-read from the ini by LoadSettings
     FOnlyCurrBand : Boolean;
     FOnlyCurrMode : Boolean;
+    //[BandMap] ShowMembership: club labels after the call. FMembershipGen is
+    //the cache generation the last paint saw; a new answer means a repaint
+    FShowMembership : Boolean;
+    FMembershipGen  : Integer;
 
     //per paint metrics
     FRowH      : Integer;
@@ -122,6 +126,7 @@ type
     function  HitTest(AX, AY : Integer; out AHit : TSpotHit) : Boolean;
     function  SpotVisible(const ASpot : TGfxSpot) : Boolean;
     function  IsWorked(const ACall, ABand, AMode, ALastDate, ALastTime : String) : Boolean;
+    function  MembershipLabel(const ACall, ADate : String) : String;
     procedure UpdateFilterIndicator;
     function  GlobalRuleText : String;
     function  ShownBand : String;
@@ -200,6 +205,8 @@ type
       //a window met a station the log cache does not know: the thread looks
       //it up, the window shows the spot until then
       procedure RequestLogCheck(const ACall, ABand, AMode, ALastDate, ALastTime : String);
+      //the same for the club membership of a heard station on a day
+      procedure RequestMembership(const ACall, ADate : String);
       //a window opened or closed: menus showing the open choices redraw
       property OnChanged : TNotifyEvent read FOnChanged write FOnChanged;
   end;
@@ -393,6 +400,7 @@ begin
   //"only the active band" is the text band map's option and only means
   //something while following the radio; a fixed window is its band
   FOnlyCurrBand := FInst.Choice.IsAuto and cqrini.ReadBool('BandMap','OnlyActiveBand',False);
+  FShowMembership := cqrini.ReadBool('BandMap','ShowMembership',False);
   //a fixed window wants its band only; the Auto window keeps every band so
   //that following the radio across bands throws nothing away
   if FInst.Choice.IsAuto then
@@ -522,6 +530,9 @@ begin
 
   t0 := Now;
   if FView.Poll(Now, dmUtils.GetDateTime(0)) then
+    FDirty := True;
+  //a membership answer arrived (or the club tables changed): the labels differ
+  if FShowMembership and (FMembershipGen <> dmData.RbnLogCache.MembershipGeneration) then
     FDirty := True;
   ms := Round((Now - t0) * 86400000);
   if ms > 200 then
@@ -859,6 +870,16 @@ begin
     exit;
   BandMapWindows.RequestLogCheck(ACall,ABand,AMode,ALastDate,ALastTime);
   Result := False
+end;
+
+{ GUI thread, from DrawSpots: the cache answers or the log check thread is
+  asked and the label appears on a later paint }
+function TfrmBandMapGfx.MembershipLabel(const ACall, ADate : String) : String;
+begin
+  if dmData.RbnLogCache.TryMembership(ACall, ADate, Result) then
+    exit;
+  BandMapWindows.RequestMembership(ACall, ADate);
+  Result := ''
 end;
 
 { the shared [BandMapFilter] rule of the text band map, in a few words }
@@ -1297,11 +1318,17 @@ var
   i,n,TrueY,TextY,LastBottom,Overflow : Integer;
   TickX,LeadX,TextX : Integer;
   sp    : TGfxSpot;
-  s     : String;
+  s,m   : String;
+  today : String;
   r     : TRect;
   eff   : TColor;
   cLead : TColor;
 begin
+  //membership rows have fromdate/todate; the spots are minutes old, so the
+  //day is today (UTC)
+  today := FormatDateTime('yyyy-mm-dd', dmUtils.GetDateTime(0));
+  if FShowMembership then
+    FMembershipGen := dmData.RbnLogCache.MembershipGeneration;
   TickX      := FRulerW+2;
   LeadX      := FRulerW+12;
   TextX      := FRulerW+17;
@@ -1337,6 +1364,12 @@ begin
       s := '*'+s;
     if sp.SplitInfo <> '' then
       s := s+' '+sp.SplitInfo;
+    if FShowMembership then
+    begin
+      m := MembershipLabel(sp.Call, today);
+      if m <> '' then
+        s := s+' ('+m+')'
+    end;
 
     r := Rect(TextX-2, TextY-FRowH div 2, TextX+c.TextWidth(s)+2, TextY+FRowH div 2);
 
@@ -1487,7 +1520,10 @@ begin
       Continue
     end;
     try
-      dmData.RbnLogCache.WorkedAfter(R.Call, R.Band, R.Mode, R.LastDate, R.LastTime)
+      if R.Kind = lckMembership then
+        dmData.RbnLogCache.Membership(R.Call, R.LastDate)
+      else
+        dmData.RbnLogCache.WorkedAfter(R.Call, R.Band, R.Mode, R.LastDate, R.LastTime)
     except
       on E : Exception do
         DbgLogException('BMAP', 'log check ' + R.Call + ' ' + R.Band + ' ' + R.Mode, E)
@@ -1528,6 +1564,13 @@ begin
   if FChecker = nil then
     FChecker := TLogCheckThread.Create(FChecks);
   FChecks.Push(ACall, ABand, AMode, ALastDate, ALastTime)
+end;
+
+procedure TBandMapWindows.RequestMembership(const ACall, ADate : String);
+begin
+  if FChecker = nil then
+    FChecker := TLogCheckThread.Create(FChecks);
+  FChecks.PushMembership(ACall, ADate)
 end;
 
 procedure TBandMapWindows.Changed;

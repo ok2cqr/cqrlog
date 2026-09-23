@@ -16,7 +16,9 @@
   and starved the RBN socket. Instead the window pushes the question here,
   shows the spot for now, and a thread answers into the shared cache. The
   same station is queued once however many windows ask; once answered it can
-  be asked again (the cache entry may have expired).
+  be asked again (the cache entry may have expired).  A club membership
+  question (call and day) goes through the same queue and thread, so the
+  club tables see one round trip per station too.
 
   Thread safe, no LCL. }
 
@@ -30,21 +32,26 @@ uses
   Classes, SysUtils;
 
 type
+  TLogCheckKind = (lckWorked, lckMembership);
+
   TLogCheckRequest = record
+    Kind               : TLogCheckKind;
     Call, Band, Mode   : String;
-    LastDate, LastTime : String;
+    LastDate, LastTime : String;   //for lckMembership LastDate is the day asked
   end;
 
   TLogCheckQueue = class
     private
       FCrit  : TRTLCriticalSection;
       FItems : array of TLogCheckRequest;
-      FKeys  : TStringList;   //sorted, one per queued (call|band|mode)
+      FKeys  : TStringList;   //sorted, one per queued question
       FHead  : Integer;
+      procedure Add(const R : TLogCheckRequest; const AKey : String);
     public
       constructor Create;
       destructor  Destroy; override;
       procedure Push(const ACall, ABand, AMode, ALastDate, ALastTime : String);
+      procedure PushMembership(const ACall, ADate : String);
       function  Pop(out R : TLogCheckRequest) : Boolean;
       function  Count : Integer;
       procedure Clear;
@@ -68,27 +75,54 @@ begin
   inherited Destroy
 end;
 
-procedure TLogCheckQueue.Push(const ACall, ABand, AMode, ALastDate, ALastTime : String);
-var
-  key : String;
-  i   : Integer;
+function KeyOf(const R : TLogCheckRequest) : String;
 begin
-  key := UpperCase(ACall) + '|' + ABand + '|' + AMode;
+  if R.Kind = lckMembership then
+    Result := 'M|' + UpperCase(R.Call) + '|' + R.LastDate
+  else
+    Result := 'W|' + UpperCase(R.Call) + '|' + R.Band + '|' + R.Mode
+end;
+
+procedure TLogCheckQueue.Add(const R : TLogCheckRequest; const AKey : String);
+var
+  i : Integer;
+begin
   EnterCriticalSection(FCrit);
   try
-    if FKeys.IndexOf(key) >= 0 then
+    if FKeys.IndexOf(AKey) >= 0 then
       exit;
-    FKeys.Add(key);
+    FKeys.Add(AKey);
     i := Length(FItems);
     SetLength(FItems, i+1);
-    FItems[i].Call     := ACall;
-    FItems[i].Band     := ABand;
-    FItems[i].Mode     := AMode;
-    FItems[i].LastDate := ALastDate;
-    FItems[i].LastTime := ALastTime
+    FItems[i] := R
   finally
     LeaveCriticalSection(FCrit)
   end
+end;
+
+procedure TLogCheckQueue.Push(const ACall, ABand, AMode, ALastDate, ALastTime : String);
+var
+  R : TLogCheckRequest;
+begin
+  R := Default(TLogCheckRequest);
+  R.Kind     := lckWorked;
+  R.Call     := ACall;
+  R.Band     := ABand;
+  R.Mode     := AMode;
+  R.LastDate := ALastDate;
+  R.LastTime := ALastTime;
+  Add(R, KeyOf(R))
+end;
+
+procedure TLogCheckQueue.PushMembership(const ACall, ADate : String);
+var
+  R : TLogCheckRequest;
+begin
+  R := Default(TLogCheckRequest);
+  R.Kind     := lckMembership;
+  R.Call     := ACall;
+  R.LastDate := ADate;
+  Add(R, KeyOf(R))
 end;
 
 function TLogCheckQueue.Pop(out R : TLogCheckRequest) : Boolean;
@@ -103,7 +137,7 @@ begin
       exit;
     R := FItems[FHead];
     Inc(FHead);
-    i := FKeys.IndexOf(UpperCase(R.Call) + '|' + R.Band + '|' + R.Mode);
+    i := FKeys.IndexOf(KeyOf(R));
     if i >= 0 then
       FKeys.Delete(i);
     //the answered part is dropped in one go once it is all gone

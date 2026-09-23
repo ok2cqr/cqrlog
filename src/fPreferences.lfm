@@ -6529,6 +6529,14 @@ object frmPreferences: TfrmPreferences
         Caption = 'Use ''+'' key to add spots to band map (CTRL+A is a deault)'
         TabOrder = 13
       end
+      object chkShowMembership: TCheckBox
+        Left = 16
+        Height = 18
+        Top = 584
+        Width = 420
+        Caption = 'Show club membership after the callsign (clubs selected in Membership)'
+        TabOrder = 15
+      end
       object gbWidths: TGroupBox
         Left = 424
         Height = 112

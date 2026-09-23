@@ -29,6 +29,8 @@ type
     FetchCount : Integer;
     LastQso    : String;     //what the fake log answers: 'YYYY-MM-DD HH:NN' or ''
     Status     : Integer;
+    Clubs      : String;     //what the fake club tables answer
+    function FakeMembership(const Call, Date : String) : String;
     function FakeLastQso(const Call, Band, Mode : String) : String;
     function FakeStatus(Adif : Word; const Band, Mode : String) : Integer;
   protected
@@ -46,6 +48,13 @@ type
     procedure DxccStatusIsCachedByEntityBandMode;
     procedure InvalidateAllForgetsDxccStatusToo;
     procedure CacheIsBounded;
+    procedure MembershipIsFetchedOncePerCallAndDay;
+    procedure TryMembershipAnswersFromTheCacheOnly;
+    procedure NoMembershipIsCachedToo;
+    procedure AnotherDayAsksAgain;
+    procedure InvalidateMembershipKeepsTheLogEntries;
+    procedure SavedQsoKeepsTheMembership;
+    procedure GenerationMovesWithEveryMembershipChange;
   end;
 
 implementation
@@ -62,11 +71,19 @@ begin
   Result := Status
 end;
 
+function TLogCacheTest.FakeMembership(const Call, Date : String) : String;
+begin
+  Inc(FetchCount);
+  Result := Clubs
+end;
+
 procedure TLogCacheTest.SetUp;
 begin
   C := TRbnLogCache.Create(1000);
-  C.OnLastQso    := @FakeLastQso;
-  C.OnDxccStatus := @FakeStatus;
+  C.OnLastQso     := @FakeLastQso;
+  C.OnDxccStatus  := @FakeStatus;
+  C.OnMembership  := @FakeMembership;
+  Clubs := 'EPC, SOTA';
   FetchCount := 0;
   LastQso := '2026-09-21 12:00';
   Status := 4
@@ -181,6 +198,93 @@ begin
   for i := 1 to 100 do
     C.WorkedAfter('C' + IntToStr(i), '20M', 'CW', '2026-09-20', '10:00');
   AssertTrue('entries=' + IntToStr(C.Count), C.Count <= 10)
+end;
+
+procedure TLogCacheTest.MembershipIsFetchedOncePerCallAndDay;
+begin
+  AssertEquals('EPC, SOTA', C.Membership('OK1AA', '2026-09-23'));
+  AssertEquals('EPC, SOTA', C.Membership('ok1aa', '2026-09-23'));
+  AssertEquals(1, FetchCount)
+end;
+
+procedure TLogCacheTest.TryMembershipAnswersFromTheCacheOnly;
+var
+  lbl : String;
+begin
+  //four windows draw the same spot: none of them may go to the club tables
+  AssertFalse(C.TryMembership('OK1AA', '2026-09-23', lbl));
+  AssertEquals(0, FetchCount);
+  C.Membership('OK1AA', '2026-09-23');
+  AssertTrue(C.TryMembership('OK1AA', '2026-09-23', lbl));
+  AssertEquals('EPC, SOTA', lbl);
+  AssertEquals(1, FetchCount)
+end;
+
+procedure TLogCacheTest.NoMembershipIsCachedToo;
+var
+  lbl : String;
+begin
+  //most stations are in no club; asking again for each spot would cost the
+  //same round trips as a member
+  Clubs := '';
+  AssertEquals('', C.Membership('ZZ9ZZZ', '2026-09-23'));
+  AssertTrue(C.TryMembership('ZZ9ZZZ', '2026-09-23', lbl));
+  AssertEquals('', lbl);
+  AssertEquals(1, FetchCount)
+end;
+
+procedure TLogCacheTest.AnotherDayAsksAgain;
+begin
+  //membership rows have fromdate/todate, so the answer belongs to the day
+  C.Membership('OK1AA', '2026-09-23');
+  C.Membership('OK1AA', '2026-09-24');
+  AssertEquals(2, FetchCount)
+end;
+
+procedure TLogCacheTest.InvalidateMembershipKeepsTheLogEntries;
+begin
+  //a club table was re-imported: the log itself has not changed
+  C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  C.DxccStatus(503, '20M', 'CW');
+  C.Membership('OK1AA', '2026-09-23');
+  AssertEquals(3, FetchCount);
+  C.InvalidateMembership;
+  C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  C.DxccStatus(503, '20M', 'CW');
+  AssertEquals(3, FetchCount);
+  C.Membership('OK1AA', '2026-09-23');
+  AssertEquals(4, FetchCount)
+end;
+
+procedure TLogCacheTest.SavedQsoKeepsTheMembership;
+begin
+  C.Membership('OK1AA', '2026-09-23');
+  C.InvalidateCall('OK1AA');
+  C.Membership('OK1AA', '2026-09-23');
+  AssertEquals(1, FetchCount);
+  C.InvalidateAll;   //log switched: the clubs selected may differ
+  C.Membership('OK1AA', '2026-09-23');
+  AssertEquals(2, FetchCount)
+end;
+
+procedure TLogCacheTest.GenerationMovesWithEveryMembershipChange;
+var
+  g : Integer;
+begin
+  //the windows repaint when the generation moved, without polling the cache
+  g := C.MembershipGeneration;
+  C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  AssertEquals(g, C.MembershipGeneration);
+  C.Membership('OK1AA', '2026-09-23');
+  AssertTrue(C.MembershipGeneration > g);
+  g := C.MembershipGeneration;
+  C.Membership('OK1AA', '2026-09-23');   //a hit changes nothing
+  AssertEquals(g, C.MembershipGeneration);
+  C.InvalidateMembership;
+  AssertTrue(C.MembershipGeneration > g);
+  g := C.MembershipGeneration;
+  C.InvalidateAll;
+  AssertTrue(C.MembershipGeneration > g)
 end;
 
 initialization
