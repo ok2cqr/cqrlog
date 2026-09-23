@@ -5130,7 +5130,6 @@ object frmNewQSO: TfrmNewQSO
         Action = acShowBandMap
       end
       object mnuShowBandMapGfx: TMenuItem
-        Action = acShowBandMapGfx
         Caption = 'Band map (graphical, beta)'
       end
       object MenuItem63: TMenuItem

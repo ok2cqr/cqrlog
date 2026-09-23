@@ -97,6 +97,12 @@ object frmBandMapGfx: TfrmBandMapGfx
       Caption = 'Forget my CQ frequency'
       OnClick = pumClearCqClick
     end
+    object pumBand: TMenuItem
+      Caption = 'Band'
+    end
+    object pumOpenMap: TMenuItem
+      Caption = 'Open another band map'
+    end
     object pumSep1: TMenuItem
       Caption = '-'
     end
