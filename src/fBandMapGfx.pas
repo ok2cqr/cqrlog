@@ -129,6 +129,7 @@ type
     function  MembershipLabel(const ACall, ADate : String) : String;
     procedure UpdateFilterIndicator;
     function  GlobalRuleText : String;
+    function  RbnContinentLimit : String;
     function  ShownBand : String;
     function  BandLimitsOf(const ABand : String; out ALoKHz, AHiKHz : Double) : Boolean;
     procedure UpdateTitle;
@@ -894,6 +895,28 @@ begin
     Result := 'worked stations shown'
 end;
 
+{ the continents the RBN monitor lets spotters come from, '' when it lets all
+  of them: a missing key and '' mean no limit to it, and the RBN filter dialog
+  stores all seven once it is saved }
+function TfrmBandMapGfx.RbnContinentLimit : String;
+var
+  all : TStringList;
+  i   : Integer;
+begin
+  Result := cqrini.ReadString('RBNFilter','SrcCont',C_RBN_CONT);
+  all := TStringList.Create;
+  try
+    all.CommaText := C_RBN_CONT;
+    for i := 0 to all.Count-1 do
+      //the same test as the monitor's
+      if Pos(all[i]+',', Result+',') = 0 then
+        exit
+  finally
+    all.Free
+  end;
+  Result := ''
+end;
+
 procedure TfrmBandMapGfx.UpdateFilterIndicator;
 var
   filtered : Boolean;
@@ -941,7 +964,7 @@ begin
   try
     f.Instance       := FInst;
     f.GlobalRuleText := GlobalRuleText;
-    f.RbnContinents  := cqrini.ReadString('RBNFilter','SrcCont','');
+    f.RbnContinents  := RbnContinentLimit;
     if f.ShowModal = mrOK then
     begin
       FInst := f.Instance;

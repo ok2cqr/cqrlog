@@ -15,13 +15,13 @@
   The fetches are callbacks, so the cache knows nothing of SQL and is tested
   with a fake log.  Entries expire after TtlSeconds (QSOs can be edited outside
   the application) and are dropped explicitly when a QSO is saved
-  (InvalidateCall) or the log changes (InvalidateAll).  Bounded: when full the
-  oldest entries go.
+  (InvalidateCall), deleted (InvalidateLog) or the log is switched
+  (InvalidateAll).  Bounded: when full the oldest entries go.
 
   Club membership of a heard station lives here too (key M|call|date): one
   fetch per call and day for every window, negative answers included, dropped
-  when a club table is re-imported or the club selection changes
-  (InvalidateMembership).  MembershipGeneration moves with every change, so
+  when a club table is re-imported, the club selection changes
+  (InvalidateMembership) or the log is switched, never by a QSO.  MembershipGeneration moves with every change, so
   the windows know when to repaint without walking the cache.
 
   Thread safe: the callbacks are called outside the lock, so a slow fetch does
@@ -56,6 +56,7 @@ type
     function  Get(const Key : String; out Value : Integer; out Text : String) : Boolean;
     procedure Put(const Key, Call : String; Value : Integer; const Text : String = '');
     procedure ClearAll;
+    procedure Drop(Index : Integer);
   public
     OnLastQso     : TLastQsoFunc;
     OnDxccStatus  : TDxccStatusFunc;
@@ -78,7 +79,11 @@ type
     //the same from the cache alone: False when not looked up yet
     function  TryMembership(const Call, Date : String; out ALabel : String) : Boolean;
     procedure InvalidateAll;                  //log switched, DXCC tables reloaded
-    procedure InvalidateCall(const Call : String);  //a QSO with it was saved or changed
+    //a QSO with it was saved: its entries and every DXCC status go, as the
+    //entity of the QSO is not at hand
+    procedure InvalidateCall(const Call : String);
+    //a QSO was deleted: all the log says goes, the membership stays
+    procedure InvalidateLog;
     //a club table was re-imported or the selected clubs changed
     procedure InvalidateMembership;
     //moves whenever a membership answer arrives or is dropped
@@ -126,6 +131,12 @@ begin
   FMap.Clear
 end;
 
+procedure TRbnLogCache.Drop(Index : Integer);
+begin
+  Dispose(PEntry(FMap[Index]));
+  FMap.Delete(Index)
+end;
+
 function TRbnLogCache.Get(const Key : String; out Value : Integer; out Text : String) : Boolean;
 var
   E : PEntry;
@@ -168,8 +179,7 @@ begin
             oldest := PEntry(FMap[i])^.Order;
             old := i
           end;
-        Dispose(PEntry(FMap[old]));
-        FMap.Delete(old)
+        Drop(old)
       end;
       New(E);
       E^.Call := Call;
@@ -254,10 +264,7 @@ begin
   try
     for i := FMap.Count-1 downto 0 do
       if Copy(FMap.NameOfIndex(i), 1, 2) = 'M|' then
-      begin
-        Dispose(PEntry(FMap[i]));
-        FMap.Delete(i)
-      end
+        Drop(i)
   finally
     LeaveCriticalsection(FCrit)
   end;
@@ -289,11 +296,22 @@ begin
   EnterCriticalsection(FCrit);
   try
     for i := FMap.Count-1 downto 0 do
-      if PEntry(FMap[i])^.Call = c then
-      begin
-        Dispose(PEntry(FMap[i]));
-        FMap.Delete(i)
-      end
+      if (PEntry(FMap[i])^.Call = c) or (Copy(FMap.NameOfIndex(i), 1, 2) = 'D|') then
+        Drop(i)
+  finally
+    LeaveCriticalsection(FCrit)
+  end
+end;
+
+procedure TRbnLogCache.InvalidateLog;
+var
+  i : Integer;
+begin
+  EnterCriticalsection(FCrit);
+  try
+    for i := FMap.Count-1 downto 0 do
+      if Copy(FMap.NameOfIndex(i), 1, 2) <> 'M|' then
+        Drop(i)
   finally
     LeaveCriticalsection(FCrit)
   end

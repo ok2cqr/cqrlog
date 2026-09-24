@@ -45,6 +45,8 @@ type
     procedure EntryExpires;
     procedure InvalidateAllForgetsEverything;
     procedure InvalidateCallForgetsThatCallOnly;
+    procedure InvalidateCallForgetsDxccStatus;
+    procedure InvalidateLogKeepsTheMembership;
     procedure DxccStatusIsCachedByEntityBandMode;
     procedure InvalidateAllForgetsDxccStatusToo;
     procedure CacheIsBounded;
@@ -169,6 +171,30 @@ begin
   C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
   C.WorkedAfter('OK2BB', '20M', 'CW', '2026-09-20', '10:00');
   AssertEquals(3, FetchCount)
+end;
+
+procedure TLogCacheTest.InvalidateCallForgetsDxccStatus;
+begin
+  //a QSO with OK1AA may make its entity worked or confirmed; the entity is
+  //not at hand where the QSO is saved
+  C.DxccStatus(503, '20M', 'CW');
+  C.InvalidateCall('OK1AA');
+  C.DxccStatus(503, '20M', 'CW');
+  AssertEquals(2, FetchCount)
+end;
+
+procedure TLogCacheTest.InvalidateLogKeepsTheMembership;
+begin
+  //a QSO was deleted, the call is not at hand: what the log says goes, the
+  //club tables have not changed
+  C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  C.DxccStatus(503, '20M', 'CW');
+  C.Membership('OK1AA', '2026-09-23');
+  C.InvalidateLog;
+  C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  C.DxccStatus(503, '20M', 'CW');
+  C.Membership('OK1AA', '2026-09-23');
+  AssertEquals(5, FetchCount)
 end;
 
 procedure TLogCacheTest.DxccStatusIsCachedByEntityBandMode;

@@ -745,8 +745,8 @@ var
   procedure DeleteRec(idx: longint);
   begin
     dmSqlQso.DeleteQso(idx);
-    //the call is not at hand here; the whole cache is cheap to refill
-    dmData.RbnLogCache.InvalidateAll
+    //the call is not at hand here; what the log says is cheap to refill
+    dmData.RbnLogCache.InvalidateLog
   end;
 
 begin
