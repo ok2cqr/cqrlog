@@ -221,8 +221,8 @@ object frmRbnMonitor: TfrmRbnMonitor
       OnExecute = acFilterExecute
     end
     object acRbnServer: TAction
-      Caption = 'Change RBN server address'
-      Hint = 'Change RBN server address'
+      Caption = 'RBN control window'
+      Hint = 'Open the RBN control window (source, connect, filter)'
       ImageIndex = 4
       OnExecute = acRbnServerExecute
     end

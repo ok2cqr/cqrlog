@@ -345,8 +345,8 @@ var
   i : Integer;
 begin
   FView := TBandMapStore.Create;
-  //no cqrini/dmData access here - this runs from Application.CreateForm, before
-  //the database (and therefore cqrini) exists. Settings live in LoadSettings.
+  //runs inside inherited Create, before CreateInstance names the window;
+  //settings are read in LoadSettings (FormShow)
   {$IFNDEF LCLCocoa}
   DoubleBuffered := True;
   {$ENDIF}

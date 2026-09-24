@@ -400,7 +400,7 @@ begin
     end;
   SetLength(Result, j);
   n := j;
-  //the QSO rule may cost a database round trip, so it runs outside the lock
+  //the QSO rule is the caller's code, so it runs outside the lock
   if Assigned(Worked) then
   begin
     j := 0;

@@ -43,7 +43,7 @@ const
   //FPC hides the server message ("Server connect failed."), so we match errno.
   cErrSecureTransportRequired = 3159;         //ER_SECURE_TRANSPORT_REQUIRED
   //per-session setup, run on every connection right after it opens (and again
-  //when a connection is reopened, see ReconnectRbnMon).
+  //when a connection is reopened, see ReopenConnection).
   //lock_wait_timeout: a metadata lock held by a stale connection (a client
   //that died without closing its TCP session, its transaction still open on
   //the server) would otherwise block any DDL for a year, the server default,
@@ -2348,7 +2348,7 @@ begin
       if old_version < 7 then
       begin
         //RBN server presets. The old [RBN] Server and [RBNMonitor] ServerName
-        //keys become presets when the log is opened, see fRbnSources
+        //keys become presets when the log is opened, see SeedRbnSources
         Q1.SQL.Text := dmSqlSchema.SqlCreateRbnSources;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
@@ -3420,8 +3420,8 @@ begin
   end
 end;
 
-//Called through RbnLogCache from the RBN worker thread AND from the graphical
-//band map on the GUI thread (its QSO rule). qRbnMon is one query on one
+//Called through RbnLogCache from the RBN worker thread AND from the band map
+//log check thread. qRbnMon is one query on one
 //connection, and two threads inside the MySQL client at once hang it, so the
 //two fetches below take csRbnMon for the whole round trip
 function TdmData.RbnLastQso(const callsign,band,mode : String) : String;

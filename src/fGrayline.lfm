@@ -235,7 +235,7 @@ object frmGrayline: TfrmGrayline
       OnExecute = acShowStatusBarExecute
     end
     object acLinkToRbnMonitor: TAction
-      Caption = 'Link to RBNMonitor'
+      Caption = 'Link to main RBN connection'
       OnExecute = acLinkToRbnMonitorExecute
     end
   end
