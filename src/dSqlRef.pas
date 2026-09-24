@@ -466,8 +466,6 @@ begin
   ExecInBatch(SqlInsertClubMembers(DbNum, Values))
 end;
 
-// A row with an empty id and an empty number is "not a member"; the number
-// and the callsign come back trimmed, as fQSODetails read them.
 function TdmSqlRef.LoadRbnSources : TRbnSourceList;
 var
   Src : TRbnSource;
@@ -515,6 +513,8 @@ begin
   FQ.ExecAndCommit
 end;
 
+// A row with an empty id and an empty number is "not a member"; the number
+// and the callsign come back trimmed, as fQSODetails read them.
 function TdmSqlRef.GetClubMember(const ClubTable, ClubField, Value, Date : String; out Member : TClubMember) : Boolean;
 begin
   FQ.Prepare(SqlClubMember(ClubTable, ClubField, Value, Date));

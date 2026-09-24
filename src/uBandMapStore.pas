@@ -24,8 +24,8 @@ uses
   Classes, SysUtils, uSpotStore;
 
 const
-  //how many candidates the shared store keeps, all bands. Stage 0 measured
-  //~4000 per 12 minutes on an ordinary evening, ~17000 at 24 spots/s
+  //how many candidates the shared store keeps, all bands. Measured ~4000 per
+  //12 minutes on an ordinary evening, ~17000 at 24 spots/s
   MAX_SPOT_CANDIDATES = 20000;
 
 type
@@ -107,7 +107,7 @@ type
 
 var
   SpotStore    : TSpotStore;    //the shared candidates, created in initialization
-  BandMapStore : TBandMapStore; //the graphical map's view of it, never nil
+  BandMapStore : TBandMapStore; //the producers' way in (Add/Remove); each window polls a view of its own
 
 implementation
 

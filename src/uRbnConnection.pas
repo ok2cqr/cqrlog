@@ -10,9 +10,8 @@
 
 { A managed RBN telnet connection.
 
-  The socket used to belong to the RBN monitor window: closing the window was the
-  only way the connection could end, and nothing else could listen to it. Here the
-  connection is an object of its own and windows are subscribers. It owns the
+  The connection is an object of its own, independent of any window; windows
+  are subscribers and come and go without touching the socket. It owns the
   socket, the line framer, the login and the reconnect policy (all in src/rbn,
   tested there); it parses every line once and hands the result to everybody who
   asked for it.

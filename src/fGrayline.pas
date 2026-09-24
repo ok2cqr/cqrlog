@@ -159,7 +159,7 @@ begin
     //the source is named: a server that filters its stream shows fewer dots
     rbn_status := FOwnName + ': ' + FOwnConn.Status
   else
-    rbn_status := 'Linked to RBN monitor: ' + FListening.Status
+    rbn_status := 'Linked to main RBN connection: ' + FListening.Status
 end;
 
 function TfrmGrayline.GetEmptyPos : Word;

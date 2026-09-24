@@ -1502,8 +1502,8 @@ begin
                                 cfgClusterColor,ThBckColor, False, isLoTW, isEQSL)
     end;
 
-    //graphical band map keeps a store of its own, with its own visibility gate,
-    //so the text band map above is not affected either way
+    //the graphical band maps read the shared spot store; the text band map
+    //above is fed separately
     if ToBandMap and Assigned(BandMapStore) then
     begin
       if cfgUseDXCColors then

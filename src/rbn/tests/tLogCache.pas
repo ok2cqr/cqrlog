@@ -10,8 +10,8 @@
 
 { The shared log cache: what the log says about a callsign or a DXCC entity
   (worked after a moment; new one / new band / new mode / QSL needed), fetched
-  once and reused across spots and windows.  Stage 0 measured 2-5 round trips
-  per spot, with the DXCC status queries scanning the whole table. }
+  once and reused across spots and windows.  Without it there were 2-5 round
+  trips per spot, with the DXCC status queries scanning the whole table. }
 
 unit tLogCache;
 

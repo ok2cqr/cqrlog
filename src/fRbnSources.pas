@@ -36,7 +36,7 @@ type
     procedure Reload(SelectId : Integer = 0);
     function  Selected(out Source : TRbnSource) : Boolean;
   public
-    //the id of the row the user selected last, for the caller's combo box
+    //the row to select when the dialog opens (the caller's current preset)
     SelectedId : Integer;
   end;
 

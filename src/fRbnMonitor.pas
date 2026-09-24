@@ -409,7 +409,7 @@ begin
       end;
       Inc(nSpots);
 
-      //lReceive queues only what parses, but the queue is a list of strings
+      //OnRbnSpot queues only what parsed, but the queue is a list of strings
       if not ParseRbnSpot(spot, Parsed) then
         Continue;
       spotter := Parsed.Spotter;
