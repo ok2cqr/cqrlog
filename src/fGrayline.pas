@@ -513,6 +513,8 @@ begin
 end;
 
 procedure TfrmGrayline.tmrAutoConnectTimer(Sender : TObject);
+var
+  Src : TRbnSource;
 begin
     tmrAutoConnect.Enabled:=False; //runs once, FormShow starts it again
     if Assigned(FListening) then exit;
@@ -522,7 +524,8 @@ begin
     SetRbnLink(cqrini.ReadBool('RBN','AutoLink',false));
     if acLinkToRbnMonitor.Checked then
       exit;
-    if cqrini.ReadBool('RBN','AutoConnect',False) and (cqrini.ReadString('RBN','login','') <> '') then
+    //the chosen preset carries its own user name, [RBN] login may be empty
+    if cqrini.ReadBool('RBN','AutoConnect',False) and OwnSource(Src) then
       acConnect.Execute
 end;
 

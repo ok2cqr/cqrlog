@@ -1384,7 +1384,6 @@ var
 begin
   //a QSO with this call changes what the log says about it and its entity
   RbnLogCache.InvalidateCall(call);
-  RbnLogCache.InvalidateAll;
   band := dmUtils.GetBandFromFreq(CurrToStr(freq));
   if qso_dxcc then
     changed := 1
