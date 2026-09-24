@@ -102,8 +102,6 @@ type
     //before any filter; and since the connection object exists
     function  SpotsLastMinutes : Integer;
     property SpotsTotal : Int64 read FTotal;
-    property Host   : String read FHost;
-    property Port   : Integer read FPort;
   end;
 
 //the main RBN source, created on the first call and owned by Application
@@ -289,7 +287,7 @@ end;
 
 procedure TRbnConnection.AnswerLogin(const Text : String);
 begin
-  if (FUserName <> '') and IsRbnLoginPrompt(Text) and FLogin.ShouldAnswer(Text) then
+  if (FUserName <> '') and FLogin.ShouldAnswer(Text) then
   begin
     DbgLog('RBN', 'connection: login prompt "' + Trim(Text) + '", sending ' + FUserName);
     FTelnet.SendMessage(FUserName + #13#10)

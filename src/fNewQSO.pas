@@ -49,7 +49,6 @@ type
     acDetails: TAction;
     acQSOperMode: TAction;
     acShowBandMap: TAction;
-    acShowBandMapGfx: TAction;
     acAddToBandMap: TAction;
     acLongNote: TAction;
     acDXCCCfm: TAction;
@@ -497,7 +496,6 @@ type
     procedure acPreferencesExecute(Sender: TObject);
     procedure acQSOperModeExecute(Sender: TObject);
     procedure acShowBandMapExecute(Sender: TObject);
-    procedure acShowBandMapGfxExecute(Sender: TObject);
     procedure mnuBandMapGfxChoiceClick(Sender: TObject);
     procedure BandMapWindowsChanged(Sender: TObject);
     procedure RebuildBandMapGfxMenuAsync(Data: PtrInt);
@@ -5360,11 +5358,6 @@ begin
     frmBandMap.BringToFront
   else
     frmBandMap.Show;
-end;
-
-procedure TfrmNewQSO.acShowBandMapGfxExecute(Sender: TObject);
-begin
-  BandMapWindows.Open(AutoChoice)
 end;
 
 procedure TfrmNewQSO.RebuildBandMapGfxMenu;

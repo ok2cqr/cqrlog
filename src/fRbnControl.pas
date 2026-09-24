@@ -33,6 +33,7 @@ type
     btnConnect: TSpeedButton;
     btnFilter: TSpeedButton;
     btnSources: TSpeedButton;
+    btnStatusBar: TSpeedButton;
     cmbSource: TComboBox;
     imgRbnControl: TImageList;
     shpState: TShape;
