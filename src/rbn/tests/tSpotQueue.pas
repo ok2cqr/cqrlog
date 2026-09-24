@@ -8,7 +8,8 @@
  ***************************************************************************
 *)
 
-{ The queue between the socket (main thread) and the worker that filters spots.
+{ The queue between the socket (main thread) and the worker that filters spots,
+  carrying each line with the spot parsed from it.
   It used to be a TStringList that grew without a limit: on 2026-09-06 it
   reached 1586 lines, five minutes behind the band. }
 
@@ -19,12 +20,14 @@ unit tSpotQueue;
 interface
 
 uses
-  Classes, SysUtils, fpcunit, testregistry, uRbnSpotQueue;
+  Classes, SysUtils, fpcunit, testregistry, uRbnSpotParser, uRbnSpotQueue;
 
 type
   TSpotQueueTest = class(TTestCase)
   private
     Q : TRbnSpotQueue;
+    procedure PushLine(const Line : String);
+    function  PopLine(out Line : String) : Boolean;
   protected
     procedure TearDown; override;
   published
@@ -36,6 +39,7 @@ type
     procedure ClearEmptiesTheQueueAndKeepsTheDropCounter;
     procedure OrderSurvivesWrapAround;
     procedure ProducerAndConsumerThreadsLoseNothingBelowCapacity;
+    procedure TheParsedSpotTravelsWithItsLine;
   end;
 
 implementation
@@ -53,7 +57,19 @@ var
   i : Integer;
 begin
   for i := 1 to N do
-    Q.Push(IntToStr(i))
+    Q.Push(IntToStr(i), Default(TRbnSpotLine))
+end;
+
+procedure TSpotQueueTest.PushLine(const Line : String);
+begin
+  Q.Push(Line, Default(TRbnSpotLine))
+end;
+
+function TSpotQueueTest.PopLine(out Line : String) : Boolean;
+var
+  Spot : TRbnSpotLine;
+begin
+  Result := Q.Pop(Line, Spot)
 end;
 
 procedure TSpotQueueTest.TearDown;
@@ -66,7 +82,7 @@ var
   s : String;
 begin
   Q := TRbnSpotQueue.Create(4);
-  AssertFalse(Q.Pop(s));
+  AssertFalse(PopLine(s));
   AssertEquals('', s)
 end;
 
@@ -75,11 +91,11 @@ var
   s : String;
 begin
   Q := TRbnSpotQueue.Create(4);
-  Q.Push('a'); Q.Push('b'); Q.Push('c');
-  AssertTrue(Q.Pop(s)); AssertEquals('a', s);
-  AssertTrue(Q.Pop(s)); AssertEquals('b', s);
-  AssertTrue(Q.Pop(s)); AssertEquals('c', s);
-  AssertFalse(Q.Pop(s))
+  PushLine('a'); PushLine('b'); PushLine('c');
+  AssertTrue(PopLine(s)); AssertEquals('a', s);
+  AssertTrue(PopLine(s)); AssertEquals('b', s);
+  AssertTrue(PopLine(s)); AssertEquals('c', s);
+  AssertFalse(PopLine(s))
 end;
 
 procedure TSpotQueueTest.FullQueueDropsTheOldestLine;
@@ -88,10 +104,10 @@ var
 begin
   //a spot that has waited the longest is worth the least on a live display
   Q := TRbnSpotQueue.Create(3);
-  Q.Push('1'); Q.Push('2'); Q.Push('3'); Q.Push('4');
-  AssertTrue(Q.Pop(s)); AssertEquals('2', s);
-  AssertTrue(Q.Pop(s)); AssertEquals('3', s);
-  AssertTrue(Q.Pop(s)); AssertEquals('4', s)
+  PushLine('1'); PushLine('2'); PushLine('3'); PushLine('4');
+  AssertTrue(PopLine(s)); AssertEquals('2', s);
+  AssertTrue(PopLine(s)); AssertEquals('3', s);
+  AssertTrue(PopLine(s)); AssertEquals('4', s)
 end;
 
 procedure TSpotQueueTest.DroppedCountsEveryLostLine;
@@ -101,7 +117,7 @@ begin
   Q := TRbnSpotQueue.Create(3);
   AssertEquals(0, Q.Dropped);
   for i := 1 to 10 do
-    Q.Push(IntToStr(i));
+    PushLine(IntToStr(i));
   AssertEquals(7, Q.Dropped)
 end;
 
@@ -112,7 +128,7 @@ begin
   Q := TRbnSpotQueue.Create(5);
   for i := 1 to 100 do
   begin
-    Q.Push('x');
+    PushLine('x');
     AssertTrue(Q.Count <= 5)
   end;
   AssertEquals(5, Q.Count)
@@ -123,10 +139,10 @@ var
   s : String;
 begin
   Q := TRbnSpotQueue.Create(2);
-  Q.Push('1'); Q.Push('2'); Q.Push('3');
+  PushLine('1'); PushLine('2'); PushLine('3');
   Q.Clear;
   AssertEquals(0, Q.Count);
-  AssertFalse(Q.Pop(s));
+  AssertFalse(PopLine(s));
   AssertEquals('Clear is not a loss', 1, Q.Dropped)
 end;
 
@@ -139,10 +155,10 @@ begin
   n := 0;
   for i := 1 to 20 do
   begin
-    Q.Push(IntToStr(i));
+    PushLine(IntToStr(i));
     if Odd(i) then
     begin
-      AssertTrue(Q.Pop(s));
+      AssertTrue(PopLine(s));
       AssertTrue('out of order: ' + s, StrToInt(s) > n);
       n := StrToInt(s)
     end
@@ -164,7 +180,7 @@ begin
   P.Start;
   Got := 0; Last := 0; Idle := 0;
   while (Got < 10000) and (Idle < 2000) do
-    if Q.Pop(s) then
+    if PopLine(s) then
     begin
       AssertEquals(Last+1, StrToInt(s));
       Last := StrToInt(s);
@@ -179,6 +195,23 @@ begin
   P.Free;
   AssertEquals(10000, Got);
   AssertEquals(0, Q.Dropped)
+end;
+
+procedure TSpotQueueTest.TheParsedSpotTravelsWithItsLine;
+var
+  In_, Out_ : TRbnSpotLine;
+  Line      : String;
+begin
+  //the connection parses every line once; the worker must not parse it again
+  Q := TRbnSpotQueue.Create(4);
+  In_ := Default(TRbnSpotLine);
+  In_.Dx := 'OK1AA';
+  In_.FreqKHz := 14025.1;
+  Q.Push('DX de W3LPL-#: 14025.1 OK1AA', In_);
+  AssertTrue(Q.Pop(Line, Out_));
+  AssertEquals('DX de W3LPL-#: 14025.1 OK1AA', Line);
+  AssertEquals('OK1AA', Out_.Dx);
+  AssertEquals(14025.1, Out_.FreqKHz, 0.0001)
 end;
 
 initialization
