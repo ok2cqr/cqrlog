@@ -177,7 +177,7 @@ implementation
 {$R *.lfm}
 
 uses dUtils, uMyIni, dData, fRbnControl, dDXCluster, fRbnFilter, fNewQSO,
-     fBandMap, uBandMapStore, uDebugLog, sqldb;
+     fBandMap, uSpotStore, uBandMapStore, uDebugLog, sqldb;
 
 { TfrmRbnMonitor }
 
@@ -468,11 +468,11 @@ begin
 
         //the shared spot store collects whether or not a band map window is
         //open; the text band map above keeps its own way
-        if bm_ToBandMap and Assigned(BandMapStore) then
+        if bm_ToBandMap then
         begin
           if TryStrToFloat(freq,fkHz,fsRbn) then    //RBN freq is already in kHz
-            BandMapStore.Add(fkHz,dxstn,mode,band,'',spotColor,bgColor,
-                             gssRbn,(LoTW='L'),(eQSL='E'),spotter,bm_SourceId)
+            AddBandMapSpot(fkHz,dxstn,mode,band,'',spotColor,bgColor,
+                           soRbn,(LoTW='L'),(eQSL='E'),spotter,bm_SourceId)
         end;
 
         Synchronize(@ShowSpot)

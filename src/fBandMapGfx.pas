@@ -19,7 +19,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, ExtCtrls, StdCtrls, Buttons,
-  ComCtrls, Menus, Types, uBandMapStore, uBandMapLayout, uLogCheckQueue;
+  ComCtrls, Menus, Types, uSpotStore, uBandMapStore, uBandMapLayout, uLogCheckQueue;
 
 type
   { What was drawn where, rebuilt at the end of every paint. Call/Mode/Freq are
@@ -1376,7 +1376,7 @@ begin
     LastBottom := TextY + FRowH div 2;
 
     s := sp.Call;
-    if sp.Source = gssManual then
+    if sp.Source = soManual then
       s := '*'+s;
     if sp.SplitInfo <> '' then
       s := s+' '+sp.SplitInfo;
