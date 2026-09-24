@@ -209,8 +209,7 @@ begin
   FTelnet.Host := FHost;
   FTelnet.Port := FPort;
   //lNet resolves the host name here, synchronously
-  FTelnet.Connect;
-  DbgLog('RBN', 'connection: socket opened (name resolved)')
+  FTelnet.Connect
 end;
 
 //Lost or could not be made. Tries again with a growing delay for as long as the
