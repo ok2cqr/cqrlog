@@ -13,8 +13,8 @@ unit uBandMapStore;
   of the cluster and RBN windows) depend on plain Pascal.
 
   Threading contract:
-    Add / Remove    - any thread (SpotStore is thread safe)
-    everything else - main thread only }
+    AddBandMapSpot / RemoveBandMapSpot - any thread (SpotStore is thread safe)
+    TBandMapStore                      - main thread only }
 
 {$mode objfpc}{$H+}
 
@@ -29,8 +29,6 @@ const
   MAX_SPOT_CANDIDATES = 20000;
 
 type
-  TGfxSpotSource = (gssCluster, gssRbn, gssManual);
-
   //same three states as the text band map's TDateFilterType
   TBmDateFilter = (bmdShowAll, bmdLastHours, bmdSinceDateTime);
 
@@ -50,7 +48,7 @@ type
     BaseColor : LongInt;    //foreground colour as supplied by the producer
     BgColor   : LongInt;
     TimeStamp : TDateTime;  //last live arrival
-    Source    : TGfxSpotSource;
+    Source    : TSpotOrigin;
     AgeStep   : Byte        //0 fresh, 1 past FirstAging, 2 past SecondAging
   end;
 
@@ -76,14 +74,6 @@ type
     public
       constructor Create;
 
-      { any thread }
-      procedure Add(AFreq : Double; const ACall, AMode, ABand, ASplit : String;
-                    AColor, ABgColor : LongInt; ASource : TGfxSpotSource;
-                    AisLoTW : Boolean = False; AisEQSL : Boolean = False;
-                    const ASpotter : String = ''; ASourceId : Integer = 0);
-      procedure Remove(const ACall, AMode, ABand : String);
-
-      { main thread only }
       //ANow is local time (spot aging), AUtcNow is the clock QSOs are logged in.
       //True when the display must be redrawn
       function  Poll(ANow, AUtcNow : TDateTime) : Boolean;
@@ -106,8 +96,14 @@ type
   end;
 
 var
-  SpotStore    : TSpotStore;    //the shared candidates, created in initialization
-  BandMapStore : TBandMapStore; //the producers' way in (Add/Remove); each window polls a view of its own
+  SpotStore : TSpotStore;    //the shared candidates, created in initialization
+
+//the producers' way in: the DX cluster, the RBN monitor and the operator
+procedure AddBandMapSpot(AFreq : Double; const ACall, AMode, ABand, ASplit : String;
+                         AColor, ABgColor : LongInt; AOrigin : TSpotOrigin;
+                         AisLoTW : Boolean = False; AisEQSL : Boolean = False;
+                         const ASpotter : String = ''; ASourceId : Integer = 0);
+procedure RemoveBandMapSpot(const ACall, AMode, ABand : String);
 
 implementation
 
@@ -120,19 +116,15 @@ begin
   FLastHours  := 48
 end;
 
-procedure TBandMapStore.Add(AFreq : Double; const ACall, AMode, ABand, ASplit : String;
-                            AColor, ABgColor : LongInt; ASource : TGfxSpotSource;
-                            AisLoTW : Boolean; AisEQSL : Boolean;
-                            const ASpotter : String; ASourceId : Integer);
+procedure AddBandMapSpot(AFreq : Double; const ACall, AMode, ABand, ASplit : String;
+                         AColor, ABgColor : LongInt; AOrigin : TSpotOrigin;
+                         AisLoTW : Boolean; AisEQSL : Boolean;
+                         const ASpotter : String; ASourceId : Integer);
 var
   C : TSpotCandidate;
 begin
   C := Default(TSpotCandidate);
-  case ASource of
-    gssRbn     : C.Origin := soRbn;
-    gssCluster : C.Origin := soCluster;
-    else         C.Origin := soManual
-  end;
+  C.Origin    := AOrigin;
   C.SourceId  := ASourceId;
   C.Spotter   := ASpotter;
   C.Call      := ACall;
@@ -148,7 +140,7 @@ begin
   SpotStore.Add(C)
 end;
 
-procedure TBandMapStore.Remove(const ACall, AMode, ABand : String);
+procedure RemoveBandMapSpot(const ACall, AMode, ABand : String);
 begin
   SpotStore.Remove(ACall, ABand, AMode)
 end;
@@ -215,11 +207,7 @@ begin
     FItems[i].BaseColor := V[i].Color;
     FItems[i].BgColor   := V[i].BgColor;
     FItems[i].TimeStamp := V[i].LastSeen;
-    case V[i].Origin of
-      soRbn     : FItems[i].Source := gssRbn;
-      soCluster : FItems[i].Source := gssCluster;
-      else        FItems[i].Source := gssManual
-    end;
+    FItems[i].Source    := V[i].Origin;
     Step := AgeStepFor((ANow - V[i].LastSeen) * 86400);
     if FItems[i].AgeStep <> Step then
       Result := True;
@@ -246,11 +234,9 @@ begin
 end;
 
 initialization
-  SpotStore    := TSpotStore.Create(MAX_SPOT_CANDIDATES);
-  BandMapStore := TBandMapStore.Create;
+  SpotStore := TSpotStore.Create(MAX_SPOT_CANDIDATES);
 
 finalization
-  FreeAndNil(BandMapStore);
   FreeAndNil(SpotStore);
 
 end.

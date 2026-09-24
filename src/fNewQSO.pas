@@ -847,7 +847,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fRbnControl, fException, fCommentToCall,
      fRemind, fContest, fXfldigi, dMembership, dSatellite, dSqlUserData, fCountyStat,
-     fBandMapGfx, uBandMapStore, uBandMapLayout, fNewVersion;
+     fBandMapGfx, uSpotStore, uBandMapStore, uBandMapLayout, fNewVersion;
 
 
 
@@ -3491,9 +3491,10 @@ begin
       if cqrini.ReadBool('BandMap','AddAfterQSO',False) then
         acAddToBandMap.Execute;
       if Delete then
+      begin
         frmBandMap.DeleteFromBandMap(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text));
-      if Delete and Assigned(BandMapStore) then
-        BandMapStore.Remove(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text))
+        RemoveBandMapSpot(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text))
+      end
     end;
     dmData.SaveQSO(date,
                    edtStartTime.Text,
@@ -4509,9 +4510,8 @@ begin
   frmBandMap.AddToBandMap(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',lat,
                           lng,clBlack,clWhite,True,sbtnLoTW.Visible,sbtneQSL.Visible);
   //graphical band map: system colours, it has to stay readable in dark mode
-  if Assigned(BandMapStore) then
-    BandMapStore.Add(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',
-                     clWindowText,clWindow,gssManual,sbtnLoTW.Visible,sbtneQSL.Visible)
+  AddBandMapSpot(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',
+                 clWindowText,clWindow,soManual,sbtnLoTW.Visible,sbtneQSL.Visible)
 end;
 
 procedure TfrmNewQSO.acCWMessagesExecute(Sender: TObject);

@@ -239,7 +239,7 @@ implementation
 { TfrmDXCluster }
 
 uses dUtils, fDXClusterList, dData, dDXCluster, fMain, fTRXControl, fNewQSO, fBandMap,
-     uMyIni, fPreferences, uBandMapStore, uDebugLog, sqldb;
+     uMyIni, fPreferences, uSpotStore, uBandMapStore, uDebugLog, sqldb;
 
 procedure TfrmDXCluster.ConnectToWeb;
 var
@@ -1504,14 +1504,14 @@ begin
 
     //the graphical band maps read the shared spot store; the text band map
     //above is fed separately
-    if ToBandMap and Assigned(BandMapStore) then
+    if ToBandMap then
     begin
       if cfgUseDXCColors then
-        BandMapStore.Add(kmitocet,call,mode,band,splitstr,sColor,ThBckColor,
-                         gssCluster,isLoTW,isEQSL)
+        AddBandMapSpot(kmitocet,call,mode,band,splitstr,sColor,ThBckColor,
+                       soCluster,isLoTW,isEQSL)
       else
-        BandMapStore.Add(kmitocet,call,mode,band,splitstr,cfgClusterColor,ThBckColor,
-                         gssCluster,isLoTW,isEQSL)
+        AddBandMapSpot(kmitocet,call,mode,band,splitstr,cfgClusterColor,ThBckColor,
+                       soCluster,isLoTW,isEQSL)
     end
   end;
 
