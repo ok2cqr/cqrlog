@@ -20,8 +20,9 @@
   original age.
 
   Candidates are kept per (origin, source, spotter, call, band, mode): the same
-  station heard by two skimmers is two candidates, because the skimmers may be
-  on different continents and the RBN source filter needs them apart.  A
+  station heard by two skimmers is two candidates, each with its own frequency
+  and age: after a QSY one skimmer may still hold the old frequency, and the
+  view shows the station where it was heard last.  A
   repeated spot refreshes LastSeen and counts a hit; LoadSnapshot never does.
 
   Bounded.  When full, the oldest RBN candidate goes first: an RBN flood must
@@ -69,10 +70,8 @@ type
 
   //what a window applies on top of band and expiry
   TSpotFilter = record
-    Mode       : String;    //'' = all
     OnlyLoTW   : Boolean;
     OnlyEQSL   : Boolean;
-    Origins    : TSpotOrigins;
   end;
 
   //the window's QSO rule (global / own / none): True hides the spot. nil = none
@@ -109,20 +108,12 @@ type
   end;
 
 function DefaultSpotFilter : TSpotFilter;
-function SpotFilterOrigin(O : TSpotOrigin) : TSpotFilter;
 
 implementation
 
 function DefaultSpotFilter : TSpotFilter;
 begin
-  Result := Default(TSpotFilter);
-  Result.Origins := [soRbn, soCluster, soManual]
-end;
-
-function SpotFilterOrigin(O : TSpotOrigin) : TSpotFilter;
-begin
-  Result := DefaultSpotFilter;
-  Result.Origins := [O]
+  Result := Default(TSpotFilter)
 end;
 
 //edit distance of two calls, capped: a garbled skimmer decode is the real
@@ -348,9 +339,7 @@ begin
     SetLength(Result, FCount);
     for i := 0 to FCount-1 do
     begin
-      if not (FItems[i].Origin in Filter.Origins) then Continue;
       if (Band <> '') and (FItems[i].Band <> Band) then Continue;
-      if (Filter.Mode <> '') and (FItems[i].Mode <> Filter.Mode) then Continue;
       if Filter.OnlyLoTW and not FItems[i].IsLoTW then Continue;
       if Filter.OnlyEQSL and not FItems[i].IsEQSL then Continue;
       if not Alive(FItems[i], ANow) then Continue;
@@ -363,7 +352,7 @@ begin
   SetLength(Result, n);
   //one station once per band and mode, where it was heard last: after a QSY
   //some skimmers still hold the old frequency for a while. The store keeps
-  //every spotter (the source filter needs them apart), the view does not
+  //every spotter, the view does not
   for i := 0 to n-1 do
     if Result[i].Call <> '' then
       for j := i+1 to n-1 do
