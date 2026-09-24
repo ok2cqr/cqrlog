@@ -3457,10 +3457,8 @@ var
   n      : Integer;
   Club   : TClub;
   idcall : String;
-  t0     : TDateTime;
 begin
   Result := '';
-  t0 := Now;
   idcall := dmUtils.GetIDCall(callsign);
   EnterCriticalsection(csRbnMon);
   try
@@ -3493,11 +3491,7 @@ begin
     end
   finally
     LeaveCriticalsection(csRbnMon)
-  end;
-  //one line per heard station and day: grep them to count the club round
-  //trips against the spots
-  DbgLog('BMAP', 'membership ' + callsign + ' ' + date + ' -> "' + Result + '" ' +
-                 IntToStr(Round((Now - t0) * 86400000)) + ' ms')
+  end
 end;
 
 //Reopens a connection whose TCP session died under it, typically "Server has

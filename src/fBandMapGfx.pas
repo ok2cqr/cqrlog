@@ -519,9 +519,6 @@ begin
 end;
 
 procedure TfrmBandMapGfx.tmrPollTimer(Sender: TObject);
-var
-  t0 : TDateTime;
-  ms : Integer;
 begin
   //With no rig model configured at all SynTRX never runs (its timer is only
   //enabled once a rig initialises), so nothing would ever call SetVfo. Keep
@@ -529,15 +526,11 @@ begin
   if (FVfoKHz <= 0) or FVfoFromQso then
     UseNewQsoFreq;
 
-  t0 := Now;
   if FView.Poll(Now, dmUtils.GetDateTime(0)) then
     FDirty := True;
   //a membership answer arrived (or the club tables changed): the labels differ
   if FShowMembership and (FMembershipGen <> dmData.RbnLogCache.MembershipGeneration) then
     FDirty := True;
-  ms := Round((Now - t0) * 86400000);
-  if ms > 200 then
-    DbgLog('BMAP', Name + ': Poll took ' + IntToStr(ms) + ' ms, spots ' + IntToStr(FView.Count));
   if FDirty then
   begin
     FDirty := False;
