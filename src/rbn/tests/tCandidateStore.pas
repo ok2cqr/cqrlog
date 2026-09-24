@@ -45,7 +45,6 @@ type
     procedure RestoredSpotKeepsItsTimeAndExpiresOnIt;
     procedure QsoRuleHidesWorkedStation;
     procedure QsoRuleOffShowsIt;
-    procedure ModeFilterInSelect;
     procedure LotwOnlyInSelect;
     procedure RemoveByCallBandMode;
     procedure RbnOfOtherSourceIsDropped;
@@ -140,7 +139,7 @@ end;
 
 procedure TSpotStoreTest.DifferentSpottersAreSeparateCandidates;
 begin
-  //they can be on different continents; the source filter needs them apart
+  //each keeps its own frequency and age, see OneStationOncePerBandAtItsLatestFrequency
   Store.Add(MakeSpot('OK1AA', '20M', 14020, soRbn, 'DL1RBN'));
   Store.Add(MakeSpot('OK1AA', '20M', 14020, soRbn, 'W3RBN'));
   AssertEquals(2, Store.Count)
@@ -203,17 +202,6 @@ begin
   AssertEquals(1, Length(Store.Select('20M', Now, DefaultSpotFilter, nil)))
 end;
 
-procedure TSpotStoreTest.ModeFilterInSelect;
-var
-  F : TSpotFilter;
-begin
-  Store.Add(MakeSpot('OK1AA', '20M', 14020, soRbn, 'OK1RBN', 'CW'));
-  Store.Add(MakeSpot('OK2BB', '20M', 14200, soCluster, 'OK1RBN', 'SSB'));
-  F := DefaultSpotFilter;
-  F.Mode := 'SSB';
-  AssertEquals(1, Length(Store.Select('20M', Now, F, @NeverWorked)))
-end;
-
 procedure TSpotStoreTest.LotwOnlyInSelect;
 var
   A : TSpotCandidate;
@@ -249,14 +237,20 @@ end;
 
 procedure TSpotStoreTest.StoreIsBoundedAndKeepsRoomForCluster;
 var
-  i : Integer;
+  i     : Integer;
+  V     : TSpotView;
+  Found : Boolean;
 begin
   //an RBN flood must not push a still valid SSB cluster spot out
   Store.Add(MakeSpot('OK9SSB', '20M', 14200, soCluster));
   for i := 1 to 500 do
     Store.Add(MakeSpot('R' + IntToStr(i), '20M', 14000 + i / 10));
   AssertTrue('count=' + IntToStr(Store.Count), Store.Count <= 100);
-  AssertEquals(1, Length(Store.Select('20M', Now, SpotFilterOrigin(soCluster), @NeverWorked)))
+  V := Store.Select('20M', Now, DefaultSpotFilter, @NeverWorked);
+  Found := False;
+  for i := 0 to High(V) do
+    Found := Found or ((V[i].Call = 'OK9SSB') and (V[i].Origin = soCluster));
+  AssertTrue('the cluster spot is gone', Found)
 end;
 
 procedure TSpotStoreTest.SnapshotRoundTrip;
@@ -314,7 +308,7 @@ begin
   V := Store.Select('20M', Now, DefaultSpotFilter, @NeverWorked);
   AssertEquals(1, Length(V));
   AssertEquals(14035.0, V[0].FreqKHz, 0.001);
-  //both candidates stay in the store, the source filter needs them apart
+  //both candidates stay in the store, each with its own age
   AssertEquals(2, Store.Count)
 end;
 
