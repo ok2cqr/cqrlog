@@ -6,8 +6,8 @@ interface
 
 uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,
-  ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,
-  lclType, LazFileUtils, StrUtils, DateUtils, Math,
+  ExtCtrls,Buttons,FileUtil,Menus,ActnList,ComCtrls,
+  lclType, LazFileUtils, DateUtils, Math,
   uRbnSpotParser, uRbnConnection, dSqlRef;
 
 type
@@ -83,7 +83,6 @@ type
     FListening : TRbnConnection;  //the one AddSpotToList is subscribed to, or nil
     FOwnName   : String;          //the preset FOwnConn was last connected to
     csRBN : TRTLCriticalSection;
-    login      : String;
     delAfter : integer;
     watchFor : String;
     LocalDbg : boolean;
@@ -672,7 +671,6 @@ Const
   MEC       = 170  *pi/180;       // Map image horizontal Edge Crossing "no print" limit in degrees (converted to radians)
 
 var
-  lat1,lat2,lon1,lon2,
   latFrom,lonFrom,
   BaseStep,step,                  // degree steps (converted to radians) for path line
   PolarStep,                      // steps in polar regions where distances/degrees are smaller
@@ -837,8 +835,7 @@ end;
 procedure  TfrmGrayline.RemoveOldSpots(RemoveAfter:integer); //setting RemoveAfter:=0 removes all Spots
 var
   i        : Integer;
-  time,
-  SpotTime: int64;
+  time     : int64;
 
 begin
   time := DateTimeToUnix(now);
@@ -864,14 +861,12 @@ var
   index   : Word;
   tmp     : Integer;
   wCall   : String;
-  mode    : String;
   latitude, longitude: Currency;
 begin
   watchFor   := cqrini.ReadString('RBN','watch','');
   spotter := Parsed.Spotter;
   call    := Parsed.Dx;
   freq    := Parsed.FreqText;
-  mode    := Parsed.Mode;
   stren   := IntToStr(Parsed.SignalDb);
 
   if watchFor<>'' then

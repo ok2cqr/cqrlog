@@ -9,10 +9,8 @@
 *)
 
 { The shared store of spot candidates: every spot from RBN, the DX cluster and
-  the operator, kept for a while, filtered only when a window looks at it.
-  The band maps used to filter on the way in and only while their window was
-  open, so a changed filter or a newly opened window never saw what had already
-  arrived. }
+  the operator, kept for a while, filtered only when a window looks at it, so a
+  changed filter or a newly opened window sees what has already arrived. }
 
 unit tCandidateStore;
 
@@ -38,7 +36,7 @@ type
     procedure AddedSpotIsSelectedOnItsBand;
     procedure OtherBandIsNotSelected;
     procedure SelectAllBandsWithEmptyBand;
-    procedure SameKeyUpdatesLastSeenNotCount;
+    procedure SameKeyUpdatesFrequencyAndLastSeen;
     procedure DifferentSpottersAreSeparateCandidates;
     procedure SelectionIsSortedByFrequency;
     procedure ExpiredSpotIsGone;
@@ -120,7 +118,7 @@ begin
   AssertEquals(2, Length(Store.Select('', Now, DefaultSpotFilter, @NeverWorked)))
 end;
 
-procedure TSpotStoreTest.SameKeyUpdatesLastSeenNotCount;
+procedure TSpotStoreTest.SameKeyUpdatesFrequencyAndLastSeen;
 var
   A : TSpotCandidate;
   V : TSpotView;
