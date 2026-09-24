@@ -212,7 +212,6 @@ type
     function SqlSpotQsoOnBandMode(const DbName, Adif, Band, Mode : String) : String;
     function SqlSpotQsoOnBand(const DbName, Adif, Band : String) : String;
     function SqlSpotQsoWithDxcc(const DbName, Adif : String) : String;
-    function SqlRbnQsoCfmOnBandModeIncLotw(const DbName, Adif, Band, Mode : String) : String;
   end;
 
 var
@@ -1093,14 +1092,6 @@ function TdmSqlStat.SqlSpotQsoWithDxcc(const DbName, Adif : String) : String;
 begin
   Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
             Adif+' LIMIT 1'
-end;
-
-function TdmSqlStat.SqlRbnQsoCfmOnBandModeIncLotw(const DbName, Adif, Band, Mode : String) : String;
-begin
-  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
-            Adif+' AND band='+QuotedStr(Band)+' AND ((qsl_r='+
-            QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
-            QuotedStr(Mode)+' LIMIT 1'
 end;
 
 end.

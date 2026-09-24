@@ -44,7 +44,6 @@ type
   protected
     procedure Execute; override;
   public
-    DxccWithLoTW              : Boolean;
     fil_SrcCont               : String;
     fil_SrcCalls              : TStringList;
     fil_IgnWkdHour            : Boolean;
@@ -177,7 +176,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, uMyIni, dData, dSqlRef, fRbnControl, dDXCluster, fRbnFilter, fNewQSO,
+uses dUtils, uMyIni, dData, fRbnControl, dDXCluster, fRbnFilter, fNewQSO,
      fBandMap, uBandMapStore, uDebugLog, sqldb;
 
 { TfrmRbnMonitor }
@@ -333,7 +332,6 @@ begin
     exit
   end;
 
-  //DxccWithLoTW was never set anywhere, the LoTW variant of the query was dead
   index := dmData.RbnLogCache.DxccStatus(adif,band,mode);
   FDxccIndex := index;
   case index of

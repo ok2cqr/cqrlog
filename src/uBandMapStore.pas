@@ -51,9 +51,7 @@ type
     BgColor   : LongInt;
     TimeStamp : TDateTime;  //last live arrival
     Source    : TGfxSpotSource;
-    AgeStep   : Byte;       //0 fresh, 1 past FirstAging, 2 past SecondAging
-    isLoTW    : Boolean;
-    isEQSL    : Boolean
+    AgeStep   : Byte        //0 fresh, 1 past FirstAging, 2 past SecondAging
   end;
 
   TBandMapStore = class
@@ -61,8 +59,6 @@ type
       FItems     : array of TGfxSpot;    //main thread only, sorted by Freq
       FFirstSec  : Integer;
       FSecondSec : Integer;
-      FDeleteSec : Integer;
-      FLastCount : Integer;
 
       FBand       : String;      //'' = every band (the window follows the radio)
       FDateFilter : TBmDateFilter;
@@ -77,7 +73,6 @@ type
 
       function  AgeStepFor(ASeconds : Double) : Byte;
       function  WorkedRule(const Call, Band, Mode : String) : Boolean;
-      procedure SetDeleteAfterSec(Sec : Integer);
     public
       constructor Create;
 
@@ -98,7 +93,6 @@ type
 
       property FirstAgingSec  : Integer read FFirstSec  write FFirstSec;
       property SecondAgingSec : Integer read FSecondSec write FSecondSec;
-      property DeleteAfterSec : Integer read FDeleteSec write SetDeleteAfterSec;
 
       { the window's filters, applied by Poll }
       property Band       : String read FBand write FBand;
@@ -114,7 +108,6 @@ type
 var
   SpotStore    : TSpotStore;    //the shared candidates, created in initialization
   BandMapStore : TBandMapStore; //the graphical map's view of it, never nil
-  BandMapStoreDebug : Boolean = False;
 
 implementation
 
@@ -123,15 +116,8 @@ begin
   inherited Create;
   FFirstSec   := 5*60;
   FSecondSec  := 8*60;
-  FDeleteSec  := 12*60;
   FDateFilter := bmdShowAll;
   FLastHours  := 48
-end;
-
-procedure TBandMapStore.SetDeleteAfterSec(Sec : Integer);
-begin
-  FDeleteSec := Sec;
-  SpotStore.DeleteAfterSec := Sec
 end;
 
 procedure TBandMapStore.Add(AFreq : Double; const ACall, AMode, ABand, ASplit : String;
@@ -213,7 +199,7 @@ begin
   end;
 
   V := SpotStore.Select(FBand, ANow, F, Rule);
-  if (Length(V) <> Length(FItems)) or (Length(V) <> FLastCount) then
+  if Length(V) <> Length(FItems) then
     Result := True;
   SetLength(FItems, Length(V));
   for i := 0 to High(V) do
@@ -234,14 +220,11 @@ begin
       soCluster : FItems[i].Source := gssCluster;
       else        FItems[i].Source := gssManual
     end;
-    FItems[i].isLoTW := V[i].IsLoTW;
-    FItems[i].isEQSL := V[i].IsEQSL;
     Step := AgeStepFor((ANow - V[i].LastSeen) * 86400);
     if FItems[i].AgeStep <> Step then
       Result := True;
     FItems[i].AgeStep := Step
   end;
-  FLastCount := Length(V);
   //the store keeps what any window may still want; expiry is one sweep
   SpotStore.Expire(ANow)
 end;
@@ -249,8 +232,7 @@ end;
 procedure TBandMapStore.Clear;
 begin
   SpotStore.Clear;
-  FItems := nil;
-  FLastCount := 0
+  FItems := nil
 end;
 
 function TBandMapStore.Count : Integer;

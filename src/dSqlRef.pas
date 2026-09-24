@@ -116,7 +116,6 @@ type
 
     // rbn_sources: presets of RBN telnet servers, see uRbnConnection
     function  LoadRbnSources : TRbnSourceList;
-    function  GetRbnSource(const Id : Integer; out Source : TRbnSource) : Boolean;
     function  InsertRbnSource(const Source : TRbnSource) : Integer;  // the new id
     procedure UpdateRbnSource(const Source : TRbnSource);
     procedure DeleteRbnSource(const Id : Integer);
@@ -164,7 +163,6 @@ type
 
     // rbn_sources
     function SqlRbnSources : String;
-    function SqlRbnSource(const Id : Integer) : String;
     function SqlInsertRbnSource(const Description, Address : String; const Port : Integer; const UserName : String) : String;
     function SqlUpdateRbnSource(const Description, Address : String; const Port : Integer; const UserName : String; const Id : Integer) : String;
     function SqlDeleteRbnSource(const Id : Integer) : String;
@@ -495,27 +493,6 @@ begin
   end
 end;
 
-function TdmSqlRef.GetRbnSource(const Id : Integer; out Source : TRbnSource) : Boolean;
-begin
-  Source := Default(TRbnSource);
-  FQ.Prepare(SqlRbnSource(Id));
-  try
-    FQ.Open;
-    Result := not FQ.Query.EOF;
-    if Result then
-      with FQ.Query do
-      begin
-        Source.Id          := Fields[0].AsInteger;
-        Source.Description := Fields[1].AsString;
-        Source.Address     := Fields[2].AsString;
-        Source.Port        := Fields[3].AsInteger;
-        Source.UserName    := Fields[4].AsString
-      end
-  finally
-    FQ.Release
-  end
-end;
-
 function TdmSqlRef.InsertRbnSource(const Source : TRbnSource) : Integer;
 begin
   FQ.PrepareNext(SqlInsertRbnSource(Source.Description, Source.Address, Source.Port, Source.UserName));
@@ -725,11 +702,6 @@ end;
 function TdmSqlRef.SqlRbnSources : String;
 begin
   Result := 'select id_rbn_sources, description, address, port, username from cqrlog_common.rbn_sources order by description'
-end;
-
-function TdmSqlRef.SqlRbnSource(const Id : Integer) : String;
-begin
-  Result := 'select id_rbn_sources, description, address, port, username from cqrlog_common.rbn_sources where id_rbn_sources = ' + IntToStr(Id)
 end;
 
 function TdmSqlRef.SqlInsertRbnSource(const Description, Address : String; const Port : Integer; const UserName : String) : String;

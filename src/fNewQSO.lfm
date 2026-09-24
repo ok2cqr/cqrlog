@@ -5611,11 +5611,6 @@ object frmNewQSO: TfrmNewQSO
       Caption = 'Band map'
       OnExecute = acShowBandMapExecute
     end
-    object acShowBandMapGfx: TAction
-      Category = 'Window'
-      Caption = 'Band map (graphical)'
-      OnExecute = acShowBandMapGfxExecute
-    end
     object acAddToBandMap: TAction
       Category = 'File'
       Caption = 'Add to band map (+,Ctrl+A)'

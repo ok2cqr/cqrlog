@@ -286,7 +286,7 @@ type
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
     function  TriggersExistsOnCqrlog_main : Boolean;
     function  CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
-    function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
+    function  RbnMonDXCCInfo(adif : Word; band, mode : String; var index : integer) : String;
     function  RbnLastQso(const callsign,band,mode : String) : String;
     function  RbnMembership(const callsign, date : String) : String;
     function  ReopenConnection(con : TSQLConnection; const What : String) : Boolean;
@@ -771,18 +771,6 @@ begin
     Q.Close();
     trQ.Rollback
   end;
-  //version 7 was once stamped with the table created in the wrong database
-  //(a development build); the statement is IF NOT EXISTS, so it is cheap to
-  //make sure here
-  trQ.StartTransaction;
-  try
-    Q.SQL.Text := dmSqlSchema.SqlCreateRbnSources;
-    Q.ExecSQL;
-    trQ.Commit
-  except
-    trQ.Rollback
-  end;
-
   dmUtils.TimeOffset     := cqrini.ReadFloat('Program','offset',0);
   dmUtils.GrayLineOffset := cqrini.ReadFloat('Program','GraylineOffset',0);
   dmUtils.SysUTC         := cqrini.ReadBool('Program','SysUTC',True);
@@ -3352,13 +3340,13 @@ function TdmData.CachedDxccStatus(Adif : Word; const Band, Mode : String) : Inte
 begin
   EnterCriticalsection(csRbnMon);
   try
-    RbnMonDXCCInfo(Adif, Band, Mode, False, Result)
+    RbnMonDXCCInfo(Adif, Band, Mode, Result)
   finally
     LeaveCriticalsection(csRbnMon)
   end
 end;
 
-function TdmData.RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean; var index : integer) : String;
+function TdmData.RbnMonDXCCInfo(adif : Word; band, mode : String; var index : integer) : String;
 var
   sAdif : String = '';
 begin
@@ -3380,10 +3368,7 @@ begin
     trRbnMon.Rollback;
 
   try try
-    if DxccWithLoTW then
-      qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoCfmOnBandModeIncLotw(dmData.DBName, sAdif, band, mode)
-    else
-      qRbnMon.SQL.Text := dmSqlStat.SqlSpotQsoCfmOnBandMode(dmData.DBName, sAdif, band, mode);
+    qRbnMon.SQL.Text := dmSqlStat.SqlSpotQsoCfmOnBandMode(dmData.DBName, sAdif, band, mode);
     trRbnMon.StartTransaction;
     qRbnMon.Open;
     if qRbnMon.Fields[0].AsInteger > 0 then

@@ -393,8 +393,8 @@ begin
   //aging is shared with the text band map on purpose - one place to tune it
   FView.FirstAgingSec  := cqrini.ReadInteger('BandMap','FirstAging',5)*60;
   FView.SecondAgingSec := cqrini.ReadInteger('BandMap','SecondAging',8)*60;
-  FView.DeleteAfterSec := cqrini.ReadInteger('BandMap','Disep',12)*60;
-  BandMapStoreDebug := dmData.DebugLevel >= 1;
+  //the expiry belongs to the shared store, not to a window
+  SpotStore.DeleteAfterSec := cqrini.ReadInteger('BandMap','Disep',12)*60;
 
   FInst := LoadInstance(IniStore, FInst.Choice, cSpans[cDefaultSpanIndex]);
 
