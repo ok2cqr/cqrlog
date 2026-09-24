@@ -52,13 +52,13 @@ procedure TLogCheckQueueTest.PopsInArrivalOrder;
 var
   R : TLogCheckRequest;
 begin
-  Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
-  Q.Push('OK1BB', '20M', 'CW', '2026-09-20', '10:00');
+  Q.Push('OK1AA', '20M', 'CW');
+  Q.Push('OK1BB', '20M', 'CW');
   AssertEquals(2, Q.Count);
   AssertTrue(Q.Pop(R));
   AssertEquals('OK1AA', R.Call);
-  AssertEquals('2026-09-20', R.LastDate);
-  AssertEquals('10:00', R.LastTime);
+  AssertEquals('20M', R.Band);
+  AssertEquals('CW', R.Mode);
   AssertTrue(Q.Pop(R));
   AssertEquals('OK1BB', R.Call);
   AssertFalse(Q.Pop(R));
@@ -68,17 +68,16 @@ end;
 procedure TLogCheckQueueTest.SameStationIsQueuedOnce;
 begin
   //four windows ask about the same spot within one tick
-  Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
-  Q.Push('ok1aa', '20M', 'CW', '2026-09-20', '10:00');
-  Q.Push('OK1AA', '20M', 'CW', '2026-09-21', '10:00');
+  Q.Push('OK1AA', '20M', 'CW');
+  Q.Push('ok1aa', '20M', 'CW');
   AssertEquals(1, Q.Count)
 end;
 
 procedure TLogCheckQueueTest.DifferentBandIsAnotherQuestion;
 begin
-  Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
-  Q.Push('OK1AA', '40M', 'CW', '2026-09-20', '10:00');
-  Q.Push('OK1AA', '40M', 'SSB', '2026-09-20', '10:00');
+  Q.Push('OK1AA', '20M', 'CW');
+  Q.Push('OK1AA', '40M', 'CW');
+  Q.Push('OK1AA', '40M', 'SSB');
   AssertEquals(3, Q.Count)
 end;
 
@@ -86,9 +85,9 @@ procedure TLogCheckQueueTest.CanBeAskedAgainOncePopped;
 var
   R : TLogCheckRequest;
 begin
-  Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  Q.Push('OK1AA', '20M', 'CW');
   Q.Pop(R);
-  Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  Q.Push('OK1AA', '20M', 'CW');
   AssertEquals(1, Q.Count)
 end;
 
@@ -96,11 +95,11 @@ procedure TLogCheckQueueTest.ClearEmptiesIt;
 var
   R : TLogCheckRequest;
 begin
-  Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  Q.Push('OK1AA', '20M', 'CW');
   Q.Clear;
   AssertEquals(0, Q.Count);
   AssertFalse(Q.Pop(R));
-  Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  Q.Push('OK1AA', '20M', 'CW');
   AssertEquals(1, Q.Count)
 end;
 
@@ -108,7 +107,7 @@ procedure TLogCheckQueueTest.MembershipIsAnotherKindOfQuestion;
 var
   R : TLogCheckRequest;
 begin
-  Q.Push('OK1AA', '20M', 'CW', '2026-09-20', '10:00');
+  Q.Push('OK1AA', '20M', 'CW');
   Q.PushMembership('OK1AA', '2026-09-23');
   Q.PushMembership('OK1AA', '2026-09-23');   //queued once
   AssertEquals(2, Q.Count);
@@ -117,7 +116,7 @@ begin
   AssertTrue(Q.Pop(R));
   AssertTrue(R.Kind = lckMembership);
   AssertEquals('OK1AA', R.Call);
-  AssertEquals('2026-09-23', R.LastDate);
+  AssertEquals('2026-09-23', R.Date);
   AssertFalse(Q.Pop(R))
 end;
 
