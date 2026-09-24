@@ -205,7 +205,7 @@ type
                                ACurrent : PBandMapChoice);
       //a window met a station the log cache does not know: the thread looks
       //it up, the window shows the spot until then
-      procedure RequestLogCheck(const ACall, ABand, AMode, ALastDate, ALastTime : String);
+      procedure RequestLogCheck(const ACall, ABand, AMode : String);
       //the same for the club membership of a heard station on a day
       procedure RequestMembership(const ACall, ADate : String);
       //a window opened or closed: menus showing the open choices redraw
@@ -862,7 +862,7 @@ function TfrmBandMapGfx.IsWorked(const ACall, ABand, AMode,
 begin
   if dmData.RbnLogCache.TryWorkedAfter(ACall,ABand,AMode,ALastDate,ALastTime,Result) then
     exit;
-  BandMapWindows.RequestLogCheck(ACall,ABand,AMode,ALastDate,ALastTime);
+  BandMapWindows.RequestLogCheck(ACall,ABand,AMode);
   Result := False
 end;
 
@@ -1537,9 +1537,9 @@ begin
     end;
     try
       if R.Kind = lckMembership then
-        dmData.RbnLogCache.Membership(R.Call, R.LastDate)
+        dmData.RbnLogCache.Membership(R.Call, R.Date)
       else
-        dmData.RbnLogCache.WorkedAfter(R.Call, R.Band, R.Mode, R.LastDate, R.LastTime)
+        dmData.RbnLogCache.FetchLastQso(R.Call, R.Band, R.Mode)
     except
       on E : Exception do
         DbgLogException('BMAP', 'log check ' + R.Call + ' ' + R.Band + ' ' + R.Mode, E)
@@ -1574,12 +1574,12 @@ begin
   inherited Destroy
 end;
 
-procedure TBandMapWindows.RequestLogCheck(const ACall, ABand, AMode, ALastDate, ALastTime : String);
+procedure TBandMapWindows.RequestLogCheck(const ACall, ABand, AMode : String);
 begin
   //started on the first question, so a session without a QSO rule has no thread
   if FChecker = nil then
     FChecker := TLogCheckThread.Create(FChecks);
-  FChecks.Push(ACall, ABand, AMode, ALastDate, ALastTime)
+  FChecks.Push(ACall, ABand, AMode)
 end;
 
 procedure TBandMapWindows.RequestMembership(const ACall, ADate : String);

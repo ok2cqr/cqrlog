@@ -39,6 +39,7 @@ type
   published
     procedure FirstAskFetchesSecondDoesNot;
     procedure TryAnswersFromTheCacheOnly;
+    procedure FetchLastQsoFillsTheCacheOnce;
     procedure DifferentBandIsADifferentEntry;
     procedure DifferentBoundaryIsADifferentEntry;
     procedure NegativeAnswerIsCachedToo;
@@ -119,6 +120,17 @@ begin
   AssertTrue(C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00'));
   AssertTrue(C.WorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00'));
   AssertEquals(1, FetchCount)
+end;
+
+procedure TLogCacheTest.FetchLastQsoFillsTheCacheOnce;
+var
+  w : Boolean;
+begin
+  //the band map log check thread: no boundary, only the fetch
+  C.FetchLastQso('OK1AA', '20M', 'CW');
+  C.FetchLastQso('OK1AA', '20M', 'CW');
+  AssertEquals(1, FetchCount);
+  AssertTrue(C.TryWorkedAfter('OK1AA', '20M', 'CW', '2026-09-20', '10:00', w))
 end;
 
 procedure TLogCacheTest.DifferentBandIsADifferentEntry;

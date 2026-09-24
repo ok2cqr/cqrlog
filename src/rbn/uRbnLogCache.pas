@@ -57,6 +57,7 @@ type
     procedure Put(const Key, Call : String; Value : Integer; const Text : String = '');
     procedure ClearAll;
     procedure Drop(Index : Integer);
+    function  LastQso(const Call, Band, Mode : String) : String;
   public
     OnLastQso     : TLastQsoFunc;
     OnDxccStatus  : TDxccStatusFunc;
@@ -67,6 +68,9 @@ type
     //was there a QSO after LastDate LastTime? Answered from the cached last
     //QSO, so a boundary that moves with the clock costs no new fetch
     function  WorkedAfter(const Call, Band, Mode, LastDate, LastTime : String) : Boolean;
+    //fetches the last QSO into the cache on a miss, no question asked: the
+    //band map log check thread answers ahead of TryWorkedAfter
+    procedure FetchLastQso(const Call, Band, Mode : String);
     //the same answer from the cache alone: False when the station has not
     //been looked up yet, so the caller can ration the round trips
     function  TryWorkedAfter(const Call, Band, Mode, LastDate, LastTime : String;
@@ -195,20 +199,31 @@ begin
   end
 end;
 
-function TRbnLogCache.WorkedAfter(const Call, Band, Mode, LastDate, LastTime : String) : Boolean;
+function TRbnLogCache.LastQso(const Call, Band, Mode : String) : String;
 var
-  Key  : String;
-  v    : Integer;
-  Last : String;
+  Key : String;
+  v   : Integer;
 begin
   Key := 'W|' + UpperCase(Call) + '|' + Band + '|' + Mode;
-  if not Get(Key, v, Last) then
+  if not Get(Key, v, Result) then
   begin
-    Last := OnLastQso(Call, Band, Mode);
-    Put(Key, UpperCase(Call), 0, Last)
-  end;
+    Result := OnLastQso(Call, Band, Mode);
+    Put(Key, UpperCase(Call), 0, Result)
+  end
+end;
+
+function TRbnLogCache.WorkedAfter(const Call, Band, Mode, LastDate, LastTime : String) : Boolean;
+var
+  Last : String;
+begin
+  Last := LastQso(Call, Band, Mode);
   //both are 'YYYY-MM-DD HH:NN', so text order is time order
   Result := (Last <> '') and (Last > LastDate + ' ' + LastTime)
+end;
+
+procedure TRbnLogCache.FetchLastQso(const Call, Band, Mode : String);
+begin
+  LastQso(Call, Band, Mode)
 end;
 
 function TRbnLogCache.TryWorkedAfter(const Call, Band, Mode, LastDate, LastTime : String;

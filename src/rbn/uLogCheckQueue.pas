@@ -35,9 +35,9 @@ type
   TLogCheckKind = (lckWorked, lckMembership);
 
   TLogCheckRequest = record
-    Kind               : TLogCheckKind;
-    Call, Band, Mode   : String;
-    LastDate, LastTime : String;   //for lckMembership LastDate is the day asked
+    Kind             : TLogCheckKind;
+    Call, Band, Mode : String;     //Band and Mode for lckWorked
+    Date             : String;     //the day asked, for lckMembership
   end;
 
   TLogCheckQueue = class
@@ -50,7 +50,7 @@ type
     public
       constructor Create;
       destructor  Destroy; override;
-      procedure Push(const ACall, ABand, AMode, ALastDate, ALastTime : String);
+      procedure Push(const ACall, ABand, AMode : String);
       procedure PushMembership(const ACall, ADate : String);
       function  Pop(out R : TLogCheckRequest) : Boolean;
       function  Count : Integer;
@@ -78,7 +78,7 @@ end;
 function KeyOf(const R : TLogCheckRequest) : String;
 begin
   if R.Kind = lckMembership then
-    Result := 'M|' + UpperCase(R.Call) + '|' + R.LastDate
+    Result := 'M|' + UpperCase(R.Call) + '|' + R.Date
   else
     Result := 'W|' + UpperCase(R.Call) + '|' + R.Band + '|' + R.Mode
 end;
@@ -100,7 +100,7 @@ begin
   end
 end;
 
-procedure TLogCheckQueue.Push(const ACall, ABand, AMode, ALastDate, ALastTime : String);
+procedure TLogCheckQueue.Push(const ACall, ABand, AMode : String);
 var
   R : TLogCheckRequest;
 begin
@@ -109,8 +109,6 @@ begin
   R.Call     := ACall;
   R.Band     := ABand;
   R.Mode     := AMode;
-  R.LastDate := ALastDate;
-  R.LastTime := ALastTime;
   Add(R, KeyOf(R))
 end;
 
@@ -121,7 +119,7 @@ begin
   R := Default(TLogCheckRequest);
   R.Kind     := lckMembership;
   R.Call     := ACall;
-  R.LastDate := ADate;
+  R.Date     := ADate;
   Add(R, KeyOf(R))
 end;
 
