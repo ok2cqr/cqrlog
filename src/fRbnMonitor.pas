@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ActnList, StdCtrls, Grids, lclType, ExtCtrls,
+  ComCtrls, ActnList, Grids, lclType, ExtCtrls,
   Menus, RegExpr, uRbnSpotParser, uRbnSpotQueue, uRbnConnection;
 
 const
@@ -33,7 +33,6 @@ type
 type
   TRbnThread = class(TThread)
   private
-    cs  : TRTLCriticalSection;
     reg : TRegExpr;
     fRbnSpot : TRbnSpot;
     FOnShowSpot : TOnShowSpotEvent;
@@ -151,7 +150,6 @@ type
     procedure ToolButton3Click(Sender: TObject);
   private
     RbnMonThread : TRbnThread;
-    aRbnArchive  : Array of TRbnSpot;
     SrcCalls : TStringlist;
 
 
@@ -202,7 +200,6 @@ var
   Boundary : TDateTime;
   adif     : Word;
   index    : Integer;
-  f        : Double;
   i        : integer;
   SpotterOk: Boolean;
 begin
@@ -364,8 +361,6 @@ var
   LoTW    : String;
   eQSL    : String;
   dxinfo  : String;
-  RbnSpot : TRbnSpot;
-  index   : Integer;
   band    : String;
   lat     : String;
   long    : String;
