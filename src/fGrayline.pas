@@ -112,7 +112,7 @@ type
     function  GetEmptyPos : Word;
     function  SpotterExists(spotter : String) : Word;
     procedure RemoveOldSpots(RemoveAfter:integer);
-    procedure AddSpotToList(spot : String);
+    procedure AddSpotToList(const Parsed : TRbnSpotLine);
     procedure LoadSettings();
   end;
 
@@ -148,7 +148,7 @@ end;
 procedure TfrmGrayline.OnRbnSpot(const Line : String; const Spot : TRbnSpotLine);
 begin
   if LocalDbg then Writeln('  RBN:',Line);
-  AddSpotToList(Line)
+  AddSpotToList(Spot)
 end;
 
 procedure TfrmGrayline.OnRbnState(Sender : TObject);
@@ -852,7 +852,7 @@ begin
   LeaveCriticalsection(csRBN);
 
 end;
-procedure TfrmGrayline.AddSpotToList(spot : String);
+procedure TfrmGrayline.AddSpotToList(const Parsed : TRbnSpotLine);
 
 var
   spotter : String;
@@ -866,9 +866,7 @@ var
   wCall   : String;
   mode    : String;
   latitude, longitude: Currency;
-  Parsed  : TRbnSpotLine;
 begin
-  if not ParseRbnSpot(spot, Parsed) then exit;
   watchFor   := cqrini.ReadString('RBN','watch','');
   spotter := Parsed.Spotter;
   call    := Parsed.Dx;

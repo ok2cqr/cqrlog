@@ -390,7 +390,7 @@ begin
   try
     while not Terminated do
     try
-      if not frmRbnMonitor.SpotQueue.Pop(spot) then
+      if not frmRbnMonitor.SpotQueue.Pop(spot, Parsed) then
         spot := '';
       //heartbeat, so the log distinguishes "thread died" from "no spots arrived"
       if (Now - tBeat) > (5/1440) then
@@ -409,9 +409,6 @@ begin
       end;
       Inc(nSpots);
 
-      //OnRbnSpot queues only what parsed, but the queue is a list of strings
-      if not ParseRbnSpot(spot, Parsed) then
-        Continue;
       spotter := Parsed.Spotter;
       dxstn   := Parsed.Dx;
       freq    := Parsed.FreqText;
@@ -516,7 +513,7 @@ procedure TfrmRbnMonitor.OnRbnSpot(const Line : String; const Spot : TRbnSpotLin
 begin
   //the Grayline is a subscriber of the same connection itself now
   if Assigned(RbnMonThread) then
-    SpotQueue.Push(Line)
+    SpotQueue.Push(Line, Spot)
 end;
 
 procedure TfrmRbnMonitor.OnRbnState(Sender : TObject);
