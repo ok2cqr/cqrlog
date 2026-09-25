@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 CQRLOG is an advanced ham radio logger for Linux/macOS, written in Free Pascal using the Lazarus IDE (LCL framework). It uses MariaDB/MySQL as its database backend and integrates with hamlib for radio control (140+ radio models).
 
-Current version: 3.1.0 (defined in `src/uVersion.pas`; the Makefile derives the package version from it).
+Current version: 3.2.0 (defined in `src/uVersion.pas`; the Makefile derives the package version from it).
 
 ## Build Commands
 
