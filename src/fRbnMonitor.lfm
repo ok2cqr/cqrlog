@@ -243,7 +243,7 @@ object frmRbnMonitor: TfrmRbnMonitor
     end
     object acLinkToBandMap: TAction
       Caption = 'Send spots to band map'
-      Hint = 'Send RBN spots to the band map (band map window must be open)'
+      Hint = 'Send RBN spots to the band maps'
       OnExecute = acLinkToBandMapExecute
     end
   end

@@ -166,6 +166,8 @@ type
     DeleteCount  : Integer;
     procedure SynRbnMonitor(RbnSpot : TRbnSpot);
     procedure LoadConfigToThread;
+    //the RBN control window has the same switch; both go through here
+    procedure SetSendToBandMap(Value : Boolean);
   end;
 
 var
@@ -559,7 +561,7 @@ begin
   begin
     //restored here, not in FormShow: the thread may start before the window
     //is ever opened, and LoadConfigToThread reads this action
-    acLinkToBandMap.Checked := cqrini.ReadBool('RBNMonitor','ToBandMap',False);
+    SetSendToBandMap(cqrini.ReadBool('RBNMonitor','ToBandMap',False));
     RbnMonThread := TRBNThread.Create(True);
     RbnMonThread.FreeOnTerminate :=  False;// True; I think this causes abrt in terminate (TfrmRbnMonitor.acDisconnectExecute) because procedure has freeAndNil (does free twice)
     RbnMonThread.OnShowSpot := @SynRbnMonitor; //shows up when RBN traffic is high like IARU HF contest and connect is tried to close or filter adjusted
@@ -597,11 +599,18 @@ end;
 
 procedure TfrmRbnMonitor.acLinkToBandMapExecute(Sender: TObject);
 begin
-  acLinkToBandMap.Checked := not acLinkToBandMap.Checked;
-  cqrini.WriteBool('RBNMonitor','ToBandMap',acLinkToBandMap.Checked);
+  SetSendToBandMap(not acLinkToBandMap.Checked)
+end;
+
+procedure TfrmRbnMonitor.SetSendToBandMap(Value : Boolean);
+begin
+  acLinkToBandMap.Checked := Value;
+  cqrini.WriteBool('RBNMonitor','ToBandMap',Value);
   //pushed straight to the worker so the toggle takes effect without a reconnect
   if Assigned(RbnMonThread) then
-    RbnMonThread.bm_ToBandMap := acLinkToBandMap.Checked
+    RbnMonThread.bm_ToBandMap := Value;
+  if Assigned(frmRbnControl) then
+    frmRbnControl.chkToBandMap.Checked := Value
 end;
 
 procedure TfrmRbnMonitor.acFontSettingsExecute(Sender: TObject);
@@ -711,7 +720,7 @@ begin
 
   //restored in FormShow, not FormCreate, because cqrini is re-created on log switch.
   //must happen before acConnectExecute below, LoadConfigToThread reads this action
-  acLinkToBandMap.Checked := cqrini.ReadBool('RBNMonitor','ToBandMap',False);
+  SetSendToBandMap(cqrini.ReadBool('RBNMonitor','ToBandMap',False));
 
   if (FConn.State <> rcsDisconnected) or cqrini.ReadBool('RBN','AutoConnectM',False) then
      acConnectExecute(nil);
