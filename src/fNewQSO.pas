@@ -74,6 +74,8 @@ type
     acRefreshTime: TAction;
     acRBNMonitor: TAction;
     acRbnControl: TAction;
+    MenuItem95: TMenuItem;
+    MenuItem96: TMenuItem;
     mnuRbnControl: TMenuItem;
     acRemoteWsjt: TAction;
     acCommentToCallsign : TAction;
@@ -365,6 +367,17 @@ type
     sbtnQRZ: TSpeedButton;
     sbtnQSL: TSpeedButton;
     Separator1: TMenuItem;
+    Separator10: TMenuItem;
+    Separator11: TMenuItem;
+    Separator12: TMenuItem;
+    Separator2: TMenuItem;
+    Separator3: TMenuItem;
+    Separator4: TMenuItem;
+    Separator5: TMenuItem;
+    Separator6: TMenuItem;
+    Separator7: TMenuItem;
+    Separator8: TMenuItem;
+    Separator9: TMenuItem;
     sgrdStatistic : TStringGrid;
     btnSunRise: TSpeedButton;
     sgrdCallStatistic: TStringGrid;

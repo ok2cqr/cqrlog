@@ -5126,14 +5126,20 @@ object frmNewQSO: TfrmNewQSO
     end
     object MenuItem67: TMenuItem
       Caption = 'Window'
+      object MenuItem63: TMenuItem
+        Action = acContest
+      end
+      object Separator4: TMenuItem
+        Caption = '-'
+      end
       object MenuItem71: TMenuItem
         Action = acShowBandMap
       end
       object mnuShowBandMapGfx: TMenuItem
         Caption = 'Band map (graphical, beta)'
       end
-      object MenuItem63: TMenuItem
-        Action = acContest
+      object Separator5: TMenuItem
+        Caption = '-'
       end
       object MenuItem73: TMenuItem
         Action = acCWType
@@ -5142,17 +5148,23 @@ object frmNewQSO: TfrmNewQSO
         Action = acCWFKey
         Caption = 'Memory keys'
       end
-      object MenuItem80: TMenuItem
-        Action = acDetails
+      object Separator6: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem91: TMenuItem
+        Action = acRBNMonitor
+      end
+      object mnuRbnControl: TMenuItem
+        Action = acRbnControl
+      end
+      object Separator7: TMenuItem
+        Caption = '-'
       end
       object MenuItem70: TMenuItem
         Action = acDXCluster
       end
-      object MenuItem68: TMenuItem
-        Action = acGrayline
-      end
-      object MenuItem52: TMenuItem
-        Action = acLogUploadStatus
+      object Separator8: TMenuItem
+        Caption = '-'
       end
       object MenuItem74: TMenuItem
         Action = acProp
@@ -5161,26 +5173,41 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem94: TMenuItem
         Action = acpDK0WCY
       end
-      object MenuItem38: TMenuItem
-        Action = acQSOList
+      object Separator9: TMenuItem
+        Caption = '-'
       end
-      object MenuItem91: TMenuItem
-        Action = acRBNMonitor
-      end
-      object mnuRbnControl: TMenuItem
-        Action = acRbnControl
-      end
-      object mnuReminder: TMenuItem
-        Action = acReminder
+      object MenuItem69: TMenuItem
+        Action = acTRXControl
       end
       object MenuItem37: TMenuItem
         Action = acRotControl
       end
+      object Separator10: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem80: TMenuItem
+        Action = acDetails
+      end
+      object Separator12: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem68: TMenuItem
+        Action = acGrayline
+      end
+      object Separator11: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem52: TMenuItem
+        Action = acLogUploadStatus
+      end
+      object Separator3: TMenuItem
+        Caption = '-'
+      end
+      object mnuReminder: TMenuItem
+        Action = acReminder
+      end
       object MenuItem34: TMenuItem
         Action = acSCP
-      end
-      object MenuItem69: TMenuItem
-        Action = acTRXControl
       end
       object mnuWsjtxmonitor: TMenuItem
         Action = acMonitorWsjtx
@@ -5192,6 +5219,12 @@ object frmNewQSO: TfrmNewQSO
       end
       object MenuItem75: TMenuItem
         Action = acXplanet
+      end
+      object Separator2: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem38: TMenuItem
+        Action = acQSOList
       end
     end
     object MenuItem3: TMenuItem
