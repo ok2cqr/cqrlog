@@ -1,11 +1,11 @@
 object frmRbnControl: TfrmRbnControl
   Left = 300
-  Height = 56
+  Height = 80
   Top = 200
   Width = 392
   BorderStyle = bsSizeToolWin
   Caption = 'RBN control'
-  ClientHeight = 56
+  ClientHeight = 80
   ClientWidth = 392
   Constraints.MinHeight = 34
   Constraints.MinWidth = 190
@@ -46,6 +46,22 @@ object frmRbnControl: TfrmRbnControl
     Style = csDropDownList
     TabOrder = 0
     OnChange = cmbSourceChange
+  end
+  object chkToBandMap: TCheckBox
+    AnchorSideLeft.Control = cmbSource
+    AnchorSideTop.Control = btnSources
+    AnchorSideTop.Side = asrBottom
+    Left = 26
+    Height = 18
+    Hint = 'Send RBN spots to the band maps'
+    Top = 35
+    Width = 170
+    BorderSpacing.Top = 4
+    Caption = 'Send spots to band map'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 1
+    OnChange = chkToBandMapChange
   end
   object btnSources: TSpeedButton
     AnchorSideTop.Control = Owner
@@ -124,7 +140,7 @@ object frmRbnControl: TfrmRbnControl
   object sbStatus: TStatusBar
     Left = 0
     Height = 18
-    Top = 38
+    Top = 62
     Width = 392
     Panels = <>
   end

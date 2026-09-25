@@ -34,12 +34,14 @@ type
     btnFilter: TSpeedButton;
     btnSources: TSpeedButton;
     btnStatusBar: TSpeedButton;
+    chkToBandMap: TCheckBox;
     cmbSource: TComboBox;
     imgRbnControl: TImageList;
     shpState: TShape;
     sbStatus: TStatusBar;
     tmrStatus: TTimer;
     procedure btnStatusBarClick(Sender: TObject);
+    procedure chkToBandMapChange(Sender: TObject);
     procedure tmrStatusTimer(Sender: TObject);
     procedure btnConnectClick(Sender: TObject);
     procedure btnFilterClick(Sender: TObject);
@@ -92,6 +94,7 @@ procedure TfrmRbnControl.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(self);
   LoadSources;
+  chkToBandMap.Checked := cqrini.ReadBool('RBNMonitor','ToBandMap',False);
   //the status bar is the only place to see that spots arrive at all when the
   //monitor is closed and the band is quiet
   tmrStatusTimer(nil);
@@ -113,6 +116,15 @@ begin
     sbStatus.Visible := False
   else
     sbStatus.Visible := True
+end;
+
+procedure TfrmRbnControl.chkToBandMapChange(Sender: TObject);
+begin
+  //the switch lives with the monitor's worker, which feeds the band maps
+  //whether the monitor window is open or not. Setting the same value back
+  //from SetSendToBandMap fires no second change
+  if Assigned(frmRbnMonitor) and (frmRbnMonitor.acLinkToBandMap.Checked <> chkToBandMap.Checked) then
+    frmRbnMonitor.SetSendToBandMap(chkToBandMap.Checked)
 end;
 
 procedure TfrmRbnControl.FormClose(Sender: TObject; var CloseAction: TCloseAction);
