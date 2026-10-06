@@ -1,3 +1,20 @@
+cqrlog (3.2.1-1) unstable; urgency=low
+
+  * Debian package: files were installed under /share and /bin instead of
+    /usr, so the installation failed in postinst with
+    'cqrlog-apparmor-fix: not found' (Petr, OK2CQR)
+  * Debian package: on Ubuntu 26.04 (MariaDB 11) the database server could
+    not start with 'Permission denied' on ~/.config/cqrlog/database; the
+    AppArmor fix now also updates the mariadbd profile and the changes are
+    removed on uninstall (Petr, OK2CQR)
+  * Debian package is built with Qt6 and requires Ubuntu 26.04 or newer
+    (Petr, OK2CQR)
+  * Qt5 AppImage is built on Ubuntu 24.04 so it keeps running on older
+    distributions; the deb and the docker build image use Ubuntu 26.04
+    (Petr, OK2CQR)
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Tue, 06 Oct 2026 12:00:00 +0200
+
 cqrlog (3.2.0-1) unstable; urgency=low
 
   * RBN monitor reconnects by itself after a lost connection or a socket

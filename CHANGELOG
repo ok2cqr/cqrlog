@@ -20,6 +20,12 @@
 #
 -->
 
+3.2.1 (2026-10-06)
+  - Debian package: files were installed under /share and /bin instead of /usr, so the installation failed in postinst with 'cqrlog-apparmor-fix: not found' (Petr, OK2CQR)
+  - Debian package: on Ubuntu 26.04 (MariaDB 11) the database server could not start with 'Permission denied' on ~/.config/cqrlog/database; the AppArmor fix now also updates the mariadbd profile and the changes are removed on uninstall (Petr, OK2CQR)
+  * Debian package is built with Qt6 and requires Ubuntu 26.04 or newer (Petr, OK2CQR)
+  * Qt5 AppImage is built on Ubuntu 24.04 so it keeps running on older distributions; the deb and the docker build image use Ubuntu 26.04 (Petr, OK2CQR)
+
 3.2.0 (2026-09-25)
   + RBN monitor reconnects by itself after a lost connection or a socket error (5 s, doubling up to 300 s); never after a manual Disconnect and never to another server (Petr, OK2CQR)
   + RBN monitor keeps up with contest traffic: the worker no longer sleeps 100 ms after every spot, and the queue between the socket and the worker is limited to 500 lines (the oldest line is dropped, losses are reported in cqrlog-debug.log) instead of growing without a limit (Petr, OK2CQR)
