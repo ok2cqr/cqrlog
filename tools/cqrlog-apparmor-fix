@@ -50,5 +50,23 @@ then
     echo ""
   fi
 fi
+
+# MariaDB 11.x (Ubuntu 26.04+) ships an enforced profile named mariadbd
+# that includes local/mariadbd
+MARIADB_PROFILE=/etc/apparmor.d/mariadbd
+LOCAL_MARIADB_FILE=/etc/apparmor.d/local/mariadbd
+
+if [ -f "$MARIADB_PROFILE" ]
+then
+  if ! grep -q "@{HOME}/.config/cqrlog/database/" "$LOCAL_MARIADB_FILE" 2>/dev/null
+  then
+    echo "@{HOME}/.config/cqrlog/database/  r," >> $LOCAL_MARIADB_FILE
+    echo "@{HOME}/.config/cqrlog/database/** rwk," >> $LOCAL_MARIADB_FILE
+    echo File $LOCAL_MARIADB_FILE was modified, reloading the mariadbd profile
+  fi
+  if which apparmor_parser >/dev/null 2>&1; then
+    apparmor_parser -r "$MARIADB_PROFILE" || echo "Reloading $MARIADB_PROFILE failed"
+  fi
+fi
 rm $FTMP
 

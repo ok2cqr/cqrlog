@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
-/usr/share/cqrlog/cqrlog-apparmor-fix
+if [ -x /usr/share/cqrlog/cqrlog-apparmor-fix ]; then
+  /usr/share/cqrlog/cqrlog-apparmor-fix
+fi
 #DEBHELPER#
-

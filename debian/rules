@@ -12,8 +12,12 @@
 %:
 	dh  $@
 
-# Default Makefile widgetset is qt6, but the .deb is built against Qt5
-# (lcl-qt5 / libqt5pas) since the qt6 Lazarus toolchain is not in the apt
-# repositories. Pin WS=qt5 so the binary matches the declared dependencies.
+# Ubuntu 26.04 has no prebuilt lcl-qt6, but lazbuild compiles the Qt6 LCL
+# interface from lazarus-src; pin WS=qt6 to match libqt6pas in debian/control.
 override_dh_auto_build:
-	dh_auto_build -- WS=qt5
+	dh_auto_build -- WS=qt6
+
+# The Makefile treats DESTDIR as the install prefix (datadir = $(DESTDIR)/share/cqrlog),
+# so dh's plain DESTDIR=debian/cqrlog would put files under /share and /bin.
+override_dh_auto_install:
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/cqrlog/usr

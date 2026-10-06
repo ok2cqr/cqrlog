@@ -30,7 +30,7 @@ make clean
 make DESTDIR=/path/to/install install
 
 # Packaging
-make deb                               # Debian package (Qt5, via tools/makedeb.sh)
+make deb                               # Debian package (Qt6, via tools/makedeb.sh; Ubuntu 26.04+)
 make appimage                          # AppImage, Qt6
 make appimage-qt5                      # AppImage, Qt5 (what CI publishes)
 make flatpak                           # single-file flatpak bundle, Qt6
@@ -104,7 +104,7 @@ Each log is a separate database. A common database stores shared data (DXCC tabl
 
 ### Widget Set
 
-The default widget set is **Qt6** on Linux and **Cocoa** on macOS (Makefile `WS` variable). Qt5 remains only for legacy packaging: the Qt5 AppImage published by CI and the `.deb` package (`debian/rules` pins `WS=qt5` because the Qt6 Lazarus toolchain is not in the apt repositories). Flatpak and Snap are Qt6; GTK2 is a fallback target only. The version string in `uVersion.pas` includes the widget set via `{$IFDEF}` conditionals.
+The default widget set is **Qt6** on Linux and **Cocoa** on macOS (Makefile `WS` variable). Qt5 remains only for the legacy Qt5 AppImage published by CI, built on the `ubuntu-24.04` runner (with `QT6_DEPS=`) so it keeps running on older distros. The `.deb` is Qt6 and targets Ubuntu 26.04+ (`debian/rules` pins `WS=qt6`; there is no prebuilt `lcl-qt6`, lazbuild compiles the Qt6 LCL interface from `lazarus-src`). Flatpak and Snap are Qt6; GTK2 is a fallback target only. The version string in `uVersion.pas` includes the widget set via `{$IFDEF}` conditionals.
 
 ## Runtime Dependencies
 

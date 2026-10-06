@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     steps:
     - uses: actions/checkout@v4
@@ -24,8 +24,8 @@ jobs:
     - name: Unit tests
       run: make test
 
-    - name: Run Build GTK2
-      run: make cqrlog_gtk2
+    - name: Run Build QT6
+      run: make cqrlog_qt6
 
     - name: Run Build QT5
       run: make cqrlog_qt5
