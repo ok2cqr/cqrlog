@@ -326,7 +326,7 @@ dependencies: ## Install all dependencies assuming a Ubuntu 26.04 LTS machine
 		lcl-units lcl-utils lazarus lazarus-doc \
 		lazarus-src fp-units-misc fp-units-rtl \
 		fp-utils fpc fpc-source libssl-dev libfl-dev \
-		libqt5pas1 libqt5pas-dev libqt6pas-dev libfuse2t64 libsquashfuse0 \
+		libgtk2.0-dev libqt5pas1 libqt5pas-dev libqt6pas-dev libfuse2t64 libsquashfuse0 \
 		wget devscripts debhelper qt5-qmake-bin qtchooser \
 		mariadb-server mariadb-client ; \
 	fi

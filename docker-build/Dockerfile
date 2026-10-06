@@ -31,6 +31,7 @@ RUN apt-get install -y \
 RUN apt-get install -y \
         libssl-dev \
         libfl-dev \
+        libgtk2.0-dev \
         libqt5pas1 \
         libqt5pas-dev \
         libqt6pas6 \
