@@ -9,8 +9,44 @@ permissions:
   contents: write
 
 jobs:
+  appimage:
+    # Oldest supported runner: the AppImage only runs on systems with
+    # a glibc at least as new as the one it was built against
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Run Build Appimage QT5
+        run: make appimage-qt5 QT6_DEPS=
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AppImage
+          path: CQRLOG-*-QT5-*.AppImage
+
+  deb:
+    runs-on: ubuntu-26.04
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: make dependencies
+
+      - name: Run Build test deb
+        run: make deb
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deb
+          path: cqrlog_*.deb
+
   build_release:
     name: build_release
+    needs: [ appimage, deb ]
     runs-on: ubuntu-26.04
 
     steps:
@@ -22,11 +58,9 @@ jobs:
       - name: version
         run: echo "tag_ver=$(./tools/get_version.sh)" >> $GITHUB_ENV
 
-      - name: Run Build Appimage QT5
-        run: make appimage-qt5
-
-      - name: Run Build test deb
-        run: make deb
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
 
       - name: Get latest changelog entries
         run: ./tools/changelog_latest.sh > CHANGELOG.latest

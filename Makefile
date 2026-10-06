@@ -317,6 +317,9 @@ test-dmg: dmg_create
 # the macOS build is left untouched.
 # ---------------------------------------------------------------------------
 
+# libqt6pas-dev is not in Ubuntu 24.04; the Qt5 AppImage job builds there with QT6_DEPS=
+QT6_DEPS ?= libqt6pas-dev
+
 dependencies: ## Install all dependencies assuming a Ubuntu 26.04 LTS machine
 	if [ -e /usr/bin/fpc ]; then \
 		echo "Dependencies already installed" ; \
@@ -326,7 +329,7 @@ dependencies: ## Install all dependencies assuming a Ubuntu 26.04 LTS machine
 		lcl-units lcl-utils lazarus lazarus-doc \
 		lazarus-src fp-units-misc fp-units-rtl \
 		fp-utils fpc fpc-source libssl-dev libfl-dev \
-		libqt5pas1 libqt5pas-dev libqt6pas-dev libfuse2t64 libsquashfuse0 \
+		libqt5pas1 libqt5pas-dev $(QT6_DEPS) libfuse2t64 libsquashfuse0 \
 		wget devscripts debhelper qt5-qmake-bin qtchooser \
 		mariadb-server mariadb-client ; \
 	fi

@@ -12,21 +12,35 @@ on:
       - '*'
 
 jobs:
-  build:
-    runs-on: ubuntu-26.04
+  appimage:
+    # Oldest supported runner: the AppImage only runs on systems with
+    # a glibc at least as new as the one it was built against
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: actions/checkout@v4
 
     - name: Run Build Appimage QT5
-      run: make appimage-qt5
+      run: make appimage-qt5 QT6_DEPS=
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: AppImage
+        path: CQRLOG-*.AppImage
+
+  deb:
+    runs-on: ubuntu-26.04
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Dependencies
+      run: make dependencies
 
     - name: Run Build test deb
       run: make deb
 
     - uses: actions/upload-artifact@v4
       with:
-        name: AppImage
-        path: |
-          CQRLOG-*.AppImage
-          cqrlog_*.deb
+        name: deb
+        path: cqrlog_*.deb
