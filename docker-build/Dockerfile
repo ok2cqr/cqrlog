@@ -14,7 +14,7 @@ RUN apt-get update
 RUN apt-get install -y \
         git \
         lazarus-ide \
-        lcl lcl-gtk2 lcl-qt5 \
+        lcl lcl-qt5 \
         lcl-nogui \
         lcl-units \
         lcl-utils \
@@ -31,7 +31,6 @@ RUN apt-get install -y \
 RUN apt-get install -y \
         libssl-dev \
         libfl-dev \
-        libgtk2.0-dev \
         libqt5pas1 \
         libqt5pas-dev \
         libqt6pas6 \

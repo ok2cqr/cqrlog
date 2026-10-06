@@ -322,11 +322,11 @@ dependencies: ## Install all dependencies assuming a Ubuntu 26.04 LTS machine
 		echo "Dependencies already installed" ; \
 	else \
 		sudo apt-get update && sudo apt-get install -y \
-		build-essential git lazarus-ide lcl lcl-gtk2 lcl-qt5 lcl-nogui \
+		build-essential git lazarus-ide lcl lcl-qt5 lcl-nogui \
 		lcl-units lcl-utils lazarus lazarus-doc \
 		lazarus-src fp-units-misc fp-units-rtl \
 		fp-utils fpc fpc-source libssl-dev libfl-dev \
-		libgtk2.0-dev libqt5pas1 libqt5pas-dev libqt6pas-dev libfuse2t64 libsquashfuse0 \
+		libqt5pas1 libqt5pas-dev libqt6pas-dev libfuse2t64 libsquashfuse0 \
 		wget devscripts debhelper qt5-qmake-bin qtchooser \
 		mariadb-server mariadb-client ; \
 	fi
