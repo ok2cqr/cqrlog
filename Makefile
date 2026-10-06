@@ -317,7 +317,7 @@ test-dmg: dmg_create
 # the macOS build is left untouched.
 # ---------------------------------------------------------------------------
 
-dependencies: ## Install all dependencies assuming a Ubuntu 24.04 LTS machine
+dependencies: ## Install all dependencies assuming a Ubuntu 26.04 LTS machine
 	if [ -e /usr/bin/fpc ]; then \
 		echo "Dependencies already installed" ; \
 	else \
@@ -326,8 +326,8 @@ dependencies: ## Install all dependencies assuming a Ubuntu 24.04 LTS machine
 		lcl-units lcl-utils lazarus lazarus-doc \
 		lazarus-src fp-units-misc fp-units-rtl \
 		fp-utils fpc fpc-source libssl-dev libfl-dev \
-		libqt5pas1 libqt5pas-dev libfuse2 libsquashfuse0 \
-		wget devscripts qt5-qmake-bin qtchooser \
+		libqt5pas1 libqt5pas-dev libqt6pas-dev libfuse2t64 libsquashfuse0 \
+		wget devscripts debhelper qt5-qmake-bin qtchooser \
 		mariadb-server mariadb-client ; \
 	fi
 

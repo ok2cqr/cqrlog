@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Europe/London"
@@ -14,7 +14,7 @@ RUN apt-get update
 RUN apt-get install -y \
         git \
         lazarus-ide \
-        lcl lcl-gtk2 lcl-qt6 \
+        lcl lcl-gtk2 lcl-qt5 \
         lcl-nogui \
         lcl-units \
         lcl-utils \
@@ -36,10 +36,11 @@ RUN apt-get install -y \
         libqt6pas6 \
         libqt6pas-dev \
         qt6-base-dev-tools \
-        libfuse2 \
+        libfuse2t64 \
         libsquashfuse0 \
         wget \
         devscripts \
+        debhelper \
         qt5-qmake-bin \
         qtchooser \
         mariadb-server \
