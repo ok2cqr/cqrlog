@@ -19,5 +19,16 @@ then
     fi
   fi
 fi
+
+MFILE=/etc/apparmor.d/local/mariadbd
+if [ -f $MFILE ] && grep -q "@{HOME}/.config/cqrlog/database/" $MFILE
+then
+  grep -v "@{HOME}/.config/cqrlog/database/" $MFILE > $FTMP
+  cat $FTMP > $MFILE
+  echo Changes removed from $MFILE
+  if [ -f /etc/apparmor.d/mariadbd ] && which apparmor_parser >/dev/null 2>&1; then
+    apparmor_parser -r /etc/apparmor.d/mariadbd || true
+  fi
+fi
 rm $FTMP
 #DEBHELPER#
