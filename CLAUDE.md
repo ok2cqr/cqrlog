@@ -31,6 +31,7 @@ make DESTDIR=/path/to/install install
 
 # Packaging
 make deb                               # Debian package (Qt6, via tools/makedeb.sh; Ubuntu 26.04+)
+make rpm                               # RPM package (Qt6, rpm/cqrlog.spec via tools/makerpm.sh; Fedora 44, needs `dnf builddep rpm/cqrlog.spec`)
 make appimage                          # AppImage, Qt6
 make appimage-qt5                      # AppImage, Qt5 (what CI publishes)
 make flatpak                           # single-file flatpak bundle, Qt6
@@ -49,6 +50,7 @@ Uses the prebuilt `pavelmc/cqrlog-build` image (or build it locally with `make d
 make docker-build       # build the binary inside the container
 make docker-appimage    # AppImage via docker
 make docker-deb         # deb package via docker
+make docker-rpm         # rpm package via a fedora:44 container (RPM_FEDORA=NN to change)
 make docker-flatpak     # flatpak bundle via a Fedora container
 ```
 

@@ -31,7 +31,7 @@ CQR_BUILD := $(shell git rev-list --count HEAD 2>/dev/null || echo $(CQR_BUILD_F
 
 .PHONY : help test dependencies hamlib clean install deb deb_src debug \
          appimage appimage-qt5 docker-image docker docker-build docker-install \
-         docker-appimage docker-appimage-qt5 docker-deb docker-deb-src \
+         docker-appimage docker-appimage-qt5 docker-deb docker-deb-src rpm docker-rpm \
          install_macos sign_macos dmg_create dmg test-dmg flatpak docker-flatpak \
          lint-lfm
 
@@ -108,6 +108,8 @@ deb: dependencies ## Build a deb package (Linux, via tools/makedeb.sh)
 	./tools/makedeb.sh
 deb_src: ## Build a deb package with source (Linux)
 	dpkg-buildpackage -rfakeroot -i -I -S
+rpm: ## Build an rpm package (Fedora, Qt6, via tools/makerpm.sh; needs dnf builddep rpm/cqrlog.spec)
+	./tools/makerpm.sh
 debug:
 	$(LAZBUILD) --ws=$(WS) --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
@@ -424,6 +426,15 @@ docker-deb-src: docker-build ## Build a deb-src package using the binaries from 
 	--security-opt apparmor:unconfined \
 	pavelmc/cqrlog-build \
 	make deb_src
+
+# RPM in a throwaway Fedora container (native arch of the docker host)
+RPM_FEDORA ?= 44
+docker-rpm: ## Build an rpm package inside a fedora container
+	docker run --rm -v $(PWD):/cqrlog -w /cqrlog fedora:$(RPM_FEDORA) bash -c '\
+		dnf -y install rpm-build dnf-plugins-core git && \
+		dnf -y builddep rpm/cqrlog.spec && \
+		git config --global --add safe.directory /cqrlog && \
+		make rpm'
 
 # Flatpak (Qt6, self-hosted single-file bundle) -------------------------------
 FLATPAK_ID       = com.cqrlog.cqrlog

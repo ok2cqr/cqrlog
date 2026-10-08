@@ -44,3 +44,28 @@ jobs:
       with:
         name: deb
         path: cqrlog_*.deb
+
+  rpm:
+    runs-on: ubuntu-latest
+    container: fedora:44
+
+    steps:
+    # git must be there before checkout, or it falls back to a tarball without
+    # .git and makerpm.sh (git ls-files) has nothing to package
+    - name: Install Dependencies
+      run: dnf -y install rpm-build dnf-plugins-core git make
+
+    - uses: actions/checkout@v4
+
+    - name: Install Build Dependencies
+      run: dnf -y builddep rpm/cqrlog.spec
+
+    - name: Run Build test rpm
+      run: |
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        make rpm
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: rpm
+        path: cqrlog-*.rpm
