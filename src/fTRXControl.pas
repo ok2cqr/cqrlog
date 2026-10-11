@@ -158,6 +158,8 @@ type
     function GetModeNumber(mode : String) : Cardinal;
     procedure SetMode(mode : String; bandwidth : Integer);
     procedure ClearBandButtonsColor;
+    procedure SetButtonActive(Button : TButton; IsActive : Boolean);
+    procedure HighlightBandButton(const Band : String);
     procedure ClearModeButtonsColor;
     procedure UpdateModeButtons(mode : String);
 
@@ -273,7 +275,6 @@ begin
   lblFreq.Caption := FormatFloat(empty_freq, f);
 
   UpdateModeButtons(m);
-  ClearBandButtonsColor;
   // this waits5 rig polls before lock freq set by memory. After that if freq chanfǵes (by vfo knob) clean info text
   // stupid but works quite well
   case infosetstage of
@@ -313,6 +314,7 @@ begin
       frmBandMap.CurrentMode := '';
       BandMapWindows.SetVfo('', 0, '');
     end;
+    ClearBandButtonsColor;
     exit;
   end;
 
@@ -351,30 +353,7 @@ begin
 
   if (b = '') then
     b := dmUtils.GetBandFromFreq(lblFreq.Caption);
-  if b = btn160MBand then
-    btn160m.Font.Color := clRed
-  else if b = btn80MBand then
-    btn80m.Font.Color := clRed
-  else if b = btn40MBand then
-    btn40m.Font.Color := clRed
-  else if b = btn30MBand then
-    btn30m.Font.Color := clRed
-  else if b = btn20MBand then
-    btn20m.Font.Color := clRed
-  else if b = btn17MBand then
-    btn17m.Font.Color := clRed
-  else if b = btn15MBand then
-    btn15m.Font.Color := clRed
-  else if b = btn12MBand then
-    btn12m.Font.Color := clRed
-  else if b = btn10MBand then
-    btn10m.Font.Color := clRed
-  else if b = btn6MBand then
-    btn6m.Font.Color := clRed
-  else if b = btn2MBand then
-    btn2m.Font.Color := clRed
-  else if b = btn70CMBand then
-    btn70cm.Font.Color := clRed;
+  HighlightBandButton(b);
   frmGrayline.band := b;
   frmBandMap.CurrentBand := b;
   frmBandMap.CurrentFreq := f * 1000;
@@ -457,7 +436,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(8, mode);
   SetModeFreq(mode, freq);
-  btn10m.Font.Color := clRed;
+  SetButtonActive(btn10m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -470,7 +449,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(7, mode);
   SetModeFreq(mode, freq);
-  btn12m.Font.Color := clRed;
+  SetButtonActive(btn12m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -483,7 +462,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(6, mode);
   SetModeFreq(mode, freq);
-  btn15m.Font.Color := clRed;
+  SetButtonActive(btn15m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -496,7 +475,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(0, mode);
   SetModeFreq(mode, freq);
-  btn160m.Font.Color := clRed;
+  SetButtonActive(btn160m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -509,7 +488,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(5, mode);
   SetModeFreq(mode, freq);
-  btn17m.Font.Color := clRed;
+  SetButtonActive(btn17m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -522,7 +501,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(4, mode);
   SetModeFreq(mode, freq);
-  btn20m.Font.Color := clRed;
+  SetButtonActive(btn20m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -535,7 +514,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(10, mode);
   SetModeFreq(mode, freq);
-  btn2m.Font.Color := clRed;
+  SetButtonActive(btn2m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -548,7 +527,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(3, mode);
   SetModeFreq(mode, freq);
-  btn30m.Font.Color := clRed;
+  SetButtonActive(btn30m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -561,7 +540,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(2, mode);
   SetModeFreq(mode, freq);
-  btn40m.Font.Color := clRed;
+  SetButtonActive(btn40m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -574,7 +553,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(9, mode);
   SetModeFreq(mode, freq);
-  btn6m.Font.Color := clRed;
+  SetButtonActive(btn6m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -587,7 +566,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(11, mode);
   SetModeFreq(mode, freq);
-  btn70cm.Font.Color := clRed;
+  SetButtonActive(btn70cm, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -600,7 +579,7 @@ begin
   mode := GetActualMode;
   freq := GetFreqFromModeBand(1, mode);
   SetModeFreq(mode, freq);
-  btn80m.Font.Color := clRed;
+  SetButtonActive(btn80m, True);
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
@@ -857,9 +836,9 @@ begin
   if Assigned(radio) then
   begin
     radio.PwrOff;
-    btPon.Font.Color := clDefault;
-    btPstby.Font.Color := clDefault;
-    btPoff.Font.Color := clRed;
+    SetButtonActive(btPon, False);
+    SetButtonActive(btPstby, False);
+    SetButtonActive(btPoff, True);
   end;
 end;
 
@@ -868,9 +847,9 @@ begin
   if Assigned(radio) then
   begin
     radio.PwrOn;
-    btPon.Font.Color := clRed;
-    btPstby.Font.Color := clDefault;
-    btPoff.Font.Color := clDefault;
+    SetButtonActive(btPon, True);
+    SetButtonActive(btPstby, False);
+    SetButtonActive(btPoff, False);
   end;
 end;
 
@@ -879,9 +858,9 @@ begin
   if Assigned(radio) then
   begin
     radio.PwrStBy;
-    btPon.Font.Color := clDefault;
-    btPstby.Font.Color := clRed;
-    btPoff.Font.Color := clDefault;
+    SetButtonActive(btPon, False);
+    SetButtonActive(btPstby, True);
+    SetButtonActive(btPoff, False);
   end;
 end;
 
@@ -1413,27 +1392,40 @@ end;
 
 procedure TfrmTRXControl.ClearBandButtonsColor;
 begin
-  btn160m.Font.Color := COLOR_WINDOWTEXT;
-  btn80m.Font.Color := COLOR_WINDOWTEXT;
-  btn40m.Font.Color := COLOR_WINDOWTEXT;
-  btn30m.Font.Color := COLOR_WINDOWTEXT;
-  btn20m.Font.Color := COLOR_WINDOWTEXT;
-  btn17m.Font.Color := COLOR_WINDOWTEXT;
-  btn15m.Font.Color := COLOR_WINDOWTEXT;
-  btn12m.Font.Color := COLOR_WINDOWTEXT;
-  btn10m.Font.Color := COLOR_WINDOWTEXT;
-  btn6m.Font.Color := COLOR_WINDOWTEXT;
-  btn2m.Font.Color := COLOR_WINDOWTEXT;
-  btn70cm.Font.Color := COLOR_WINDOWTEXT;
+  HighlightBandButton('')
+end;
 
+procedure TfrmTRXControl.SetButtonActive(Button : TButton; IsActive : Boolean);
+begin
+  // bold, not a colour: Cocoa ignores the font colour of a push button
+  if IsActive then
+    Button.Font.Style := [fsBold]
+  else
+    Button.Font.Style := []
+end;
+
+procedure TfrmTRXControl.HighlightBandButton(const Band : String);
+begin
+  SetButtonActive(btn160m, (Band <> '') and (Band = btn160MBand));
+  SetButtonActive(btn80m, (Band <> '') and (Band = btn80MBand));
+  SetButtonActive(btn40m, (Band <> '') and (Band = btn40MBand));
+  SetButtonActive(btn30m, (Band <> '') and (Band = btn30MBand));
+  SetButtonActive(btn20m, (Band <> '') and (Band = btn20MBand));
+  SetButtonActive(btn17m, (Band <> '') and (Band = btn17MBand));
+  SetButtonActive(btn15m, (Band <> '') and (Band = btn15MBand));
+  SetButtonActive(btn12m, (Band <> '') and (Band = btn12MBand));
+  SetButtonActive(btn10m, (Band <> '') and (Band = btn10MBand));
+  SetButtonActive(btn6m, (Band <> '') and (Band = btn6MBand));
+  SetButtonActive(btn2m, (Band <> '') and (Band = btn2MBand));
+  SetButtonActive(btn70cm, (Band <> '') and (Band = btn70CMBand))
 end;
 procedure TfrmTRXControl.ClearModeButtonsColor;
 begin
-  btnCW.Font.Color := COLOR_WINDOWTEXT;
-  btnSSB.Font.Color := COLOR_WINDOWTEXT;
-  btnDATA.Font.Color := COLOR_WINDOWTEXT;
-  btnAM.Font.Color := COLOR_WINDOWTEXT;
-  btnFM.Font.Color := COLOR_WINDOWTEXT;
+  SetButtonActive(btnCW, False);
+  SetButtonActive(btnSSB, False);
+  SetButtonActive(btnDATA, False);
+  SetButtonActive(btnAM, False);
+  SetButtonActive(btnFM, False)
 end;
 
 function TfrmTRXControl.GetModeBand(var mode, band : String) : Boolean;
@@ -1464,24 +1456,13 @@ procedure TfrmTRXControl.UpdateModeButtons(mode : String);
 var
   usermode :String;
 begin
-  ClearModeButtonsColor;
-
   usermode:=cqrini.ReadString('Band'+RigInUse, 'Datacmd', 'RTTY');
 
-  btnCW.Font.Color    := COLOR_WINDOWTEXT;
-  btnSSB.Font.Color   := COLOR_WINDOWTEXT;
-  btnDATA.Font.Color  := COLOR_WINDOWTEXT;
-  btnAM.Font.Color    := COLOR_WINDOWTEXT;
-  btnFM.Font.Color    := COLOR_WINDOWTEXT;
-
-  if mode = usermode then btnDATA.Font.Color := clRed
-     else
-       case mode of
-        'CW' : btnCW.Font.Color := clRed;
-        'SSB' : btnSSB.Font.Color := clRed;
-        'AM' : btnAM.Font.Color := clRed;
-        'FM' : btnFM.Font.Color := clRed;
-       end;
+  SetButtonActive(btnDATA, mode = usermode);
+  SetButtonActive(btnCW, (mode <> usermode) and (mode = 'CW'));
+  SetButtonActive(btnSSB, (mode <> usermode) and (mode = 'SSB'));
+  SetButtonActive(btnAM, (mode <> usermode) and (mode = 'AM'));
+  SetButtonActive(btnFM, (mode <> usermode) and (mode = 'FM'));
    //update vfobuttons if vfo is known by radio.vfostr
   if Assigned(radio) then
   begin
@@ -1489,19 +1470,19 @@ begin
      begin
       case radio.GetCurrVFO of
       VFOA: begin
-              btnVFOA.Font.Color := clRed;
-              btnVFOB.Font.Color := clDefault;
+              SetButtonActive(btnVFOA, True);
+              SetButtonActive(btnVFOB, False);
             end;
       VFOB: begin
-              btnVFOB.Font.Color := clRed;
-              btnVFOA.Font.Color := clDefault;
+              SetButtonActive(btnVFOB, True);
+              SetButtonActive(btnVFOA, False);
             end;
       end;
      end
     else
      begin
-      btnVFOB.Font.Color := clDefault;
-      btnVFOA.Font.Color := clDefault;
+      SetButtonActive(btnVFOB, False);
+      SetButtonActive(btnVFOA, False);
      end;
   end;
 end;
