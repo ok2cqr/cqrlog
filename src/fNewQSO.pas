@@ -5846,7 +5846,8 @@ begin
       Caption := dmUtils.GetNewQSOCaption('New QSO');
       fViewQSO := False;
       fEditQSO := False;
-    end
+    end;
+    Key := 0 // handled; otherwise Cocoa passes ESC to the edit control and beeps
   end
   else
     EscFirstPressDone := False;
