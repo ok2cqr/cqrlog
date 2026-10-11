@@ -1,25 +1,25 @@
 object frmLoTWExport: TfrmLoTWExport
-  Left = 153
+  Left = 356
   Height = 549
-  Top = 93
-  Width = 477
+  Top = 152
+  Width = 513
   HelpType = htKeyword
   HelpKeyword = 'help/h7.html'
   ActiveControl = pgLoTWExport
   Caption = 'Export for LoTW'
   ClientHeight = 549
-  ClientWidth = 477
+  ClientWidth = 513
+  LCLVersion = '4.6.0.0'
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
   object pgLoTWExport: TPageControl
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 0
     Height = 509
     Top = 0
-    Width = 477
+    Width = 513
     ActivePage = tabUpload
     Align = alClient
     TabIndex = 1
@@ -28,26 +28,26 @@ object frmLoTWExport: TfrmLoTWExport
       AnchorSideLeft.Control = pgLoTWExport
       AnchorSideTop.Control = pgLoTWExport
       Caption = 'Export to local file'
-      ClientHeight = 478
-      ClientWidth = 467
+      ClientHeight = 475
+      ClientWidth = 503
       object GroupBox1: TGroupBox
         AnchorSideLeft.Control = tabLocalFile
         AnchorSideTop.Control = tabLocalFile
         Left = 0
         Height = 88
         Top = 0
-        Width = 461
+        Width = 497
         Anchors = [akTop, akLeft, akRight]
-        ClientHeight = 70
-        ClientWidth = 459
+        ClientHeight = 61
+        ClientWidth = 487
         TabOrder = 0
         object rbFileExportAll: TRadioButton
           AnchorSideLeft.Control = GroupBox1
           AnchorSideTop.Control = GroupBox1
           Left = 14
-          Height = 23
+          Height = 18
           Top = 6
-          Width = 131
+          Width = 119
           BorderSpacing.Left = 14
           BorderSpacing.Top = 6
           Caption = ' Export all QSOs'
@@ -60,9 +60,9 @@ object frmLoTWExport: TfrmLoTWExport
           AnchorSideTop.Control = rbFileExportAll
           AnchorSideTop.Side = asrBottom
           Left = 14
-          Height = 23
-          Top = 29
-          Width = 358
+          Height = 18
+          Top = 24
+          Width = 315
           Caption = 'Export only QSOs which have never been uploaded'
           TabOrder = 1
         end
@@ -74,19 +74,19 @@ object frmLoTWExport: TfrmLoTWExport
         Left = 0
         Height = 105
         Top = 156
-        Width = 460
+        Width = 496
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 6
-        ClientHeight = 87
-        ClientWidth = 458
+        ClientHeight = 78
+        ClientWidth = 486
         TabOrder = 1
         object Label1: TLabel
           AnchorSideLeft.Control = GroupBox2
           AnchorSideTop.Control = GroupBox2
           Left = 14
-          Height = 17
+          Height = 16
           Top = 4
-          Width = 63
+          Width = 59
           BorderSpacing.Left = 14
           BorderSpacing.Top = 4
           Caption = 'Export to:'
@@ -97,9 +97,9 @@ object frmLoTWExport: TfrmLoTWExport
           AnchorSideTop.Control = Label1
           AnchorSideTop.Side = asrBottom
           Left = 14
-          Height = 34
-          Top = 21
-          Width = 434
+          Height = 21
+          Top = 20
+          Width = 462
           Anchors = [akTop, akLeft, akRight]
           TabOrder = 0
         end
@@ -108,16 +108,16 @@ object frmLoTWExport: TfrmLoTWExport
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = edtFileName
           AnchorSideRight.Side = asrBottom
-          Left = 384
-          Height = 33
-          Top = 59
-          Width = 64
+          Left = 409
+          Height = 26
+          Top = 45
+          Width = 67
           Anchors = [akTop, akRight]
           AutoSize = True
           BorderSpacing.Top = 4
           Caption = 'Browse'
-          OnClick = btnFileBrowseClick
           TabOrder = 1
+          OnClick = btnFileBrowseClick
         end
       end
       object GroupBox3: TGroupBox
@@ -127,20 +127,20 @@ object frmLoTWExport: TfrmLoTWExport
         Left = 0
         Height = 56
         Top = 94
-        Width = 461
+        Width = 497
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 6
-        ClientHeight = 38
-        ClientWidth = 459
+        ClientHeight = 29
+        ClientWidth = 487
         TabOrder = 2
         object chkFileMarkAfterExport: TCheckBox
           AnchorSideLeft.Control = GroupBox3
           AnchorSideTop.Control = GroupBox3
           AnchorSideTop.Side = asrCenter
           Left = 14
-          Height = 23
-          Top = 16
-          Width = 260
+          Height = 18
+          Top = 5
+          Width = 230
           BorderSpacing.Left = 14
           Caption = 'Mark QSOs as exported after export'
           TabOrder = 0
@@ -151,41 +151,41 @@ object frmLoTWExport: TfrmLoTWExport
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = GroupBox2
         AnchorSideRight.Side = asrBottom
-        Left = 382
-        Height = 53
+        Left = 414
+        Height = 46
         Top = 267
-        Width = 78
+        Width = 82
         Anchors = [akTop, akRight]
         AutoSize = True
         BorderSpacing.Top = 6
         BorderSpacing.InnerBorder = 10
         Caption = 'Export'
-        OnClick = btnFileExportClick
         TabOrder = 3
+        OnClick = btnFileExportClick
       end
     end
     object tabUpload: TTabSheet
       Caption = 'Upload to LoTW'
-      ClientHeight = 478
-      ClientWidth = 467
+      ClientHeight = 475
+      ClientWidth = 503
       object grbWebExport: TGroupBox
         AnchorSideLeft.Control = tabUpload
         AnchorSideTop.Control = tabUpload
         Left = 0
         Height = 88
         Top = 0
-        Width = 467
+        Width = 503
         Align = alTop
-        ClientHeight = 86
-        ClientWidth = 465
+        ClientHeight = 61
+        ClientWidth = 493
         TabOrder = 0
         object rbWebExportAll: TRadioButton
           AnchorSideLeft.Control = grbWebExport
           AnchorSideTop.Control = grbWebExport
           Left = 14
-          Height = 23
+          Height = 18
           Top = 7
-          Width = 131
+          Width = 119
           BorderSpacing.Left = 14
           BorderSpacing.Top = 7
           Caption = ' Export all QSOs'
@@ -196,9 +196,9 @@ object frmLoTWExport: TfrmLoTWExport
           AnchorSideTop.Control = rbWebExportAll
           AnchorSideTop.Side = asrBottom
           Left = 14
-          Height = 23
-          Top = 30
-          Width = 358
+          Height = 18
+          Top = 25
+          Width = 315
           Caption = 'Export only QSOs which have never been uploaded'
           Checked = True
           TabOrder = 1
@@ -211,18 +211,18 @@ object frmLoTWExport: TfrmLoTWExport
         Left = 0
         Height = 128
         Top = 88
-        Width = 467
+        Width = 503
         Align = alTop
-        ClientHeight = 126
-        ClientWidth = 465
+        ClientHeight = 101
+        ClientWidth = 493
         TabOrder = 1
         object Label2: TLabel
           AnchorSideLeft.Control = grbTqsl
           AnchorSideTop.Control = grbTqsl
           Left = 14
-          Height = 17
+          Height = 16
           Top = 6
-          Width = 199
+          Width = 182
           BorderSpacing.Left = 14
           BorderSpacing.Top = 6
           Caption = 'tqsl command line arguments:'
@@ -233,9 +233,9 @@ object frmLoTWExport: TfrmLoTWExport
           AnchorSideTop.Control = edtTqsl
           AnchorSideTop.Side = asrBottom
           Left = 14
-          Height = 34
-          Top = 57
-          Width = 315
+          Height = 32
+          Top = 43
+          Width = 290
           Caption = '"your qth name" means the qth which you have '#10'defined in tqsl QTH profile'
           ParentColor = False
         end
@@ -244,9 +244,9 @@ object frmLoTWExport: TfrmLoTWExport
           AnchorSideTop.Control = Label2
           AnchorSideTop.Side = asrBottom
           Left = 14
-          Height = 34
-          Top = 23
-          Width = 424
+          Height = 21
+          Top = 22
+          Width = 464
           TabOrder = 0
           Text = '/usr/bin/tqsl -d -l "your qth name" %f -x'
         end
@@ -255,60 +255,60 @@ object frmLoTWExport: TfrmLoTWExport
         AnchorSideLeft.Control = grbTqsl
         AnchorSideTop.Control = grbTqsl
         Left = 0
-        Height = 262
+        Height = 259
         Top = 216
-        Width = 467
+        Width = 503
         Align = alClient
         Caption = ' Upload '
-        ClientHeight = 244
-        ClientWidth = 465
+        ClientHeight = 232
+        ClientWidth = 493
         TabOrder = 2
         object mStat: TMemo
           AnchorSideLeft.Control = GroupBox6
           AnchorSideTop.Control = GroupBox6
           Left = 0
-          Height = 206
+          Height = 194
           Top = 0
-          Width = 465
+          Width = 493
           Align = alClient
           Lines.Strings = (
             ''
           )
-          OnChange = mStatChange
           ReadOnly = True
           ScrollBars = ssAutoBoth
           TabOrder = 0
+          OnChange = mStatChange
         end
         object pnlUpload: TPanel
           AnchorSideLeft.Control = GroupBox6
           AnchorSideBottom.Control = GroupBox6
           Left = 0
           Height = 38
-          Top = 206
-          Width = 465
+          Top = 194
+          Width = 493
           Align = alBottom
           BevelOuter = bvNone
           ClientHeight = 38
-          ClientWidth = 465
+          ClientWidth = 493
           TabOrder = 1
           object btnExportSign: TButton
             AnchorSideTop.Control = btnUpload
             AnchorSideRight.Control = btnUpload
-            Left = 215
+            Left = 243
             Height = 25
             Top = 8
             Width = 115
             Anchors = [akTop, akRight]
             BorderSpacing.Right = 20
             Caption = 'Export && sign'
-            OnClick = btnExportSignClick
             TabOrder = 0
+            OnClick = btnExportSignClick
           end
           object btnUpload: TButton
             AnchorSideTop.Control = pnlUpload
             AnchorSideRight.Control = pnlUpload
             AnchorSideRight.Side = asrBottom
-            Left = 350
+            Left = 378
             Height = 25
             Top = 8
             Width = 115
@@ -316,8 +316,17 @@ object frmLoTWExport: TfrmLoTWExport
             BorderSpacing.Top = 8
             Caption = 'Upload'
             Enabled = False
-            OnClick = btnUploadClick
             TabOrder = 1
+            OnClick = btnUploadClick
+          end
+          object chkAutoExportAndSign: TCheckBox
+            Left = 8
+            Height = 18
+            Top = 8
+            Width = 197
+            Caption = 'Export and sign before upload'
+            TabOrder = 2
+            OnChange = chkAutoExportAndSignChange
           end
         end
       end
@@ -330,11 +339,11 @@ object frmLoTWExport: TfrmLoTWExport
     Left = 0
     Height = 40
     Top = 509
-    Width = 477
+    Width = 513
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 40
-    ClientWidth = 477
+    ClientWidth = 513
     TabOrder = 1
     object lblInfo: TLabel
       Left = 11
@@ -347,7 +356,7 @@ object frmLoTWExport: TfrmLoTWExport
       AnchorSideTop.Control = pnlClose
       AnchorSideRight.Control = pnlClose
       AnchorSideRight.Side = asrBottom
-      Left = 397
+      Left = 433
       Height = 25
       Top = 8
       Width = 75
@@ -362,27 +371,27 @@ object frmLoTWExport: TfrmLoTWExport
     object btnHelp: TButton
       AnchorSideTop.Control = btnClose
       AnchorSideRight.Control = btnClose
-      Left = 302
+      Left = 338
       Height = 25
       Top = 8
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 20
       Caption = 'Help'
-      OnClick = btnHelpClick
       TabOrder = 1
+      OnClick = btnHelpClick
     end
   end
   object dlgSave: TSaveDialog
     DefaultExt = '.adi'
     Filter = 'ADIF|*.adi;*.ADI'
-    left = 54
-    top = 350
+    Left = 54
+    Top = 350
   end
   object tmrLoTW: TTimer
     Enabled = False
     OnTimer = tmrLoTWTimer
-    left = 148
-    top = 388
+    Left = 148
+    Top = 388
   end
 end

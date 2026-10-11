@@ -20,6 +20,7 @@ type
     btnFileExport : TButton;
     btnUpload: TButton;
     btnHelp: TButton;
+    chkAutoExportAndSign: TCheckBox;
     chkFileMarkAfterExport: TCheckBox;
     edtTqsl: TEdit;
     edtFileName: TEdit;
@@ -45,6 +46,7 @@ type
     tabLocalFile: TTabSheet;
     tabUpload: TTabSheet;
     tmrLoTW: TTimer;
+    procedure chkAutoExportAndSignChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnExportSignClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -62,16 +64,27 @@ type
     FileSize : Int64;
     // Number of QSOs written by the last ExportToAdif.
     FQsoCount : Integer;
-    // The selection ExportToAdif walked, so that the marking after a web
-    // upload walks the same rows.
-    FLotwAll       : Boolean;
-    FLotwFilterSql : String;
+    // id_cqrlog_main of the QSOs written by the last ExportToAdif. After a
+    // successful signing they are saved next to the signed file, and exactly
+    // these QSOs are marked as sent once the upload is accepted.
+    FExportedIds   : TStringList;
+    // Upload was clicked with chkAutoExportAndSign checked: the upload runs
+    // after tqsl finishes signing successfully.
+    FAutoUpload    : Boolean;
 
     function ExportToAdif : Word;
+    procedure StartExportSign;
+    procedure UploadSignedFile;
+    procedure AutoExportSignFailed;
+    procedure UpdateSignUploadButtons;
+    function  PendingUploadFile : String;
+    procedure ClearPendingUpload;
     procedure SockCallBack (Sender: TObject; Reason:  THookSocketReason; const  Value: string);
   public
     Running : Integer;
     command : String;
+
+    destructor Destroy; override;
 
   end;
 
@@ -98,7 +111,45 @@ begin
   ShowHelp
 end;
 
+destructor TfrmLoTWExport.Destroy;
+begin
+  FExportedIds.Free;
+  inherited Destroy
+end;
+
+// A signed file whose upload has not been accepted by LoTW yet. tqsl refuses
+// to sign the same QSOs again (duplicates), so this file has to be uploaded
+// before anything new is signed. Kept in the log's local config so that it
+// survives closing the window or the program.
+function TfrmLoTWExport.PendingUploadFile : String;
+begin
+  Result := cqrini.ReadString('LoTWExp', 'PendingUpload', '', True);
+  if (Result <> '') and not FileExists(Result) then
+  begin
+    ClearPendingUpload;
+    Result := ''
+  end
+end;
+
+procedure TfrmLoTWExport.ClearPendingUpload;
+begin
+  cqrini.DeleteKey('LoTWExp', 'PendingUpload', True)
+end;
+
 procedure TfrmLoTWExport.btnUploadClick(Sender: TObject);
+begin
+  if PendingUploadFile <> '' then
+    UploadSignedFile
+  else if chkAutoExportAndSign.Checked then
+  begin
+    FAutoUpload := True;
+    StartExportSign
+  end
+  else
+    UploadSignedFile
+end;
+
+procedure TfrmLoTWExport.UploadSignedFile;
 const
   UPLOAD_URL = 'https://LoTW.arrl.org/lotwuser/upload?login=%s&password=%s';
   CR = #$0d;
@@ -113,13 +164,24 @@ var
   suc  : Boolean = False;
   date : String = '';
   url  : String = '';
-  rows : TDataSet;
+  ids  : TStringList;
+  i    : Integer;
 begin
+  FileName := PendingUploadFile;
+  if FileName = '' then
+  begin
+    UpdateSignUploadButtons;
+    exit
+  end;
   btnUpload.Enabled:=false; //allow only one click
   mStat.Lines.Add('');
   Bound := IntToHex(Random(MaxInt), 8) + '_Synapse_boundary';
-  FileName := ChangeFileExt(Filename,'.tq8');
-  mStat.Lines.Add('Uploading file with ' + IntToStr(FQsoCount) + ' QSO(s) ...');
+  ids := TStringList.Create;
+  if FileExists(ChangeFileExt(FileName, '.ids')) then
+    ids.LoadFromFile(ChangeFileExt(FileName, '.ids'));
+  FileSize := 0;
+  mStat.Lines.Add('Uploading file with ' + IntToStr(ids.Count) + ' QSO(s) ...');
+  mStat.Lines.Add(FileName);
   mStat.Lines.Add('Size: ');
   http := THTTPSend.Create;
   m    := TMemoryStream.Create;
@@ -151,7 +213,7 @@ begin
       l.LoadFromStream(HTTP.Document);
       if Pos('<!-- .UPL.  accepted -->',l.Text) > 0 then
       begin
-        mStat.Lines.Add('Uploading was successful, ' + IntToStr(FQsoCount) + ' QSO(s) uploaded');
+        mStat.Lines.Add('Uploading was successful, ' + IntToStr(ids.Count) + ' QSO(s) uploaded');
         suc := True
       end
       else begin
@@ -165,31 +227,31 @@ begin
     end;
     if suc then
     begin
+      ClearPendingUpload;
       date := FormatDateTime('yyyy-mm-dd',now);
       try
         if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
           dmLogUpload.DisableOnlineLogSupport;
 
-        rows := dmSqlQsl.OpenQsosForLotwRows(FLotwAll, FLotwFilterSql);
-        rows.First;
-        while not rows.Eof do
-        begin
-          dmSqlQsl.MarkLotwSent(date, rows.FieldByName('id_cqrlog_main').AsString);
-          rows.Next
-        end;
+        for i := 0 to ids.Count - 1 do
+          dmSqlQsl.MarkLotwSent(date, ids[i]);
       finally
         dmSqlQsl.CommitBatch;
-        dmSqlQsl.CloseRows;
         if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
           dmLogUpload.EnableOnlineLogSupport(False)
       end
     end
+    else begin
+      mStat.Lines.Add('The signed file was kept, press Upload to send it again.');
+      mStat.Lines.Add('Do not sign these QSOs again, tqsl would reject them as duplicates.')
+    end
   finally
     http.Free;
     l.Free;
-    m.Free
+    m.Free;
+    ids.Free
   end;
-  btnUpload.Enabled:=true; //allow only one click
+  UpdateSignUploadButtons
 end;
 
 procedure TfrmLoTWExport.mStatChange(Sender: TObject);
@@ -222,18 +284,53 @@ begin
       OutputLines.Free;
     end;
 
-    if Aprocess.ExitCode = 0 then begin
-      mStat.Lines.Add('Signed ...');
-      mStat.Lines.Add('If you did not see any errors, you can send signed file to LoTW website by' +
-                      ' pressing Upload button');
-      btnUpload.Enabled := True;
+    if Aprocess.ExitCode = 0 then
+    begin
+      FExportedIds.SaveToFile(ChangeFileExt(FileName, '.ids'));
+      cqrini.WriteString('LoTWExp', 'PendingUpload', ChangeFileExt(FileName, '.tq8'), True)
     end;
     grbWebExport.Enabled := True;
     grbTqsl.Enabled      := True;
     pnlUpload.Enabled    := True;
     pnlClose.Enabled     := True;
     tmrLoTW.Enabled      := False;
+
+    if Aprocess.ExitCode = 0 then
+    begin
+      mStat.Lines.Add('Signed ...');
+      if FAutoUpload then
+      begin
+        FAutoUpload := False;
+        UpdateSignUploadButtons;
+        UploadSignedFile
+      end
+      else begin
+        mStat.Lines.Add('If you did not see any errors, you can send signed file to LoTW website by' +
+                        ' pressing Upload button');
+        UpdateSignUploadButtons
+      end
+    end
+    else begin
+      mStat.Lines.Add('Signing failed, tqsl exit code: ' + IntToStr(Aprocess.ExitCode));
+      AutoExportSignFailed;
+      UpdateSignUploadButtons
+    end
   end
+end;
+
+procedure TfrmLoTWExport.AutoExportSignFailed;
+begin
+  if not FAutoUpload then
+    exit;
+  FAutoUpload := False;
+  //OnChange saves the unchecked state and enables the Export & sign button
+  chkAutoExportAndSign.Checked := False
+end;
+
+procedure TfrmLoTWExport.UpdateSignUploadButtons;
+begin
+  btnExportSign.Enabled := not chkAutoExportAndSign.Checked;
+  btnUpload.Enabled     := chkAutoExportAndSign.Checked or (PendingUploadFile <> '')
 end;
 
 
@@ -265,7 +362,16 @@ begin
   end;
   edtTqsl.Text := cqrini.ReadString('LoTWExp', dmUtils.PlatformKey('cmd'), dmUtils.DefaultToolPath('tqsl', '/usr/bin/tqsl') + ' -d -l "your qth name" %f -x');
   if pgLoTWExport.ActivePageIndex = 1 then
-    rbWebExportNotExported.SetFocus
+    rbWebExportNotExported.SetFocus;
+
+  chkAutoExportAndSign.Checked := cqrini.ReadBool('LoTWExp', 'AutoExportAndSign', False);
+  UpdateSignUploadButtons;
+  if PendingUploadFile <> '' then
+  begin
+    mStat.Lines.Add('A signed file has not been uploaded to LoTW yet:');
+    mStat.Lines.Add(PendingUploadFile);
+    mStat.Lines.Add('Press Upload to send it.')
+  end
 end;
 
 procedure TfrmLoTWExport.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -293,12 +399,29 @@ begin
 end;
 
 procedure TfrmLoTWExport.btnExportSignClick(Sender: TObject);
+begin
+  if PendingUploadFile <> '' then
+  begin
+    if Application.MessageBox(PChar('A signed file has not been uploaded to LoTW yet:' + LineEnding +
+                              PendingUploadFile + LineEnding + LineEnding +
+                              'Signing its QSOs again will fail in tqsl (duplicates). ' +
+                              'Discard it and sign again anyway?'),
+                              'Question ...', mb_YesNo + mb_IconQuestion) <> idYes then
+      exit;
+    ClearPendingUpload
+  end;
+  FAutoUpload := False;
+  StartExportSign
+end;
+
+procedure TfrmLoTWExport.StartExportSign;
 var
   tmp : String;
   paramList :TStringList;
   res : Integer;
 begin
   MarkAfter := False;
+  UpdateSignUploadButtons;
   mStat.Clear;
   FileName := dmData.HomeDir + 'lotw'+PathDelim+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
   tmp := copy(edtTqsl.Text,1,Pos(' ',edtTqsl.Text)-1);
@@ -310,6 +433,8 @@ begin
     mStat.Lines.Add(tmp);
     mStat.Lines.Add('Correct path to the tqsl binary or if you do not have tqsl installed, please install it from ' +
                      'software repository');
+    AutoExportSignFailed;
+    UpdateSignUploadButtons;
     exit
   end;
   mStat.Lines.Add('Starting export to adif ...');
@@ -321,10 +446,16 @@ begin
     mStat.Lines.Add('File:');
     mStat.Lines.Add(FileName);
     lblInfo.Caption := '';
+    AutoExportSignFailed;
+    UpdateSignUploadButtons;
     exit
   end else
     if res = 1 then
-      exit;
+    begin
+      //nothing to export is not an error, keep the auto mode on
+      FAutoUpload := False;
+      exit
+    end;
   lblInfo.Caption := '';
   mStat.Lines.Add('Export to the adif file completed, ' + IntToStr(FQsoCount) + ' QSO(s) exported.');
   mStat.Lines.Add('File:');
@@ -339,7 +470,17 @@ begin
   paramList.Free;
   AProcess.Options := [poUsePipes];
   if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
-  AProcess.Execute;
+  try
+    AProcess.Execute
+  except
+    on E: Exception do
+    begin
+      mStat.Lines.Add('Cannot start tqsl: ' + E.Message);
+      AutoExportSignFailed;
+      UpdateSignUploadButtons;
+      exit
+    end
+  end;
 
   grbWebExport.Enabled := False;
   grbTqsl.Enabled      := False;
@@ -350,7 +491,14 @@ end;
 
 procedure TfrmLoTWExport.FormCreate(Sender: TObject);
 begin
-  AProcess := TProcess.Create(nil)
+  AProcess := TProcess.Create(nil);
+  FExportedIds := TStringList.Create
+end;
+
+procedure TfrmLoTWExport.chkAutoExportAndSignChange(Sender: TObject);
+begin
+  cqrini.WriteBool('LoTWExp', 'AutoExportAndSign', chkAutoExportAndSign.Checked);
+  UpdateSignUploadButtons
 end;
 
 function TfrmLoTWExport.ExportToAdif : Word;
@@ -362,8 +510,10 @@ var
   ModeOut,
   SubmodeOut: String;
   rows      : TDataSet;
+  FilterSql : String;
 begin
   FQsoCount := 0;
+  FExportedIds.Clear;
   if FileExists(FileName) then
     DeleteFile(FileName);
 
@@ -390,11 +540,10 @@ begin
   Writeln(f, '<EOH>');
 
   if (dmData.IsFilter and (rbWebExportAll.Checked or rbFileExportAll.Checked)) then
-    FLotwFilterSql := dmData.qCQRLOG.SQL.Text
+    FilterSql := dmData.qCQRLOG.SQL.Text
   else
-    FLotwFilterSql := '';
-  FLotwAll := rbWebExportAll.Checked;
-  rows := dmSqlQsl.OpenQsosForLotwRows(FLotwAll, FLotwFilterSql);
+    FilterSql := '';
+  rows := dmSqlQsl.OpenQsosForLotwRows(rbWebExportAll.Checked, FilterSql);
   try
     rows.First;
     while not rows.EOF do
@@ -470,6 +619,7 @@ begin
       end;
       inc(nr);
       FQsoCount := nr - 1;
+      FExportedIds.Add(rows.FieldByName('id_cqrlog_main').AsString);
       if MarkAfter and (pgLoTWExport.ActivePageIndex = 0) then
         dmSqlQsl.MarkLotwSent(date, rows.FieldByName('id_cqrlog_main').AsString);
       rows.Next
