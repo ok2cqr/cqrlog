@@ -60,6 +60,8 @@ type
     MarkAfter : Boolean;
     AProcess  : TProcess;
     FileSize : Int64;
+    // Number of QSOs written by the last ExportToAdif.
+    FQsoCount : Integer;
     // The selection ExportToAdif walked, so that the marking after a web
     // upload walks the same rows.
     FLotwAll       : Boolean;
@@ -117,7 +119,7 @@ begin
   mStat.Lines.Add('');
   Bound := IntToHex(Random(MaxInt), 8) + '_Synapse_boundary';
   FileName := ChangeFileExt(Filename,'.tq8');
-  mStat.Lines.Add('Uploading file ...');
+  mStat.Lines.Add('Uploading file with ' + IntToStr(FQsoCount) + ' QSO(s) ...');
   mStat.Lines.Add('Size: ');
   http := THTTPSend.Create;
   m    := TMemoryStream.Create;
@@ -149,7 +151,7 @@ begin
       l.LoadFromStream(HTTP.Document);
       if Pos('<!-- .UPL.  accepted -->',l.Text) > 0 then
       begin
-        mStat.Lines.Add('Uploading was successful');
+        mStat.Lines.Add('Uploading was successful, ' + IntToStr(FQsoCount) + ' QSO(s) uploaded');
         suc := True
       end
       else begin
@@ -244,7 +246,8 @@ begin
   end;
   FileName  := edtFileName.Text;
   MarkAfter := chkFileMarkAfterExport.Checked;
-  ExportToAdif
+  if ExportToAdif = 0 then
+    lblInfo.Caption := 'Exported ' + IntToStr(FQsoCount) + ' QSO(s)'
 end;
 
 procedure TfrmLoTWExport.FormShow(Sender: TObject);
@@ -323,7 +326,7 @@ begin
     if res = 1 then
       exit;
   lblInfo.Caption := '';
-  mStat.Lines.Add('Export to the adif file completed.');
+  mStat.Lines.Add('Export to the adif file completed, ' + IntToStr(FQsoCount) + ' QSO(s) exported.');
   mStat.Lines.Add('File:');
   mStat.Lines.Add(FileName);
   mStat.Lines.Add('Signing adif file ...');
@@ -360,6 +363,7 @@ var
   SubmodeOut: String;
   rows      : TDataSet;
 begin
+  FQsoCount := 0;
   if FileExists(FileName) then
     DeleteFile(FileName);
 
@@ -465,6 +469,7 @@ begin
         Application.ProcessMessages
       end;
       inc(nr);
+      FQsoCount := nr - 1;
       if MarkAfter and (pgLoTWExport.ActivePageIndex = 0) then
         dmSqlQsl.MarkLotwSent(date, rows.FieldByName('id_cqrlog_main').AsString);
       rows.Next
