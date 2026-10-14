@@ -34,7 +34,8 @@ function  CompleteLoc(loc: string): string;
 function  IsLocOK(Loc: string): boolean;
 //AA00aa00: upper case square, lower case subsquare
 function  StdFormatLocator(loc:string):String;
-//centre of the locator's subsquare; untouched if the locator is not valid
+//centre of the locator's subsquare (any case, completed like IsLocOK);
+//untouched if the locator is not valid
 procedure CoordinateFromLocator(loc: string; var latitude, longitude: currency);
 //qra in km, azim in degrees; untouched if a locator is not valid
 procedure DistanceFromLocator(my_loc, his_loc: string; var qra, azim: string);
@@ -122,6 +123,8 @@ var
 begin
   if not IsLocOK(loc) then
     exit;
+  //compute from what IsLocOK validated: completed, trimmed, upper case
+  loc := UpCase(CompleteLoc(loc));
 
   a := nr(loc[1]);
   b := nr(loc[2]);

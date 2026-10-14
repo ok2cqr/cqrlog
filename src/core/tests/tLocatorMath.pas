@@ -32,6 +32,7 @@ type
     procedure CoordinateOfSquareCentre;
     procedure CoordinateOfInvalidLocatorIsUntouched;
     procedure CoordinateOfLowercaseSubsquare;
+    procedure CoordinateOfIncompleteLocator;
     procedure DistanceToItself;
     procedure DistanceBrnoBerlin;
     procedure DistanceAcrossTheWorld;
@@ -129,11 +130,29 @@ procedure TLocatorTest.CoordinateOfLowercaseSubsquare;
 var
   lat, lon : Currency;
 begin
-  //the letters are looked up as upper case only, so the subsquare of
-  //'JN89he' (StdFormatLocator's output) counts as 0.  Kept as it was.
+  //'JN89he' is what StdFormatLocator returns; the subsquare used to count as 0
   CoordinateFromLocator('JN89he', lat, lon);
-  AssertEquals(48.9792, Double(lat), 0.0001);
-  AssertEquals(15.9583, Double(lon), 0.0001)
+  AssertEquals(49.1875, Double(lat), 0.0001);
+  AssertEquals(16.625, Double(lon), 0.0001);
+  CoordinateFromLocator('jn89he', lat, lon);
+  AssertEquals(49.1875, Double(lat), 0.0001);
+  AssertEquals(16.625, Double(lon), 0.0001)
+end;
+
+procedure TLocatorTest.CoordinateOfIncompleteLocator;
+var
+  lat, lon : Currency;
+begin
+  //validated as completed, so computed as completed too: 'JN89' is JN89LL
+  CoordinateFromLocator('JN89', lat, lon);
+  AssertEquals(49.4792, Double(lat), 0.0001);
+  AssertEquals(16.9583, Double(lon), 0.0001);
+  CoordinateFromLocator(' JN89HE ', lat, lon);  //used to raise EConvertError
+  AssertEquals(49.1875, Double(lat), 0.0001);
+  AssertEquals(16.625, Double(lon), 0.0001);
+  CoordinateFromLocator('JN89HE16', lat, lon);
+  AssertEquals(49.1875, Double(lat), 0.0001);
+  AssertEquals(16.625, Double(lon), 0.0001)
 end;
 
 procedure TLocatorTest.DistanceToItself;
