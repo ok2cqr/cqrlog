@@ -108,11 +108,11 @@ type
 
 implementation
 
-uses fTRXControl, uMyIni;
+uses fTRXControl, uMyIni, dUtils;
 
 function TCWWinKeyerUSB.PotSpeedEnabled : Boolean;
 begin
-  Result := cqrini.ReadBool('CW'+IntToStr(frmTRXControl.cmbRig.ItemIndex),'PotSpeed',False)
+  Result := cqrini.ReadBool('CW'+IntToStr(frmTRXControl.cmbRig.ItemIndex),dmUtils.PlatformKey('PotSpeed'),False)
 end;
 
 procedure TCWWinKeyerUSB.HexError(const Msg : String);
