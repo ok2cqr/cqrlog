@@ -20,7 +20,7 @@ uses
   DBGrids, aziloc, azidis3, process, DB, sqldb, Grids, Buttons, spin, colorbox,
   Menus, Graphics, Math, LazHelpHTML, lNet, DateUtils, fileutil, httpsend,
   sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8, RegExpr,
-  laz2_XMLRead, laz2_DOM, fpjson,jsonparser,StrUtils, Themes;
+  laz2_XMLRead, laz2_DOM, fpjson,jsonparser,StrUtils, Themes, uBandPlan;
 
   //"XMLRead, DOM," replced. These have system encoding. "laz2_" ones have full UTF-8 Unicode support
   //they should be replaceable by Laz-XML-wiki.
@@ -35,11 +35,7 @@ type
     Exists    : Boolean;
   end;
 
-  BandVsFreq = record
-    band     : string;
-    b_begin  : currency;
-    b_end    : currency;
-  end;
+  BandVsFreq = TBandEdge; //core/uBandPlan.pas
 
 type
   TColumnVisibleArray = array of TVisibleColumn;
@@ -402,19 +398,9 @@ Begin
   end;
 end;
 function TdmUtils.BandFromArray(tmp:Currency):string;
-var
-   x:integer;
+//the lookup lives in core/uBandPlan.pas
 Begin
-  result:='';
-   for x:=0 to  (cMaxBandsCount - 1 ) do
-      Begin
-           if (tmp >= dmUtils.BandFreq[x].b_begin )
-             and (tmp <= dmUtils.BandFreq[x].b_end ) then
-                Begin
-                   Result := dmUtils.BandFreq[x].band;
-                   exit;
-                end;
-      end;
+  Result := BandFromFreq(tmp, dmUtils.BandFreq)
 end;
 
 function TdmUtils.GetModeFromFreq(freq: string): string; //freq in MHz
