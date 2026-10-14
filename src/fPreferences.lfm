@@ -6484,7 +6484,10 @@ object frmPreferences: TfrmPreferences
           Height = 18
           Top = 6
           Width = 202
-          Caption = 'Use the same color as the spot'
+          Caption = 'Color by DXCC status (also RBN)'
+          ParentShowHint = False
+          ShowHint = True
+          Hint = 'New country / new band / new mode / QSL needed, using the DX cluster colors. Applies to cluster and RBN spots.'
           TabOrder = 3
           OnChange = chkUseDXCColorsChange
         end
