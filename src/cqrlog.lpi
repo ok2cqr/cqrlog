@@ -786,11 +786,11 @@
         <IsPartOfProject Value="True"/>
       </Unit102>
       <Unit103>
-        <Filename Value="aziloc.pas"/>
+        <Filename Value="core/aziloc.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit103>
       <Unit104>
-        <Filename Value="azidis3.pas"/>
+        <Filename Value="core/azidis3.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit104>
       <Unit105>

@@ -1,5 +1,9 @@
 unit azidis3;
 
+//Lazarus compiles the project in this mode by default; stated here so a plain
+//fpc build (core/Makefile) compiles the unit the same way
+{$mode objfpc}{$H+}
+
 interface
 
 uses sysutils;
@@ -108,6 +112,6 @@ end;
  d:=dely(l1);
  repeat
   write('LOC2: ');readln(l2);
-  if isloc(l2) then writeln('AZI=',azimut(l2):5:1,'ø, QRB=',round(dis),' km');
+  if isloc(l2) then writeln('AZI=',azimut(l2):5:1,' deg, QRB=',round(dis),' km');
  until l2=''; }
 end.

@@ -1,5 +1,9 @@
 unit aziloc;
 
+//Lazarus compiles the project in this mode by default; stated here so a plain
+//fpc build (core/Makefile) compiles the unit the same way
+{$mode objfpc}{$H+}
+
 interface
 
 function VratLokator(pozx,pozy : Currency) : String;
