@@ -19,8 +19,8 @@ program coretests;
 uses
   {$IFDEF UNIX}cthreads,{$ENDIF}
   Classes, SysUtils, consoletestrunner,
-  uScpIndex, uWinKeyerProtocol, uCWDevice, uCWWinKeyer,
-  tScpLookup, tWinKeyerProtocol;
+  uScpIndex, uWinKeyerProtocol, uCWDevice, uCWWinKeyer, uCWMacros,
+  tScpLookup, tWinKeyerProtocol, tCWMacroExpansion;
 
 type
   TCoreTestRunner = class(TTestRunner)

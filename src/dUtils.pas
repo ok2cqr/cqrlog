@@ -366,7 +366,8 @@ implementation
   {$R *.lfm}
 
 { TdmUtils }
-uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest, dSqlRef, dSqlStat;
+uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest, dSqlRef, dSqlStat,
+  uCWMacros;
 
 function TdmUtils.LetterFromMode(mode: string): string;
 begin
@@ -2775,46 +2776,18 @@ begin
 end;
 
 function TdmUtils.GetCWMessage(Key,call,rst_s,stx,stx_str,srx,srx_str,HisName,HelloMsg, text : String) : String;
-{
- %mc - my callsign
- %mn - my name
- %mq - my qth
- %ml - my locator
- %r  - rst send
- %rs - rst send sends N instead of 9 (sends also 0 as T, but does not exist in normal report)
-
- %n  - name
- %c  - callsign
- %h - greeting GM/GA/GE calculated from the %c station location time
-
- %xn  - contest exchange serial number
- %xnr - contest exchange seral number received
- %xm  - contest exchange message
- %xmr - contest exchange message received
- %xns - contest exchenge serial number sends 9->N and 0->T
- %xnrs- contest exchange message received sends 9->N and 0->T
- %xrs - full contest exchange RST+SerialNR+Message sends 9->N and 0->T.
-        Can be used "always" as if serNR and/or Message are empty just sends plain report.
-
-if text is not empty and we didn't send any key (F1 etc.) we can
-use this function to prepare every text wee need to send
-}
-
+//Macros (%c, %r, %xrs, ...) are expanded by ExpandCWMacros in core/uCWMacros.pas,
+//the list is there.
+//if text is not empty and we didn't send any key (F1 etc.) we can
+//use this function to prepare every text wee need to send
 var
-  mycall : String = '';
-  myloc  : String = '';
-  myname : String = '';
-  myqth  : String = '';
-  rst_sh : String = '';
-  stx_sh : String = '';
-  srx_sh : String = '';
-  con_ex : String = '';
-
+  Station : TCWMacroStation;
+  Qso     : TCWMacroQso;
 begin
-  mycall := cqrini.ReadString('Station', 'Call', '');
-  myloc := cqrini.ReadString('Station', 'LOC', '');
-  myname := cqrini.ReadString('Station', 'Name', '');
-  myqth := cqrini.ReadString('Station', 'QTH', '');
+  Station.MyCall := cqrini.ReadString('Station', 'Call', '');
+  Station.MyLoc  := cqrini.ReadString('Station', 'LOC', '');
+  Station.MyName := cqrini.ReadString('Station', 'Name', '');
+  Station.MyQth  := cqrini.ReadString('Station', 'QTH', '');
   if key <> '' then
    Begin
     if (frmContest.Showing) and ( not (cqrini.ReadBool('CW','S&P',True))) then //if contest and run mode keys are F11-F20
@@ -2828,41 +2801,15 @@ begin
   else
     Result := text;
 
-    rst_sh := StringReplace(rst_s,'9','N',[rfReplaceAll, rfIgnoreCase]);
-    rst_sh := StringReplace(rst_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
-
-    stx_sh := StringReplace(stx,'9','N',[rfReplaceAll, rfIgnoreCase]);
-    stx_sh := StringReplace(stx_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
-
-    srx_sh := StringReplace(srx,'9','N',[rfReplaceAll, rfIgnoreCase]);
-    srx_sh := StringReplace(srx_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
-
-    con_ex := rst_sh;
-    if stx_sh <>'' then con_ex:=con_ex+' '+stx_sh;
-    if stx_str <>'' then con_ex:=con_ex+' '+stx_str;
-
-    Result := StringReplace(Result,'%xnrs',srx_sh,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%xnr',srx,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%xns',stx_sh,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%xn',stx,[rfReplaceAll, rfIgnoreCase]);
-
-    Result := StringReplace(Result,'%xmr',srx_str,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%xm',stx_str,[rfReplaceAll, rfIgnoreCase]);
-
-    Result := StringReplace(Result,'%xrs',con_ex,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
-
-    Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
-
-    Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%ml',myloc,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%mq',myqth,[rfReplaceAll, rfIgnoreCase]);
-
-    Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
-
-    Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
+  Qso.Call    := call;
+  Qso.RstS    := rst_s;
+  Qso.Stx     := stx;
+  Qso.StxStr  := stx_str;
+  Qso.Srx     := srx;
+  Qso.SrxStr  := srx_str;
+  Qso.HisName := HisName;
+  Qso.Hello   := HelloMsg;
+  Result := ExpandCWMacros(Result, Station, Qso);
 
     if dmData.DebugLevel>=1 then
                                 Writeln('Sending:',Result)
