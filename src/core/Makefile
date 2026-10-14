@@ -12,7 +12,8 @@ ifeq ($(UNAME_S),Darwin)
 MACFLAGS    = -WM11.0
 endif
 FPCFLAGS   ?= -O1 -vw $(MACFLAGS)
-UNITPATHS   = -Fu. -Futests
+# synapse for synaser (TBlockSerial) used by the WinKeyer driver
+UNITPATHS   = -Fu. -Futests -Fu../synapse
 OUTPUT      = -FUlib -FEtests
 BIN         = tests/coretests
 SOURCES     = $(wildcard *.pas) $(wildcard tests/*.pas) tests/coretests.lpr
