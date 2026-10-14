@@ -478,7 +478,8 @@ lint-lfm: ## Check Lazarus forms for layout that breaks on Qt/GTK (tools/lfm_lay
 # they do not need lazbuild nor a widget set.
 FPC ?= $(or $(shell command -v fpc 2>/dev/null),$(firstword $(wildcard $(HOME)/fpcupdeluxe/fpc/bin/*/fpc)),fpc)
 
-test: ## Run the unit tests (RBN receive path, DXCC parser, lfm layout tool)
+test: ## Run the unit tests (shared core, RBN receive path, DXCC parser, lfm layout tool)
+	$(MAKE) -C src/core test FPC=$(FPC)
 	$(MAKE) -C src/rbn test FPC=$(FPC)
 	$(MAKE) -C src/dxcc-parser test FPC=$(FPC)
 	cd tools && python3 -m unittest -q test_lfm_layout

@@ -46,13 +46,14 @@ There is no application-wide test suite; `make test` runs the unit tests of the 
 
 ```bash
 make test                              # everything below except lint; CI runs this and lint-lfm
+make -C src/core test                  # FPCUnit suite for LCL-free units extracted from forms/data modules (SCP index, ...)
 make -C src/rbn test                   # FPCUnit suite for the RBN line framer + spot parser (fixtures = recorded traffic), log cache, spot store, band map layout, check queue
 make -C src/dxcc-parser test           # FPCUnit suite for the DXCC parser; also test-full, diff, bench
 cd tools && python3 -m unittest test_lfm_layout   # tests for the .lfm layout linter
 make lint-lfm                          # lint selected forms (tools/lfm_layout.py)
 ```
 
-The Pascal suites are built with plain `fpc` (no LCL, no MySQL). New non-GUI logic should follow the `src/dxcc-parser/` and `src/rbn/` pattern (LCL-free units + an `fpc`-built test runner) so it can be tested without a database or a widget set.
+The Pascal suites are built with plain `fpc` (no LCL, no MySQL). New non-GUI logic should follow the `src/core/`, `src/dxcc-parser/` and `src/rbn/` pattern (LCL-free units + an `fpc`-built test runner) so it can be tested without a database or a widget set.
 
 macOS DMGs are built locally on Petr's machine (`make dmg` signs and notarizes via keychain profile `cqrlog`), not in CI.
 

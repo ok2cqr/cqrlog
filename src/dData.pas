@@ -20,7 +20,7 @@ uses
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
   mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils,
-  mysql57dyn, mysql57conn, uMyFindFile, Graphics, contnrs, uRbnLogCache;
+  mysql57dyn, mysql57conn, uMyFindFile, Graphics, contnrs, uRbnLogCache, uScpIndex;
 
 const
   cDB_LIMIT = 500;
@@ -172,8 +172,7 @@ type
     fShareDir    : String;
     fFirstMemId  : Integer;
     fLastMemId   : Integer;
-    fSCPData  : AnsiString; //MASTER.SCP calls, each wrapped in #10, see LoadMasterSCP
-    fSCPCount : Integer;
+    fScpIndex : TScpIndex; //MASTER.SCP calls, see LoadMasterSCP
     MySQLProcess : TProcess;
     csPreviousQSO : TRTLCriticalSection;
     csRbnMon      : TRTLCriticalSection;  //qRbnMon: RBN worker and GUI thread
@@ -1225,6 +1224,7 @@ begin
   PrepareVoice_keyerDir;
   LoadLoTWCalls;
   LoadeQSLCalls;
+  fScpIndex := TScpIndex.Create;
   LoadMasterSCP;
 
   cqrini := TMyIni.Create(fHomeDir+'cqrlog.cfg',fHomeDir+'local.cfg');
@@ -1261,6 +1261,7 @@ begin
   DoneCriticalsection(csPreviousQSO);
   DoneCriticalsection(csRbnMon);
   FreeAndNil(RbnLogCache);
+  FreeAndNil(fScpIndex);
   KillMySQL(False)
 end;
 
@@ -2037,65 +2038,26 @@ begin
 end;
 
 procedure TdmData.LoadMasterSCP;
-//Loads MASTER.SCP into one flat string: #10 CALL1 #10 CALL2 #10 ... CALLn #10
-//GetSCPCalls then does one Pos() per hit over the whole buffer instead of one
-//Pos() per callsign. Assigning a new string is also a safe swap for the reload
-//after a country files update.
-var
-  Lines, Calls : TStringList;
-  i   : Integer;
-  tmp : String;
+//Search lives in TScpIndex (core/uScpIndex.pas, LCL-free with tests). Loading
+//there assigns a new buffer, so the reload after a country files update is a
+//safe swap.
 begin
   if not FileExists(fHomeDir+'MASTER.SCP') then
     exit;
-  Lines := TStringList.Create;
-  Calls := TStringList.Create;
-  try
-    Lines.LoadFromFile(fHomeDir+'MASTER.SCP');
-    Calls.Capacity := Lines.Count;
-    for i:=0 to Lines.Count-1 do
-    begin
-      tmp := trim(Lines[i]);
-      if tmp = '' then
-        Continue;
-      if (tmp[1]='#') or (tmp[1]='!') then //skip comments and the !!Order header
-        Continue;
-      Calls.Add(tmp)
-    end;
-    Calls.LineBreak := #10;
-    fSCPData  := #10 + Calls.Text; //Text ends with LineBreak
-    fSCPCount := Calls.Count;
-    if fDebugLevel>=1 then Writeln('Loaded ',fSCPCount,' SCP calls')
-  finally
-    Calls.Free;
-    Lines.Free
-  end
+  fScpIndex.LoadFromFile(fHomeDir+'MASTER.SCP');
+  if fDebugLevel>=1 then Writeln('Loaded ',fScpIndex.Count,' SCP calls')
 end;
 
 function TdmData.GetSCPCalls(call : String) : String;
 var
-  p, TokenStart, TokenEnd : SizeInt;
   Hits : TStringList;
 begin
   Result := '';
-  if (call = '') or (fSCPData = '') or (Pos(#10,call) > 0) then
-    exit;
   Hits := TStringList.Create;
   try
+    fScpIndex.Find(call,Hits);
     Hits.Delimiter := ' ';
     Hits.StrictDelimiter := True;
-    p := Pos(call,fSCPData);
-    while p > 0 do
-    begin
-      TokenStart := p;
-      while (TokenStart > 1) and (fSCPData[TokenStart-1] <> #10) do
-        Dec(TokenStart);
-      TokenEnd := p + Length(call);
-      while (TokenEnd <= Length(fSCPData)) and (fSCPData[TokenEnd] <> #10) do
-        Inc(TokenEnd);
-      Hits.Add(Copy(fSCPData,TokenStart,TokenEnd-TokenStart));
-      p := Pos(call,fSCPData,TokenEnd+1)
-    end;
     if Hits.Count > 0 then
       Result := ' ' + Hits.DelimitedText //same format as before: space separated with a leading space
   finally

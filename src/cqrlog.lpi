@@ -1030,7 +1030,7 @@
     <Version Value="11"/>
     <SearchPaths>
       <Libraries Value="$(LazarusDir)/lcl;../../../.lazarus/lib/LCLBase/units/x86_64-linux"/>
-      <OtherUnitFiles Value="lnet/lib;synapse;dxcc-parser;rbn"/>
+      <OtherUnitFiles Value="lnet/lib;synapse;dxcc-parser;rbn;core"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
