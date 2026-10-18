@@ -9,11 +9,13 @@
 *)
 
 { HamQTH API v2 (https://www.hamqth.com/developers): request bodies and
-  response parsing for the callbook lookup and the DX cluster spots.
+  response parsing for the callbook lookup, the DX cluster spots and the
+  real-time log upload.
 
-  The HTTP calls stay in TdmUtils.GetHamQTHInfo and TWebThread (fDXCluster),
-  this unit only turns JSON into the strings CQRLOG has always used, so the
-  callers did not change when the v1 xml.php and dxc_csv.php were replaced.
+  The HTTP calls stay in TdmUtils (GetHamQTHInfo, HamQTHRequest),
+  TWebThread (fDXCluster) and TdmLogUpload, this unit only turns JSON into
+  the strings CQRLOG has always used, so the callers did not change when the
+  v1 xml.php, dxc_csv.php and qso_realtime.php were replaced.
   The token and logging in again after a 401 are kept by TdmUtils
   (fHamQTHSession, GetHamQTHSession).
   No LCL, no globals; see tests/tHamQTHApi.pas. }
@@ -52,6 +54,14 @@ function ParseHamQTHLogin(const Json : String; out Token : String) : Boolean;
 function HamQTHErrorText(ResultCode : Integer; const Reason, Json : String) : String;
 function ParseHamQTHCallbook(const Json : String; out Info : THamQTHCallbook) : Boolean;
 function ParseHamQTHSpots(const Json : String; out Spots : THamQTHSpots) : Boolean;
+//ADIF record (<CALL:6>OK2CQR...<EOR>) to the body of POST log/qso,
+//{"qso":{"call":"OK2CQR",...}} with lower-case ADIF names
+function HamQTHQsoRequest(const Adif : String) : String;
+//query string of DELETE log/qso
+function HamQTHQsoKeyQuery(const Call, QsoDate, TimeOn, Band, Mode : String) : String;
+//result of a log/qso request as TdmLogUpload.GetResultMessage reports it:
+//ErrorCode 0 = done, 1 = stop the upload, 2 = QSO rejected, go on with the next one
+function HamQTHQsoResult(ResultCode : Integer; const Json : String; out ErrorCode : Integer) : String;
 
 implementation
 
@@ -118,13 +128,32 @@ end;
 
 function HamQTHErrorText(ResultCode : Integer; const Reason, Json : String) : String;
 var
-  o : TJSONObject;
+  o          : TJSONObject;
+  violations : TJSONData;
+  i          : Integer;
+  s          : String;
 begin
   o := ParseObject(Json);
   try
     Result := StrAt(o, 'detail');
     if Result = '' then
-      Result := StrAt(o, 'title')
+      Result := StrAt(o, 'title');
+    //422: which parameters were wrong
+    violations := nil;
+    if o <> nil then
+      violations := o.FindPath('violations');
+    if (violations is TJSONArray) and (violations.Count > 0) then
+    begin
+      s := '';
+      for i := 0 to violations.Count - 1 do
+      begin
+        if s <> '' then
+          s := s + '; ';
+        s := s + StrAt(violations.Items[i], 'propertyPath') + ': ' +
+          StrAt(violations.Items[i], 'title')
+      end;
+      Result := Trim(Result + ' (' + s + ')')
+    end
   finally
     o.Free
   end;
@@ -242,6 +271,87 @@ begin
     SetLength(Spots, n)
   finally
     o.Free
+  end
+end;
+
+function HamQTHQsoRequest(const Adif : String) : String;
+var
+  req, qso : TJSONObject;
+  p, e, len : Integer;
+  tag, name : String;
+begin
+  qso := TJSONObject.Create;
+  req := TJSONObject.Create(['qso', qso]);
+  try
+    p := Pos('<', Adif);
+    while p > 0 do
+    begin
+      e := Pos('>', Adif, p);
+      if e = 0 then
+        Break;
+      tag := Copy(Adif, p + 1, e - p - 1); //CALL:6 or QSO_DATE:8:D
+      if UpperCase(tag) = 'EOR' then
+        Break;
+      len := -1;
+      if Pos(':', tag) > 0 then
+      begin
+        name := LowerCase(Copy(tag, 1, Pos(':', tag) - 1));
+        Delete(tag, 1, Pos(':', tag));
+        if Pos(':', tag) > 0 then
+          tag := Copy(tag, 1, Pos(':', tag) - 1);
+        len := StrToIntDef(tag, -1)
+      end;
+      if (len > 0) and (name <> '') then
+      begin
+        //the length is in bytes, the way GetAdifValue counts it
+        qso.Strings[name] := Copy(Adif, e + 1, len);
+        p := Pos('<', Adif, e + 1 + len)
+      end
+      else
+        p := Pos('<', Adif, e + 1)
+    end;
+    Result := req.AsJSON
+  finally
+    req.Free
+  end
+end;
+
+function UrlEncode(const s : String) : String;
+var
+  c : Char;
+begin
+  Result := '';
+  for c in s do
+    if c in ['A'..'Z', 'a'..'z', '0'..'9', '-', '_', '.', '~'] then
+      Result := Result + c
+    else
+      Result := Result + '%' + IntToHex(Ord(c), 2)
+end;
+
+function HamQTHQsoKeyQuery(const Call, QsoDate, TimeOn, Band, Mode : String) : String;
+begin
+  Result := 'call=' + UrlEncode(Call) + '&qso_date=' + UrlEncode(QsoDate) +
+    '&time_on=' + UrlEncode(TimeOn) + '&band=' + UrlEncode(Band) +
+    '&mode=' + UrlEncode(Mode)
+end;
+
+function HamQTHQsoResult(ResultCode : Integer; const Json : String; out ErrorCode : Integer) : String;
+begin
+  ErrorCode := 0;
+  case ResultCode of
+    200, 201, 204 : Result := 'OK';
+    409           : Result := 'Already exists';
+    //deleting a QSO which is not there, nothing to do
+    404           : Result := HamQTHErrorText(ResultCode, 'QSO not found in the log', Json);
+    422           : begin
+                      Result    := HamQTHErrorText(ResultCode, 'QSO rejected', Json);
+                      ErrorCode := 2
+                    end
+    else begin
+      //401/403 login, 429 too many requests, 503 DXCC service down, server errors
+      Result    := HamQTHErrorText(ResultCode, 'Unexpected response from HamQTH', Json);
+      ErrorCode := 1
+    end
   end
 end;
 

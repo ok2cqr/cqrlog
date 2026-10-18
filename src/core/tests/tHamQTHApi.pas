@@ -37,6 +37,16 @@ type
     procedure SpotList;
     procedure SpotListEmpty;
     procedure SpotListInvalidJson;
+    procedure ErrorTextWithViolations;
+    procedure QsoRequestFromAdif;
+    procedure QsoRequestTypedAndRepeatedFields;
+    procedure QsoRequestTruncatedAdif;
+    procedure QsoKeyQueryIsEncoded;
+    procedure QsoResultStored;
+    procedure QsoResultAlreadyInLog;
+    procedure QsoResultNotInLog;
+    procedure QsoResultRejected;
+    procedure QsoResultFatal;
   end;
 
 implementation
@@ -210,6 +220,127 @@ begin
   AssertFalse(ParseHamQTHSpots('S53M^14235.8^LB6WI^wag^1635 2026-10-17', Spots));
   AssertFalse(ParseHamQTHSpots('{"detail":"Too many requests"}', Spots));
   AssertEquals(0, Length(Spots))
+end;
+
+procedure THamQTHApiTest.ErrorTextWithViolations;
+begin
+  AssertEquals('Invalid field (qso.band: unknown band; qso.time_on: HHMM expected)',
+    HamQTHErrorText(422, 'Unprocessable Entity',
+      '{"title":"Unprocessable Entity","status":422,"detail":"Invalid field",' +
+      '"violations":[{"propertyPath":"qso.band","title":"unknown band"},' +
+      '{"propertyPath":"qso.time_on","title":"HHMM expected"}]}'))
+end;
+
+//what TdmLogUpload.PrepareInsertHeader sends, lengths in bytes (Jiří = 6)
+procedure THamQTHApiTest.QsoRequestFromAdif;
+var
+  d : TJSONData;
+begin
+  d := GetJSON(HamQTHQsoRequest('<QSO_DATE:8>20261018<TIME_ON:4>1203<CALL:6>OK1ABC' +
+    '<BAND:3>20M<MODE:2>CW<FREQ:6>14.025<TIME_OFF:4>1205<NAME:6>Jiří' +
+    '<COMMENT:9>a<b>"c":d<EOR>'));
+  try
+    AssertEquals(9, TJSONObject(d.FindPath('qso')).Count);
+    AssertEquals('20261018', d.FindPath('qso.qso_date').AsString);
+    AssertEquals('1203', d.FindPath('qso.time_on').AsString);
+    AssertEquals('OK1ABC', d.FindPath('qso.call').AsString);
+    AssertEquals('20M', d.FindPath('qso.band').AsString);
+    AssertEquals('CW', d.FindPath('qso.mode').AsString);
+    AssertEquals('14.025', d.FindPath('qso.freq').AsString);
+    AssertEquals('Jiří', d.FindPath('qso.name').AsString);
+    AssertEquals('a<b>"c":d', d.FindPath('qso.comment').AsString);
+    AssertNull(d.FindPath('qso.eor'));
+    AssertNull(d.FindPath('callsign'))
+  finally
+    d.Free
+  end
+end;
+
+procedure THamQTHApiTest.QsoRequestTypedAndRepeatedFields;
+var
+  d : TJSONData;
+begin
+  d := GetJSON(HamQTHQsoRequest('<qso_date:8:d>20261018<CALL:5>OK1AA<CALL:5>OK1BB<eor>'));
+  try
+    AssertEquals('20261018', d.FindPath('qso.qso_date').AsString);
+    AssertEquals('OK1BB', d.FindPath('qso.call').AsString);
+    AssertEquals(2, TJSONObject(d.FindPath('qso')).Count)
+  finally
+    d.Free
+  end
+end;
+
+procedure THamQTHApiTest.QsoRequestTruncatedAdif;
+var
+  d : TJSONData;
+begin
+  d := GetJSON(HamQTHQsoRequest('<CALL:5>OK1AA<EOH><NAME:x>Petr<QTH:10>Brno'));
+  try
+    AssertEquals('OK1AA', d.FindPath('qso.call').AsString);
+    AssertEquals('Brno', d.FindPath('qso.qth').AsString);
+    AssertEquals(2, TJSONObject(d.FindPath('qso')).Count)
+  finally
+    d.Free
+  end
+end;
+
+procedure THamQTHApiTest.QsoKeyQueryIsEncoded;
+begin
+  AssertEquals('call=OK1ABC%2FP&qso_date=20261018&time_on=1203&band=70CM&mode=SSB',
+    HamQTHQsoKeyQuery('OK1ABC/P', '20261018', '1203', '70CM', 'SSB'))
+end;
+
+procedure THamQTHApiTest.QsoResultStored;
+var
+  ErrorCode : Integer;
+begin
+  AssertEquals('OK', HamQTHQsoResult(201, '{"call":"OK1ABC","dxcc":503}', ErrorCode));
+  AssertEquals(0, ErrorCode);
+  AssertEquals('OK', HamQTHQsoResult(204, '', ErrorCode));
+  AssertEquals(0, ErrorCode)
+end;
+
+procedure THamQTHApiTest.QsoResultAlreadyInLog;
+var
+  ErrorCode : Integer;
+begin
+  AssertEquals('Already exists',
+    HamQTHQsoResult(409, '{"status":409,"detail":"The QSO is in the log already."}', ErrorCode));
+  AssertEquals(0, ErrorCode)
+end;
+
+procedure THamQTHApiTest.QsoResultNotInLog;
+var
+  ErrorCode : Integer;
+begin
+  AssertEquals('The QSO is not in the log.',
+    HamQTHQsoResult(404, '{"status":404,"detail":"The QSO is not in the log."}', ErrorCode));
+  AssertEquals(0, ErrorCode)
+end;
+
+procedure THamQTHApiTest.QsoResultRejected;
+var
+  ErrorCode : Integer;
+begin
+  AssertEquals('Invalid field (qso.band: unknown band)',
+    HamQTHQsoResult(422, '{"status":422,"detail":"Invalid field",' +
+      '"violations":[{"propertyPath":"qso.band","title":"unknown band"}]}', ErrorCode));
+  AssertEquals(2, ErrorCode)
+end;
+
+procedure THamQTHApiTest.QsoResultFatal;
+var
+  ErrorCode : Integer;
+begin
+  AssertEquals('Wrong callsign or password.',
+    HamQTHQsoResult(401, '{"status":401,"detail":"Wrong callsign or password."}', ErrorCode));
+  AssertEquals(1, ErrorCode);
+  AssertEquals('The DXCC service is down for a moment.',
+    HamQTHQsoResult(503, '{"status":503,"detail":"The DXCC service is down for a moment."}', ErrorCode));
+  AssertEquals(1, ErrorCode);
+  AssertEquals('(502):Unexpected response from HamQTH',
+    HamQTHQsoResult(502, '<html>Bad gateway</html>', ErrorCode));
+  AssertEquals(1, ErrorCode)
 end;
 
 initialization

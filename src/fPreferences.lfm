@@ -6482,12 +6482,12 @@ object frmPreferences: TfrmPreferences
         object chkUseDXCColors: TCheckBox
           Left = 6
           Height = 18
+          Hint = 'New country / new band / new mode / QSL needed, using the DX cluster colors. Applies to cluster and RBN spots.'
           Top = 6
-          Width = 202
+          Width = 213
           Caption = 'Color by DXCC status (also RBN)'
           ParentShowHint = False
           ShowHint = True
-          Hint = 'New country / new band / new mode / QSL needed, using the DX cluster colors. Applies to cluster and RBN spots.'
           TabOrder = 3
           OnChange = chkUseDXCColorsChange
         end
@@ -6536,7 +6536,7 @@ object frmPreferences: TfrmPreferences
         Left = 16
         Height = 18
         Top = 584
-        Width = 420
+        Width = 438
         Caption = 'Show club membership after the callsign (clubs selected in Membership)'
         TabOrder = 15
       end
@@ -9530,13 +9530,13 @@ object frmPreferences: TfrmPreferences
         AnchorSideLeft.Control = tabOnlineLog
         AnchorSideTop.Control = tabOnlineLog
         Left = 12
-        Height = 109
+        Height = 104
         Top = 0
         Width = 650
         AutoSize = True
         BorderSpacing.Left = 12
         Caption = ' HamQTH '
-        ClientHeight = 82
+        ClientHeight = 77
         ClientWidth = 640
         Constraints.MinWidth = 650
         TabOrder = 0
@@ -9558,7 +9558,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 6
           Height = 16
-          Top = 41
+          Top = 26
           Width = 69
           BorderSpacing.Top = 6
           Caption = 'User name:'
@@ -9567,26 +9567,28 @@ object frmPreferences: TfrmPreferences
         object edtHaUserName: TEdit
           AnchorSideLeft.Control = Label179
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = edtHamQTHurl
+          AnchorSideTop.Control = chkHaUpEnabled
           AnchorSideTop.Side = asrBottom
           Left = 78
           Height = 21
-          Top = 39
-          Width = 102
+          Top = 24
+          Width = 146
           BorderSpacing.Left = 3
-          TabOrder = 3
+          BorderSpacing.Top = 6
+          BorderSpacing.Bottom = 8
+          TabOrder = 2
           Text = 'edtHaUserName'
         end
         object lbl: TLabel
           AnchorSideLeft.Control = edtHaUserName
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = Label179
-          Left = 192
+          Left = 236
           Height = 16
-          Top = 41
-          Width = 62
+          Top = 26
+          Width = 69
           BorderSpacing.Left = 12
-          Caption = 'Password:'
+          Caption = 'Password:  '
           ParentColor = False
         end
         object edtHaPasswd: TEdit
@@ -9594,14 +9596,13 @@ object frmPreferences: TfrmPreferences
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = lbl
           AnchorSideTop.Side = asrCenter
-          Left = 257
+          Left = 305
           Height = 21
-          Top = 39
-          Width = 104
-          BorderSpacing.Left = 3
+          Top = 24
+          Width = 171
           EchoMode = emPassword
           PasswordChar = '*'
-          TabOrder = 4
+          TabOrder = 3
           Text = 'edtHaPasswd'
         end
         object chkHaupOnline: TCheckBox
@@ -9622,7 +9623,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 6
           Height = 16
-          Top = 64
+          Top = 54
           Width = 49
           BorderSpacing.Top = 9
           Caption = 'Use this'
@@ -9635,7 +9636,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 254
           Height = 16
-          Top = 64
+          Top = 54
           Width = 303
           BorderSpacing.Left = 6
           Caption = 'color to show information in status upload window'
@@ -9648,7 +9649,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 61
           Height = 19
-          Top = 63
+          Top = 53
           Width = 187
           DefaultColorColor = clBlue
           NoneColorColor = clMoneyGreen
@@ -9656,19 +9657,9 @@ object frmPreferences: TfrmPreferences
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
           BorderSpacing.Left = 6
           BorderSpacing.Top = 3
+          BorderSpacing.Bottom = 5
           ItemHeight = 28
-          TabOrder = 5
-        end
-        object edtHamQTHurl: TEdit
-          AnchorSideLeft.Control = chkHaUpEnabled
-          AnchorSideTop.Control = chkHaUpEnabled
-          AnchorSideTop.Side = asrBottom
-          Left = 6
-          Height = 21
-          Top = 18
-          Width = 600
-          TabOrder = 2
-          Text = 'https://www.hamqth.com/qso_realtime.php'
+          TabOrder = 4
         end
       end
       object GroupBox45: TGroupBox
@@ -9680,7 +9671,7 @@ object frmPreferences: TfrmPreferences
         Top = 112
         Width = 650
         AutoSize = True
-        BorderSpacing.Top = 3
+        BorderSpacing.Top = 8
         Caption = ' ClubLog '
         ClientHeight = 106
         ClientWidth = 640
@@ -9856,10 +9847,10 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 112
-        Top = 248
+        Top = 253
         Width = 650
         AutoSize = True
-        BorderSpacing.Top = 3
+        BorderSpacing.Top = 8
         Caption = ' HRDLog.net '
         ClientHeight = 85
         ClientWidth = 640
@@ -9998,7 +9989,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 18
-        Top = 475
+        Top = 485
         Width = 390
         BorderSpacing.Top = 6
         Caption = 'Close the "Status of log upload" window after successful upload'
@@ -10010,7 +10001,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 18
-        Top = 496
+        Top = 506
         Width = 358
         BorderSpacing.Top = 3
         Caption = 'Ignore changes caused by LoTW/eQSL upload or download'
@@ -10023,7 +10014,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 18
-        Top = 514
+        Top = 524
         Width = 282
         Caption = 'Ignore changes caused by QSL sent/received'
         TabOrder = 5
@@ -10035,7 +10026,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 18
-        Top = 532
+        Top = 542
         Width = 229
         Caption = 'Ignore changes caused by QSO edit'
         TabOrder = 6
@@ -10047,10 +10038,10 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 106
-        Top = 363
+        Top = 373
         Width = 650
         AutoSize = True
-        BorderSpacing.Top = 3
+        BorderSpacing.Top = 8
         Caption = 'UDP Log Messages'
         ClientHeight = 79
         ClientWidth = 640

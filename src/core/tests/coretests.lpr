@@ -30,6 +30,9 @@ var
   App: TCoreTestRunner;
 
 begin
+  //what LazUTF8 does in CQRLOG: strings are UTF-8, fpjson results are not
+  //converted to a legacy code page
+  SetMultiByteConversionCodePage(CP_UTF8);
   App := TCoreTestRunner.Create(nil);
   try
     App.Initialize;

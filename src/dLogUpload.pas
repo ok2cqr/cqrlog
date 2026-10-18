@@ -38,6 +38,7 @@ type
     procedure Q2BeforeOpen(DataSet: TDataSet);
     procedure QBeforeOpen(DataSet: TDataSet);
   private
+    fHamQTHToken : String;
     function  GetAdifValue(Field,Value : String) : String;
     function  RemoveSpaces(s : String) : String;
     function  GetQSOInAdif(id_cqrlog_main : Integer) : String;
@@ -51,6 +52,7 @@ type
     function  UploadLogData(where : TWhereToUpload; cmd: String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
     function  UploadLogDataHTTP(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
     function  UploadLogDataUDP(cmd : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
+    function  UploadLogDataHamQTH(cmd : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
     function  CheckUserUploadSettings(where : TWhereToUpload) : String;
     function  GetLogUploadColor(where : TWhereToUpload) : Integer;
     function  GetUploadUrl(where : TWhereToUpload; cmd : String) : String;
@@ -74,7 +76,7 @@ var
 implementation
   {$R *.lfm}
 
-uses dData, dDXCluster, uMyIni, dSqlUpload;
+uses dData, dDXCluster, uMyIni, dSqlUpload, dUtils, uHamQTHApi;
 
 procedure TdmLogUpload.DataModuleCreate(Sender: TObject);
 var
@@ -115,7 +117,8 @@ end;
 function TdmLogUpload.UploadLogData(where : TWhereToUpload; cmd: String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
 begin
   case where of
-    upUDPLog  : Result := UploadLogDataUDP(cmd,data,Response,ResultCode)
+    upUDPLog  : Result := UploadLogDataUDP(cmd,data,Response,ResultCode);
+    upHamQTH  : Result := UploadLogDataHamQTH(cmd,data,Response,ResultCode)
   else
     Result := UploadLogDataHTTP(dmLogUpload.GetUploadUrl(where,cmd), data, Response, ResultCode);
   end; // case
@@ -170,6 +173,40 @@ begin
   finally
     FreeAndNil(HTTP);
     FreeAndNil(l)
+  end
+end;
+
+//API v2: data has adif= for INSERT/UPDATE, query= for DELETE (PrepareInsertHeader,
+//PrepareDeleteHeader); the token is kept and the login repeated once after a 401
+function TdmLogUpload.UploadLogDataHamQTH(cmd : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
+var
+  i : Integer;
+begin
+  Result := False;
+  for i:=1 to 2 do
+  begin
+    if (fHamQTHToken='') then
+    begin
+      Result := dmUtils.HamQTHRequest('POST',C_HAMQTH_API+'login','',
+                  HamQTHLoginRequest(cqrini.ReadString('OnlineLog','HaUserName',''),
+                  cqrini.ReadString('OnlineLog','HaPasswd','')),ResultCode,Response);
+      if (not Result) or (ResultCode<>200) then
+        exit; //GetResultMessage shows why
+      if not ParseHamQTHLogin(Response,fHamQTHToken) then
+      begin
+        ResultCode := 0;
+        exit
+      end
+    end;
+
+    if (cmd='DELETE') then
+      Result := dmUtils.HamQTHRequest('DELETE',C_HAMQTH_API+'log/qso?'+data.Values['query'],fHamQTHToken,'',ResultCode,Response)
+    else
+      Result := dmUtils.HamQTHRequest('POST',C_HAMQTH_API+'log/qso',fHamQTHToken,HamQTHQsoRequest(data.Values['adif']),ResultCode,Response);
+
+    if not (Result and (ResultCode=401)) then
+      exit;
+    fHamQTHToken := '' //expired
   end
 end;
 
@@ -678,11 +715,7 @@ end;
 procedure TdmLogUpload.PrepareUserInfoHeader(where : TWhereToUpload; data : TStringList);
 begin
   case where of
-    upHamQTH  :  begin
-                   data.Add('u='+cqrini.ReadString('OnlineLog','HaUserName',''));
-                   data.Add('p='+cqrini.ReadString('OnlineLog','HaPasswd',''));
-                   data.Add('prg=CQRLOG')
-                 end;
+    upHamQTH  :  ; //login with a token in UploadLogDataHamQTH
     upClublog :  begin
                    data.Add('email='+cqrini.ReadString('OnlineLog','ClEmail',''));
                    data.Add('password='+cqrini.ReadString('OnlineLog','ClPasswd',''));
@@ -737,8 +770,7 @@ begin
 
     case where of
       upHamQTH  :  begin
-                     data.Add('adif='+adif);
-                     data.Add('cmd=INSERT')
+                     data.Add('adif='+adif)
                    end;
       upClublog :  begin
                      data.Add('adif='+adif)
@@ -792,12 +824,9 @@ begin
 
     case where of
       upHamQTH  :  begin
-                     adif := GetAdifValue('OLD_QSO_DATE',qsodate)+GetAdifValue('OLD_TIME_ON',time_on)+
-                             GetAdifValue('OLD_CALL',Q2.FieldByName('old_callsign').AsString)+
-                             GetAdifValue('OLD_BAND',Q2.FieldByName('old_band').AsString)+
-                             GetAdifValue('OLD_MODE',Q2.FieldByName('old_mode').AsString);
-                     data.Add('adif='+adif);
-                     data.Add('cmd=DELETE')
+                     data.Add('query='+HamQTHQsoKeyQuery(Q2.FieldByName('old_callsign').AsString,qsodate,time_on,
+                                                         Q2.FieldByName('old_band').AsString,
+                                                         Q2.FieldByName('old_mode').AsString))
                    end;
       upClublog :  begin
                      data.Add('dxcall='+Q2.FieldByName('old_callsign').AsString);
@@ -834,7 +863,6 @@ function TdmLogUpload.GetUploadUrl(where : TWhereToUpload; cmd : String) : Strin
 begin
   Result := '';
   case where of
-    upHamQTH  : Result := cqrini.ReadString('OnlineLog','HaUrl','https://www.hamqth.com/qso_realtime.php');
     upClubLog : begin
                   if (cmd='DELETE') then
                     Result := cqrini.ReadString('OnlineLog','ClUrlDel','https://clublog.org/delete.php')
@@ -852,34 +880,7 @@ begin
   Response   := Trim(Response);
 
   case where of
-    upHamQTH  : begin
-                  case ResultCode of
-                    200 : Result := 'OK';
-                    500 : begin
-                            Result     := Response;
-                            ErrorCode  := 1;
-                          end;//something wrong with HamQTH server
-                    400 : begin
-                            Result := Response;
-                            if (Response = 'QSO already exists in the log')  then
-                              Result := 'Already exists'
-                            else if (Response = 'QSO not found in the log!') then
-                              ErrorCode := 0
-                            else begin
-                              ErrorCode  := 2; //QSO rejected; continue with next one
-                              Result     := Response
-                            end
-                          end;
-                    403 : begin
-                            Result     := 'Access denied';
-                            Errorcode := 1
-                          end
-                    else begin
-                      Result     := Response;
-                      ErrorCode  := 1
-                    end
-                  end
-                end;
+    upHamQTH  : Result := HamQTHQsoResult(ResultCode,Response,ErrorCode);
     upClubLog : begin
                   case ResultCode of
                     200 : Result := 'OK';

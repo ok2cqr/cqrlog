@@ -230,6 +230,10 @@ type
     procedure ShowLocatorMapInBrowser(locator: string);
     procedure LoadBandsSettings;
     procedure FillBandCombo(cmb : TComboBox);
+    //HamQTH API v2 call; False when the server could not be reached,
+    //otherwise ResultCode and Response are those of the server
+    function HamQTHRequest(const Method, Url, Token, Body : String;
+      var ResultCode : Integer; var Response : String) : Boolean;
     procedure ShowHamQTHInBrowser(call : String);
     procedure ShowUsrUrl;
     procedure SortArray(l,r : Integer);
@@ -4094,11 +4098,48 @@ begin
   end;
 end;
 
-function TdmUtils.GetHamQTHSession(var ErrMsg: string): boolean;
+function TdmUtils.HamQTHRequest(const Method, Url, Token, Body: string;
+  var ResultCode: integer; var Response: string): boolean;
 var
   http: THTTPSend;
-  body: string = '';
   m: TStringList;
+begin
+  http := THTTPSend.Create;
+  m := TStringList.Create;
+  try
+    http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
+    http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
+    http.UserName := cqrini.ReadString('Program', 'User', '');
+    http.Password := cqrini.ReadString('Program', 'Passwd', '');
+    if Token <> '' then
+      http.Headers.Add('Authorization: Bearer ' + Token);
+    if Body <> '' then
+    begin
+      http.Document.Write(Pointer(Body)^, Length(Body));
+      http.MimeType := 'application/json'
+    end;
+    Result := http.HTTPMethod(Method, Url);
+    ResultCode := http.ResultCode;
+    if Result then
+    begin
+      m.LoadFromStream(http.Document);
+      Response := m.Text
+    end
+    else
+      Response := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString;
+    //the body is not written, the login one carries the password
+    if dmData.DebugLevel >= 1 then
+      Writeln(Method, ' ', Url, ' -> ', ResultCode, LineEnding, Response)
+  finally
+    m.Free;
+    http.Free
+  end;
+end;
+
+function TdmUtils.GetHamQTHSession(var ErrMsg: string): boolean;
+var
+  ResultCode: integer = 0;
+  Response: string = '';
 begin
   Result := False;
   if (cqrini.ReadString('CallBook', 'CbHamQTHUser', '') = '') or
@@ -4107,68 +4148,26 @@ begin
     ErrMsg := 'Empty password or user name';
     exit;
   end;
-  http := THTTPSend.Create;
-  m := TStringList.Create;
-  try
-    http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
-    http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
-    http.UserName := cqrini.ReadString('Program', 'User', '');
-    http.Password := cqrini.ReadString('Program', 'Passwd', '');
-    //API v2: the password goes only in the body of the POST, never in the URL
-    body := HamQTHLoginRequest(cqrini.ReadString('CallBook', 'CbHamQTHUser', ''),
-      cqrini.ReadString('CallBook', 'CbHamQTHPass', ''));
-    http.Document.Write(Pointer(body)^, Length(body));
-    http.MimeType := 'application/json';
-    if not HTTP.HTTPMethod('POST', C_HAMQTH_API + 'login') then
-      ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
-    else
-    begin
-      m.LoadFromStream(http.Document);
-      if dmData.DebugLevel >= 1 then
-        Writeln(m.Text);
-      if http.ResultCode <> 200 then
-        ErrMsg := HamQTHErrorText(http.ResultCode, http.ResultString, m.Text)
-      else if not ParseHamQTHLogin(m.Text, fHamQTHSession) then
-        ErrMsg := 'Token not found in the HamQTH response!'
-      else
-        Result := True
-    end
-  finally
-    m.Free;
-    HTTP.Free
-  end;
+  //API v2: the password goes only in the body of the POST, never in the URL
+  if not HamQTHRequest('POST', C_HAMQTH_API + 'login', '',
+    HamQTHLoginRequest(cqrini.ReadString('CallBook', 'CbHamQTHUser', ''),
+    cqrini.ReadString('CallBook', 'CbHamQTHPass', '')), ResultCode, Response) then
+    ErrMsg := Response
+  else if ResultCode <> 200 then
+    ErrMsg := HamQTHErrorText(ResultCode, 'Login failed', Response)
+  else if not ParseHamQTHLogin(Response, fHamQTHSession) then
+    ErrMsg := 'Token not found in the HamQTH response!'
+  else
+    Result := True
 end;
 
 function TdmUtils.GetHamQTHInfo(call: string;
   var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
 var
-  m: TStringList;
   ResultCode: integer = 0;
+  Response: string = '';
+  Url: string;
   Info: THamQTHCallbook;
-
-  //False when the server could not be reached
-  function Lookup: boolean;
-  var
-    http: THTTPSend;
-  begin
-    http := THTTPSend.Create;
-    try
-      http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
-      http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
-      http.UserName := cqrini.ReadString('Program', 'User', '');
-      http.Password := cqrini.ReadString('Program', 'Passwd', '');
-      http.Headers.Add('Authorization: Bearer ' + fHamQTHSession);
-      Result := http.HTTPMethod('GET', C_HAMQTH_API + 'callbook/' + GetIDCall(call) + '?app=CQRLOG');
-      ResultCode := http.ResultCode;
-      if Result then
-        m.LoadFromStream(http.Document)
-      else
-        ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
-    finally
-      http.Free
-    end
-  end;
-
 begin
   Result := False;
   address := '';
@@ -4188,47 +4187,47 @@ begin
     if not GetHamQTHSession(ErrMsg) then
       exit;
   end;
-  m := TStringList.Create;
-  try
-    if not Lookup then
-      exit;
-    if ResultCode = 401 then
-    begin
-      //the token is valid for an hour, log in again once
-      fHamQTHSession := '';
-      if not GetHamQTHSession(ErrMsg) then
-        exit;
-      if not Lookup then
-        exit
-    end;
-    if dmData.DebugLevel >= 1 then
-      Writeln(m.Text);
-    case ResultCode of
-      200 : if not ParseHamQTHCallbook(m.Text, Info) then
-              ErrMsg := 'Unexpected response from HamQTH'
-            else
-            begin
-              nick := Info.nick;
-              qth := Info.qth;
-              address := Info.address;
-              zip := Info.zip;
-              grid := Info.grid;
-              state := Info.state;
-              county := Info.county;
-              qsl := Info.qsl;
-              iota := Info.iota;
-              waz := Info.waz;
-              itu := Info.itu;
-              dok := Info.dok;
-              Result := True
-            end;
-      404 : ErrMsg := 'Callsign not found'
-      else
-        ErrMsg := HamQTHErrorText(ResultCode, '', m.Text)
-    end
-  finally
-    m.Free
+  Url := C_HAMQTH_API + 'callbook/' + GetIDCall(call) + '?app=CQRLOG';
+  if not HamQTHRequest('GET', Url, fHamQTHSession, '', ResultCode, Response) then
+  begin
+    ErrMsg := Response;
+    exit
   end;
+  if ResultCode = 401 then
+  begin
+    //the token is valid for an hour, log in again once
+    fHamQTHSession := '';
+    if not GetHamQTHSession(ErrMsg) then
+      exit;
+    if not HamQTHRequest('GET', Url, fHamQTHSession, '', ResultCode, Response) then
+    begin
+      ErrMsg := Response;
+      exit
+    end
+  end;
+  case ResultCode of
+    200 : if not ParseHamQTHCallbook(Response, Info) then
+            ErrMsg := 'Unexpected response from HamQTH'
+          else
+          begin
+            nick := Info.nick;
+            qth := Info.qth;
+            address := Info.address;
+            zip := Info.zip;
+            grid := Info.grid;
+            state := Info.state;
+            county := Info.county;
+            qsl := Info.qsl;
+            iota := Info.iota;
+            waz := Info.waz;
+            itu := Info.itu;
+            dok := Info.dok;
+            Result := True
+          end;
+    404 : ErrMsg := 'Callsign not found'
+    else
+      ErrMsg := HamQTHErrorText(ResultCode, 'Lookup failed', Response)
+  end
 end;
 procedure TdmUtils.ShowHamQTHInBrowser(call: string);
 var

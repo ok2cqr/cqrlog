@@ -461,7 +461,6 @@ type
     edtHrdUrl: TEdit;
     edtClubLogUrl: TEdit;
     edtClubLogUrlDel: TEdit;
-    edtHamQTHurl: TEdit;
     edtGCLineWidth: TEdit;
     edtGCStep: TEdit;
     edtGCPolarDivisor: TEdit;
@@ -1584,7 +1583,6 @@ begin
   cqrini.WriteString('OnlineLog','HaUserName',edtHaUserName.Text);
   cqrini.WriteString('OnlineLog','HaPasswd',edtHaPasswd.Text);
   cqrini.WriteInteger('OnlineLog','HaColor',cmbHaColor.Selected);
-  cqrini.WriteString('OnlineLog','HaUrl',edtHamQthUrl.Text);
 
   cqrini.WriteBool('OnlineLog','ClUP',chkClUpEnabled.Checked);
   cqrini.WriteBool('OnlineLog','ClUpOnline',chkClUpOnline.Checked);
@@ -3271,7 +3269,6 @@ begin
   edtHaUserName.Text     := cqrini.ReadString('OnlineLog','HaUserName','');
   edtHaPasswd.Text       := cqrini.ReadString('OnlineLog','HaPasswd','');
   cmbHaColor.Selected    := cqrini.ReadInteger('OnlineLog','HaColor',clBlue);
-  edtHamQTHurl.Text      := cqrini.ReadString('OnlineLog','HaUrl','https://www.hamqth.com/qso_realtime.php');
   chkHaUpEnabledChange(nil);
 
   chkClUpEnabled.Checked := cqrini.ReadBool('OnlineLog','ClUP',False);
