@@ -215,7 +215,8 @@ implementation
 {$R *.lfm}
 
 { TfrmTRXControl }
-uses dUtils, dData, fNewQSO, fBandMap, uMyIni, fGrayline, fRadioMemories, fBandMapGfx;
+uses dUtils, dData, fNewQSO, fBandMap, uMyIni, fGrayline, fRadioMemories, fBandMapGfx,
+     uHamQTHRigReport;
 
 procedure TfrmTRXControl.HLTune(start : Boolean);
 begin
@@ -359,6 +360,14 @@ begin
   frmBandMap.CurrentFreq := f * 1000;
   frmBandMap.CurrentMode := m;
   BandMapWindows.SetVfo(b, f * 1000, m);
+  if cqrini.ReadBool('OnlineLog', 'HaRigReport', False) then
+  begin
+    //the mode as it is logged (FT8 from wsjt, data mode from the rig settings)
+    m := frmNewQSO.cmbMode.Text;
+    if (m = '') then
+      m := radio.GetModeOnly;
+    HamQTHRigUpdate(f * 1000, m)
+  end;
   if Assigned(radio) then
      begin
           btPon.Enabled:=radio.Power;

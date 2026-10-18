@@ -107,6 +107,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkHaRigReport: TCheckBox;
     chkNewVersionCheck: TCheckBox;
     chkUdUpEnabled: TCheckBox;
     chkUdUpOnline: TCheckBox;
@@ -1583,6 +1584,7 @@ begin
   cqrini.WriteString('OnlineLog','HaUserName',edtHaUserName.Text);
   cqrini.WriteString('OnlineLog','HaPasswd',edtHaPasswd.Text);
   cqrini.WriteInteger('OnlineLog','HaColor',cmbHaColor.Selected);
+  cqrini.WriteBool('OnlineLog', 'HaRigReport', chkHaRigReport.Checked);
 
   cqrini.WriteBool('OnlineLog','ClUP',chkClUpEnabled.Checked);
   cqrini.WriteBool('OnlineLog','ClUpOnline',chkClUpOnline.Checked);
@@ -2280,8 +2282,8 @@ end;
 
 procedure TfrmPreferences.chkHaUpEnabledChange(Sender: TObject);
 begin
-  edtHaUserName.Enabled := chkHaUpEnabled.Checked;
-  edtHaPasswd.Enabled   := chkHaUpEnabled.Checked;
+  //the user name and password stay enabled, the rig status report
+  //(chkHaRigReport) uses them too
   chkHaupOnline.Enabled := chkHaUpEnabled.Checked;
   cmbHaColor.Enabled    := chkHaUpEnabled.Checked
 end;
@@ -3269,6 +3271,7 @@ begin
   edtHaUserName.Text     := cqrini.ReadString('OnlineLog','HaUserName','');
   edtHaPasswd.Text       := cqrini.ReadString('OnlineLog','HaPasswd','');
   cmbHaColor.Selected    := cqrini.ReadInteger('OnlineLog','HaColor',clBlue);
+  chkHaRigReport.Checked := cqrini.ReadBool('OnlineLog', 'HaRigReport', False);
   chkHaUpEnabledChange(nil);
 
   chkClUpEnabled.Checked := cqrini.ReadBool('OnlineLog','ClUP',False);

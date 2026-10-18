@@ -47,6 +47,30 @@ type
     procedure QsoResultNotInLog;
     procedure QsoResultRejected;
     procedure QsoResultFatal;
+    procedure RigRequest;
+    procedure RigRequestWithoutModeAndCall;
+    procedure RigResultStored;
+    procedure RigResultSwitchedOff;
+    procedure RigResultErrors;
+  end;
+
+  THamQTHRigScheduleTest = class(TTestCase)
+  private
+    Schedule : THamQTHRigSchedule;
+  protected
+    procedure SetUp; override;
+    procedure TearDown; override;
+  published
+    procedure FirstReportAtOnce;
+    procedure NothingChanged;
+    procedure RepeatedAfter30s;
+    procedure FrequencyChange;
+    procedure ChangeBelowResolution;
+    procedure ModeChange;
+    procedure NotSoonerThan5s;
+    procedure Pause;
+    procedure PauseUntilChange;
+    procedure Resume;
   end;
 
 implementation
@@ -343,6 +367,163 @@ begin
   AssertEquals(1, ErrorCode)
 end;
 
+procedure THamQTHApiTest.RigRequest;
+var
+  d : TJSONData;
+begin
+  d := GetJSON(HamQTHRigRequest(14025.34, 'FT8', 'OK2CQR/P'));
+  try
+    AssertEquals(14025.3, d.FindPath('freq').AsFloat, 0.001);
+    AssertEquals('FT8', d.FindPath('mode').AsString);
+    AssertEquals('OK2CQR/P', d.FindPath('callsign').AsString)
+  finally
+    d.Free
+  end
+end;
+
+procedure THamQTHApiTest.RigRequestWithoutModeAndCall;
+var
+  d : TJSONData;
+begin
+  d := GetJSON(HamQTHRigRequest(7010, '', ''));
+  try
+    AssertEquals(7010, d.FindPath('freq').AsFloat, 0.001);
+    AssertNull(d.FindPath('mode'));
+    AssertNull(d.FindPath('callsign'))
+  finally
+    d.Free
+  end
+end;
+
+procedure THamQTHApiTest.RigResultStored;
+var
+  PauseMs     : Cardinal;
+  UntilChange : Boolean;
+begin
+  AssertEquals('', HamQTHRigResult(200, '{"stored":true,"callsign":"OK2CQR","as":"OK2CQR/P",' +
+    '"band":"20M","reason":null}', PauseMs, UntilChange));
+  AssertEquals(0, PauseMs)
+end;
+
+procedure THamQTHApiTest.RigResultSwitchedOff;
+var
+  PauseMs     : Cardinal;
+  UntilChange : Boolean;
+begin
+  AssertEquals('rig status is switched off in the HamQTH profile of OK2CQR',
+    HamQTHRigResult(200, '{"stored":false,"callsign":"OK2CQR","as":"OK2CQR",' +
+    '"band":null,"reason":"disabled"}', PauseMs, UntilChange));
+  AssertEquals(C_RIG_LONG_PAUSE, PauseMs);
+  AssertFalse(UntilChange)
+end;
+
+procedure THamQTHApiTest.RigResultErrors;
+var
+  PauseMs     : Cardinal;
+  UntilChange : Boolean;
+begin
+  //the pause ends early when the login settings change (uHamQTHRigReport)
+  AssertEquals('Wrong callsign or password.',
+    HamQTHRigResult(401, '{"status":401,"detail":"Wrong callsign or password."}', PauseMs, UntilChange));
+  AssertEquals(C_RIG_LONG_PAUSE, PauseMs);
+  AssertFalse(UntilChange);
+  //the pause ends early when the frequency or mode changes
+  AssertEquals('Invalid frequency (freq: not in an amateur band)',
+    HamQTHRigResult(422, '{"status":422,"detail":"Invalid frequency",' +
+    '"violations":[{"propertyPath":"freq","title":"not in an amateur band"}]}', PauseMs, UntilChange));
+  AssertEquals(C_RIG_LONG_PAUSE, PauseMs);
+  AssertTrue(UntilChange);
+  HamQTHRigResult(429, '{"status":429,"detail":"Too many reports"}', PauseMs, UntilChange);
+  AssertEquals(0, PauseMs);
+  AssertEquals('(503):Unexpected response from HamQTH',
+    HamQTHRigResult(503, '', PauseMs, UntilChange));
+  AssertEquals(C_RIG_SHORT_PAUSE, PauseMs);
+  AssertFalse(UntilChange);
+  AssertEquals('(0):Unexpected response from HamQTH', HamQTHRigResult(0, '', PauseMs, UntilChange));
+  AssertEquals(C_RIG_SHORT_PAUSE, PauseMs)
+end;
+
+procedure THamQTHRigScheduleTest.SetUp;
+begin
+  Schedule := THamQTHRigSchedule.Create
+end;
+
+procedure THamQTHRigScheduleTest.TearDown;
+begin
+  Schedule.Free
+end;
+
+procedure THamQTHRigScheduleTest.FirstReportAtOnce;
+begin
+  AssertTrue(Schedule.Due(14025, 'CW', 1000))
+end;
+
+procedure THamQTHRigScheduleTest.NothingChanged;
+begin
+  Schedule.Sent(14025, 'CW', 1000);
+  AssertFalse(Schedule.Due(14025, 'CW', 1500));
+  AssertFalse(Schedule.Due(14025, 'CW', 1000 + 29999))
+end;
+
+procedure THamQTHRigScheduleTest.RepeatedAfter30s;
+begin
+  Schedule.Sent(14025, 'CW', 1000);
+  AssertTrue(Schedule.Due(14025, 'CW', 1000 + 30000))
+end;
+
+procedure THamQTHRigScheduleTest.FrequencyChange;
+begin
+  Schedule.Sent(14025, 'CW', 1000);
+  AssertTrue(Schedule.Due(14025.1, 'CW', 1000 + 5000))
+end;
+
+//the server keeps one decimal of kHz
+procedure THamQTHRigScheduleTest.ChangeBelowResolution;
+begin
+  Schedule.Sent(14025.01, 'CW', 1000);
+  AssertFalse(Schedule.Due(14025.04, 'CW', 1000 + 5000))
+end;
+
+procedure THamQTHRigScheduleTest.ModeChange;
+begin
+  Schedule.Sent(14025, 'CW', 1000);
+  AssertTrue(Schedule.Due(14025, 'RTTY', 1000 + 5000))
+end;
+
+procedure THamQTHRigScheduleTest.NotSoonerThan5s;
+begin
+  Schedule.Sent(14025, 'CW', 1000);
+  AssertFalse(Schedule.Due(14030, 'SSB', 1000 + 4999));
+  AssertTrue(Schedule.Due(14030, 'SSB', 1000 + 5000))
+end;
+
+procedure THamQTHRigScheduleTest.Pause;
+begin
+  Schedule.Sent(14025, 'CW', 1000);
+  Schedule.Pause(2000, 600000);
+  AssertFalse(Schedule.Due(14030, 'SSB', 2000 + 599999));
+  AssertTrue(Schedule.Due(14030, 'SSB', 2000 + 600000))
+end;
+
+//a rejected report (422) waits only until the frequency or mode changes
+procedure THamQTHRigScheduleTest.PauseUntilChange;
+begin
+  Schedule.Sent(14400, 'CW', 1000);
+  Schedule.Pause(2000, 600000, True);
+  AssertFalse(Schedule.Due(14400, 'CW', 2000 + 30000));
+  AssertTrue(Schedule.Due(14025, 'CW', 2000 + 30000));
+  AssertTrue(Schedule.Due(14400, 'RTTY', 2000 + 30000))
+end;
+
+procedure THamQTHRigScheduleTest.Resume;
+begin
+  Schedule.Sent(14025, 'CW', 1000);
+  Schedule.Pause(2000, 600000);
+  Schedule.Resume;
+  AssertTrue(Schedule.Due(14025, 'CW', 1000 + 30000))
+end;
+
 initialization
-  RegisterTest(THamQTHApiTest)
+  RegisterTest(THamQTHApiTest);
+  RegisterTest(THamQTHRigScheduleTest)
 end.
