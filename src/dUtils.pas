@@ -362,7 +362,7 @@ implementation
   {$R *.lfm}
 
 { TdmUtils }
-uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest, dSqlRef, dSqlStat,
+uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest, dSqlRef, dSqlStat, uHamQTHApi,
   uCWMacros;
 
 function TdmUtils.LetterFromMode(mode: string): string;
@@ -4097,7 +4097,7 @@ end;
 function TdmUtils.GetHamQTHSession(var ErrMsg: string): boolean;
 var
   http: THTTPSend;
-  req: string = '';
+  body: string = '';
   m: TStringList;
 begin
   Result := False;
@@ -4114,27 +4114,24 @@ begin
     http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
     http.UserName := cqrini.ReadString('Program', 'User', '');
     http.Password := cqrini.ReadString('Program', 'Passwd', '');
-    req := 'https://www.hamqth.com/xml.php?u=' + cqrini.ReadString('CallBook', 'CbHamQTHUser', '') +
-      '&p=' + EncodeURLData(cqrini.ReadString('CallBook', 'CbHamQTHPass', '')) + '&prg=Cqrlog_'+uVersion.cVERSION;
-    //Writeln(req);
-    if not HTTP.HTTPMethod('GET', req) then
+    //API v2: the password goes only in the body of the POST, never in the URL
+    body := HamQTHLoginRequest(cqrini.ReadString('CallBook', 'CbHamQTHUser', ''),
+      cqrini.ReadString('CallBook', 'CbHamQTHPass', ''));
+    http.Document.Write(Pointer(body)^, Length(body));
+    http.MimeType := 'application/json';
+    if not HTTP.HTTPMethod('POST', C_HAMQTH_API + 'login') then
       ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
     else
     begin
       m.LoadFromStream(http.Document);
       if dmData.DebugLevel >= 1 then
         Writeln(m.Text);
-      //I'd like to parse it as normal XML but it seems XML support in Freepascal
-      //2.4.0 is broken :-(
-      ErrMsg := GetTagValue(m.Text, '<Error>');
-      if (ErrMsg = '') then
-      begin
-        fHamQTHSession := GetTagValue(m.Text, '<session_id>');
-        if fHamQTHSession = '' then
-          ErrMsg := 'Tag "<session_id>" not found!'
-        else
-          Result := True;
-      end;
+      if http.ResultCode <> 200 then
+        ErrMsg := HamQTHErrorText(http.ResultCode, http.ResultString, m.Text)
+      else if not ParseHamQTHLogin(m.Text, fHamQTHSession) then
+        ErrMsg := 'Token not found in the HamQTH response!'
+      else
+        Result := True
     end
   finally
     m.Free;
@@ -4145,10 +4142,33 @@ end;
 function TdmUtils.GetHamQTHInfo(call: string;
   var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
 var
-  http: THTTPSend;
-  req: string = '';
   m: TStringList;
-  tmp: string;
+  ResultCode: integer = 0;
+  Info: THamQTHCallbook;
+
+  //False when the server could not be reached
+  function Lookup: boolean;
+  var
+    http: THTTPSend;
+  begin
+    http := THTTPSend.Create;
+    try
+      http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
+      http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
+      http.UserName := cqrini.ReadString('Program', 'User', '');
+      http.Password := cqrini.ReadString('Program', 'Passwd', '');
+      http.Headers.Add('Authorization: Bearer ' + fHamQTHSession);
+      Result := http.HTTPMethod('GET', C_HAMQTH_API + 'callbook/' + GetIDCall(call) + '?app=CQRLOG');
+      ResultCode := http.ResultCode;
+      if Result then
+        m.LoadFromStream(http.Document)
+      else
+        ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
+    finally
+      http.Free
+    end
+  end;
+
 begin
   Result := False;
   address := '';
@@ -4158,85 +4178,56 @@ begin
   qsl := '';
   dok := '';
   ErrMsg := '';
+  if (call = '') then
+  begin
+    ErrMsg := 'Callsign field empty!';
+    exit;
+  end;
   if fHamQTHSession = '' then
   begin
     if not GetHamQTHSession(ErrMsg) then
       exit;
   end;
-  http := THTTPSend.Create;
   m := TStringList.Create;
   try
-    http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
-    http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
-    http.UserName := cqrini.ReadString('Program', 'User', '');
-    http.Password := cqrini.ReadString('Program', 'Passwd', '');
-    if (call = '') then
-    begin
-      ErrMsg := 'Callsign field empty!';
+    if not Lookup then
       exit;
-    end;
-    req := 'https://www.hamqth.com/xml.php?id=' + fHamQTHSession + '&callsign=' +
-      GetIDCall(call) + '&prg=CQRLOG';
-    if not HTTP.HTTPMethod('GET', req) then
-      ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
-    else
+    if ResultCode = 401 then
     begin
-      m.LoadFromStream(http.Document);
-      if dmData.DebugLevel >= 1 then
-        Writeln(m.Text);
-      if Pos('<error>Session does not exist or expired</error>', m.Text) > 0 then
-      begin
-        fHamQTHSession := '';
-        Result := GetHamQTHInfo(call, nick, qth, address, zip, grid, state,
-          county, qsl, iota, waz, itu, dok, ErrMsg)
-      end
+      //the token is valid for an hour, log in again once
+      fHamQTHSession := '';
+      if not GetHamQTHSession(ErrMsg) then
+        exit;
+      if not Lookup then
+        exit
+    end;
+    if dmData.DebugLevel >= 1 then
+      Writeln(m.Text);
+    case ResultCode of
+      200 : if not ParseHamQTHCallbook(m.Text, Info) then
+              ErrMsg := 'Unexpected response from HamQTH'
+            else
+            begin
+              nick := Info.nick;
+              qth := Info.qth;
+              address := Info.address;
+              zip := Info.zip;
+              grid := Info.grid;
+              state := Info.state;
+              county := Info.county;
+              qsl := Info.qsl;
+              iota := Info.iota;
+              waz := Info.waz;
+              itu := Info.itu;
+              dok := Info.dok;
+              Result := True
+            end;
+      404 : ErrMsg := 'Callsign not found'
       else
-      begin
-        if Pos('<error>Callsign not found', m.Text) > 0 then
-        begin
-          ErrMsg := 'Callsign not found';
-          exit;
-        end;
-        nick := GetTagValue(m.Text, '<nick>');
-        if Pos(' ', nick) > 0 then
-          nick := copy(nick, 1, Pos(' ', nick) - 1);
-        if Length(nick) > 0 then
-        begin
-          nick := LowerCase(nick);
-          nick[1] := upCase(nick[1]);
-        end;
-        qth := GetTagValue(m.Text, '<qth>');
-        state := GetTagValue(m.Text, '<us_state>');
-        zip := GetTagValue(m.Text, '<adr_zip>');
-        address := GetTagValue(m.Text, '<adr_name>') + LineEnding +
-          GetTagValue(m.Text, '<adr_street1>') + LineEnding;
-        tmp := GetTagValue(m.Text, '<adr_street2>');
-        if tmp <> '' then
-          address := address + tmp + LineEnding;
-        tmp := GetTagValue(m.Text, '<adr_street3>');
-        if tmp <> '' then
-          address := address + tmp + LineEnding;
-        address := address + GetTagValue(m.Text, '<adr_city>');
-        if (state <> '') then
-          address := address + ', ' + state;
-        address := address + ' ' + zip;
-        county := GetTagValue(m.Text, '<us_county>');
-        grid := UpperCase(GetTagValue(m.Text, '<grid>'));
-        qsl := GetTagValue(m.Text, '<qsl_via>');
-        iota := GetTagValue(m.Text, '<iota>');
-        waz := GetTagValue(m.Text, '<cq>');
-        itu := GetTagValue(m.Text, '<itu>');
-        //DL7OAP: DOK can be 'H24', 'h 24' or 'H-24', etc.
-        //thats why we clean it with RegExp so only letters and figures are left
-        dok := GetTagValue(m.Text, '<dok>');
-        if (trim(dok) <> '') then
-           dok := ReplaceRegExpr('[^a-zA-Z0-9]', dok, '', True); //ARegExpr, AInputStr, AReplaceStr
-        dok := LeftStr(UpperCase(dok),12); // now all upcase and cut to maximal length of 12 of dok field
-      end
+        ErrMsg := HamQTHErrorText(ResultCode, '', m.Text)
     end
   finally
-    m.Free;
-    HTTP.Free
+    m.Free
   end;
 end;
 procedure TdmUtils.ShowHamQTHInBrowser(call: string);

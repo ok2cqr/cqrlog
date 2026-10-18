@@ -239,7 +239,7 @@ implementation
 { TfrmDXCluster }
 
 uses dUtils, fDXClusterList, dData, dDXCluster, fMain, fTRXControl, fNewQSO, fBandMap,
-     uMyIni, fPreferences, uSpotStore, uBandMapStore, uDebugLog, sqldb;
+     uMyIni, fPreferences, uSpotStore, uBandMapStore, uDebugLog, sqldb, uHamQTHApi;
 
 procedure TfrmDXCluster.ConnectToWeb;
 var
@@ -1657,31 +1657,12 @@ procedure TWebThread.Execute;
     end
   end;
 
-  function  Explode(const cSeparator, vString: String): TExplodeArray;
-  var
-    i: integer;
-    S: string;
-  begin
-    S := vString;
-    SetLength(Result, 0);
-    i := 0;
-    while Pos(cSeparator, S) > 0 do
-    begin
-      SetLength(Result, Length(Result) + 1);
-      Result[i] := Copy(S, 1, Pos(cSeparator, S) - 1);
-      Inc(i);
-      S := Copy(S, Pos(cSeparator, S) + Length(cSeparator), Length(S))
-    end;
-    SetLength(Result, Length(Result) + 1);
-    Result[i] := Copy(S, 1, Length(S))
-  end;
-
 var
   i,tmp   : Integer;
   HTTP    : THTTPSend;
   sp      : TStringList;
   spot    : String;
-  a       : TExplodeArray;
+  Spots   : THamQTHSpots;
   sColor  : TColor;
   Country : String;
   x       : String;
@@ -1705,7 +1686,7 @@ begin
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if not HTTP.HTTPMethod('GET','https://www.hamqth.com/dxc_csv.php?limit='+limit) then
+    if not HTTP.HTTPMethod('GET',C_HAMQTH_API+'spots?limit='+limit) then
     begin
       frmDXCluster.StopAllConnections;
       frmDXCluster.btnWebConnect.Click;
@@ -1714,19 +1695,21 @@ begin
     ThInfo := 'Downloading spots ...';
     Synchronize(@frmDXCluster.SynWeb);
     sp.LoadFromStream(HTTP.Document);
-    for i:=0 to sp.Count-1 do
+    if not ParseHamQTHSpots(sp.Text,Spots) then
+    begin
+      if dmData.DebugLevel>=1 then Writeln('Unexpected response from HamQTH (',HTTP.ResultCode,'):',sp.Text);
+      exit
+    end;
+    for i:=0 to Length(Spots)-1 do
     begin
       EnterCriticalsection(frmDXCluster.csTelnet);
       if dmData.DebugLevel>=1 then Writeln('Enter critical section TWebThread.Execute');
       try
-        a := Explode('^',sp.Strings[i]);
-        if Length(a) < 3 then
-          Continue;
-        spot :=  SpacesFromRight('DX de '+a[0]+':',13)+ //spotter
-                 SpacesFromLeft(a[1],8)+ ' '+  //freq
-                 SpacesFromRight(a[2],12)+ ' ' + //dxcall
-                 SpacesFromRight(a[3],28)+ ' ' + //comment
-                 copy(a[4],1,4)+'Z';
+        spot :=  SpacesFromRight('DX de '+Spots[i].spotter+':',13)+
+                 SpacesFromLeft(Spots[i].freq,8)+ ' '+
+                 SpacesFromRight(Spots[i].dxcall,12)+ ' ' +
+                 SpacesFromRight(Spots[i].comment,28)+ ' ' +
+                 Spots[i].time+'Z';
         {
         Writeln(SpacesFromRight('DX de '+a[0]+':',14),'|',Length(SpacesFromRight('DX de '+a[0]+':',14)));
         Writeln(SpacesFromLeft(a[1],9),'|',Length(SpacesFromLeft(a[1],9)));
