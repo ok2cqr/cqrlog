@@ -5908,6 +5908,7 @@ begin
        else
         sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
+      key := 0 //handled; an edit would beep (Cocoa) or move the cursor
     end
   end;
 
@@ -5922,6 +5923,7 @@ begin
        else
         sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
+      key := 0 //handled; an edit would beep (Cocoa) or move the cursor
     end
   end;
 
