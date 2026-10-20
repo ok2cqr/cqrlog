@@ -627,7 +627,7 @@ end;
 
 function TdmSqlStat.SqlSetCharacterSetUtf8 : String;
 begin
-  Result := 'SET CHARACTER SET '+QuotedStr('utf8')
+  Result := 'SET CHARACTER SET '+QuotedStr('utf8mb4')
 end;
 
 function TdmSqlStat.SqlWorkedContests : String;

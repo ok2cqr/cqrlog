@@ -529,7 +529,7 @@ var
 
     procedure Setup(con : TSQLConnection);
     begin
-      con.CharSet      := 'UTF8';
+      con.CharSet      := 'utf8mb4'; //utf8 is utf8mb3, emoji from callbooks need 4 bytes
       con.HostName     := host;
       con.Params.Text  := 'Port='+port+LineEnding+sslParam;
       con.UserName     := user;
