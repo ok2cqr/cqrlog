@@ -1183,18 +1183,16 @@ begin
 
   MainCon.KeepConnection := True;
   MainCon.Transaction := trmQ;
+  //transactions first: SetDatabase of a query whose transaction is not on
+  //MainCon yet replaces it by MainCon.Transaction, so a query declared in
+  //dData.lfm before its transaction (qLogList, Q2, CQ, ...) ran on trmQ and
+  //every trmQ commit or rollback (CreateViews on each upgrade) closed it
   for i:=0 to ComponentCount-1 do
-  begin
+    if Components[i] is TSQLTransaction then
+      (Components[i] as TSQLTransaction).DataBase := MainCon;
+  for i:=0 to ComponentCount-1 do
     if Components[i] is TSQLQuery then
       (Components[i] as TSQLQuery).DataBase := MainCon;
-    if Components[i] is TSQLTransaction then
-      (Components[i] as TSQLTransaction).DataBase := MainCon
-  end;
-  //qLogList comes before trLogList in dData.lfm, so the loop above left it on
-  //MainCon.Transaction (SetDatabase drops a transaction of another database)
-  //and every trmQ commit or rollback (CreateViews on each upgrade) closed the
-  //log list
-  qLogList.Transaction := trLogList;
 
   //the dSql* modules run on their own cursors and are not our components,
   //so the loop above does not reach them
