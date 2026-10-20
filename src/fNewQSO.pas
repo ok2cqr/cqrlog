@@ -6018,31 +6018,55 @@ begin
   end;
   {$IFNDEF DARWIN}  // on macOS handled by acSendSpot action (own ShortCut = ⌘W) — otherwise the window would open twice
   if ((Shift = [ssCtrl]) and (key = VK_W)) then
+  begin
     acSendSpot.Execute;
+    key := 0
+  end;
   {$ENDIF}
 
-  if dmUtils.IsCmdCtrl(Shift) then
-    if key in [VK_1..VK_9] then SetSplit(chr(key));
+  //every handled key is set to 0: otherwise it goes on to the focused edit,
+  //which beeps on macOS or, with Option (Alt), types a character
+  if dmUtils.IsCmdCtrl(Shift) and (key in [VK_1..VK_9]) then
+  begin
+    SetSplit(chr(key));
+    key := 0
+  end;
   if (dmUtils.IsCmdCtrl(Shift) and (key = VK_0)) then
+  begin
     frmTRXControl.DisableSplit;
+    key := 0
+  end;
 
   // ALT-Key > Keyboard Shortcuts for NewQSO GUI with ALT
 
   if ((Shift = [ssAlt]) and (key = VK_B)) then
+  begin
     frmTRXControl.btnMemUp.Click;
+    key := 0
+  end;
   if ((Shift = [ssAlt]) and (key = VK_F)) then
   begin
     dmUtils.EnterFreq;
     key := 0
   end;
   if ((Shift = [ssAlt]) and (key = VK_V)) then  //Alt+V
+  begin
     frmTRXControl.btnMemDwn.Click;
+    key := 0
+  end;
   if ((Shift = [ssAlt]) and (key = VK_W)) then  //Alt+W
+  begin
     cmbQSL_S.text:='SB';
+    key := 0
+  end;
   if ((Shift = [ssAlt]) and (key = VK_N)) then  //Alt+N
+  begin
     cmbQSL_S.text:='N';
+    key := 0
+  end;
   if ((Shift = [ssAlt]) and (key = VK_O)) then //Alt+O
   begin
+    key := 0;
     with TfrmChangeOperator.Create(self) do
     try
       edtOperator.Text := Op;

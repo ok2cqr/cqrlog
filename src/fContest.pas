@@ -336,14 +336,23 @@ begin
   end;
 
   //split keys
-   if dmUtils.IsCmdCtrl(Shift) then
-    if key in [VK_1..VK_9] then frmNewQSO.SetSplit(chr(key));
+  if dmUtils.IsCmdCtrl(Shift) and (key in [VK_1..VK_9]) then
+  begin
+    frmNewQSO.SetSplit(chr(key));
+    key := 0
+  end;
   if (dmUtils.IsCmdCtrl(Shift) and (key = VK_0)) then
+  begin
     frmTRXControl.DisableSplit;
+    key := 0
+  end;
 
   //Jump to last CQ freq,mode
   if  ((Shift = [ssCTRL]) and (key = VK_L)) then
-                              lblCqFreqClick(nil);
+  begin
+    lblCqFreqClick(nil);
+    key := 0
+  end;
 end;
 
 procedure TfrmContest.edtCallExit(Sender: TObject);

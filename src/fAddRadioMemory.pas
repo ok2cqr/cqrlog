@@ -94,8 +94,16 @@ end;
 procedure TfrmAddRadioMemory.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if key = VK_RETURN then  Button1Click(nil);
-  if key = VK_ESCAPE then ModalResult:=mrCancel;
+  if key = VK_RETURN then
+  begin
+    Button1Click(nil);
+    key := 0
+  end;
+  if key = VK_ESCAPE then
+  begin
+    ModalResult:=mrCancel;
+    key := 0
+  end;
 end;
 
 initialization

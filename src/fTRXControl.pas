@@ -1036,10 +1036,16 @@ begin
     dmUtils.EnterFreq;
     key := 0;
   end;
-  if (Shift = [ssCTRL]) then
-    if key in [VK_1..VK_9] then frmNewQSO.SetSplit(chr(key));
+  if (Shift = [ssCTRL]) and (key in [VK_1..VK_9]) then
+  begin
+    frmNewQSO.SetSplit(chr(key));
+    key := 0
+  end;
   if ((Shift = [ssCTRL]) and (key = VK_0)) then
+  begin
     DisableSplit;
+    key := 0
+  end;
 end;
 
 procedure TfrmTRXControl.FormKeyUp(Sender : TObject; var Key : Word;
