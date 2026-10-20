@@ -371,6 +371,9 @@ procedure TfrmDatabaseUpdate.FormDestroy(Sender: TObject);
 begin
   dmData.qCallBook.Close;
   dmData.qCallBook.SQL.Clear;
+  //qCallBook.Open started it, nothing else ends it
+  if dmData.trCallBook.Active then
+    dmData.trCallBook.Rollback
 end;
 
 procedure TfrmDatabaseUpdate.FormShow(Sender: TObject);

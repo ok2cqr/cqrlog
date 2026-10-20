@@ -1731,6 +1731,8 @@ begin
    end;
 
   qsl_via := '';
+  if trQSLMgr.Active then //left active when a previous call raised
+    trQSLMgr.Rollback;
   trQSLMgr.StartTransaction;
   qQSLMgr.SQL.Text := dmSqlQsl.SqlQslManager(call, date);
   if fDebugLevel >=1 then Writeln(qQSLMgr.SQL.Text);

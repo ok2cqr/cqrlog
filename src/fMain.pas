@@ -1001,6 +1001,7 @@ begin
          if i  < Length(aid)-1 then
             ids := ids + ','
        end;
+      dmData.qCallBook.Close;
       dmData.qCallBook.SQL.Text:= dmSqlQso.SqlQsosByIds(ids);
     dmData.qCallBook.Open();
     dmData.qCallBook.First;

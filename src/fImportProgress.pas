@@ -405,6 +405,8 @@ begin
     Application.ProcessMessages;
     dmData.qIOTAList.Close();
     dmData.qIOTAList.SQL.Text := dmSqlImpExp.SqlClearIotaList;
+    if dmData.trIOTAList.Active then
+      dmData.trIOTAList.Rollback;
     dmData.trIOTAList.StartTransaction;
     dmData.qIOTAList.ExecSQL;
     dmData.trIOTAList.Commit;
@@ -435,6 +437,9 @@ begin
     dmData.trIOTAList.Commit;
 
   finally
+    //an error in the IOTA import left it active, the next import would fail on it
+    if dmData.trIOTAList.Active then
+      dmData.trIOTAList.Rollback;
     //dmDXCC.trDXCCRef.StartTransaction;
     dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByAdifOrder;
     dmDXCC.qDXCCRef.Open;
