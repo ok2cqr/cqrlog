@@ -5879,7 +5879,8 @@ begin
     key := 0
   end;
 
-  if (Key = VK_F11) then
+  //macOS takes F11 for Show Desktop, Cmd+L (lookup) does the same there
+  if (Key = VK_F11) {$IFDEF DARWIN} or ((Shift = [ssMeta]) and (Key = VK_L)) {$ENDIF} then
   begin
     if NOT c_running then
     begin
@@ -5888,7 +5889,11 @@ begin
       QRZ := TQRZThread.Create(True);
       QRZ.FreeOnTerminate := True;
       QRZ.Start
-    end
+    end;
+    {$IFDEF DARWIN}
+    if Key = VK_L then
+      Key := 0
+    {$ENDIF}
   end;
 
   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
