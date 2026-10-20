@@ -31,6 +31,8 @@ type TRigControl = class
     fFreq        : Double;
     fFreqPending : Boolean; //get_freq reply started, its RPRT not received yet
     fFreqOkTick  : QWord;   //GetTickCount64 of the last frequency read from the rig
+    fPollReplies : Integer; //RPRTs the last poll still waits for
+    fPollSentTick: QWord;   //GetTickCount64 of the last poll
     fRigPoll     : Word;
     fRigCtldPort : Word;
     fLastError   : String;
@@ -161,6 +163,10 @@ implementation
 
 const
   C_FREQ_HOLD_POLLS = 3; //poll intervals without a frequency before a get_freq failure clears it
+  //a poll whose replies did not all come is given up after this (ms). Longer than
+  //a switched off rig takes to fail all its commands (KX3: 3x 5x 1 s), otherwise
+  //the polls pile up in rigctld again
+  C_POLL_REPLY_TIMEOUT = 30000;
 
 constructor TRigControl.Create;
 begin
@@ -707,6 +713,8 @@ begin
        Begin
          //if none of above hits what to expect we accept just report received to be the one
          if not Hit then AllowCommand:=1;
+         if fPollReplies > 0 then
+           Dec(fPollReplies);
          //get_freq failed (rig switched off: -20, or timed out: -5), do not keep the last frequency;
          //only when there was none for a few polls, so a single lost reply does not blank it.
          //Time, not a count: with a switched off rig one timeout can take seconds (KX3: 5x 1 s)
@@ -809,12 +817,30 @@ begin
             end;
         end;
  AllowCommand:=-1; //waiting for reply
+ //every command of the poll ends its reply with RPRT
+ fPollReplies := 0;
+ for f:=1 to 3 do
+   if s[f]<>'' then
+     Inc(fPollReplies);
+ fPollSentTick := GetTickCount64
 end;
 
 //-----------------------------------------------------------
 begin
  if DebugMode then
                Writeln('Polling - allowcommand:',AllowCommand);
+ //AllowCommand goes 1 with the first reply of a poll (and with every command
+ //put in the queue); sending before the rest came made a switched off rig,
+ //which answers each command after a timeout, collect polls in rigctld
+ if fPollReplies > 0 then
+ begin
+   if GetTickCount64 - fPollSentTick < C_POLL_REPLY_TIMEOUT then
+     exit;
+   if DebugMode then
+     Writeln('Poll replies missing: ',fPollReplies,', polling again');
+   fPollReplies := 0;
+   AllowCommand := 1
+ end;
  case AllowCommand of
      -1:  Exit;   //no sending allowed
 
@@ -883,6 +909,7 @@ Begin
     if DebugMode then
                    Writeln('Connected to rigctld');
     ConnectionDone:=true;
+    fPollReplies:=0;
     ParmHasVfo:=0;   //default: "--vfo" is not used as start parameter
     AllowCommand:=10;  //start with chk_vfo
     RigCommand.Clear;
