@@ -29,6 +29,8 @@ type TRigControl = class
     fRunRigCtld  : Boolean;
     fMode        : TRigMode;
     fFreq        : Double;
+    fFreqPending : Boolean; //get_freq reply started, its RPRT not received yet
+    fFreqOkTick  : QWord;   //GetTickCount64 of the last frequency read from the rig
     fRigPoll     : Word;
     fRigCtldPort : Word;
     fLastError   : String;
@@ -156,6 +158,9 @@ public
 end;
 
 implementation
+
+const
+  C_FREQ_HOLD_POLLS = 3; //poll intervals without a frequency before a get_freq failure clears it
 
 constructor TRigControl.Create;
 begin
@@ -557,8 +562,13 @@ begin
       //we send all commands with '+' prefix that makes receiving sort lot easier
       b:= Explode(' ', a[i]);
 
+      if (b[0]='GET_FREQ:') then
+        fFreqPending := true;
+
       if (b[0]='FREQUENCY:')then
        Begin
+         fFreqPending := false;
+         fFreqOkTick := GetTickCount64;
          if TryStrToFloat(b[1],f) then
            Begin
              fFReq := f;
@@ -697,6 +707,13 @@ begin
        Begin
          //if none of above hits what to expect we accept just report received to be the one
          if not Hit then AllowCommand:=1;
+         //get_freq failed (rig switched off: -20, or timed out: -5), do not keep the last frequency;
+         //only when there was none for a few polls, so a single lost reply does not blank it.
+         //Time, not a count: with a switched off rig one timeout can take seconds (KX3: 5x 1 s)
+         if fFreqPending and (b[1]<>'0') and
+            (GetTickCount64 - fFreqOkTick >= C_FREQ_HOLD_POLLS * fRigPoll) then
+           fFreq := 0;
+         fFreqPending := false;
          if DebugMode then
          case b[1] of
                         '-1': Writeln('Invalid parameter');
