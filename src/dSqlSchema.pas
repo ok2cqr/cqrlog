@@ -140,6 +140,10 @@ type
     function SqlSeedUdpLogStatus(const Max : Integer) : String;
     function SqlCallDateBandIndexExists : String;
     function SqlCreateCallDateBandIndex : String;
+    // version 21 (log) and common version 8: utf8mb3 -> utf8mb4
+    function SqlUtf8mb3Tables(const Db : String) : String;
+    function SqlConvertTableToUtf8mb4(const Db, TableName : String) : String;
+    function SqlAlterDatabaseUtf8mb4(const Db : String) : String;
     function SqlDropViewByCallsign : String;
     function SqlDropViewByQsodate : String;
     function SqlDropViewByQsodateAsc : String;
@@ -231,7 +235,7 @@ end;
 function TdmSqlSchema.SqlCreateLogDatabase(const Db : String) : String;
 begin
   Result := 'CREATE DATABASE IF NOT EXISTS '+Db+' DEFAULT CHARACTER SET = '+
-            'utf8 DEFAULT COLLATE = utf8_bin;'
+            'utf8mb4 DEFAULT COLLATE = utf8mb4_bin;'
 end;
 
 function TdmSqlSchema.SqlDropLogDatabase(const Db : String) : String;
@@ -674,6 +678,29 @@ end;
 function TdmSqlSchema.SqlCreateCallDateBandIndex : String;
 begin
   Result := 'create index callsign_qsodate_band on cqrlog_main (callsign, qsodate, band)'
+end;
+
+// version 21 (log) and common version 8
+// utf8 is utf8mb3 (3 bytes at most), emoji from callbooks need utf8mb4.
+// Only utf8mb3 tables: one already in utf8mb4 is skipped, so an interrupted
+// conversion goes on where it stopped; latin1 ones are left alone, their
+// data may not be latin1 at all.  The longest index key is 400 bytes in
+// utf8mb4, under the 767 bytes limit of the old InnoDB row formats.
+function TdmSqlSchema.SqlUtf8mb3Tables(const Db : String) : String;
+begin
+  Result := 'select table_name from information_schema.tables where table_schema='+QuotedStr(Db)+
+            ' and table_type=''BASE TABLE'''+
+            ' and (table_collation like ''utf8\_%'' or table_collation like ''utf8mb3\_%'')'
+end;
+
+function TdmSqlSchema.SqlConvertTableToUtf8mb4(const Db, TableName : String) : String;
+begin
+  Result := 'ALTER TABLE '+Db+'.'+TableName+' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin'
+end;
+
+function TdmSqlSchema.SqlAlterDatabaseUtf8mb4(const Db : String) : String;
+begin
+  Result := 'ALTER DATABASE '+Db+' CHARACTER SET utf8mb4 COLLATE utf8mb4_bin'
 end;
 
 // every upgrade: the views are dropped and re-created from scViews

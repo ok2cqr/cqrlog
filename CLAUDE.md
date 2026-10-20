@@ -115,7 +115,7 @@ All source is in `src/`. Files follow a naming convention by prefix:
 
 ### Database
 
-Uses MariaDB/MySQL with multiple connectors supported (mysql51, mysql55, mysql56, mysql57). Database schema is versioned — `dData.pas` constants `cDB_MAIN_VER` (20) and `cDB_COMN_VER` (7) track the schema version. Migrations live in `dData.pas`: `UpgradeMainDatabase` and `UpgradeCommonDatabase` (one `if old_version < N` block per step), called from `OpenDatabase`. DDL for fresh installs is in `dData.lfm` (`scCommon`, `scLog`, `scViews`), so a schema change needs both. `fUpgrade.pas` is an unused progress form, not the migration code.
+Uses MariaDB/MySQL with multiple connectors supported (mysql51, mysql55, mysql56, mysql57). Database schema is versioned — `dData.pas` constants `cDB_MAIN_VER` (21) and `cDB_COMN_VER` (8) track the schema version. Migrations live in `dData.pas`: `UpgradeMainDatabase` and `UpgradeCommonDatabase` (one `if old_version < N` block per step), called from `OpenDatabase`. DDL for fresh installs is in `dData.lfm` (`scCommon`, `scLog`, `scViews`), so a schema change needs both. `fUpgrade.pas` is an unused progress form, not the migration code.
 
 Each log is a separate database. A common database stores shared data (DXCC tables, QSL manager data, membership stats).
 

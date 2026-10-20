@@ -24,8 +24,8 @@ uses
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 20;
-  cDB_COMN_VER = 7;
+  cDB_MAIN_VER = 21;
+  cDB_COMN_VER = 8;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
   //Connection params controlling TLS. mariadb-connector-c >= 3.4 refuses to
@@ -154,6 +154,7 @@ type
     procedure WBeforeOpen(DataSet: TDataSet);
   private
     fDBName  : String;
+    fUtf8mb4Announced : Boolean; //the utf8mb4 conversion dialog was shown while this log was opened
     fHomeDir : String;
     fDataDir : String;
     fMembersDir : String;
@@ -199,6 +200,8 @@ type
     procedure KillMySQL(const OnStart : Boolean = True);
     procedure UpgradeMainDatabase(old_version : Integer);
     procedure UpgradeCommonDatabase(old_version : Integer);
+    procedure ConvertDatabaseToUtf8mb4(const Db : String);
+    function  Utf8mb3Tables(const Db : String) : TStringList;
     procedure PrepareMysqlConfigFile;
     procedure DeleteOldConfigFiles;
     procedure GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
@@ -751,6 +754,7 @@ begin
 
   dmSqlRef.RebuildDxccId(fDBName);
 
+  fUtf8mb4Announced := False;
   trQ.StartTransaction;
   try
     Q.SQL.Text := dmSqlSchema.SqlLogVersion;
@@ -1186,6 +1190,11 @@ begin
     if Components[i] is TSQLTransaction then
       (Components[i] as TSQLTransaction).DataBase := MainCon
   end;
+  //qLogList comes before trLogList in dData.lfm, so the loop above left it on
+  //MainCon.Transaction (SetDatabase drops a transaction of another database)
+  //and every trmQ commit or rollback (CreateViews on each upgrade) closed the
+  //log list
+  qLogList.Transaction := trLogList;
 
   //the dSql* modules run on their own cursors and are not our components,
   //so the loop above does not reach them
@@ -2316,6 +2325,9 @@ begin
         Q1.ExecSQL;
       end;
 
+      if old_version < 8 then
+        ConvertDatabaseToUtf8mb4('cqrlog_common');
+
       Q1.SQL.Text := dmSqlSchema.SqlSetCommonVersion(cDB_COMN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
       Q1.ExecSQL
@@ -2752,6 +2764,14 @@ begin
               trQ1.Commit;
       end;
 
+      if (old_version < 21) then
+      begin
+        //rebuilds every table, on a large log it can take a while
+        trQ1.StartTransaction;
+        ConvertDatabaseToUtf8mb4(fDBName);
+        trQ1.Commit
+      end;
+
       if TableExists('view_cqrlog_main_by_callsign') then
       begin
         trQ1.StartTransaction;
@@ -2796,6 +2816,84 @@ begin
       if trQ1.Active then
         trQ1.Rollback
     end
+  end
+end;
+
+//utf8mb3 tables of Db, see TdmSqlSchema.SqlUtf8mb3Tables; the caller frees the list
+function TdmData.Utf8mb3Tables(const Db : String) : TStringList;
+begin
+  Result := TStringList.Create;
+  Q1.SQL.Text := dmSqlSchema.SqlUtf8mb3Tables(Db);
+  if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+  Q1.Open;
+  try
+    while not Q1.EOF do
+    begin
+      Result.Add(Q1.Fields[0].AsString);
+      Q1.Next
+    end
+  finally
+    Q1.Close
+  end
+end;
+
+//utf8mb3 tables of Db to utf8mb4.
+//The log is converted first and cqrlog_common right after it, one dialog
+//tells about both.
+//Exception when a table stays locked by another connection, the upgrade
+//then does not raise the version and the next start tries again
+procedure TdmData.ConvertDatabaseToUtf8mb4(const Db : String);
+var
+  Tables : TStringList;
+  Common : TStringList;
+  Dbs    : String;
+  i      : Integer;
+begin
+  Tables := Utf8mb3Tables(Db);
+  try
+    if (Tables.Count > 0) and (not fUtf8mb4Announced) then
+    begin
+      Dbs := 'database ' + Db;
+      if Db <> 'cqrlog_common' then
+      begin
+        Common := Utf8mb3Tables('cqrlog_common');
+        try
+          if Common.Count > 0 then
+            Dbs := 'databases ' + Db + ' and cqrlog_common'
+        finally
+          Common.Free
+        end
+      end;
+      //the ALTERs block the main thread, so tell before they start
+      Application.MessageBox(PChar('CQRLOG will now convert the ' + Dbs +
+        ' to the utf8mb4 character set, so names and QTHs can keep emoji.' + LineEnding +
+        LineEnding + 'On a large log it may take a while. Please do not close the program.'),
+        'Database upgrade', mb_ok + mb_IconInformation);
+      fUtf8mb4Announced := True
+    end;
+    if Tables.Count > 0 then
+    begin
+      Screen.Cursor := crHourGlass;
+      Application.ProcessMessages //Cocoa: let the window repaint after the dialog
+    end;
+
+    //lock_wait_timeout=30 from cDBSessionSetupSql: a table locked by another
+    //connection fails the ALTER instead of waiting for a year (the default)
+    try
+      for i := 0 to Tables.Count-1 do
+      begin
+        Q1.SQL.Text := dmSqlSchema.SqlConvertTableToUtf8mb4(Db, Tables[i]);
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL
+      end;
+      Q1.SQL.Text := dmSqlSchema.SqlAlterDatabaseUtf8mb4(Db);
+      if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+      Q1.ExecSQL
+    finally
+      Screen.Cursor := crDefault
+    end
+  finally
+    Tables.Free
   end
 end;
 
