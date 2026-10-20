@@ -4839,6 +4839,7 @@ object frmPreferences: TfrmPreferences
         Height = 255
         Top = 106
         Width = 700
+        AutoSize = True
         BorderSpacing.Left = 6
         Caption = ' Show only spots'
         ClientHeight = 228
@@ -9200,13 +9201,14 @@ object frmPreferences: TfrmPreferences
       ClientHeight = 687
       ClientWidth = 864
       object chkRBNAutoConn: TCheckBox
-        AnchorSideTop.Control = cmbCl10db
-        AnchorSideTop.Side = asrCenter
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = cmbClOver30db
+        AnchorSideTop.Side = asrBottom
         Left = 24
         Height = 18
         Top = 312
         Width = 176
-        Anchors = []
+        BorderSpacing.Top = 15
         Caption = 'Autoconnect RBN Grayline'
         TabOrder = 0
       end
@@ -9424,26 +9426,26 @@ object frmPreferences: TfrmPreferences
         TabOrder = 6
       end
       object edtDelAfter: TEdit
-        AnchorSideTop.Control = cmbClOver30db
-        AnchorSideTop.Side = asrCenter
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = chkRBNConnectOnStart
+        AnchorSideTop.Side = asrBottom
         Left = 24
         Height = 21
         Top = 448
         Width = 40
-        Anchors = []
+        BorderSpacing.Top = 16
         TabOrder = 7
         Text = '60'
       end
       object lblRbnDeleteAfterSec: TLabel
         AnchorSideLeft.Control = edtDelAfter
         AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = cmbClOver30db
+        AnchorSideTop.Control = edtDelAfter
         AnchorSideTop.Side = asrCenter
         Left = 71
         Height = 16
         Top = 448
         Width = 173
-        Anchors = [akLeft]
         BorderSpacing.Left = 7
         Caption = 'seconds view time for dot(s)'
         ParentColor = False
@@ -9488,36 +9490,39 @@ object frmPreferences: TfrmPreferences
         ParentColor = False
       end
       object chkRBNMAutoConn: TCheckBox
-        AnchorSideTop.Control = cmbCl20db
-        AnchorSideTop.Side = asrCenter
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = chkRBNAutoConn
+        AnchorSideTop.Side = asrBottom
         Left = 24
         Height = 18
         Top = 344
         Width = 300
-        Anchors = []
+        BorderSpacing.Top = 14
         Caption = 'Opening the RBN monitor window connects RBN'
         TabOrder = 9
       end
       object chkRBNLink: TCheckBox
-        AnchorSideTop.Control = cmbCl30db
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = chkRBNMAutoConn
+        AnchorSideTop.Side = asrBottom
         Left = 24
         Height = 18
         Top = 376
         Width = 189
-        Anchors = []
+        BorderSpacing.Top = 14
         Caption = 'Link Grayline to RBN monitor'
         TabOrder = 10
         OnChange = chkRBNLinkChange
       end
       object chkRBNConnectOnStart: TCheckBox
+        AnchorSideLeft.Control = lblRbnHeader
         AnchorSideTop.Control = chkRBNLink
         AnchorSideTop.Side = asrBottom
         Left = 24
         Height = 18
         Top = 408
         Width = 234
-        Anchors = []
-        BorderSpacing.Top = 8
+        BorderSpacing.Top = 14
         Caption = 'Connect to RBN after program starts'
         TabOrder = 11
       end
