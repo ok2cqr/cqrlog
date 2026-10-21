@@ -441,10 +441,8 @@ var
 begin
   r.left:=0;r.right:=width-1;
   r.top:=0;r.bottom:=width*obvy div obsi-1;
-  if dmUtils.SysUTC then
-    ob^.VypocitejSunClock(dmUtils.GetDateTime(0) - (dmUtils.GrayLineOffset/24))//-dmUtils.GetLocalUTCDelta)
-  else
-    ob^.VypocitejSunClock(now - (dmUtils.GrayLineOffset/24));
+  //GetDateTime is UTC either way: the system clock, or local time with the offset from preferences
+  ob^.VypocitejSunClock(dmUtils.GetDateTime(0) - (dmUtils.GrayLineOffset/24));
   ob^.kresli(r,Canvas)
 end;
 

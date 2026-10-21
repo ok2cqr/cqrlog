@@ -775,6 +775,13 @@ begin
     trQ.Rollback
   end;
   dmUtils.TimeOffset     := cqrini.ReadFloat('Program','offset',0);
+  //the offset compensated a wrong shadow (about -1.25 h); with the shadow
+  //computed right an old value would move it off, so it is cleared once
+  if not cqrini.ReadBool('Program','GraylineOffsetCleared',False) then
+  begin
+    cqrini.WriteFloat('Program','GraylineOffset',0);
+    cqrini.WriteBool('Program','GraylineOffsetCleared',True)
+  end;
   dmUtils.GrayLineOffset := cqrini.ReadFloat('Program','GraylineOffset',0);
   dmUtils.SysUTC         := cqrini.ReadBool('Program','SysUTC',True);
 

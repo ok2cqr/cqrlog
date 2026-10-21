@@ -348,7 +348,7 @@ object frmPreferences: TfrmPreferences
           Top = 125
           Width = 271
           BorderSpacing.Top = 3
-          Caption = 'Sometimes grayline is not accurate, you can '#10'enter the correction here (in hours, try -1.25)'
+          Caption = 'Correction of the grayline shadow '#10'in hours, normally 0'
           ParentColor = False
         end
         object LblTimes: TLabel

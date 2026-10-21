@@ -27,15 +27,6 @@ var    sintab:array[0..1023] of extended;
        asintab:array[-10010..10010] of longint;
 
 
-
-type
-  t_coord = record
-    longitude, latitude, radius: extended; (* lambda, beta, R *)
-    rektaszension, declination: extended;  (* alpha, delta *)
-    parallax: extended;
-    elevation, azimuth: extended;          (* h, A *)
-    end;
-
 const body_popis_max=30;
 type Tcarobod=record
        typ:byte; // 0 - nothing, 1 square, 2 square points, 3 cross points
@@ -49,7 +40,6 @@ const body_max=128;
 type TGC_point=record
        La1,Lo1,La2,Lo2 : double;
      end;
-var star_time_u:extended;
 
 type
   Tgrayline=object
@@ -108,7 +98,7 @@ type
 
       LP        : integer;
 
-      function calc_horizontalx(var coord:t_coord; date:TDateTime; z:longint;latitude: extended):longint;
+      function calc_horizontalx(z:longint;latitude: extended):longint;
   end;
   Pgrayline=^Tgrayline;
 
@@ -116,307 +106,11 @@ type
 implementation
 
 
-uses ah_math,vsop;
+uses ah_math, uSunPosition;
 
 { Tfgline }
 
-const
-  julian_offset: extended = 0;
-  AU=149597869;             (* astronomical unit in km *)
-  mean_lunation=29.530589;  (* Mean length of a month *)
-  tropic_year=365.242190;   (* Tropic year length *)
-  earth_radius=6378.15;     (* Radius of the earth *)
-
-
-
-
-
-
-function put_in_360(x:extended):extended;
-begin
-  result:=x-round(x/360)*360;
-  while result<0 do result:=result+360;
-  end;
-
-function julian_date(date:TDateTime):extended;
-begin
-  julian_date:=julian_offset+date
-  end;
-
-procedure calc_epsilon_phi(date:TDateTime; var delta_phi,epsilon:extended);
-(*$ifndef low_accuracy *)
-const
-  (*@/// arg_mul:array[0..30,0..4] of shortint = (..); *)
-  arg_mul:array[0..30,0..4] of shortint = (
-     ( 0, 0, 0, 0, 1),
-     (-2, 0, 0, 2, 2),
-     ( 0, 0, 0, 2, 2),
-     ( 0, 0, 0, 0, 2),
-     ( 0, 1, 0, 0, 0),
-     ( 0, 0, 1, 0, 0),
-     (-2, 1, 0, 2, 2),
-     ( 0, 0, 0, 2, 1),
-     ( 0, 0, 1, 2, 2),
-     (-2,-1, 0, 2, 2),
-     (-2, 0, 1, 0, 0),
-     (-2, 0, 0, 2, 1),
-     ( 0, 0,-1, 2, 2),
-     ( 2, 0, 0, 0, 0),
-     ( 0, 0, 1, 0, 1),
-     ( 2, 0,-1, 2, 2),
-     ( 0, 0,-1, 0, 1),
-     ( 0, 0, 1, 2, 1),
-     (-2, 0, 2, 0, 0),
-     ( 0, 0,-2, 2, 1),
-     ( 2, 0, 0, 2, 2),
-     ( 0, 0, 2, 2, 2),
-     ( 0, 0, 2, 0, 0),
-     (-2, 0, 1, 2, 2),
-     ( 0, 0, 0, 2, 0),
-     (-2, 0, 0, 2, 0),
-     ( 0, 0,-1, 2, 1),
-     ( 0, 2, 0, 0, 0),
-     ( 2, 0,-1, 0, 1),
-     (-2, 2, 0, 2, 2),
-     ( 0, 1, 0, 0, 1)
-                   );
-  (*@\\\*)
-  (*@/// arg_phi:array[0..30,0..1] of longint = (); *)
-  arg_phi:array[0..30,0..1] of longint = (
-     (-171996,-1742),
-     ( -13187,  -16),
-     (  -2274,   -2),
-     (   2062,    2),
-     (   1426,  -34),
-     (    712,    1),
-     (   -517,   12),
-     (   -386,   -4),
-     (   -301,    0),
-     (    217,   -5),
-     (   -158,    0),
-     (    129,    1),
-     (    123,    0),
-     (     63,    0),
-     (     63,    1),
-     (    -59,    0),
-     (    -58,   -1),
-     (    -51,    0),
-     (     48,    0),
-     (     46,    0),
-     (    -38,    0),
-     (    -31,    0),
-     (     29,    0),
-     (     29,    0),
-     (     26,    0),
-     (    -22,    0),
-     (     21,    0),
-     (     17,   -1),
-     (     16,    0),
-     (    -16,    1),
-     (    -15,    0)
-    );
-  (*@\\\*)
-  (*@/// arg_eps:array[0..30,0..1] of longint = (); *)
-  arg_eps:array[0..30,0..1] of longint = (
-     ( 92025,   89),
-     (  5736,  -31),
-     (   977,   -5),
-     (  -895,    5),
-     (    54,   -1),
-     (    -7,    0),
-     (   224,   -6),
-     (   200,    0),
-     (   129,   -1),
-     (   -95,    3),
-     (     0,    0),
-     (   -70,    0),
-     (   -53,    0),
-     (     0,    0),
-     (   -33,    0),
-     (    26,    0),
-     (    32,    0),
-     (    27,    0),
-     (     0,    0),
-     (   -24,    0),
-     (    16,    0),
-     (    13,    0),
-     (     0,    0),
-     (   -12,    0),
-     (     0,    0),
-     (     0,    0),
-     (   -10,    0),
-     (     0,    0),
-     (    -8,    0),
-     (     7,    0),
-     (     9,    0)
-    );
-  (*@\\\*)
-(*$endif *)
-var
-  t,omega: extended;
-(*$ifdef low_accuracy *)
-  l,ls: extended;
-(*$else *)
-  d,m,ms,f,s: extended;
-  i: longint;
-(*$endif *)
-  epsilon_0,delta_epsilon: extended;
-begin
-  t:=(julian_date(date)-2451545.0)/36525;
-
-  (* longitude of rising knot *)
-  omega:=put_in_360(125.04452+(-1934.136261+(0.0020708+1/450000*t)*t)*t);
-
-(*$ifdef low_accuracy *)
-  (*@/// delta_phi and delta_epsilon - low accuracy *)
-  (* mean longitude of sun (l) and moon (ls) *)
-  l:=280.4665+36000.7698*t;
-  ls:=218.3165+481267.8813*t;
-
-  (* correction due to nutation *)
-  delta_epsilon:=9.20*cos_d(omega)+0.57*cos_d(2*l)+0.10*cos_d(2*ls)-0.09*cos_d(2*omega);
-
-  (* longitude correction due to nutation *)
-  delta_phi:=(-17.20*sin_d(omega)-1.32*sin_d(2*l)-0.23*sin_d(2*ls)+0.21*sin_d(2*omega))/3600;
-  (*@\\\*)
-(*$else *)
-  (*@/// delta_phi and delta_epsilon - higher accuracy *)
-  (* mean elongation of moon to sun *)
-  d:=put_in_360(297.85036+(445267.111480+(-0.0019142+t/189474)*t)*t);
-
-  (* mean anomaly of the sun *)
-  m:=put_in_360(357.52772+(35999.050340+(-0.0001603-t/300000)*t)*t);
-
-  (* mean anomly of the moon *)
-  ms:=put_in_360(134.96298+(477198.867398+(0.0086972+t/56250)*t)*t);
-
-  (* argument of the latitude of the moon *)
-  f:=put_in_360(93.27191+(483202.017538+(-0.0036825+t/327270)*t)*t);
-
-  delta_phi:=0;
-  delta_epsilon:=0;
-
-  for i:=0 to 30 do begin
-    s:= arg_mul[i,0]*d
-       +arg_mul[i,1]*m
-       +arg_mul[i,2]*ms
-       +arg_mul[i,3]*f
-       +arg_mul[i,4]*omega;
-    delta_phi:=delta_phi+(arg_phi[i,0]+arg_phi[i,1]*t*0.1)*sin_d(s);
-    delta_epsilon:=delta_epsilon+(arg_eps[i,0]+arg_eps[i,1]*t*0.1)*cos_d(s);
-    end;
-
-  delta_phi:=delta_phi*0.0001/3600;
-  delta_epsilon:=delta_epsilon*0.0001/3600;
-  (*@\\\*)
-(*$endif *)
-
-  (* angle of ecliptic *)
-  epsilon_0:=84381.448+(-46.8150+(-0.00059+0.001813*t)*t)*t;
-
-  epsilon:=(epsilon_0+delta_epsilon)/3600;
-end;
-
-
-function delphi_date(juldat:extended):TDateTime;
-begin
-  delphi_date:=juldat-julian_offset;
-  end;
-
-(*@/// function star_time(date:TDateTime):extended;            // degrees *)
-function star_time(date:TDateTime):extended;
-var
-  jd, t: extended;
-  delta_phi, epsilon: extended;
-begin
-  jd:=julian_date(date);
-  t:=(jd-2451545.0)/36525;
-  epsilon:=0;   delta_phi:=0;
-  calc_epsilon_phi(date,delta_phi,epsilon);
-  result:=put_in_360(280.46061837+360.98564736629*(jd-2451545.0)+
-                     t*t*(0.000387933-t/38710000)+
-                     delta_phi*cos_d(epsilon) );
-end;
-
-
-procedure calc_geocentric(var coord:t_coord; date:TDateTime);
-var
-  epsilon: extended;
-  delta_phi: extended;
-  alpha,delta: extended;
-begin
-  calc_epsilon_phi(date,delta_phi,epsilon);
-  coord.longitude:=put_in_360(coord.longitude+delta_phi);
-
-  (* geocentric coordinates *)
-{   alpha:=arctan2_d(cos_d(epsilon)*sin_d(o),cos_d(o)); }
-{   delta:=arcsin_d(sin_d(epsilon)*sin_d(o)); }
-  alpha:=arctan2_d( sin_d(coord.longitude)*cos_d(epsilon)
-                   -tan_d(coord.latitude)*sin_d(epsilon)
-                  ,cos_d(coord.longitude));
-  delta:=arcsin_d( sin_d(coord.latitude)*cos_d(epsilon)
-                  +cos_d(coord.latitude)*sin_d(epsilon)*sin_d(coord.longitude));
-
-  coord.rektaszension:=alpha;
-  coord.declination:=delta;
-  end;
-
-procedure calc_coord(date: TDateTime; obj_class: TCVSOP; var l,b,r: extended);
-var
-  obj: TVSOP;
-begin
-  obj:=NIL;
-  try
-    obj:=obj_class.Create;
-    obj.date:=date;
-    r:=obj.radius;
-    l:=obj.longitude;
-    b:=obj.latitude;
-    obj.DynamicToFK5(l,b);
-  finally
-    obj.free;
-    end;
-  l:=put_in_360(rad2deg(l));  (* rad -> degree *)
-  b:=rad2deg(b);
-  end;
-
-
-procedure earth_coord(date:TdateTime; var l,b,r: extended);
-begin
-  calc_coord(date,TVSOPEarth,l,b,r);
-  end;
-
-
-function sun_coordinate(date:TDateTime):t_coord;
-var
-  l,b,r: extended;
-  lambda,t: extended;
-begin
-  earth_coord(date,l,b,r);
-  (* convert earth coordinate to sun coordinate *)
-  l:=l+180;
-  b:=-b;
-  (* conversion to FK5 *)
-  t:=(julian_date(date)-2451545.0)/365250.0*10;
-  lambda:=l+(-1.397-0.00031*t)*t;
-  l:=l-0.09033/3600;
-  b:=b+0.03916/3600*(cos_d(lambda)-sin_d(lambda));
-  (* aberration *)
-  l:=l-20.4898/3600/r;
-  (* correction of nutation - is done inside calc_geocentric *)
-{   calc_epsilon_phi(date,delta_phi,epsilon); }
-{   l:=l+delta_phi; }
-  (* fill result and convert to geocentric *)
-  result.longitude:=put_in_360(l);
-  result.latitude:=b;
-  result.radius:=r*AU;
-  calc_geocentric(result,date);
-  end;
-
-
-
-
-function Tgrayline.calc_horizontalx(var coord:t_coord; date:TDateTime; z:longint;latitude: extended):longint;
+function Tgrayline.calc_horizontalx(z:longint;latitude: extended):longint;
 var
   h: longint;
   la:longint;
@@ -546,16 +240,13 @@ destructor Tgrayline.done;
 
 procedure tgrayline.VypocitejSunClock(cas:Tdatetime);
 const ko=10;
-var z,c:longint;
-    ce:extended;
-    datum : TDateTime;
-    datum2:extended;
-    pos1: T_Coord;
+var z:longint;
+    SunLat,SunLon:extended;
     vere,vere1:longint;
 
            function vr1(z,x:longint):longint;
              begin
-              vr1:=calc_horizontalx(pos1,datum,z,(x-obvy shr 1)*obvy2);
+              vr1:=calc_horizontalx(z,(x-obvy shr 1)*obvy2);
 //              if vr1>100 then vr1:=200;
 //              if vr1<80 then vr1:=80;
 //              vr1:=random(1000)-500;
@@ -661,35 +352,25 @@ begin
   if chcipni then exit;
   if round(poslednicas*24*60)=round(cas*24*60) then exit;
   poslednicas:=cas;
- // datum := now+strtofloat(edit1.Text)/24-3.5/24;
-    datum := cas -3.5/24;
- {  for c:=0 to 23 do}
-  c:=0;
-  ce:=(datum-trunc(datum))*24+c;
-  datum2:=(datum-trunc(datum)+ce/24)*360;
   begin
      fillchar(q,obvy*obsi,0);
-     pos1:=sun_coordinate(trunc(datum));
-     //declin:=round(pos1.declination*512) div 180 and 1023;
+     SubsolarPoint(cas,SunLat,SunLon);
      //workaround because of bug in fpc 3.0.0 and above
-     declin:=round(pos1.declination*512) div 180;
+     declin:=round(SunLat*512) div 180;
      while(declin<0) do declin:=declin+1024;
      while(declin>1023) do declin:=declin-1024;
 
      sideclin:=sintab[declin];
      codeclin:=costab[declin];
-     star_time_u:=star_time(datum);
      ziju:=true;
      for z:=0 to obsi-1 do
      begin
-       //harr[z]:=(round(star_time_u-pos1.rektaszension-(datum2+z*obsi2)) shl 9 div 180) and 1023;
-       //workaround because of bug in fpc 3.0.0 and above
-       harr[z]:=(round(star_time_u-pos1.rektaszension-(datum2+z*obsi2)) *512 div 180);
+       //hour angle of the Sun in the middle of column z, 1024 steps per circle
+       harr[z]:=round(((z+0.5)*obsi2-180-SunLon)*512/180);
        while(harr[z]<0) do harr[z]:=harr[z]+1024;
        while(harr[z]>1023) do harr[z]:=harr[z]-1024
      end;
-//(round(star_time_u-coord.rektaszension-(datum2+z*obsi2)) shl 9 div 180) and 1023;
-     
+
      vere:=0;
      vere1:=obsi;
      while vere1>2 do
