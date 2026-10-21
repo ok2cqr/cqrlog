@@ -1,27 +1,19 @@
 name: Build + AppImage Artifact for testing
 
+# Test packages from branches and pull requests; master builds without
+# packages (01-build.yml), releases are built from tags (03-release.yml)
 on:
   workflow_dispatch:
   push:
-    branches: [ "master" ]
+    branches:
+      - "**"
+      - "!master"
     tags-ignore:
       - '*'
   pull_request:
     branches: [ "master" ]
-    tags-ignore:
-      - '*'
 
 jobs:
-  lint:
-    # 01-build.yml skips master, so lint the forms here too
-    runs-on: ubuntu-26.04
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Lint Lazarus forms
-      run: make lint-lfm
-
   appimage:
     # Oldest supported runner: the AppImage only runs on systems with
     # a glibc at least as new as the one it was built against
