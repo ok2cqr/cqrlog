@@ -1,4 +1,5 @@
 unit ah_math;
+{$mode objfpc}
 
 {$i ah_def.inc }
 (*$define nomath *)
