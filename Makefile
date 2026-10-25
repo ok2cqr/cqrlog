@@ -32,7 +32,7 @@ CQR_BUILD := $(shell git rev-list --count HEAD 2>/dev/null || echo $(CQR_BUILD_F
 .PHONY : help test dependencies hamlib clean install deb deb_src debug \
          appimage appimage-qt5 docker-image docker docker-build docker-install \
          docker-appimage docker-appimage-qt5 docker-deb docker-deb-src rpm docker-rpm \
-         install_macos sign_macos dmg_create dmg test-dmg flatpak docker-flatpak \
+         install_macos sign_macos dmg_create dmg dmg-upload test-dmg flatpak docker-flatpak \
          lint-lfm
 
 cqrlog: src/cqrlog.lpi
@@ -306,6 +306,15 @@ dmg: dmg_create
 	xcrun stapler staple $(DESTDIR)/$(DMGNAME).dmg
 	spctl -a -t open --context context:primary-signature $(DESTDIR)/$(DMGNAME).dmg
 	@echo "Signed and notarized DMG created at $(DESTDIR)/$(DMGNAME).dmg"
+
+# Uploads the DMG made by 'make dmg' to the GitHub release v$(CQR_VERSION)
+# (draft or published) and rebuilds cqrlog.ok2cqr.com so its Download section
+# links to it right away. Needs gh logged in with write access to both repos.
+dmg-upload:
+	test -f $(DESTDIR)/$(DMGNAME).dmg || { echo "$(DESTDIR)/$(DMGNAME).dmg not found, run 'make dmg' first"; exit 1; }
+	gh release upload v$(CQR_VERSION) $(DESTDIR)/$(DMGNAME).dmg --repo ok2cqr/cqrlog --clobber
+	gh workflow run pages.yml --repo ok2cqr/cqrlog.ok2cqr.com
+	@echo "DMG uploaded to v$(CQR_VERSION), website rebuild started"
 
 # Signed but NOT notarized — for local testing only (Gatekeeper may complain
 # on other machines; right-click > Open, or: xattr -dr com.apple.quarantine CQRLOG.app)

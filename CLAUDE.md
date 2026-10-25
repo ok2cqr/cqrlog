@@ -36,6 +36,7 @@ make appimage                          # AppImage, Qt6
 make appimage-qt5                      # AppImage, Qt5 (what CI publishes)
 make flatpak                           # single-file flatpak bundle, Qt6
 make dmg / test-dmg                    # macOS DMG (test-dmg skips notarization)
+make dmg-upload                        # upload the DMG to release v<version> and rebuild cqrlog.ok2cqr.com
 ```
 
 The compiled binary is output to `src/cqrlog`.
