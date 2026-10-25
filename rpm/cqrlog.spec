@@ -16,7 +16,7 @@ Version:        %{cqr_version}
 Release:        1%{?dist}
 Summary:        Advanced logging program for hamradio operators
 License:        GPL-2.0-only
-URL:            https://www.cqrlog.com
+URL:            https://cqrlog.ok2cqr.com
 Source0:        %{name}-%{version}.tar.gz
 
 ExclusiveArch:  x86_64 aarch64

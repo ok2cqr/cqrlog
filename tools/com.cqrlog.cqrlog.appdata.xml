@@ -17,11 +17,11 @@
     and maintenance.
     </p>
   </description>
-  <url type="homepage">https://www.cqrlog.com/</url>
+  <url type="homepage">https://cqrlog.ok2cqr.com/</url>
   <launchable type="desktop-id">cqrlog.desktop</launchable>
   <screenshots>
     <screenshot type="default">
-      <image>https://cqrlog.com/images/users/ok2cqr.png</image>
+      <image>https://cqrlog.ok2cqr.com/assets/cqrlog-darkmode.png</image>
     </screenshot>
   </screenshots>
   <content_rating type="oars-1.1" />

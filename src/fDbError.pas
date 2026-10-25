@@ -42,7 +42,7 @@ end;
 
 procedure TfrmDbError.btnVisitFAQClick(Sender : TObject);
 begin
-  dmUtils.OpenWithDesktop('https://www.cqrlog.com/faq')
+  dmUtils.OpenWithDesktop('https://cqrlog.ok2cqr.com/#faq')
 end;
 
 end.

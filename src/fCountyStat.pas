@@ -199,7 +199,7 @@ begin
   writeln(f,'<html>');
   Writeln(f,'<head>');
   writeln(f,'<meta http-equiv="content-type" content="text/html; charset=utf-8">');
-  writeln(f,'<meta name="generator" content="CQRLOG '+cVERSION+', www.cqrlog.com">');
+  writeln(f,'<meta name="generator" content="CQRLOG '+cVERSION+', cqrlog.ok2cqr.com">');
   writeln(f,'<title>County statistic ('+cqrini.ReadString('Station','Call','')+')</title>');
   writeln(f,'</head>');
   writeln(f,'<body>');

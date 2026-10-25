@@ -13,7 +13,7 @@ object frmDbError: TfrmDbError
     Height = 119
     Top = 8
     Width = 428
-    Caption = 'MySQL could not be started, please check if the MySQL server is '#10'installed properly.'#10#10'Please look at https://www.cqrlog.com/faq'#10#10'If you don''t find the answer, ask in CQRLOG forum and attach '#10'last 20 lines from the mysql.err file.'
+    Caption = 'MySQL could not be started, please check if the MySQL server is '#10'installed properly.'#10#10'Please look at https://cqrlog.ok2cqr.com/#faq'#10#10'If you don''t find the answer, report it at GitHub Issues and attach '#10'last 20 lines from the mysql.err file.'
     ParentColor = False
   end
   object btnOpenErrFile: TButton

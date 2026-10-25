@@ -1042,7 +1042,7 @@ begin
   l.Add('LoTW import errors from CQRLOG for Linux version '+dmData.VersionString);
   l.Add('Copyright (C) '+FormatDateTime('YYYY',now)+' by Petr, OK2CQR and Martin, OK1RR');
   l.Add('');
-  l.Add('Internet: https://www.cqrlog.com');
+  l.Add('Internet: https://cqrlog.ok2cqr.com');
   l.Add('');
   l.Add('<EOH>');
   l.Add('');
@@ -1533,7 +1533,7 @@ begin
   l.Add('eQSL import errors from CQRLOG for Linux version '+dmData.VersionString);
   l.Add('Copyright (C) '+FormatDateTime('YYYY',now)+' by Petr, OK2CQR and Martin, OK1RR');
   l.Add('');
-  l.Add('Internet: https://www.cqrlog.com');
+  l.Add('Internet: https://cqrlog.ok2cqr.com');
   l.Add('');
   l.Add('<EOH>');
   l.Add('');

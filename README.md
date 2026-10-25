@@ -1,8 +1,8 @@
 # What is CQRLOG?
 
-CQRLOG is an advanced ham radio logger based on MySQL database. Provides radio control based on hamlib libraries (currently support of 140+ radio types and models), DX cluster connection, online callbook, a grayliner, internal QSL manager database support and a most accurate country resolution algorithm based on country tables developed by OK1RR. CQRLOG is intended for daily general logging of HF, CW & SSB contacts and strongly focused on easy operation and maintenance. More at https://www.cqrlog.com/
+CQRLOG is an advanced ham radio logger based on MySQL database. Provides radio control based on hamlib libraries (currently support of 140+ radio types and models), DX cluster connection, online callbook, a grayliner, internal QSL manager database support and a most accurate country resolution algorithm based on country tables developed by OK1RR. CQRLOG is intended for daily general logging of HF, CW & SSB contacts and strongly focused on easy operation and maintenance. More at https://cqrlog.ok2cqr.com/
 
-![Image of CQRLOG](https://cqrlog.com/images/users/ok2cqr.png)
+![Image of CQRLOG](https://cqrlog.ok2cqr.com/assets/cqrlog-darkmode.png)
 
 ## How to contribute?
 

@@ -5,7 +5,7 @@ Maintainer: Petr Hlozek <petr@ok2cqr.com>
 Uploaders: Petr Hlozek <petr@ok2cqr.com>, Kamal Mostafa <kamal@whence.com>, Colin Tuckley <colint@debian.org>
 Build-Depends: debhelper (>= 9), lazarus-ide, lcl, lazarus-src, lcl-units, lcl-utils, fp-utils, fp-units-misc, fp-units-gfx, fp-units-db, fp-units-math, fp-units-net, libqt6pas-dev
 Standards-Version: 3.9.5
-Homepage: http://www.cqrlog.com
+Homepage: https://cqrlog.ok2cqr.com
 
 Package: cqrlog
 Architecture: any
