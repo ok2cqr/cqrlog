@@ -1,0 +1,24 @@
+name: Update website
+
+# Tells cqrlog.ok2cqr.com to rebuild when a release is published, so the
+# version, News and Download sections are current right away. The website
+# also rebuilds every hour by itself, which catches files uploaded to the
+# release later (the macOS DMG). workflow_dispatch is there for testing.
+#
+# Needs the secret WEBSITE_DISPATCH_TOKEN: a fine-grained token with
+# Contents read/write on ok2cqr/cqrlog.ok2cqr.com.
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Trigger website rebuild
+        run: gh api repos/ok2cqr/cqrlog.ok2cqr.com/dispatches -f event_type=cqrlog-release
+        env:
+          GH_TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
