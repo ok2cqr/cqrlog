@@ -8,6 +8,45 @@
     You can return to this changelog via <strong>Help</strong> after Cqrlog has started.
     <hr>
     <br>
+    <strong>CQRLOG 3.3.0 (2026-10-25)</strong><br>
+    <ul style="list-style: square;text-align:left; color: blue;">
+    <li>RBN: one shared connection for the whole program; the RBN monitor, the band maps and the Grayline all read from it, so closing the monitor window no longer disconnects (Petr, OK2CQR)</li>
+    <li>RBN: new RBN control window (New QSO -> Window) with a connection status dot, server preset, connect/disconnect, the global filter and a switch for sending spots to the band map; Preferences/RBN support gets 'Connect to RBN after program starts' (Petr, OK2CQR)</li>
+    <li>RBN: servers are kept as presets in the common database and managed in a small dialog; on the first start they are filled from the old RBN monitor and RBN settings (Petr, OK2CQR)</li>
+    <li>Graphical band map: several windows at once, each following the VFO (Auto) or showing a fixed band, with its own span, position and filter; open windows are restored after a restart; Window -> Band map and the map's M -> Band menu list every enabled band (Petr, OK2CQR)</li>
+    <li>Graphical band map: each window has its own filter with one rule for worked stations (the global band map rule, its own hours or date/time, or none), LoTW/eQSL and current mode only; the rule in force is shown in the status bar (Petr, OK2CQR)</li>
+    <li>Band maps: club membership of the spotted station can be shown after the callsign, e.g. 'OK1ABC (EPC, SOTA)'; Preferences/Bandmap, off by default (Petr, OK2CQR)</li>
+    <li>Band maps: whether a spotted station was already worked is checked in a background thread with a shared cache, so many spots and a database on another computer no longer freeze the program (Petr, OK2CQR)</li>
+    <li>Grayline: 'Link to main RBN connection' gets every spot whether the RBN monitor is open or not; its own 'Connect to RBN' can use any RBN preset; the spotter list grows instead of reporting 'list is full' (Petr, OK2CQR)</li>
+    <li>Network outages: database connections are checked every 5 minutes and reopened when they died; RBN and DX cluster detect a connection that went silent and reconnect; DX cluster reconnects by itself while it should be connected (Petr, OK2CQR)</li>
+    <li>LoTW: export can sign and upload in one step; a signed file whose upload failed is kept and offered for upload again; the number of uploaded QSOs is shown (Petr, OK2CQR)</li>
+    <li>HamQTH: callbook lookups, DX cluster lookups and log upload use the new HamQTH API v2 (Petr, OK2CQR)</li>
+    <li>HamQTH: CQRLOG can report the rig frequency and mode to HamQTH, which shows you as on the air; Preferences/Online log, off by default (Petr, OK2CQR)</li>
+    <li>Emoji and other 4-byte characters from callbooks are stored correctly: the database connection uses utf8mb4 and the tables are converted on the first start (on a large log it can take a while) (Petr, OK2CQR)</li>
+    <li>New QSO: the Window menu is grouped with separators (Petr, OK2CQR)</li>
+    <li>RPM package for Fedora 44 (Qt6) (Petr, OK2CQR)</li>
+    <li>New website cqrlog.ok2cqr.com (cqrlog.com is used by the CQRLOGImproved fork now); the About window, help, export headers and packages point to it, bug reports go to GitHub Issues (Petr, OK2CQR)</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: red;">
+    <li>Grayline: the shadow was 45 to 105 minutes off depending on the season; the Sun position is now computed properly, the old time offset in Preferences is cleared once; with 'get UTC from computer time' off the map used local time without the offset (Petr, OK2CQR)</li>
+    <li>TRX control: with the rig switched off, polls piled up in rigctld and commands waited behind them after the rig came back on (Petr, OK2CQR)</li>
+    <li>TRX control: the frequency could not be entered manually after the radio was switched off during operation (Petr, OK2CQR)</li>
+    <li>The log list was empty after a database upgrade and File -> Open failed with 'index out of bounds' (Petr, OK2CQR)</li>
+    <li>An error in QSL via lookup or in the IOTA import left a transaction open and every later use failed with 'transaction already active' (Petr, OK2CQR)</li>
+    <li>WinKeyer honours 'Pot speed' on macOS, in flatpak and snap (Petr, OK2CQR)</li>
+    <li>Locator with a lowercase subsquare gave wrong coordinates (Petr, OK2CQR)</li>
+    <li>MacOS: system bell after every Esc, PgUp/PgDn CW speed change beeped, shortcuts reached the focused edit (beep, Option typed a character) (Petr, OK2CQR)</li>
+    <li>MacOS: callbook lookup is on Cmd+L, F11 is Show Desktop there (Petr, OK2CQR)</li>
+    <li>MacOS: TRX control shows the active band, mode and VFO in bold, the coloured caption was not visible (Petr, OK2CQR)</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: gray;">
+    <li>SCP search, WinKeyer driver, CW macro expansion, band lookup, locator math and Sun position moved to LCL-free units in src/core with their own tests (Petr, OK2CQR)</li>
+    <li>RBN log cache, spot store, band map layout and check queue are LCL-free units in src/rbn with tests (Petr, OK2CQR)</li>
+    <li>'make rpm' and 'make docker-rpm' build the RPM package; CI attaches it to the release (Petr, OK2CQR)</li>
+    <li>CI: master is built and tested on every push, packages are built from branches, pull requests and tags (Petr, OK2CQR)</li>
+    <li>'make dmg-upload' uploads the macOS DMG to the GitHub release and rebuilds the website (Petr, OK2CQR)</li>
+    </ul>
+    <br>
     <strong>CQRLOG 3.2.1 (2026-10-06)</strong><br>
     <ul style="list-style: square;text-align:left; color: blue;">
     <li>Debian package is built with Qt6 and requires Ubuntu 26.04 or newer (Petr, OK2CQR)</li>
