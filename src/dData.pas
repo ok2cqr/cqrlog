@@ -687,9 +687,6 @@ procedure TdmData.OpenDatabase(nr : Word);
 var
   l : TStringList;
 begin
-  DeleteFile(cqrini.IniFileName);
-  FreeAndNil(cqrini);
-
   fDBName := GetProperDBName(nr);
   if trQ.Active then
     trQ.Rollback;
@@ -736,16 +733,27 @@ begin
     LeaveCriticalsection(csRbnMon)
   end;
 
+  //the old ini is dropped only once the new log answered; a log that fails
+  //above (missing database, ...) used to leave cqrini nil and every later
+  //open, even of a healthy log, ended in an access violation
   Q.SQL.Text := dmSqlSchema.SqlConfig;
   trQ.StartTransaction;
   l := TStringList.Create;
-  Q.Open;
   try
+    Q.Open;
     l.Text := Q.Fields[1].AsString;
+    Q.Close;
+    trQ.Rollback;
+
+    if Assigned(cqrini) then
+    begin
+      DeleteFile(cqrini.IniFileName);
+      FreeAndNil(cqrini)
+    end;
     l.SaveToFile(fHomeDir+IntToStr(nr)+'cqrlog.cfg')
   finally
     Q.Close;
-    trQ.Rollback;
+    if trQ.Active then trQ.Rollback;
     l.Free
   end;
 
