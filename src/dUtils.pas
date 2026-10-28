@@ -3934,7 +3934,7 @@ end;
 
 function TdmUtils.GetNewQSOCaption(capt: string): string;
 begin
-  Result := capt + ' ... (CQRLOG for Linux)';
+  Result := capt + ' ... (CQRLOG)';
   if dmData.LogName <> '' then
     Result := Result + ', database: ' + dmData.LogName;
 end;

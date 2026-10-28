@@ -447,7 +447,7 @@ begin   //TfrmExportProgress
   Rewrite(f);
   System.SetTextBuf(f, TextBuf, SizeOf(TextBuf));   // 64 KB buffer -> fewer write() syscalls
   Writeln(f);
-  Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
+  Writeln(f, 'ADIF export from CQRLOG version '+dmData.VersionString);
   Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
   Writeln(f);
   Writeln(f, 'Internet: https://cqrlog.ok2cqr.com');

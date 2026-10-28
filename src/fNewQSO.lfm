@@ -8,7 +8,7 @@ object frmNewQSO: TfrmNewQSO
   HorzScrollBar.Page = 970
   VertScrollBar.Page = 638
   AutoScroll = True
-  Caption = 'New QSO ... (CQRLOG for Linux)'
+  Caption = 'New QSO ... (CQRLOG)'
   ClientHeight = 709
   ClientWidth = 1032
   Icon.Data = {

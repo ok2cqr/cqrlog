@@ -1039,7 +1039,7 @@ begin
   l := TStringList.Create;
   l.Add('<ADIF_VER:5>3.1.0');
   l.Add('<CREATED_TIMESTAMP:15>'+FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
-  l.Add('LoTW import errors from CQRLOG for Linux version '+dmData.VersionString);
+  l.Add('LoTW import errors from CQRLOG version '+dmData.VersionString);
   l.Add('Copyright (C) '+FormatDateTime('YYYY',now)+' by Petr, OK2CQR and Martin, OK1RR');
   l.Add('');
   l.Add('Internet: https://cqrlog.ok2cqr.com');
@@ -1530,7 +1530,7 @@ begin
   l := TStringList.Create;
   l.Add('<ADIF_VER:5>3.1.0');
   l.Add('<CREATED_TIMESTAMP:15>'+FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
-  l.Add('eQSL import errors from CQRLOG for Linux version '+dmData.VersionString);
+  l.Add('eQSL import errors from CQRLOG version '+dmData.VersionString);
   l.Add('Copyright (C) '+FormatDateTime('YYYY',now)+' by Petr, OK2CQR and Martin, OK1RR');
   l.Add('');
   l.Add('Internet: https://cqrlog.ok2cqr.com');

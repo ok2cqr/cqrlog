@@ -532,7 +532,7 @@ begin
   Writeln(f);
   Writeln(f, '<ADIF_VER:5>3.1.0');
   Writeln(f, '<CREATED_TIMESTAMP:15>',FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
-  Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
+  Writeln(f, 'ADIF export from CQRLOG version '+dmData.VersionString);
   Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
   Writeln(f);
   Writeln(f, 'Internet: https://cqrlog.ok2cqr.com');
