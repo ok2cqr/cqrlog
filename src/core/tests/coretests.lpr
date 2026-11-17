@@ -19,8 +19,8 @@ program coretests;
 uses
   {$IFDEF UNIX}cthreads,{$ENDIF}
   Classes, SysUtils, consoletestrunner,
-  uScpIndex, uWinKeyerProtocol, uCWDevice, uCWWinKeyer, uCWMacros, uBandPlan, uLocator, uHamQTHApi, uSunPosition,
-  tScpLookup, tWinKeyerProtocol, tCWMacroExpansion, tBandLookup, tLocatorMath, tHamQTHApi, tSunPosition;
+  uScpIndex, uWinKeyerProtocol, uCWDevice, uCWWinKeyer, uCWMacros, uBandPlan, uLocator, uHamQTHApi, uQRZApi, uSunPosition,
+  tScpLookup, tWinKeyerProtocol, tCWMacroExpansion, tBandLookup, tLocatorMath, tHamQTHApi, tQRZApi, tSunPosition;
 
 type
   TCoreTestRunner = class(TTestRunner)

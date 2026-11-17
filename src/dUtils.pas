@@ -117,6 +117,8 @@ type
     fTimeOffset: currency;
     fGrayLineOffset: currency;
     fQRZSession: string;
+    fQRZRefusedUser: string;
+    fQRZRefusedUntil: TDateTime;
     fHamQTHSession: string;
     fQRZCQSession: string;
     fSysUTC: boolean;
@@ -366,7 +368,7 @@ implementation
   {$R *.lfm}
 
 { TdmUtils }
-uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest, dSqlRef, dSqlStat, uHamQTHApi,
+uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest, dSqlRef, dSqlStat, uHamQTHApi, uQRZApi,
   uCWMacros;
 
 function TdmUtils.LetterFromMode(mode: string): string;
@@ -3059,78 +3061,96 @@ end;
 function TdmUtils.GetQRZInfo(call: string;
   var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
 var
-  http: THTTPSend;
-  req: string = '';
+  http: THTTPSend = nil;
   m: TStringList;
+  Session: TQRZSession;
+  Info: TQRZCallbook;
+  Attempt: integer;
 begin
   Result := False;
+  nick := '';
+  qth := '';
   address := '';
+  zip := '';
   grid := '';
   state := '';
   county := '';
   qsl := '';
+  iota := '';
+  waz := '';
+  itu := '';
   ErrMsg := '';
-  if fQRZSession = '' then
+  if (call = '') then
   begin
-    if not GetQRZSession(ErrMsg) then
-      exit;
+    ErrMsg := 'Callsign field empty!';
+    exit;
   end;
-  http := THTTPSend.Create;
   m := TStringList.Create;
   try
-    http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
-    http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
-    http.UserName := cqrini.ReadString('Program', 'User', '');
-    http.Password := cqrini.ReadString('Program', 'Passwd', '');
-    if (call = '') then
+    for Attempt := 1 to 2 do
     begin
-      ErrMsg := 'Callsign field empty!';
-      exit;
-    end;
-    req := 'https://xml.qrz.com/xml/1.34?s=' + fQRZSession + ';callsign=' + GetIDCall(call);
-    if not HTTP.HTTPMethod('GET', req) then
-      ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
-    else
-    begin
-      m.LoadFromStream(http.Document);
-      if Pos('<Error>Session Timeout</Error>', m.Text) > 0 then
+      if fQRZSession = '' then
       begin
-        fQRZSession := '';
-        Result := GetQRZInfo(call, nick, qth, address, zip, grid, state,
-          county, qsl, iota, waz, itu, ErrMsg);
-      end
-      else
-      begin
-        if Pos('<Error>Not found:', m.Text) > 0 then
+        if not GetQRZSession(ErrMsg) then
           exit;
-        nick := GetTagValue(m.Text, '<fname>');
-        if Pos(' ', nick) > 0 then
-          nick := copy(nick, 1, Pos(' ', nick) - 1);
-        if Length(nick) > 0 then
-        begin
-          nick := LowerCase(nick);
-          nick[1] := upCase(nick[1]);
-        end;
-        qth := GetTagValue(m.Text, '<addr2>');
-        state := GetTagValue(m.Text, '<state>');
-        zip := GetTagValue(m.Text, '<zip>');
-        address := GetTagValue(m.Text, '<fname>') + ' ' + GetTagValue(m.Text, '<name>') +
-          LineEnding + GetTagValue(m.Text, '<addr1>') + LineEnding +
-          GetTagValue(m.Text, '<addr2>');
-        if (state <> '') then
-          address := address + ', ' + state;
-        address := address + ' ' + zip;
-        county := GetTagValue(m.Text, '<county>');
-        grid := UpperCase(GetTagValue(m.Text, '<grid>'));
-        qsl := GetTagValue(m.Text, '<qslmgr>');
-        iota := GetTagValue(m.Text, '<iota>');
-        waz := GetTagValue(m.Text, '<cqzone>');
-        itu := GetTagValue(m.Text, '<ituzone>')
+      end;
+      FreeAndNil(http);
+      http := THTTPSend.Create;
+      http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
+      http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
+      http.UserName := cqrini.ReadString('Program', 'User', '');
+      http.Password := cqrini.ReadString('Program', 'Passwd', '');
+      if not http.HTTPMethod('GET', QRZLookupUrl(fQRZSession, GetIDCall(call))) then
+      begin
+        ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString;
+        exit
+      end;
+      m.LoadFromStream(http.Document);
+      if dmData.DebugLevel >= 1 then
+        Writeln(m.Text);
+      if not ParseQRZResponse(m.Text, Session, Info) then
+      begin
+        ErrMsg := 'Unexpected response from QRZ.com (' + IntToStr(http.ResultCode) + ')';
+        exit
+      end;
+      //a response without Key means the session expired or became invalid
+      //(timeout, other IP address, ...), log in again once
+      if Session.Key <> '' then
+        Break;
+      fQRZSession := '';
+      if Attempt = 2 then
+      begin
+        ErrMsg := Session.Error;
+        if ErrMsg = '' then
+          ErrMsg := 'QRZ.com session lost';
+        exit
       end
+    end;
+    fQRZSession := Session.Key;
+    if Info.Found then
+    begin
+      nick := Info.nick;
+      qth := Info.qth;
+      address := Info.address;
+      zip := Info.zip;
+      grid := Info.grid;
+      state := Info.state;
+      county := Info.county;
+      qsl := Info.qsl;
+      iota := Info.iota;
+      waz := Info.waz;
+      itu := Info.itu;
+      Result := True
     end
+    else if (Session.Error = '') and (Session.Message <> '') then
+      ErrMsg := Session.Message
+    else if (Session.Error = '') or IsQRZNotFound(Session.Error) then
+      ErrMsg := 'Callsign not found'
+    else
+      ErrMsg := Session.Error
   finally
     m.Free;
-    HTTP.Free
+    http.Free
   end;
 end;
 function TdmUtils.GetQRZCQInfo(call: string;
@@ -3985,17 +4005,24 @@ end;
 function TdmUtils.GetQRZSession(var ErrMsg: string): boolean;
 var
   http: THTTPSend;
-  req: string = '';
   m: TStringList;
-  epos: word;
-  kpos: word;
+  Session: TQRZSession;
+  Info: TQRZCallbook;
+  UserName: string;
 begin
   Result := False;
-  if (cqrini.ReadString('CallBook', 'CbQRZUser', '') = '') or
-    (cqrini.ReadString('CallBook', 'CbQRZPass', '') = '') then
+  fQRZSession := '';
+  UserName := cqrini.ReadString('CallBook', 'CbQRZUser', '');
+  if (UserName = '') or (cqrini.ReadString('CallBook', 'CbQRZPass', '') = '') then
   begin
     ErrMsg := 'Empty password or user name';
     exit;
+  end;
+  //"Connection refused" = a login will not succeed for at least 24 hours
+  if (UserName = fQRZRefusedUser) and (Now < fQRZRefusedUntil) then
+  begin
+    ErrMsg := 'QRZ.com: ' + C_QRZ_REFUSED + ', next login after ' + DateTimeToStr(fQRZRefusedUntil);
+    exit
   end;
   http := THTTPSend.Create;
   m := TStringList.Create;
@@ -4004,36 +4031,38 @@ begin
     http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
     http.UserName := cqrini.ReadString('Program', 'User', '');
     http.Password := cqrini.ReadString('Program', 'Passwd', '');
-    req := 'https://xmldata.qrz.com/xml/1.34?username=' + cqrini.ReadString(
-      'CallBook', 'CbQRZUser', '') + ';password=' + cqrini.ReadString(
-      'CallBook', 'CbQRZPass', '') + ';agent=Cqrlog_'+uVersion.cVERSION;
-    if not HTTP.HTTPMethod('GET', req) then
+    if not http.HTTPMethod('GET', QRZLoginUrl(UserName, cqrini.ReadString('CallBook', 'CbQRZPass', ''),
+      'Cqrlog_' + uVersion.cVERSION)) then
       ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
     else
     begin
       m.LoadFromStream(http.Document);
       if dmData.DebugLevel >= 1 then
         Writeln(m.Text);
-      //I'd like to parse it as normal XML but it seems XML support in Freepascal
-      //2.4.0 is broken :-(
-      epos := Pos('<Error>', m.Text);
-      if epos > 0 then
-        ErrMsg := copy(m.Text, epos + 7, Pos('</Error>', m.Text) - epos - 7)
+      if not ParseQRZResponse(m.Text, Session, Info) then
+        ErrMsg := 'Unexpected response from QRZ.com (' + IntToStr(http.ResultCode) + ')'
+      else if Session.Key <> '' then
+      begin
+        fQRZSession := Session.Key;
+        Result := True
+      end
       else
       begin
-        kpos := Pos('<Key>', m.Text);
-        if kpos > 0 then
+        ErrMsg := Session.Error;
+        if ErrMsg = '' then
+          ErrMsg := Session.Message;
+        if ErrMsg = '' then
+          ErrMsg := 'QRZ.com login failed, no session key';
+        if SameText(Session.Error, C_QRZ_REFUSED) then
         begin
-          fQRZSession := copy(m.Text, kpos + 5, Pos('</Key>', m.Text) - kpos - 5);
-          Result := True;
+          fQRZRefusedUser := UserName;
+          fQRZRefusedUntil := IncHour(Now, 24)
         end
-        else
-          ErrMsg := 'Tag "<Key>" not found!';
-      end;
+      end
     end
   finally
     m.Free;
-    HTTP.Free
+    http.Free
   end;
 end;
 function TdmUtils.GetQRZCQSession(var ErrMsg: string): boolean;
