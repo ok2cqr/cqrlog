@@ -391,9 +391,11 @@ begin
   begin
     s := copy(s,2,Length(s)-1);
     if dmData.DebugLevel>=1 then Writeln('GetIndexFromPosition, looking for:',s);
+    //Freq = 0 is an empty slot; its TextValue may be left from a deleted spot
+    //of the same station, found before the live one (#514)
     for i:= MAX_ITEMS downto 1 do
     begin
-      if BandMapItems[i].TextValue=s then
+      if (BandMapItems[i].Freq<>0) and (BandMapItems[i].TextValue=s) then
       begin
         Result := i;
         break
@@ -425,6 +427,7 @@ end;
 
 procedure TBandMapThread.DeleteFromArray(index : Integer);
 begin
+  frmBandMap.BandMapItems[index].TextValue := '';
   frmBandMap.BandMapItems[index].Freq := 0;
   frmBandMap.BandMapItems[index].Call := '';
   frmBandMap.BandMapItems[index].Mode := '';
@@ -707,6 +710,7 @@ begin
    begin
       EnterCriticalSection(BandMapCrit);
     try
+      frmBandMap.BandMapItems[i].TextValue := '';
       frmBandMap.BandMapItems[i].Freq := 0;
       frmBandMap.BandMapItems[i].Call := '';
       frmBandMap.BandMapItems[i].Mode := '';
