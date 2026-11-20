@@ -59,7 +59,6 @@ type
     function SqlInsertConfig(const Db : String) : String;
     function SqlUpdateConfig(const Db : String) : String;
     function SqlConfigFile(const Db : String) : String;
-    function SqlSetConfigFile(const Db : String) : String;
 
     // clearing a log (TruncateTables)
     function SqlTruncateClub1 : String;
@@ -68,6 +67,7 @@ type
     function SqlTruncateClub4 : String;
     function SqlTruncateClub5 : String;
     function SqlTruncateConfig : String;
+    function SqlInsertEmptyConfig : String;
     function SqlDeleteAllQsosForTruncate : String;
     function SqlDeleteUploadStatus : String;
     function SqlDeleteLogChanges : String;
@@ -280,16 +280,11 @@ begin
   Result := 'update '+Db+'.cqrlog_config set config_file = :cnf'
 end;
 
-// fDBConnect copies a config between logs and exports/imports it as a
-// file; the read and the write each appear twice there.
+// fDBConnect copies a config between logs and exports it as a file;
+// writing goes through TdmData.StoreConfigFile.
 function TdmSqlSchema.SqlConfigFile(const Db : String) : String;
 begin
   Result := 'select config_file from '+Db+'.cqrlog_config'
-end;
-
-function TdmSqlSchema.SqlSetConfigFile(const Db : String) : String;
-begin
-  Result := 'update '+Db+'.cqrlog_config set config_file =:config_file'
 end;
 
 { clearing a log }
@@ -322,6 +317,13 @@ end;
 function TdmSqlSchema.SqlTruncateConfig : String;
 begin
   Result := 'TRUNCATE cqrlog_config;'
+end;
+
+// a fresh log has this row (dData.lfm scLog); the config is only updated
+// in place by fDBConnect's import, so a cleared log needs it back
+function TdmSqlSchema.SqlInsertEmptyConfig : String;
+begin
+  Result := 'INSERT INTO cqrlog_config (config_file) VALUES ('''');'
 end;
 
 function TdmSqlSchema.SqlDeleteAllQsosForTruncate : String;

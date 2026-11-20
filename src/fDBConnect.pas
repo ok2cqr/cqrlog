@@ -348,15 +348,12 @@ begin
             db := dmData.GetProperDBName(nr);
             dmData.Q.Close;
             if dmData.trQ.Active then dmData.trQ.Rollback;
-            dmData.Q.SQL.Text := dmSqlSchema.SqlSetConfigFile(db);
-            dmData.trQ.StartTransaction;
-            dmData.Q.Params[0].AsString := l.Text;
-            dmData.Q.ExecSQL
-            except
-              dmData.trQ.Rollback
-            end;
-            dmData.trQ.Commit;
+            dmData.StoreConfigFile(db, l.Text);
             ShowMessage('Config copied successfully')
+            except
+              on E : Exception do
+                ShowMessage('Config could not be copied: ' + E.Message)
+            end
             finally
               dmData.Q.Close;
               l.Free
@@ -529,23 +526,18 @@ begin
      if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
       begin
         db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);
-        dmData.Q.Close;
-        if dmData.trQ.Active then dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := dmSqlSchema.SqlSetConfigFile(db);
-        dmData.trQ.StartTransaction;
         l := TStringList.Create;
         try try
           l.LoadFromFile(dlgOpen.FileName);
-          dmData.Q.Params[0].AsString := l.Text;
-          if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-          dmData.Q.ExecSQL
+          //inserts the row when the log has none (cleared before 3.3.1, #527);
+          //the update alone changed nothing and still reported success
+          dmData.StoreConfigFile(db, l.Text);
+          ShowMessage('Config file imported successfully')
         except
-          dmData.trQ.Rollback
-        end;
-        dmData.trQ.Commit;
-        ShowMessage('Config file imported successfully')
+          on E : Exception do
+            ShowMessage('Config file could not be imported: ' + E.Message)
+        end
         finally
-          dmData.Q.Close;
           l.Free
         end
       end

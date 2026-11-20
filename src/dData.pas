@@ -332,6 +332,9 @@ type
     procedure SaveConfigFile;
     procedure CloseDatabases;
     procedure TruncateTables(nr : Word);
+    //writes Text as the config of log database Db, inserting the row when
+    //the log has none (a log cleared before 3.3.1)
+    procedure StoreConfigFile(const Db, Text : String);
     procedure LoadLoTWCalls;
     procedure LoadeQSLCalls;
     procedure LoadMasterSCP;
@@ -831,7 +834,6 @@ end;
 procedure TdmData.SaveConfigFile;
 var
   l   : TStringList;
-  ins : Boolean;
 begin
   if trQ.Active then
     trQ.Rollback;
@@ -840,23 +842,41 @@ begin
   l := TStringList.Create;
   try
     l.LoadFromFile(cqrini.IniFileName);
-    Q.SQL.Text := dmSqlSchema.SqlConfigCount(fDBName);
+    StoreConfigFile(fDBName, l.Text)
+  finally
+    l.Free
+  end;
+  if fDebugLevel>=1 then Writeln('Saving ini file to database')
+end;
+
+procedure TdmData.StoreConfigFile(const Db, Text : String);
+var
+  ins : Boolean;
+begin
+  Q.Close;
+  if trQ.Active then
+    trQ.Rollback;
+  trQ.StartTransaction;
+  try
+    Q.SQL.Text := dmSqlSchema.SqlConfigCount(Db);
     Q.Open;
     ins := Q.Fields[0].AsInteger = 0;
     Q.Close;
     if ins then
-      Q.SQL.Text := dmSqlSchema.SqlInsertConfig(fDBName)
+      Q.SQL.Text := dmSqlSchema.SqlInsertConfig(Db)
     else
-      Q.SQL.Text := dmSqlSchema.SqlUpdateConfig(fDBName);
+      Q.SQL.Text := dmSqlSchema.SqlUpdateConfig(Db);
     Q.Prepare;
-    Q.Params[0].AsString := l.Text;
+    Q.Params[0].AsString := Text;
     Q.ExecSQL;
     trQ.Commit
-  finally
+  except
     Q.Close;
-    l.Free
+    if trQ.Active then
+      trQ.Rollback;
+    raise
   end;
-  if fDebugLevel>=1 then Writeln('Saving ini file to database')
+  Q.Close
 end;
 
 procedure TdmData.CloseDatabases;
@@ -2256,12 +2276,19 @@ begin
     lQ.ExecSQL;
     lQ.SQL.Text := dmSqlSchema.SqlTruncateConfig;
     lQ.ExecSQL;
+    //#527: without the row, importing a config right after clearing did
+    //nothing and still said it was imported
+    lQ.SQL.Text := dmSqlSchema.SqlInsertEmptyConfig;
+    lQ.ExecSQL;
     lQ.SQL.Text := dmSqlSchema.SqlDeleteAllQsosForTruncate;
     lQ.ExecSQL;
     lQ.SQL.Text := dmSqlSchema.SqlDeleteUploadStatus;
     lQ.ExecSQL;
     lQ.SQL.Text := dmSqlSchema.SqlDeleteLogChanges;
     lQ.ExecSQL;
+    //as a fresh log: without upload_status rows nothing marks a change as
+    //uploaded and every upload sends all changes since the clearing again
+    PrepareEmptyLogUploadStatusTables(lQ, lTr);
     lQ.SQL.Text := dmSqlSchema.SqlTruncateDxccId;
     lQ.ExecSQL;
     lQ.SQL.Text := dmSqlSchema.SqlTruncateLongNote;
