@@ -39,7 +39,18 @@ type
     SyncMsg    : String;
     SyncColor  : TColor;
     SyncUpdate : String;
+    //True from the moment an upload is started in the main thread until the
+    //thread ends. The thread and the main thread share dmLogUpload's queries
+    //and its one MySQL session, a COMMIT or ROLLBACK of one ends the other's
+    //transaction (a lost upload_status update made the same DELETE go again).
     thRunning  : Boolean;
+    //asks a running upload to stop after the QSO it is working on
+    StopRequested : Boolean;
+
+    //True (and tells the user) when an upload is running
+    function  UploadRunning : Boolean;
+    //stops a running upload and waits for its thread to end
+    procedure StopUploadAndWait;
 
     procedure UploadDataToHamQTH(ToAll : Boolean = False);
     procedure UploadDataToClubLog(ToAll : Boolean = False);
@@ -140,7 +151,6 @@ var
 begin
   data := TStringList.Create;
   try
-    frmLogUploadStatus.thRunning := True;
     FreeOnTerminate := True;
     frmLogUploadStatus.SyncMsg    := '';
     frmLogUploadStatus.SyncUpdate := '';
@@ -175,6 +185,12 @@ begin
       end;
       while not dmLogUpload.Q.Eof do
       begin
+        if frmLogUploadStatus.StopRequested then
+        begin
+          ToMainThread('Stopped','');
+          ErrorCode := 1; //no 'Done ...'
+          Break
+        end;
         AlreadyDel := False;
         Command := dmLogUpload.Q.FieldByName('cmd').AsString;
         if (Command<>'INSERT') and (Command<>'UPDATE') and (Command<>'DELETE') then
@@ -397,7 +413,8 @@ end;
 
 procedure TfrmLogUploadStatus.FormCreate(Sender: TObject);
 begin
-  thRunning := False
+  thRunning     := False;
+  StopRequested := False
 end;
 
 procedure TfrmLogUploadStatus.FormKeyUp(Sender: TObject; var Key: Word;
@@ -429,21 +446,52 @@ begin
   mStatus.SetFont(mFont)
 end;
 
+function TfrmLogUploadStatus.UploadRunning : Boolean;
+begin
+  Result := thRunning;
+  if Result then
+    Application.MessageBox('Previous job is sill running, please try again later.','Info ...',mb_OK+mb_IconInformation)
+end;
+
+procedure TfrmLogUploadStatus.StopUploadAndWait;
+begin
+  if not thRunning then
+    exit;
+  StopRequested := True;
+  try
+    //the thread ends after the QSO it is uploading; it needs the main thread
+    //for Synchronize, so keep processing messages
+    while thRunning do
+    begin
+      CheckSynchronize(50); //runs the thread's Synchronize calls
+      Application.ProcessMessages
+    end
+  finally
+    StopRequested := False
+  end
+end;
+
 procedure TfrmLogUploadStatus.UploadDataToOnlineLogs(where : TWhereToUpload; ToAll : Boolean = False);
 var
   UploadThread : TUploadThread;
 begin
-  if thRunning then
-  begin
-    Application.MessageBox('Previous job is sill running, please try again later.','Info ...',mb_OK+mb_IconInformation)
-  end
-  else begin
-    if not Showing then  //status window has to be visible when working
-      Show;
+  if UploadRunning then
+    exit;
+  if not Showing then  //status window has to be visible when working
+    Show;
+  //set here, not in the thread: until the thread ran its first line, a
+  //second call (the timers in fMain and fNewQSO, the menu) started another
+  //thread on the same queries
+  thRunning     := True;
+  StopRequested := False;
+  try
     UploadThread := TUploadThread.Create(True);
     UploadThread.WhereToUpload := where;
     UploadThread.ToAll         := ToAll;
     UploadThread.Start
+  except
+    thRunning := False;
+    raise
   end
 end;
 

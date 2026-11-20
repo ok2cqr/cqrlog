@@ -1640,6 +1640,7 @@ end;
 
 procedure TfrmMain.acMarkAllClubLogExecute(Sender: TObject);
 begin
+  if frmLogUploadStatus.UploadRunning then exit; //same queries as the upload thread
   dmLogUpload.MarkAsUploaded(C_CLUBLOG)
 end;
 
@@ -1654,22 +1655,26 @@ end;
 
 procedure TfrmMain.acMarkAllExecute(Sender: TObject);
 begin
+  if frmLogUploadStatus.UploadRunning then exit;
   dmLogUpload.MarkAsUploadedToAllOnlineLogs;
   Application.MessageBox('Done, now all QSO are marked as uploaded.','Info ...',mb_Ok + mb_IconInformation)
 end;
 
 procedure TfrmMain.acMarkAllHamQTHExecute(Sender: TObject);
 begin
+  if frmLogUploadStatus.UploadRunning then exit;
   dmLogUpload.MarkAsUploaded(C_HAMQTH)
 end;
 
 procedure TfrmMain.acMarkAllHrdLogExecute(Sender: TObject);
 begin
+  if frmLogUploadStatus.UploadRunning then exit;
   dmLogUpload.MarkAsUploaded(C_HRDLOG)
 end;
 
 procedure TfrmMain.acMarkAllUDPLogExecute(Sender: TObject);
 begin
+  if frmLogUploadStatus.UploadRunning then exit;
   dmLogUpload.MarkAsUploaded(C_UDPLOG)
 end;
 

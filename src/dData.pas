@@ -362,7 +362,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlUpload, dSqlQsl, dSqlRef, dSqlStat, dSqlImpExp, dSqlQso, dSqlSchema, uDebugLog;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, fLogUploadStatus, dMembership, dSqlUserData, dSqlUpload, dSqlQsl, dSqlRef, dSqlStat, dSqlImpExp, dSqlQso, dSqlSchema, uDebugLog;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -706,6 +706,10 @@ begin
   dmDXCluster.Q.ExecSQL;
   dmDXCluster.trQ.Commit;
 
+  //USE on the session of a running upload would send the rest of it to the
+  //new log
+  if Assigned(frmLogUploadStatus) then
+    frmLogUploadStatus.StopUploadAndWait;
   if dmLogUpload.trQ.Active then dmLogUpload.trQ.Rollback;
   dmLogUpload.Q.Close;
   dmLogUpload.Q.SQL.Text := dmSqlSchema.SqlUseDb(fDBName);
