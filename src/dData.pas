@@ -200,6 +200,7 @@ type
     procedure KillMySQL(const OnStart : Boolean = True);
     procedure UpgradeMainDatabase(old_version : Integer);
     procedure UpgradeCommonDatabase(old_version : Integer);
+    procedure EnsureForkSafeSchema;
     procedure ConvertDatabaseToUtf8mb4(const Db : String);
     function  Utf8mb3Tables(const Db : String) : TStringList;
     procedure PrepareMysqlConfigFile;
@@ -782,6 +783,7 @@ begin
     Q.Close();
     trQ.Rollback
   end;
+  EnsureForkSafeSchema;
   dmUtils.TimeOffset     := cqrini.ReadFloat('Program','offset',0);
   //the offset compensated a wrong shadow (about -1.25 h); with the shadow
   //computed right an old value would move it off, so it is cleared once
@@ -2331,17 +2333,7 @@ begin
         Q1.ExecSQL;
       end;
 
-      if old_version < 7 then
-      begin
-        //RBN server presets. The old [RBN] Server and [RBNMonitor] ServerName
-        //keys become presets when the log is opened, see SeedRbnSources
-        Q1.SQL.Text := dmSqlSchema.SqlCreateRbnSources;
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-      end;
-
-      if old_version < 8 then
-        ConvertDatabaseToUtf8mb4('cqrlog_common');
+      //version 7 (rbn_sources) and 8 (utf8mb4) run in EnsureForkSafeSchema
 
       Q1.SQL.Text := dmSqlSchema.SqlSetCommonVersion(cDB_COMN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
@@ -2760,32 +2752,8 @@ begin
               end;
       end;
 
-      if (old_version < 20) then
-            begin
-              //composite index used to match downloaded LoTW/eQSL QSOs against the log by
-              //(callsign, qsodate, band) - turns the per-QSO lookup into one indexed lookup.
-              //On a large log creating it can take a while; it runs once during the upgrade.
-              trQ1.StartTransaction;
-              Q1.SQL.Text := dmSqlSchema.SqlCallDateBandIndexExists;
-              Q1.Open;
-              max := Q1.Fields[0].AsInteger;
-              Q1.Close;
-              if max = 0 then
-              begin
-                Q1.SQL.Text := dmSqlSchema.SqlCreateCallDateBandIndex;
-                if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-                Q1.ExecSQL;
-              end;
-              trQ1.Commit;
-      end;
-
-      if (old_version < 21) then
-      begin
-        //rebuilds every table, on a large log it can take a while
-        trQ1.StartTransaction;
-        ConvertDatabaseToUtf8mb4(fDBName);
-        trQ1.Commit
-      end;
+      //version 20 (callsign_qsodate_band index) and 21 (utf8mb4) run in
+      //EnsureForkSafeSchema
 
       if TableExists('view_cqrlog_main_by_callsign') then
       begin
@@ -2834,6 +2802,61 @@ begin
   end
 end;
 
+//Schema steps that a version number cannot be trusted for, run on every log open.
+//OH1KH's forks (CqrlogImproved, CqrlogAlpha) number their own migrations with the
+//same db_version values: their common 7/8 and log 20/21 are different changes than
+//ours. A data directory used by them already has the version we would upgrade to,
+//so our steps never ran (issue #600: cqrlog_common.rbn_sources doesn't exist).
+//Every step checks the real state of the schema, so it costs one query when done.
+//An exception leaves the rest for the next start.
+procedure TdmData.EnsureForkSafeSchema;
+var
+  cnt : Integer;
+begin
+  if trQ1.Active then trQ1.Rollback;
+  try try
+    //log version 20: composite index used to match downloaded LoTW/eQSL QSOs
+    //against the log by (callsign, qsodate, band). On a large log creating it
+    //can take a while; it runs once.
+    trQ1.StartTransaction;
+    Q1.SQL.Text := dmSqlSchema.SqlCallDateBandIndexExists;
+    Q1.Open;
+    cnt := Q1.Fields[0].AsInteger;
+    Q1.Close;
+    if cnt = 0 then
+    begin
+      Q1.SQL.Text := dmSqlSchema.SqlCreateCallDateBandIndex;
+      if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+      Q1.ExecSQL
+    end;
+    trQ1.Commit;
+
+    //log version 21 and common version 8: utf8mb3 -> utf8mb4. Rebuilds every
+    //utf8mb3 table, on a large log it can take a while. The log goes first,
+    //one dialog tells about both databases.
+    trQ1.StartTransaction;
+    ConvertDatabaseToUtf8mb4(fDBName);
+    ConvertDatabaseToUtf8mb4('cqrlog_common');
+    trQ1.Commit;
+
+    //common version 7: RBN server presets. The old [RBN] Server and
+    //[RBNMonitor] ServerName keys become presets when the log is opened, see
+    //SeedRbnSources. CREATE TABLE IF NOT EXISTS
+    trQ1.StartTransaction;
+    Q1.SQL.Text := dmSqlSchema.SqlCreateRbnSources;
+    if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+    Q1.ExecSQL;
+    trQ1.Commit
+  except
+    on E : Exception do
+      Application.MessageBox(PChar('Database upgrade crashed with this error:'+LineEnding+E.Message),'Error',mb_ok+mb_IconError)
+  end
+  finally
+    if trQ1.Active then
+      trQ1.Rollback
+  end
+end;
+
 //utf8mb3 tables of Db, see TdmSqlSchema.SqlUtf8mb3Tables; the caller frees the list
 function TdmData.Utf8mb3Tables(const Db : String) : TStringList;
 begin
@@ -2855,8 +2878,8 @@ end;
 //utf8mb3 tables of Db to utf8mb4.
 //The log is converted first and cqrlog_common right after it, one dialog
 //tells about both.
-//Exception when a table stays locked by another connection, the upgrade
-//then does not raise the version and the next start tries again
+//Exception when a table stays locked by another connection, the next start
+//tries again (EnsureForkSafeSchema runs on every log open)
 procedure TdmData.ConvertDatabaseToUtf8mb4(const Db : String);
 var
   Tables : TStringList;
