@@ -511,6 +511,7 @@ var
   SubmodeOut: String;
   rows      : TDataSet;
   FilterSql : String;
+  ExportAll : Boolean;
 begin
   FQsoCount := 0;
   FExportedIds.Clear;
@@ -539,17 +540,24 @@ begin
   Writeln(f);
   Writeln(f, '<EOH>');
 
-  if (dmData.IsFilter and (rbWebExportAll.Checked or rbFileExportAll.Checked)) then
+  //each tab has its own pair of radio buttons; the file tab defaults to
+  //'Export all', which used to switch the upload tab to the filter too
+  if pgLoTWExport.ActivePageIndex = 0 then
+    ExportAll := rbFileExportAll.Checked
+  else
+    ExportAll := rbWebExportAll.Checked;
+
+  if dmData.IsFilter and ExportAll then
     FilterSql := dmData.qCQRLOG.SQL.Text
   else
     FilterSql := '';
-  rows := dmSqlQsl.OpenQsosForLotwRows(rbWebExportAll.Checked, FilterSql);
+  rows := dmSqlQsl.OpenQsosForLotwRows(ExportAll, FilterSql);
   try
     rows.First;
     while not rows.EOF do
     begin
       lblInfo.Caption := 'Exporting QSO nr. ' + IntToStr(Nr);
-      if not rbWebExportAll.Checked then
+      if not ExportAll then
       begin
         if rows.FieldByName('lotw_qsls').AsString <> '' then
         begin

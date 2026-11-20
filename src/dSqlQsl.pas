@@ -419,10 +419,15 @@ end;
 
 // Marks one QSO as uploaded to LoTW; fLoTWExport runs it per QSO after a
 // file export and after a web upload.
+// Only a QSO not marked yet (lotw_qsls is NOT NULL since log version 4): the update trigger fires for every row the WHERE
+// matches, even when nothing changes, and each such row is uploaded again to
+// ClubLog/HamQTH/HRDLog. 'Export all' with a filter re-sent the whole filter
+// (#528). A QSO uploaded again keeps the date of its first upload.
 function TdmSqlQsl.SqlMarkLotwSent(const Date, Id : String) : String;
 begin
   Result := 'update cqrlog_main set lotw_qsls = ' + QuotedStr('Y') +
-            ',lotw_qslsdate = ' + QuotedStr(Date) + ' where id_cqrlog_main = '+ Id
+            ',lotw_qslsdate = ' + QuotedStr(Date) + ' where id_cqrlog_main = '+ Id +
+            ' and (lotw_qsls <> ' + QuotedStr('Y') + ' or lotw_qslsdate is null)'
 end;
 
 function TdmSqlQsl.SqlMarkAllLotwSent(const Date : String) : String;
