@@ -18,6 +18,7 @@ type
     long     : Double;
     strengt  : Integer;
     time     : TDateTime;
+    located  : Boolean;  //lat/long from the skimmer's locator, not its prefix
   end;
 
 const
@@ -122,7 +123,7 @@ implementation
 
 { TfrmGrayline }
 
-uses dUtils, dData, uMyIni, dDXCluster, fNewQSO, fRotControl, fRbnSources;
+uses dUtils, dData, uMyIni, dDXCluster, fNewQSO, fRotControl, fRbnSources, uSkimmerListFetch;
 
 //Subscribes to one connection at a time: the main one in shared mode, the own
 //one otherwise. Every spot of it, before any filter of the monitor
@@ -384,7 +385,7 @@ begin
   rbn_status                :='Disconnected';
   sbGrayLine.SimpleText     := rbn_status;
   tmrGrayLine.Enabled       := True;
-  tmrGrayLineTimer(nil);
+  tmrGrayLineTimer(nil);  //also loads the skimmer locators
   tmrAutoConnect.Enabled    := True;
   tmrSpotDots.Interval      :=1000;  //remove Spots(DOts) timer will always run 1 sec period.
   tmrSpotDots.Enabled       :=true;
@@ -528,6 +529,7 @@ end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
 begin
+  RefreshSkimmerList(dmData.HomeDir);  //a file check; downloads at most daily
   Refresh
 end;
 
@@ -794,6 +796,7 @@ procedure TfrmGrayline.SynRBN;
 var
   i : Integer;
   c : TColor;
+  typ : Byte;
   CqrBand:String;
 
 begin
@@ -825,7 +828,12 @@ begin
       else
         c := cqrini.ReadInteger('RBN','10db',clWhite)
     end; //case
-    ob^.body_add(3,RBNSpotList[i].long,RBNSpotList[i].lat*-1,RBNSpotList[i].long,RBNSpotList[i].lat*-1,RBNSpotList[i].spotter,c,1);
+    //a cross where the skimmer stands, a square where only its prefix puts it
+    if RBNSpotList[i].located then
+      typ := 3
+    else
+      typ := 2;
+    ob^.body_add(typ,RBNSpotList[i].long,RBNSpotList[i].lat*-1,RBNSpotList[i].long,RBNSpotList[i].lat*-1,RBNSpotList[i].spotter,c,1);
   end;
   Refresh
 end;
@@ -859,6 +867,7 @@ var
   index   : Word;
   tmp     : Integer;
   wCall   : String;
+  grid    : String;
   latitude, longitude: Currency;
 begin
   watchFor   := cqrini.ReadString('RBN','watch','');
@@ -887,8 +896,6 @@ begin
     Writeln('*Freq:  ',freq,'*')
   end;
 
-  dmDXCluster.id_country(spotter,lat,long);
-
   index := SpotterExists(spotter);
   if index = 0 then //spotter doesn't exist, we need new position
     index := GetEmptyPos;
@@ -903,8 +910,21 @@ begin
   else
     frmGrayline.RBNSpotList[index].strengt := 0;
 
-  //was a verbatim nested copy of TdmUtils.GetRealCoordinate
-  dmUtils.GetRealCoordinate(lat,long,latitude, longitude);
+  //where the skimmer stands (HamQTH list, by node: KM3T-5, EA8/DF4UE), else
+  //where its prefix is, which can be a whole country or US call area off
+  if SkimmerList.Lookup(Parsed.SpotterNode, grid) then
+  begin
+    lat  := grid;
+    long := '';
+    dmUtils.CoordinateFromLocator(grid, latitude, longitude);
+    frmGrayline.RBNSpotList[index].located := True
+  end
+  else begin
+    dmDXCluster.id_country(spotter,lat,long);
+    //was a verbatim nested copy of TdmUtils.GetRealCoordinate
+    dmUtils.GetRealCoordinate(lat,long,latitude, longitude);
+    frmGrayline.RBNSpotList[index].located := False
+  end;
   frmGrayline.RBNSpotList[index].lat  := latitude;
   frmGrayline.RBNSpotList[index].long := longitude;
   if  LocalDbg then

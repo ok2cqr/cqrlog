@@ -19,8 +19,8 @@ program rbntests;
 uses
   {$IFDEF UNIX}cthreads,{$ENDIF}
   Classes, SysUtils, consoletestrunner,
-  uRbnLineFramer, uRbnSpotParser, uRbnLogin, uRbnSpotQueue, uRbnReconnect, uRbnLogCache, uSpotStore, uBandMapLayout, uLogCheckQueue, uRbnFixture,
-  tLineFramer, tSpotParser, tLogin, tSpotQueue, tReconnect, tLogCache, tCandidateStore, tBandMapLayout, tCheckQueue, tFixtures;
+  uRbnLineFramer, uRbnSpotParser, uRbnLogin, uRbnSpotQueue, uRbnReconnect, uRbnLogCache, uSpotStore, uBandMapLayout, uLogCheckQueue, uSkimmerLocations, uRbnFixture,
+  tLineFramer, tSpotParser, tLogin, tSpotQueue, tReconnect, tLogCache, tCandidateStore, tBandMapLayout, tCheckQueue, tFixtures, tSkimmerList;
 
 type
   TRbnTestRunner = class(TTestRunner)

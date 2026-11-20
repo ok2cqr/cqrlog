@@ -27,6 +27,7 @@ type
     procedure TypicalCwSpot;
     procedure SkimmerSuffixAndSsidAreCutFromSpotter;
     procedure SpotterWithoutSuffix;
+    procedure SpotterNodeKeepsSsidAndSlash;
     procedure VhfSpotHasNoSpaceAfterColon;
     procedure NegativeSignal;
     procedure FrequencyIgnoresLocaleDecimalSeparator;
@@ -76,6 +77,25 @@ var
 begin
   AssertTrue(ParseRbnSpot('DX de OK1AA:  14025.10  OK2BB  CW  22 dB  30 WPM  CQ  0001Z', S));
   AssertEquals('OK1AA', S.Spotter)
+end;
+
+procedure TSpotParserTest.SpotterNodeKeepsSsidAndSlash;
+var
+  S : TRbnSpotLine;
+begin
+  //node forms recorded 2026-11-17 (tools/rbn-capture)
+  AssertTrue(ParseRbnSpot('DX de W3LPL-2-#: 14025.10  OK1AA  CW  22 dB  30 WPM  CQ  0001Z', S));
+  AssertEquals('W3LPL-2', S.SpotterNode);
+  AssertTrue(ParseRbnSpot('DX de EA8/DF4UE-#: 14025.10  OK1AA  CW  22 dB  30 WPM  CQ  0001Z', S));
+  AssertEquals('EA8/DF4UE', S.SpotterNode);
+  AssertEquals('EA8/DF4UE', S.Spotter);
+  AssertTrue(ParseRbnSpot('DX de YO5LD-U-#: 28027.20  OY1CT  CW  23 dB  22 WPM  CQ  1426Z', S));
+  AssertEquals('YO5LD-U', S.SpotterNode);
+  AssertEquals('YO5LD', S.Spotter);
+  AssertTrue(ParseRbnSpot('DX de DK9IP-#:   7016.00  IZ4IYK  CW  10 dB  28 WPM  CQ  1845Z', S));
+  AssertEquals('DK9IP', S.SpotterNode);
+  AssertTrue(ParseRbnSpot('DX de OK1AA:  14025.10  OK2BB  CW  22 dB  30 WPM  CQ  0001Z', S));
+  AssertEquals('no suffix', 'OK1AA', S.SpotterNode)
 end;
 
 procedure TSpotParserTest.VhfSpotHasNoSpaceAfterColon;

@@ -32,6 +32,8 @@ uses
 type
   TRbnSpotLine = record
     Spotter  : String;  //without the skimmer suffix and SSID: W3LPL-2-# -> W3LPL
+    SpotterNode : String;  //only without the skimmer suffix: W3LPL-2-# -> W3LPL-2,
+                           //EA8/DF4UE-# -> EA8/DF4UE (the node of uSkimmerLocations)
     Dx       : String;
     FreqText : String;  //as sent, always with a dot
     FreqKHz  : Double;
@@ -86,6 +88,9 @@ begin
     exit;
 
   Spot.Spotter := Trim(Copy(s, Length(DX_DE)+1, Colon-Length(DX_DE)-1));
+  Spot.SpotterNode := Spot.Spotter;
+  if AnsiEndsStr('-#', Spot.SpotterNode) then
+    SetLength(Spot.SpotterNode, Length(Spot.SpotterNode)-2);
   Dash := Pos('-', Spot.Spotter);
   if Dash > 0 then
     SetLength(Spot.Spotter, Dash-1);
