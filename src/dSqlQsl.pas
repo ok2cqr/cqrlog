@@ -458,10 +458,14 @@ begin
             'from cqrlog_main'
 end;
 
+// Only a QSO not marked yet, see SqlMarkLotwSent: with a filter, feQSLUpload
+// exports the filter result by default and every QSO of it was queued for
+// the online logs again. eqsl_qsl_sent is NOT NULL since log version 4.
 function TdmSqlQsl.SqlMarkEqslSent(const Date, Id : String) : String;
 begin
   Result := 'update cqrlog_main set eqsl_qsl_sent = ' + QuotedStr('Y') +
-            ',eqsl_qslsdate = ' + QuotedStr(Date) + 'where id_cqrlog_main = '+ Id
+            ',eqsl_qslsdate = ' + QuotedStr(Date) + ' where id_cqrlog_main = '+ Id +
+            ' and (eqsl_qsl_sent <> ' + QuotedStr('Y') + ' or eqsl_qslsdate is null)'
 end;
 
 function TdmSqlQsl.SqlMarkAllEqslSent(const Date : String) : String;

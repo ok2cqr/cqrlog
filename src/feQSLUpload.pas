@@ -34,10 +34,10 @@ type
   private
     FileSize     : Int64;
     QSOCount     : Integer;
-    // The selection ExportData walked, so that the marking after the
-    // upload walks the same rows.
-    FEqslNotExported : Boolean;
-    FEqslFilterSql   : String;
+    // id_cqrlog_main of the QSOs ExportData wrote; only these are marked as
+    // sent after the upload. Querying the selection again also marked QSOs
+    // logged while the upload ran (timers keep going, e.g. from WSJT-X).
+    FExportedIds : array of String;
     function  ExportData(const FileName : String) : Boolean;
     function  HttpPostFile(const URL, FieldName, FileName: string;
                 const Data: TStream; const ResultData: TStrings; var err : String): Boolean;
@@ -79,16 +79,17 @@ var
   SubmodeOut : String;
   f          : TextFile;
   rows       : TDataSet;
+  FilterSql  : String;
 
 begin
   QSOCount := 0;
+  SetLength(FExportedIds, 0);
   Result := True;
-  FEqslNotExported := rbWebExportNotExported.Checked;
   if dmData.IsFilter then
-    FEqslFilterSql := dmData.qCQRLOG.SQL.Text
+    FilterSql := dmData.qCQRLOG.SQL.Text
   else
-    FEqslFilterSql := '';
-  rows := dmSqlQsl.OpenQsosForEqslRows(FEqslNotExported, FEqslFilterSql);
+    FilterSql := '';
+  rows := dmSqlQsl.OpenQsosForEqslRows(rbWebExportNotExported.Checked, FilterSql);
   rows.First;
   if rows.RecordCount = 0 then
   begin
@@ -191,6 +192,8 @@ begin
       end;
       inc(nr);
       Inc(QSOCount);
+      SetLength(FExportedIds, Length(FExportedIds)+1);
+      FExportedIds[High(FExportedIds)] := rows.FieldByName('id_cqrlog_main').AsString;
       rows.Next
     end
   except
@@ -266,7 +269,9 @@ begin
   end;
   FileName := dmData.HomeDir+'eQSL'+PathDelim+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
   try
-    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+    //without an enabled online log there are no triggers, and enabling them
+    //afterwards would start filling log_changes (fLoTWExport checks it too)
+    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
       dmLogUpload.DisableOnlineLogSupport;
 
     if ExportData(FileName) then
@@ -286,7 +291,7 @@ begin
     end
 
   finally
-    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
       dmLogUpload.EnableOnlineLogSupport(False)
   end
 end;
@@ -358,7 +363,7 @@ const
   LF = #$0a;
   CRLF = CR + LF;
 var
-  rows : TDataSet;
+  i    : Integer;
   m    : TMemoryStream;
   url : String = '';
   res  : Boolean;
@@ -403,16 +408,10 @@ begin
     begin
       date := FormatDateTime('yyyy-mm-dd',now);
       try
-        rows := dmSqlQsl.OpenQsosForEqslRows(FEqslNotExported, FEqslFilterSql);
-        rows.First;
-        while not rows.Eof do
-        begin
-          dmSqlQsl.MarkEqslSent(date, rows.FieldByName('id_cqrlog_main').AsString);
-          rows.Next
-        end
+        for i := 0 to High(FExportedIds) do
+          dmSqlQsl.MarkEqslSent(date, FExportedIds[i])
       finally
         dmSqlQsl.CommitBatch;
-        dmSqlQsl.CloseRows;
         lblInfo.Caption := 'Upload complete!'
       end
     end
