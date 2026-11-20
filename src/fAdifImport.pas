@@ -177,7 +177,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dSqlUserData, dSqlImpExp, dUtils, dDXCC, fMain, uMyIni, uVersion;
+uses dData, dSqlUserData, dSqlImpExp, dUtils, dDXCC, fMain, uMyIni, uVersion, uAdifTag;
 
 resourcestring
   INVALID_DATE_RANGE_ENTERED = 'Invalid date range is entered';
@@ -200,71 +200,9 @@ function TfrmAdifImport.getNextAdifTag(var vstup,prik,data:string):boolean;
 // vstup - remaining text have to be searched for next tag
 // prik - deliveres back the extracted ADIF tag name
 // data - deliveres back the extracted ADIF information of the tag
-
-var z,x:longint;
-    aaa:string;
-    i : Integer;
-    slen : String = '';
-    DataLen : Word = 0;
-  begin
-    getNextAdifTag:=false;
-    z:=pos('<',vstup);
-    if z=0 then exit;//  there is no other record - disappearing.
-
-    aaa:=copy(vstup,z+1,length(vstup));
-    z:=pos(':',aaa);
-    x:=pos('>',aaa);
-    if (x=0) then exit; //  the record was not terminated ... disappearing
-
-    //detect length of ADIF Data
-    for i:=z+1 to x do
-    begin
-      if (aaa[i] in ['0'..'9']) then
-        slen := slen + aaa[i]
-    end;
-    if slen = '' then
-      DataLen := 0
-    else
-      DataLen := StrToInt(slen);
-    //if LocalDbg then Write('Got length:',DataLen);
-
-    if z<>0 then
-      prik:=trim(copy(aaa,1,z-1))
-    else
-      prik:=trim(copy(aaa,1,x-1));
-
-    aaa:=copy(aaa,x+1,length(aaa));
-
-    z:=pos('<',aaa);
-    i:= pos('_INTL',upcase(prik));
-    //if LocalDbg then Write(' pos INTL:',i);
-    if z=0 then
-    begin
-      if i>0 then  //tags with '_intl' have UTF8 charactes
-       Begin
-        prik:= copy(prik,1,i-1); //remove '_INTL'
-        data:=UTF8copy(aaa,1,DataLen);
-        //if LocalDbg then Write(' as UTF8');
-       end
-      else
-        data:=copy(aaa,1,DataLen);
-      vstup:=''
-    end
-    else begin
-      if i>0 then  //tags with '_intl' have UTF8 charactes
-       Begin
-        prik:= copy(prik,1,i-1); //remove '_INTL'
-        data:=UTF8copy(aaa,1,DataLen);
-        //if LocalDbg then Write(' as UTF8');
-       end
-      else
-        data:=copy(aaa,1,DataLen);
-      vstup:=copy(aaa,z,length(aaa))
-    end;
-    data :=trim(data);
-    //if LocalDbg then Writeln(' for tag:',prik,' with data:',data);
-    getNextAdifTag:=true
-  end;
+begin
+  Result := NextAdifTag(vstup, prik, data)
+end;
 
 function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry;adifTag:String):boolean;
 
