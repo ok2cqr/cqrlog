@@ -1,11 +1,12 @@
 object frmDbError: TfrmDbError
   Left = 804
-  Height = 196
+  Height = 230
   Top = 412
   Width = 442
   Caption = 'Database problem'
-  ClientHeight = 196
+  ClientHeight = 230
   ClientWidth = 442
+  OnShow = FormShow
   Position = poDesktopCenter
   LCLVersion = '1.4.4.0'
   object Label1: TLabel
@@ -16,20 +17,51 @@ object frmDbError: TfrmDbError
     Caption = 'MySQL could not be started, please check if the MySQL server is '#10'installed properly.'#10#10'Please look at https://cqrlog.ok2cqr.com/#faq'#10#10'If you don''t find the answer, report it at GitHub Issues and attach '#10'last 20 lines from the mysql.err file.'
     ParentColor = False
   end
+  object lblServer: TLabel
+    AnchorSideLeft.Control = Label1
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 8
+    Height = 17
+    Top = 135
+    Width = 428
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 8
+    BorderSpacing.Right = 6
+    Caption = 'Database server:'
+    ParentColor = False
+    WordWrap = True
+  end
   object btnOpenErrFile: TButton
+    AnchorSideTop.Control = lblServer
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = lblServer
+    AnchorSideRight.Side = asrBottom
     Left = 255
     Height = 25
-    Top = 129
+    Top = 160
     Width = 171
+    Anchors = [akTop, akRight]
+    AutoSize = True
+    BorderSpacing.Top = 8
     Caption = 'Open mysql.err file'
     OnClick = btnOpenErrFileClick
     TabOrder = 0
   end
   object Button2: TButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = btnOpenErrFile
+    AnchorSideTop.Side = asrBottom
     Left = 168
     Height = 25
-    Top = 168
+    Top = 197
     Width = 75
+    AutoSize = True
+    BorderSpacing.Top = 12
+    BorderSpacing.Bottom = 8
     Cancel = True
     Caption = 'Close'
     ModalResult = 2

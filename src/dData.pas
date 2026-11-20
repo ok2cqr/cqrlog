@@ -3085,7 +3085,10 @@ var
   Tryies    : Word = 0;
   index     :integer;
   paramList :TStringList;
-
+  StartedAt : TDateTime;
+  ExecError : String = '';
+  ErrFile   : String;
+  ErrAge    : LongInt;
 begin
   mysqld := GetMysqldPath;
   PrepareMysqlConfigFile;
@@ -3107,7 +3110,17 @@ begin
   paramList.Free;
 
   if dmData.DebugLevel>=1 then Writeln('MySQLProcess.Executable: ',MySQLProcess.Executable,' Parameters: ',MySQLProcess.Parameters.Text);
-  MySQLProcess.Execute;
+  StartedAt := Now;
+  //a binary that does not exist (the bare name from $PATH) raises here
+  try
+    MySQLProcess.Execute
+  except
+    on E : Exception do
+    begin
+      ExecError := E.Message;
+      if fDebugLevel>=1 then Writeln('Could not run ', mysqld, ': ', ExecError)
+    end
+  end;
 
   if MainCon.Connected then
     MainCon.Connected := False;
@@ -3118,7 +3131,8 @@ begin
   MainCon.UserName     := 'cqrlog';
   MainCon.Password     := 'cqrlog';
 
-  while true do
+  //nothing to wait for when the server did not run
+  while ExecError = '' do
   begin
     try try
       Connected := True;
@@ -3146,8 +3160,16 @@ begin
   MainCon.DatabaseName := '';
   if not Connected then
   begin
+    ErrFile := fDataDir + 'mysql.err';
+    ErrAge  := FileAgeUTF8(ErrFile);
     with TfrmDbError.Create(nil) do
     try
+      ServerPath := mysqld;
+      StartError := ExecError;
+      //mysql.err is appended to, an old one says nothing about this start;
+      //file times have a 2 s resolution on some file systems
+      ErrLogWritten := (ErrAge <> -1) and
+                       (FileDateToDateTime(ErrAge) >= StartedAt - 2/SecsPerDay);
       ShowModal
     finally
       Free
