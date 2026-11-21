@@ -20,6 +20,21 @@
 #
 -->
 
+3.4.0 (2026-11-21)
+  + Grayline: RBN skimmers are placed by their real locator from the HamQTH skimmer list (downloaded at most once a day); a skimmer missing in the list keeps its prefix position and is drawn as a square (Petr, OK2CQR)
+  + The database error dialog shows which server binary CQRLOG tried to run, the error when it could not be run and a hint about permissions (AppArmor, SELinux) when the server wrote nothing to mysql.err (#599) (Petr, OK2CQR)
+  - QRZ.com: callbook lookup did not work; it uses the XML interface 1.34 now, logs in again when the session expires and shows the error QRZ.com returned (Petr, OK2CQR)
+  - Logs whose data directory was used by OH1KH's forks (CqrlogImproved, CqrlogAlpha) missed the RBN presets table, an index and the utf8mb4 conversion; they are added when the log is opened (#600) (Petr, OK2CQR)
+  - ADIF import: records on one line (<EOR><CALL:4>...) ran into each other; this also fixes LoTW download (#509) (Petr, OK2CQR)
+  - Band map: double click on a spot sometimes set frequency 0 (#514) (Petr, OK2CQR)
+  - Online logs: two uploads running at once could lose the uploaded mark and send the same change again (#454) (Petr, OK2CQR)
+  - LoTW: upload with a filter sent the whole filter to ClubLog/HamQTH/HRDLog again; the file export and the upload tab mixed up their 'Export all' choice (#528) (Petr, OK2CQR)
+  - eQSL: upload with a filter sent the whole filter to online logs again, and QSOs logged during the upload were marked as sent without being uploaded (Petr, OK2CQR)
+  - Configuration import right after clearing a log did nothing; after clearing a log every upload sent all changes again (#527) (Petr, OK2CQR)
+  - Opening a log after one that failed to open ended with an access violation (Petr, OK2CQR)
+  - Window caption and export headers no longer say 'for Linux', CQRLOG runs on macOS too (Petr, OK2CQR)
+  * ADIF tag tokenizer, QRZ.com XML parsing and the RBN skimmer list are LCL-free units in src/core and src/rbn with tests (Petr, OK2CQR)
+
 3.3.0 (2026-10-25)
   + RBN: one shared connection for the whole program; the RBN monitor, the band maps and the Grayline all read from it, so closing the monitor window no longer disconnects (Petr, OK2CQR)
   + RBN: new RBN control window (New QSO -> Window) with a connection status dot, server preset, connect/disconnect, the global filter and a switch for sending spots to the band map; Preferences/RBN support gets 'Connect to RBN after program starts' (Petr, OK2CQR)
